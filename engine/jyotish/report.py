@@ -128,6 +128,26 @@ def render(chart: dict) -> str:
                  e(", ".join(r["on_hi"]) or "–")] for r in rl["aspects"]["planets"]]
     lk_rows = [[e(r["name_hi"]), str(r["views"]["lagna"]["house"]), str(r["views"]["aries"]["house"]), str(r["pakka_ghar"]),
                 e(r["views"]["lagna"]["text_hi"]), e(r["upay_hi"])] for r in chart["lalkitab"]["planets"]]
+    P = chart.get("patri")
+    patri_html = ""
+    if P:
+        b, a = P["birth"], P["avakahada"]
+        birth_rows = [["वार", e(b["vara"]["name_hi"])], ["तिथि", f'{e(b["tithi"]["paksha_hi"])} {e(b["tithi"]["name_hi"])}'],
+                      ["नक्षत्र-चरण", f'{e(b["nakshatra"]["name_hi"])}-{b["nakshatra"]["pada"]} (स्वामी {e(b["nakshatra"]["lord_hi"])})'],
+                      ["योग", e(b["yoga"]["name_hi"])], ["करण", e(b["karana"]["name_hi"])],
+                      ["सूर्योदय / सूर्यास्त", f'{e(b["sunrise"] or "—")} / {e(b["sunset"] or "—")}'],
+                      ["इष्टकाल (घटी:पल)", e(b["ishta_kaal"]["text"]) if b["ishta_kaal"] else "—"],
+                      ["मास (अमांत) ≈", e(b["masa"]["name_hi"])], ["ऋतु", e(b["ritu"]["name_hi"])], ["अयन", e(b["ayana"]["name_hi"])],
+                      ["विक्रम संवत् ≈", str(b["vikram_samvat"])], ["शक संवत् ≈", str(b["shaka_samvat"])],
+                      ["सूर्य राशि (पाश्चात्य)", e(b["sun_sign_tropical"]["name_hi"])], ["अयनांश (लाहिरी)", e(b["ayanamsa"])]]
+        ava_rows = [["लग्न-लग्नेश", f'{e(a["lagna"]["name_hi"])}-{e(a["lagna"]["lord_hi"])}'],
+                    ["राशि-राशि स्वामी", f'{e(a["rashi"]["name_hi"])}-{e(a["rashi"]["lord_hi"])}'],
+                    ["नक्षत्र स्वामी", e(a["nakshatra_lord"]["name_hi"])], ["वर्ण", e(a["varna"]["name_hi"])],
+                    ["वश्य", e(a["vashya"]["name_hi"])], ["योनि", e(a["yoni"]["name_hi"])], ["गण", e(a["gana"]["name_hi"])],
+                    ["नाड़ी", e(a["nadi"]["name_hi"])], ["तत्व", e(a["tattva"]["name_hi"])],
+                    ["नाम अक्षर", f'<b>{e(a["name_syllable"]["pada"])}</b> ({e(a["name_syllable"]["all"])})']]
+        patri_html = (f'<h2>जन्म विवरण</h2><div class="two">{_table(["", ""], birth_rows)}{_table(["", ""], ava_rows)}</div>'
+                      f'<p class="small">{e(P["note_hi"])}</p>')
     day = chart.get("day", {})
     day_html = ""
     if day.get("available"):
@@ -141,6 +161,7 @@ def render(chart: dict) -> str:
 <title>कुंडली रिपोर्ट — {e(name)}</title>
 <style>
 @page {{ size: A4; margin: 14mm; }}
+.two {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }} .two table th {{ width:45%; }}
 body {{ font-family: 'Noto Sans Devanagari','Noto Serif Devanagari','FreeSans','Mangal',sans-serif; color:#2b2118; font-size:12.5px; line-height:1.55; }}
 h1 {{ font-size:22px; margin:0 0 2px; color:#7a4a12; }} h2 {{ font-size:15px; margin:18px 0 6px; color:#7a4a12; border-bottom:1px solid #d8c8a8; padding-bottom:2px; page-break-after:avoid; }}
 .meta {{ color:#6b5a44; }} .banner {{ background:#fff4d6; border:1px solid #e3c878; padding:6px 10px; border-radius:6px; margin:10px 0; font-size:11.5px; }}
@@ -162,6 +183,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <tr><td>साढ़ेसाती</td><td>{e(sade)}</td></tr>
 </table>
 
+{patri_html}
 <h2>कुंडलियाँ</h2>
 <div class="charts"><div><b>लग्न कुंडली (D1)</b>{north_chart_svg(_d1_cells(chart))}</div>
 <div><b>नवांश (D9)</b>{north_chart_svg(_varga_cells(chart, "D9"))}</div></div>

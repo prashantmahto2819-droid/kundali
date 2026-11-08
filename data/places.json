@@ -1,1438 +1,2297 @@
 {
-"_note": "Approximate city-centre coordinates (2 decimals, ~1 km) typed in by hand for this project; verify against an official source before relying on them. Small towns are not covered: enter lat/lon manually. India uses Asia/Kolkata (historic offsets are handled by the tz database).",
-"places": [
-{
-"name": "Jabalpur",
-"hi": "जबलपुर",
-"state": "मध्य प्रदेश",
-"lat": 23.18,
-"lon": 79.99,
-"tz": "Asia/Kolkata",
-"aka": [
-"Jubbulpore"
-]
-},
-{
-"name": "Bhopal",
-"hi": "भोपाल",
-"state": "मध्य प्रदेश",
-"lat": 23.26,
-"lon": 77.41,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Indore",
-"hi": "इंदौर",
-"state": "मध्य प्रदेश",
-"lat": 22.72,
-"lon": 75.86,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Gwalior",
-"hi": "ग्वालियर",
-"state": "मध्य प्रदेश",
-"lat": 26.22,
-"lon": 78.18,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ujjain",
-"hi": "उज्जैन",
-"state": "मध्य प्रदेश",
-"lat": 23.18,
-"lon": 75.78,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Sagar",
-"hi": "सागर",
-"state": "मध्य प्रदेश",
-"lat": 23.84,
-"lon": 78.74,
-"tz": "Asia/Kolkata",
-"aka": [
-"Saugor"
-]
-},
-{
-"name": "Rewa",
-"hi": "रीवा",
-"state": "मध्य प्रदेश",
-"lat": 24.53,
-"lon": 81.3,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Satna",
-"hi": "सतना",
-"state": "मध्य प्रदेश",
-"lat": 24.6,
-"lon": 80.83,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Katni",
-"hi": "कटनी",
-"state": "मध्य प्रदेश",
-"lat": 23.83,
-"lon": 80.4,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Narsinghpur",
-"hi": "नरसिंहपुर",
-"state": "मध्य प्रदेश",
-"lat": 22.95,
-"lon": 79.19,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Damoh",
-"hi": "दमोह",
-"state": "मध्य प्रदेश",
-"lat": 23.83,
-"lon": 79.44,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Chhindwara",
-"hi": "छिंदवाड़ा",
-"state": "मध्य प्रदेश",
-"lat": 22.06,
-"lon": 78.94,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Seoni",
-"hi": "सिवनी",
-"state": "मध्य प्रदेश",
-"lat": 22.09,
-"lon": 79.54,
-"tz": "Asia/Kolkata",
-"aka": [
-"Sivni"
-]
-},
-{
-"name": "Mandla",
-"hi": "मंडला",
-"state": "मध्य प्रदेश",
-"lat": 22.6,
-"lon": 80.37,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Balaghat",
-"hi": "बालाघाट",
-"state": "मध्य प्रदेश",
-"lat": 21.81,
-"lon": 80.19,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Sehore",
-"hi": "सीहोर",
-"state": "मध्य प्रदेश",
-"lat": 23.2,
-"lon": 77.08,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Narmadapuram",
-"hi": "नर्मदापुरम",
-"state": "मध्य प्रदेश",
-"lat": 22.75,
-"lon": 77.73,
-"tz": "Asia/Kolkata",
-"aka": [
-"Hoshangabad",
-"होशंगाबाद"
-]
-},
-{
-"name": "Ratlam",
-"hi": "रतलाम",
-"state": "मध्य प्रदेश",
-"lat": 23.33,
-"lon": 75.04,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Dewas",
-"hi": "देवास",
-"state": "मध्य प्रदेश",
-"lat": 22.97,
-"lon": 76.05,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Khandwa",
-"hi": "खंडवा",
-"state": "मध्य प्रदेश",
-"lat": 21.83,
-"lon": 76.35,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Burhanpur",
-"hi": "बुरहानपुर",
-"state": "मध्य प्रदेश",
-"lat": 21.31,
-"lon": 76.23,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Shivpuri",
-"hi": "शिवपुरी",
-"state": "मध्य प्रदेश",
-"lat": 25.42,
-"lon": 77.66,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Chhatarpur",
-"hi": "छतरपुर",
-"state": "मध्य प्रदेश",
-"lat": 24.92,
-"lon": 79.58,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Vidisha",
-"hi": "विदिशा",
-"state": "मध्य प्रदेश",
-"lat": 23.52,
-"lon": 77.81,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Singrauli",
-"hi": "सिंगरौली",
-"state": "मध्य प्रदेश",
-"lat": 24.2,
-"lon": 82.67,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Betul",
-"hi": "बैतूल",
-"state": "मध्य प्रदेश",
-"lat": 21.91,
-"lon": 77.9,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Delhi",
-"hi": "दिल्ली",
-"state": "दिल्ली",
-"lat": 28.61,
-"lon": 77.21,
-"tz": "Asia/Kolkata",
-"aka": [
-"New Delhi",
-"नई दिल्ली"
-]
-},
-{
-"name": "Mumbai",
-"hi": "मुंबई",
-"state": "महाराष्ट्र",
-"lat": 19.08,
-"lon": 72.88,
-"tz": "Asia/Kolkata",
-"aka": [
-"Bombay",
-"बॉम्बे"
-]
-},
-{
-"name": "Kolkata",
-"hi": "कोलकाता",
-"state": "पश्चिम बंगाल",
-"lat": 22.57,
-"lon": 88.36,
-"tz": "Asia/Kolkata",
-"aka": [
-"Calcutta"
-]
-},
-{
-"name": "Chennai",
-"hi": "चेन्नई",
-"state": "तमिलनाडु",
-"lat": 13.08,
-"lon": 80.27,
-"tz": "Asia/Kolkata",
-"aka": [
-"Madras"
-]
-},
-{
-"name": "Bengaluru",
-"hi": "बेंगलुरु",
-"state": "कर्नाटक",
-"lat": 12.97,
-"lon": 77.59,
-"tz": "Asia/Kolkata",
-"aka": [
-"Bangalore",
-"बैंगलोर"
-]
-},
-{
-"name": "Hyderabad",
-"hi": "हैदराबाद",
-"state": "तेलंगाना",
-"lat": 17.39,
-"lon": 78.49,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ahmedabad",
-"hi": "अहमदाबाद",
-"state": "गुजरात",
-"lat": 23.02,
-"lon": 72.57,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Pune",
-"hi": "पुणे",
-"state": "महाराष्ट्र",
-"lat": 18.52,
-"lon": 73.86,
-"tz": "Asia/Kolkata",
-"aka": [
-"Poona"
-]
-},
-{
-"name": "Jaipur",
-"hi": "जयपुर",
-"state": "राजस्थान",
-"lat": 26.91,
-"lon": 75.79,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Lucknow",
-"hi": "लखनऊ",
-"state": "उत्तर प्रदेश",
-"lat": 26.85,
-"lon": 80.95,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Kanpur",
-"hi": "कानपुर",
-"state": "उत्तर प्रदेश",
-"lat": 26.45,
-"lon": 80.35,
-"tz": "Asia/Kolkata",
-"aka": [
-"Cawnpore"
-]
-},
-{
-"name": "Nagpur",
-"hi": "नागपुर",
-"state": "महाराष्ट्र",
-"lat": 21.15,
-"lon": 79.09,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Patna",
-"hi": "पटना",
-"state": "बिहार",
-"lat": 25.59,
-"lon": 85.14,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ranchi",
-"hi": "रांची",
-"state": "झारखंड",
-"lat": 23.34,
-"lon": 85.31,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Varanasi",
-"hi": "वाराणसी",
-"state": "उत्तर प्रदेश",
-"lat": 25.32,
-"lon": 82.97,
-"tz": "Asia/Kolkata",
-"aka": [
-"Banaras",
-"Benares",
-"काशी",
-"बनारस"
-]
-},
-{
-"name": "Prayagraj",
-"hi": "प्रयागराज",
-"state": "उत्तर प्रदेश",
-"lat": 25.44,
-"lon": 81.85,
-"tz": "Asia/Kolkata",
-"aka": [
-"Allahabad",
-"इलाहाबाद"
-]
-},
-{
-"name": "Agra",
-"hi": "आगरा",
-"state": "उत्तर प्रदेश",
-"lat": 27.18,
-"lon": 78.02,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Meerut",
-"hi": "मेरठ",
-"state": "उत्तर प्रदेश",
-"lat": 28.98,
-"lon": 77.71,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Noida",
-"hi": "नोएडा",
-"state": "उत्तर प्रदेश",
-"lat": 28.54,
-"lon": 77.39,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ghaziabad",
-"hi": "गाज़ियाबाद",
-"state": "उत्तर प्रदेश",
-"lat": 28.67,
-"lon": 77.45,
-"tz": "Asia/Kolkata",
-"aka": [
-"गाजियाबाद"
-]
-},
-{
-"name": "Gurugram",
-"hi": "गुरुग्राम",
-"state": "हरियाणा",
-"lat": 28.46,
-"lon": 77.03,
-"tz": "Asia/Kolkata",
-"aka": [
-"Gurgaon",
-"गुड़गांव"
-]
-},
-{
-"name": "Chandigarh",
-"hi": "चंडीगढ़",
-"state": "चंडीगढ़",
-"lat": 30.73,
-"lon": 76.78,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ludhiana",
-"hi": "लुधियाना",
-"state": "पंजाब",
-"lat": 30.9,
-"lon": 75.86,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Amritsar",
-"hi": "अमृतसर",
-"state": "पंजाब",
-"lat": 31.63,
-"lon": 74.87,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Jalandhar",
-"hi": "जालंधर",
-"state": "पंजाब",
-"lat": 31.33,
-"lon": 75.58,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Patiala",
-"hi": "पटियाला",
-"state": "पंजाब",
-"lat": 30.34,
-"lon": 76.39,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ambala",
-"hi": "अंबाला",
-"state": "हरियाणा",
-"lat": 30.38,
-"lon": 76.78,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Rohtak",
-"hi": "रोहतक",
-"state": "हरियाणा",
-"lat": 28.9,
-"lon": 76.61,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Panipat",
-"hi": "पानीपत",
-"state": "हरियाणा",
-"lat": 29.39,
-"lon": 76.97,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Karnal",
-"hi": "करनाल",
-"state": "हरियाणा",
-"lat": 29.69,
-"lon": 76.99,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Hisar",
-"hi": "हिसार",
-"state": "हरियाणा",
-"lat": 29.15,
-"lon": 75.72,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Dehradun",
-"hi": "देहरादून",
-"state": "उत्तराखंड",
-"lat": 30.32,
-"lon": 78.03,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Haridwar",
-"hi": "हरिद्वार",
-"state": "उत्तराखंड",
-"lat": 29.95,
-"lon": 78.16,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Shimla",
-"hi": "शिमला",
-"state": "हिमाचल प्रदेश",
-"lat": 31.1,
-"lon": 77.17,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Srinagar",
-"hi": "श्रीनगर",
-"state": "जम्मू-कश्मीर",
-"lat": 34.08,
-"lon": 74.8,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Jammu",
-"hi": "जम्मू",
-"state": "जम्मू-कश्मीर",
-"lat": 32.73,
-"lon": 74.87,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Leh",
-"hi": "लेह",
-"state": "लद्दाख",
-"lat": 34.15,
-"lon": 77.58,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Raipur",
-"hi": "रायपुर",
-"state": "छत्तीसगढ़",
-"lat": 21.25,
-"lon": 81.63,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bilaspur",
-"hi": "बिलासपुर",
-"state": "छत्तीसगढ़",
-"lat": 22.08,
-"lon": 82.15,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bhilai",
-"hi": "भिलाई",
-"state": "छत्तीसगढ़",
-"lat": 21.21,
-"lon": 81.38,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Surat",
-"hi": "सूरत",
-"state": "गुजरात",
-"lat": 21.17,
-"lon": 72.83,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Vadodara",
-"hi": "वडोदरा",
-"state": "गुजरात",
-"lat": 22.31,
-"lon": 73.18,
-"tz": "Asia/Kolkata",
-"aka": [
-"Baroda",
-"बड़ौदा"
-]
-},
-{
-"name": "Rajkot",
-"hi": "राजकोट",
-"state": "गुजरात",
-"lat": 22.3,
-"lon": 70.8,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Jodhpur",
-"hi": "जोधपुर",
-"state": "राजस्थान",
-"lat": 26.24,
-"lon": 73.02,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Udaipur",
-"hi": "उदयपुर",
-"state": "राजस्थान",
-"lat": 24.59,
-"lon": 73.71,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Kota",
-"hi": "कोटा",
-"state": "राजस्थान",
-"lat": 25.18,
-"lon": 75.84,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ajmer",
-"hi": "अजमेर",
-"state": "राजस्थान",
-"lat": 26.45,
-"lon": 74.64,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bikaner",
-"hi": "बीकानेर",
-"state": "राजस्थान",
-"lat": 28.02,
-"lon": 73.31,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bhubaneswar",
-"hi": "भुवनेश्वर",
-"state": "ओडिशा",
-"lat": 20.3,
-"lon": 85.82,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Cuttack",
-"hi": "कटक",
-"state": "ओडिशा",
-"lat": 20.46,
-"lon": 85.88,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Guwahati",
-"hi": "गुवाहाटी",
-"state": "असम",
-"lat": 26.14,
-"lon": 91.74,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Imphal",
-"hi": "इंफाल",
-"state": "मणिपुर",
-"lat": 24.82,
-"lon": 93.95,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Shillong",
-"hi": "शिलांग",
-"state": "मेघालय",
-"lat": 25.58,
-"lon": 91.89,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Agartala",
-"hi": "अगरतला",
-"state": "त्रिपुरा",
-"lat": 23.83,
-"lon": 91.28,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Gangtok",
-"hi": "गंगटोक",
-"state": "सिक्किम",
-"lat": 27.34,
-"lon": 88.61,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Kohima",
-"hi": "कोहिमा",
-"state": "नागालैंड",
-"lat": 25.67,
-"lon": 94.11,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Aizawl",
-"hi": "आइजोल",
-"state": "मिज़ोरम",
-"lat": 23.73,
-"lon": 92.72,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Itanagar",
-"hi": "ईटानगर",
-"state": "अरुणाचल प्रदेश",
-"lat": 27.08,
-"lon": 93.61,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Visakhapatnam",
-"hi": "विशाखापत्तनम",
-"state": "आंध्र प्रदेश",
-"lat": 17.69,
-"lon": 83.22,
-"tz": "Asia/Kolkata",
-"aka": [
-"Vizag"
-]
-},
-{
-"name": "Vijayawada",
-"hi": "विजयवाड़ा",
-"state": "आंध्र प्रदेश",
-"lat": 16.51,
-"lon": 80.65,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Tirupati",
-"hi": "तिरुपति",
-"state": "आंध्र प्रदेश",
-"lat": 13.63,
-"lon": 79.42,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Thiruvananthapuram",
-"hi": "तिरुवनंतपुरम",
-"state": "केरल",
-"lat": 8.52,
-"lon": 76.94,
-"tz": "Asia/Kolkata",
-"aka": [
-"Trivandrum"
-]
-},
-{
-"name": "Kochi",
-"hi": "कोच्चि",
-"state": "केरल",
-"lat": 9.93,
-"lon": 76.27,
-"tz": "Asia/Kolkata",
-"aka": [
-"Cochin"
-]
-},
-{
-"name": "Kozhikode",
-"hi": "कोझिकोड",
-"state": "केरल",
-"lat": 11.26,
-"lon": 75.78,
-"tz": "Asia/Kolkata",
-"aka": [
-"Calicut"
-]
-},
-{
-"name": "Madurai",
-"hi": "मदुरै",
-"state": "तमिलनाडु",
-"lat": 9.93,
-"lon": 78.12,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Coimbatore",
-"hi": "कोयंबटूर",
-"state": "तमिलनाडु",
-"lat": 11.02,
-"lon": 76.96,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Tiruchirappalli",
-"hi": "तिरुचिरापल्ली",
-"state": "तमिलनाडु",
-"lat": 10.79,
-"lon": 78.7,
-"tz": "Asia/Kolkata",
-"aka": [
-"Trichy"
-]
-},
-{
-"name": "Mysuru",
-"hi": "मैसूरु",
-"state": "कर्नाटक",
-"lat": 12.3,
-"lon": 76.64,
-"tz": "Asia/Kolkata",
-"aka": [
-"Mysore",
-"मैसूर"
-]
-},
-{
-"name": "Mangaluru",
-"hi": "मंगलुरु",
-"state": "कर्नाटक",
-"lat": 12.91,
-"lon": 74.86,
-"tz": "Asia/Kolkata",
-"aka": [
-"Mangalore"
-]
-},
-{
-"name": "Hubballi",
-"hi": "हुबली",
-"state": "कर्नाटक",
-"lat": 15.36,
-"lon": 75.12,
-"tz": "Asia/Kolkata",
-"aka": [
-"Hubli"
-]
-},
-{
-"name": "Panaji",
-"hi": "पणजी",
-"state": "गोवा",
-"lat": 15.5,
-"lon": 73.83,
-"tz": "Asia/Kolkata",
-"aka": [
-"Panjim"
-]
-},
-{
-"name": "Nashik",
-"hi": "नासिक",
-"state": "महाराष्ट्र",
-"lat": 19.99,
-"lon": 73.79,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Chhatrapati Sambhajinagar",
-"hi": "छत्रपति संभाजीनगर",
-"state": "महाराष्ट्र",
-"lat": 19.88,
-"lon": 75.34,
-"tz": "Asia/Kolkata",
-"aka": [
-"Aurangabad",
-"औरंगाबाद"
-]
-},
-{
-"name": "Solapur",
-"hi": "सोलापुर",
-"state": "महाराष्ट्र",
-"lat": 17.66,
-"lon": 75.91,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Dhanbad",
-"hi": "धनबाद",
-"state": "झारखंड",
-"lat": 23.8,
-"lon": 86.43,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Jamshedpur",
-"hi": "जमशेदपुर",
-"state": "झारखंड",
-"lat": 22.8,
-"lon": 86.18,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bokaro",
-"hi": "बोकारो",
-"state": "झारखंड",
-"lat": 23.67,
-"lon": 86.15,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Gaya",
-"hi": "गया",
-"state": "बिहार",
-"lat": 24.8,
-"lon": 85.0,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Muzaffarpur",
-"hi": "मुज़फ़्फ़रपुर",
-"state": "बिहार",
-"lat": 26.12,
-"lon": 85.39,
-"tz": "Asia/Kolkata",
-"aka": [
-"मुजफ्फरपुर"
-]
-},
-{
-"name": "Bhagalpur",
-"hi": "भागलपुर",
-"state": "बिहार",
-"lat": 25.24,
-"lon": 86.97,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Darbhanga",
-"hi": "दरभंगा",
-"state": "बिहार",
-"lat": 26.17,
-"lon": 85.9,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Gorakhpur",
-"hi": "गोरखपुर",
-"state": "उत्तर प्रदेश",
-"lat": 26.76,
-"lon": 83.37,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Bareilly",
-"hi": "बरेली",
-"state": "उत्तर प्रदेश",
-"lat": 28.35,
-"lon": 79.42,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Aligarh",
-"hi": "अलीगढ़",
-"state": "उत्तर प्रदेश",
-"lat": 27.9,
-"lon": 78.08,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Moradabad",
-"hi": "मुरादाबाद",
-"state": "उत्तर प्रदेश",
-"lat": 28.84,
-"lon": 78.78,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Mathura",
-"hi": "मथुरा",
-"state": "उत्तर प्रदेश",
-"lat": 27.49,
-"lon": 77.67,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Ayodhya",
-"hi": "अयोध्या",
-"state": "उत्तर प्रदेश",
-"lat": 26.8,
-"lon": 82.2,
-"tz": "Asia/Kolkata",
-"aka": [
-"Faizabad",
-"फैज़ाबाद"
-]
-},
-{
-"name": "Jhansi",
-"hi": "झाँसी",
-"state": "उत्तर प्रदेश",
-"lat": 25.45,
-"lon": 78.57,
-"tz": "Asia/Kolkata",
-"aka": [
-"झांसी"
-]
-},
-{
-"name": "Siliguri",
-"hi": "सिलीगुड़ी",
-"state": "पश्चिम बंगाल",
-"lat": 26.73,
-"lon": 88.4,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Durgapur",
-"hi": "दुर्गापुर",
-"state": "पश्चिम बंगाल",
-"lat": 23.52,
-"lon": 87.31,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Asansol",
-"hi": "आसनसोल",
-"state": "पश्चिम बंगाल",
-"lat": 23.68,
-"lon": 86.98,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Puducherry",
-"hi": "पुदुच्चेरी",
-"state": "पुदुच्चेरी",
-"lat": 11.93,
-"lon": 79.83,
-"tz": "Asia/Kolkata",
-"aka": [
-"Pondicherry",
-"पांडिचेरी"
-]
-},
-{
-"name": "Port Blair",
-"hi": "पोर्ट ब्लेयर",
-"state": "अंडमान-निकोबार",
-"lat": 11.62,
-"lon": 92.73,
-"tz": "Asia/Kolkata",
-"aka": []
-},
-{
-"name": "Kathmandu",
-"hi": "काठमांडू",
-"state": "नेपाल",
-"lat": 27.72,
-"lon": 85.32,
-"tz": "Asia/Kathmandu",
-"aka": []
-},
-{
-"name": "Dhaka",
-"hi": "ढाका",
-"state": "बांग्लादेश",
-"lat": 23.81,
-"lon": 90.41,
-"tz": "Asia/Dhaka",
-"aka": []
-},
-{
-"name": "Colombo",
-"hi": "कोलंबो",
-"state": "श्रीलंका",
-"lat": 6.93,
-"lon": 79.86,
-"tz": "Asia/Colombo",
-"aka": []
-},
-{
-"name": "Karachi",
-"hi": "कराची",
-"state": "पाकिस्तान",
-"lat": 24.86,
-"lon": 67.01,
-"tz": "Asia/Karachi",
-"aka": []
-},
-{
-"name": "Lahore",
-"hi": "लाहौर",
-"state": "पाकिस्तान",
-"lat": 31.55,
-"lon": 74.34,
-"tz": "Asia/Karachi",
-"aka": []
-},
-{
-"name": "Dubai",
-"hi": "दुबई",
-"state": "यूएई",
-"lat": 25.2,
-"lon": 55.27,
-"tz": "Asia/Dubai",
-"aka": []
-},
-{
-"name": "Abu Dhabi",
-"hi": "अबू धाबी",
-"state": "यूएई",
-"lat": 24.45,
-"lon": 54.38,
-"tz": "Asia/Dubai",
-"aka": []
-},
-{
-"name": "Doha",
-"hi": "दोहा",
-"state": "क़तर",
-"lat": 25.29,
-"lon": 51.53,
-"tz": "Asia/Qatar",
-"aka": []
-},
-{
-"name": "Riyadh",
-"hi": "रियाद",
-"state": "सऊदी अरब",
-"lat": 24.71,
-"lon": 46.68,
-"tz": "Asia/Riyadh",
-"aka": []
-},
-{
-"name": "Muscat",
-"hi": "मस्कट",
-"state": "ओमान",
-"lat": 23.59,
-"lon": 58.41,
-"tz": "Asia/Muscat",
-"aka": []
-},
-{
-"name": "Kuwait City",
-"hi": "कुवैत सिटी",
-"state": "कुवैत",
-"lat": 29.38,
-"lon": 47.99,
-"tz": "Asia/Kuwait",
-"aka": []
-},
-{
-"name": "Singapore",
-"hi": "सिंगापुर",
-"state": "सिंगापुर",
-"lat": 1.35,
-"lon": 103.82,
-"tz": "Asia/Singapore",
-"aka": []
-},
-{
-"name": "Kuala Lumpur",
-"hi": "कुआलालंपुर",
-"state": "मलेशिया",
-"lat": 3.14,
-"lon": 101.69,
-"tz": "Asia/Kuala_Lumpur",
-"aka": []
-},
-{
-"name": "Bangkok",
-"hi": "बैंकॉक",
-"state": "थाईलैंड",
-"lat": 13.76,
-"lon": 100.5,
-"tz": "Asia/Bangkok",
-"aka": []
-},
-{
-"name": "Hong Kong",
-"hi": "हांगकांग",
-"state": "हांगकांग",
-"lat": 22.32,
-"lon": 114.17,
-"tz": "Asia/Hong_Kong",
-"aka": []
-},
-{
-"name": "Tokyo",
-"hi": "टोक्यो",
-"state": "जापान",
-"lat": 35.68,
-"lon": 139.69,
-"tz": "Asia/Tokyo",
-"aka": []
-},
-{
-"name": "London",
-"hi": "लंदन",
-"state": "यूके",
-"lat": 51.51,
-"lon": -0.13,
-"tz": "Europe/London",
-"aka": []
-},
-{
-"name": "Paris",
-"hi": "पेरिस",
-"state": "फ़्रांस",
-"lat": 48.86,
-"lon": 2.35,
-"tz": "Europe/Paris",
-"aka": []
-},
-{
-"name": "Frankfurt",
-"hi": "फ़्रैंकफ़र्ट",
-"state": "जर्मनी",
-"lat": 50.11,
-"lon": 8.68,
-"tz": "Europe/Berlin",
-"aka": []
-},
-{
-"name": "New York",
-"hi": "न्यूयॉर्क",
-"state": "अमेरिका",
-"lat": 40.71,
-"lon": -74.01,
-"tz": "America/New_York",
-"aka": []
-},
-{
-"name": "Chicago",
-"hi": "शिकागो",
-"state": "अमेरिका",
-"lat": 41.88,
-"lon": -87.63,
-"tz": "America/Chicago",
-"aka": []
-},
-{
-"name": "Houston",
-"hi": "ह्यूस्टन",
-"state": "अमेरिका",
-"lat": 29.76,
-"lon": -95.37,
-"tz": "America/Chicago",
-"aka": []
-},
-{
-"name": "Los Angeles",
-"hi": "लॉस एंजिल्स",
-"state": "अमेरिका",
-"lat": 34.05,
-"lon": -118.24,
-"tz": "America/Los_Angeles",
-"aka": []
-},
-{
-"name": "San Francisco",
-"hi": "सैन फ़्रांसिस्को",
-"state": "अमेरिका",
-"lat": 37.77,
-"lon": -122.42,
-"tz": "America/Los_Angeles",
-"aka": []
-},
-{
-"name": "Toronto",
-"hi": "टोरंटो",
-"state": "कनाडा",
-"lat": 43.65,
-"lon": -79.38,
-"tz": "America/Toronto",
-"aka": []
-},
-{
-"name": "Sydney",
-"hi": "सिडनी",
-"state": "ऑस्ट्रेलिया",
-"lat": -33.87,
-"lon": 151.21,
-"tz": "Australia/Sydney",
-"aka": []
-},
-{
-"name": "Melbourne",
-"hi": "मेलबर्न",
-"state": "ऑस्ट्रेलिया",
-"lat": -37.81,
-"lon": 144.96,
-"tz": "Australia/Melbourne",
-"aka": []
-},
-{
-"name": "Perth",
-"hi": "पर्थ",
-"state": "ऑस्ट्रेलिया",
-"lat": -31.95,
-"lon": 115.86,
-"tz": "Australia/Perth",
-"aka": []
-},
-{
-"name": "Auckland",
-"hi": "ऑकलैंड",
-"state": "न्यूज़ीलैंड",
-"lat": -36.85,
-"lon": 174.76,
-"tz": "Pacific/Auckland",
-"aka": []
-},
-{
-"name": "Johannesburg",
-"hi": "जोहान्सबर्ग",
-"state": "दक्षिण अफ़्रीका",
-"lat": -26.2,
-"lon": 28.05,
-"tz": "Africa/Johannesburg",
-"aka": []
-},
-{
-"name": "Nairobi",
-"hi": "नैरोबी",
-"state": "केन्या",
-"lat": -1.29,
-"lon": 36.82,
-"tz": "Africa/Nairobi",
-"aka": []
-},
-{
-"name": "Port Louis",
-"hi": "पोर्ट लुई",
-"state": "मॉरीशस",
-"lat": -20.16,
-"lon": 57.5,
-"tz": "Indian/Mauritius",
-"aka": []
-}
-]
+ "_note": "Approximate city-centre coordinates (2 decimals, ~1 km) typed in by hand for this project; verify against an official source before relying on them. Small towns are not covered: enter lat/lon manually. India uses Asia/Kolkata (historic offsets are handled by the tz database).",
+ "places": [
+  {
+   "name": "Jabalpur",
+   "hi": "जबलपुर",
+   "state": "मध्य प्रदेश",
+   "lat": 23.18,
+   "lon": 79.99,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Jubbulpore"
+   ]
+  },
+  {
+   "name": "Bhopal",
+   "hi": "भोपाल",
+   "state": "मध्य प्रदेश",
+   "lat": 23.26,
+   "lon": 77.41,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Indore",
+   "hi": "इंदौर",
+   "state": "मध्य प्रदेश",
+   "lat": 22.72,
+   "lon": 75.86,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gwalior",
+   "hi": "ग्वालियर",
+   "state": "मध्य प्रदेश",
+   "lat": 26.22,
+   "lon": 78.18,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ujjain",
+   "hi": "उज्जैन",
+   "state": "मध्य प्रदेश",
+   "lat": 23.18,
+   "lon": 75.78,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Sagar",
+   "hi": "सागर",
+   "state": "मध्य प्रदेश",
+   "lat": 23.84,
+   "lon": 78.74,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Saugor"
+   ]
+  },
+  {
+   "name": "Rewa",
+   "hi": "रीवा",
+   "state": "मध्य प्रदेश",
+   "lat": 24.53,
+   "lon": 81.3,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Satna",
+   "hi": "सतना",
+   "state": "मध्य प्रदेश",
+   "lat": 24.6,
+   "lon": 80.83,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Katni",
+   "hi": "कटनी",
+   "state": "मध्य प्रदेश",
+   "lat": 23.83,
+   "lon": 80.4,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Narsinghpur",
+   "hi": "नरसिंहपुर",
+   "state": "मध्य प्रदेश",
+   "lat": 22.95,
+   "lon": 79.19,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Damoh",
+   "hi": "दमोह",
+   "state": "मध्य प्रदेश",
+   "lat": 23.83,
+   "lon": 79.44,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Chhindwara",
+   "hi": "छिंदवाड़ा",
+   "state": "मध्य प्रदेश",
+   "lat": 22.06,
+   "lon": 78.94,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Seoni",
+   "hi": "सिवनी",
+   "state": "मध्य प्रदेश",
+   "lat": 22.09,
+   "lon": 79.54,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Sivni"
+   ]
+  },
+  {
+   "name": "Mandla",
+   "hi": "मंडला",
+   "state": "मध्य प्रदेश",
+   "lat": 22.6,
+   "lon": 80.37,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Balaghat",
+   "hi": "बालाघाट",
+   "state": "मध्य प्रदेश",
+   "lat": 21.81,
+   "lon": 80.19,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Sehore",
+   "hi": "सीहोर",
+   "state": "मध्य प्रदेश",
+   "lat": 23.2,
+   "lon": 77.08,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Narmadapuram",
+   "hi": "नर्मदापुरम",
+   "state": "मध्य प्रदेश",
+   "lat": 22.75,
+   "lon": 77.73,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Hoshangabad",
+    "होशंगाबाद"
+   ]
+  },
+  {
+   "name": "Ratlam",
+   "hi": "रतलाम",
+   "state": "मध्य प्रदेश",
+   "lat": 23.33,
+   "lon": 75.04,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dewas",
+   "hi": "देवास",
+   "state": "मध्य प्रदेश",
+   "lat": 22.97,
+   "lon": 76.05,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Khandwa",
+   "hi": "खंडवा",
+   "state": "मध्य प्रदेश",
+   "lat": 21.83,
+   "lon": 76.35,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Burhanpur",
+   "hi": "बुरहानपुर",
+   "state": "मध्य प्रदेश",
+   "lat": 21.31,
+   "lon": 76.23,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Shivpuri",
+   "hi": "शिवपुरी",
+   "state": "मध्य प्रदेश",
+   "lat": 25.42,
+   "lon": 77.66,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Chhatarpur",
+   "hi": "छतरपुर",
+   "state": "मध्य प्रदेश",
+   "lat": 24.92,
+   "lon": 79.58,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Vidisha",
+   "hi": "विदिशा",
+   "state": "मध्य प्रदेश",
+   "lat": 23.52,
+   "lon": 77.81,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Singrauli",
+   "hi": "सिंगरौली",
+   "state": "मध्य प्रदेश",
+   "lat": 24.2,
+   "lon": 82.67,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Betul",
+   "hi": "बैतूल",
+   "state": "मध्य प्रदेश",
+   "lat": 21.91,
+   "lon": 77.9,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Delhi",
+   "hi": "दिल्ली",
+   "state": "दिल्ली",
+   "lat": 28.61,
+   "lon": 77.21,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "New Delhi",
+    "नई दिल्ली"
+   ]
+  },
+  {
+   "name": "Mumbai",
+   "hi": "मुंबई",
+   "state": "महाराष्ट्र",
+   "lat": 19.08,
+   "lon": 72.88,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Bombay",
+    "बॉम्बे"
+   ]
+  },
+  {
+   "name": "Kolkata",
+   "hi": "कोलकाता",
+   "state": "पश्चिम बंगाल",
+   "lat": 22.57,
+   "lon": 88.36,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Calcutta"
+   ]
+  },
+  {
+   "name": "Chennai",
+   "hi": "चेन्नई",
+   "state": "तमिलनाडु",
+   "lat": 13.08,
+   "lon": 80.27,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Madras"
+   ]
+  },
+  {
+   "name": "Bengaluru",
+   "hi": "बेंगलुरु",
+   "state": "कर्नाटक",
+   "lat": 12.97,
+   "lon": 77.59,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Bangalore",
+    "बैंगलोर"
+   ]
+  },
+  {
+   "name": "Hyderabad",
+   "hi": "हैदराबाद",
+   "state": "तेलंगाना",
+   "lat": 17.39,
+   "lon": 78.49,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ahmedabad",
+   "hi": "अहमदाबाद",
+   "state": "गुजरात",
+   "lat": 23.02,
+   "lon": 72.57,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Pune",
+   "hi": "पुणे",
+   "state": "महाराष्ट्र",
+   "lat": 18.52,
+   "lon": 73.86,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Poona"
+   ]
+  },
+  {
+   "name": "Jaipur",
+   "hi": "जयपुर",
+   "state": "राजस्थान",
+   "lat": 26.91,
+   "lon": 75.79,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Lucknow",
+   "hi": "लखनऊ",
+   "state": "उत्तर प्रदेश",
+   "lat": 26.85,
+   "lon": 80.95,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kanpur",
+   "hi": "कानपुर",
+   "state": "उत्तर प्रदेश",
+   "lat": 26.45,
+   "lon": 80.35,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Cawnpore"
+   ]
+  },
+  {
+   "name": "Nagpur",
+   "hi": "नागपुर",
+   "state": "महाराष्ट्र",
+   "lat": 21.15,
+   "lon": 79.09,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Patna",
+   "hi": "पटना",
+   "state": "बिहार",
+   "lat": 25.59,
+   "lon": 85.14,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ranchi",
+   "hi": "रांची",
+   "state": "झारखंड",
+   "lat": 23.34,
+   "lon": 85.31,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Varanasi",
+   "hi": "वाराणसी",
+   "state": "उत्तर प्रदेश",
+   "lat": 25.32,
+   "lon": 82.97,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Banaras",
+    "Benares",
+    "काशी",
+    "बनारस"
+   ]
+  },
+  {
+   "name": "Prayagraj",
+   "hi": "प्रयागराज",
+   "state": "उत्तर प्रदेश",
+   "lat": 25.44,
+   "lon": 81.85,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Allahabad",
+    "इलाहाबाद"
+   ]
+  },
+  {
+   "name": "Agra",
+   "hi": "आगरा",
+   "state": "उत्तर प्रदेश",
+   "lat": 27.18,
+   "lon": 78.02,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Meerut",
+   "hi": "मेरठ",
+   "state": "उत्तर प्रदेश",
+   "lat": 28.98,
+   "lon": 77.71,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Noida",
+   "hi": "नोएडा",
+   "state": "उत्तर प्रदेश",
+   "lat": 28.54,
+   "lon": 77.39,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ghaziabad",
+   "hi": "गाज़ियाबाद",
+   "state": "उत्तर प्रदेश",
+   "lat": 28.67,
+   "lon": 77.45,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "गाजियाबाद"
+   ]
+  },
+  {
+   "name": "Gurugram",
+   "hi": "गुरुग्राम",
+   "state": "हरियाणा",
+   "lat": 28.46,
+   "lon": 77.03,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Gurgaon",
+    "गुड़गांव"
+   ]
+  },
+  {
+   "name": "Chandigarh",
+   "hi": "चंडीगढ़",
+   "state": "चंडीगढ़",
+   "lat": 30.73,
+   "lon": 76.78,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ludhiana",
+   "hi": "लुधियाना",
+   "state": "पंजाब",
+   "lat": 30.9,
+   "lon": 75.86,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Amritsar",
+   "hi": "अमृतसर",
+   "state": "पंजाब",
+   "lat": 31.63,
+   "lon": 74.87,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jalandhar",
+   "hi": "जालंधर",
+   "state": "पंजाब",
+   "lat": 31.33,
+   "lon": 75.58,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Patiala",
+   "hi": "पटियाला",
+   "state": "पंजाब",
+   "lat": 30.34,
+   "lon": 76.39,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ambala",
+   "hi": "अंबाला",
+   "state": "हरियाणा",
+   "lat": 30.38,
+   "lon": 76.78,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Rohtak",
+   "hi": "रोहतक",
+   "state": "हरियाणा",
+   "lat": 28.9,
+   "lon": 76.61,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Panipat",
+   "hi": "पानीपत",
+   "state": "हरियाणा",
+   "lat": 29.39,
+   "lon": 76.97,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Karnal",
+   "hi": "करनाल",
+   "state": "हरियाणा",
+   "lat": 29.69,
+   "lon": 76.99,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Hisar",
+   "hi": "हिसार",
+   "state": "हरियाणा",
+   "lat": 29.15,
+   "lon": 75.72,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dehradun",
+   "hi": "देहरादून",
+   "state": "उत्तराखंड",
+   "lat": 30.32,
+   "lon": 78.03,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Haridwar",
+   "hi": "हरिद्वार",
+   "state": "उत्तराखंड",
+   "lat": 29.95,
+   "lon": 78.16,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Shimla",
+   "hi": "शिमला",
+   "state": "हिमाचल प्रदेश",
+   "lat": 31.1,
+   "lon": 77.17,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Srinagar",
+   "hi": "श्रीनगर",
+   "state": "जम्मू-कश्मीर",
+   "lat": 34.08,
+   "lon": 74.8,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jammu",
+   "hi": "जम्मू",
+   "state": "जम्मू-कश्मीर",
+   "lat": 32.73,
+   "lon": 74.87,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Leh",
+   "hi": "लेह",
+   "state": "लद्दाख",
+   "lat": 34.15,
+   "lon": 77.58,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Raipur",
+   "hi": "रायपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 21.25,
+   "lon": 81.63,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bilaspur",
+   "hi": "बिलासपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 22.08,
+   "lon": 82.15,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bhilai",
+   "hi": "भिलाई",
+   "state": "छत्तीसगढ़",
+   "lat": 21.21,
+   "lon": 81.38,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Surat",
+   "hi": "सूरत",
+   "state": "गुजरात",
+   "lat": 21.17,
+   "lon": 72.83,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Vadodara",
+   "hi": "वडोदरा",
+   "state": "गुजरात",
+   "lat": 22.31,
+   "lon": 73.18,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Baroda",
+    "बड़ौदा"
+   ]
+  },
+  {
+   "name": "Rajkot",
+   "hi": "राजकोट",
+   "state": "गुजरात",
+   "lat": 22.3,
+   "lon": 70.8,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jodhpur",
+   "hi": "जोधपुर",
+   "state": "राजस्थान",
+   "lat": 26.24,
+   "lon": 73.02,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Udaipur",
+   "hi": "उदयपुर",
+   "state": "राजस्थान",
+   "lat": 24.59,
+   "lon": 73.71,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kota",
+   "hi": "कोटा",
+   "state": "राजस्थान",
+   "lat": 25.18,
+   "lon": 75.84,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ajmer",
+   "hi": "अजमेर",
+   "state": "राजस्थान",
+   "lat": 26.45,
+   "lon": 74.64,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bikaner",
+   "hi": "बीकानेर",
+   "state": "राजस्थान",
+   "lat": 28.02,
+   "lon": 73.31,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bhubaneswar",
+   "hi": "भुवनेश्वर",
+   "state": "ओडिशा",
+   "lat": 20.3,
+   "lon": 85.82,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Cuttack",
+   "hi": "कटक",
+   "state": "ओडिशा",
+   "lat": 20.46,
+   "lon": 85.88,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Guwahati",
+   "hi": "गुवाहाटी",
+   "state": "असम",
+   "lat": 26.14,
+   "lon": 91.74,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Imphal",
+   "hi": "इंफाल",
+   "state": "मणिपुर",
+   "lat": 24.82,
+   "lon": 93.95,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Shillong",
+   "hi": "शिलांग",
+   "state": "मेघालय",
+   "lat": 25.58,
+   "lon": 91.89,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Agartala",
+   "hi": "अगरतला",
+   "state": "त्रिपुरा",
+   "lat": 23.83,
+   "lon": 91.28,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gangtok",
+   "hi": "गंगटोक",
+   "state": "सिक्किम",
+   "lat": 27.34,
+   "lon": 88.61,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kohima",
+   "hi": "कोहिमा",
+   "state": "नागालैंड",
+   "lat": 25.67,
+   "lon": 94.11,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Aizawl",
+   "hi": "आइजोल",
+   "state": "मिज़ोरम",
+   "lat": 23.73,
+   "lon": 92.72,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Itanagar",
+   "hi": "ईटानगर",
+   "state": "अरुणाचल प्रदेश",
+   "lat": 27.08,
+   "lon": 93.61,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Visakhapatnam",
+   "hi": "विशाखापत्तनम",
+   "state": "आंध्र प्रदेश",
+   "lat": 17.69,
+   "lon": 83.22,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Vizag"
+   ]
+  },
+  {
+   "name": "Vijayawada",
+   "hi": "विजयवाड़ा",
+   "state": "आंध्र प्रदेश",
+   "lat": 16.51,
+   "lon": 80.65,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Tirupati",
+   "hi": "तिरुपति",
+   "state": "आंध्र प्रदेश",
+   "lat": 13.63,
+   "lon": 79.42,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Thiruvananthapuram",
+   "hi": "तिरुवनंतपुरम",
+   "state": "केरल",
+   "lat": 8.52,
+   "lon": 76.94,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Trivandrum"
+   ]
+  },
+  {
+   "name": "Kochi",
+   "hi": "कोच्चि",
+   "state": "केरल",
+   "lat": 9.93,
+   "lon": 76.27,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Cochin"
+   ]
+  },
+  {
+   "name": "Kozhikode",
+   "hi": "कोझिकोड",
+   "state": "केरल",
+   "lat": 11.26,
+   "lon": 75.78,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Calicut"
+   ]
+  },
+  {
+   "name": "Madurai",
+   "hi": "मदुरै",
+   "state": "तमिलनाडु",
+   "lat": 9.93,
+   "lon": 78.12,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Coimbatore",
+   "hi": "कोयंबटूर",
+   "state": "तमिलनाडु",
+   "lat": 11.02,
+   "lon": 76.96,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Tiruchirappalli",
+   "hi": "तिरुचिरापल्ली",
+   "state": "तमिलनाडु",
+   "lat": 10.79,
+   "lon": 78.7,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Trichy"
+   ]
+  },
+  {
+   "name": "Mysuru",
+   "hi": "मैसूरु",
+   "state": "कर्नाटक",
+   "lat": 12.3,
+   "lon": 76.64,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Mysore",
+    "मैसूर"
+   ]
+  },
+  {
+   "name": "Mangaluru",
+   "hi": "मंगलुरु",
+   "state": "कर्नाटक",
+   "lat": 12.91,
+   "lon": 74.86,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Mangalore"
+   ]
+  },
+  {
+   "name": "Hubballi",
+   "hi": "हुबली",
+   "state": "कर्नाटक",
+   "lat": 15.36,
+   "lon": 75.12,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Hubli"
+   ]
+  },
+  {
+   "name": "Panaji",
+   "hi": "पणजी",
+   "state": "गोवा",
+   "lat": 15.5,
+   "lon": 73.83,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Panjim"
+   ]
+  },
+  {
+   "name": "Nashik",
+   "hi": "नासिक",
+   "state": "महाराष्ट्र",
+   "lat": 19.99,
+   "lon": 73.79,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Chhatrapati Sambhajinagar",
+   "hi": "छत्रपति संभाजीनगर",
+   "state": "महाराष्ट्र",
+   "lat": 19.88,
+   "lon": 75.34,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Aurangabad",
+    "औरंगाबाद"
+   ]
+  },
+  {
+   "name": "Solapur",
+   "hi": "सोलापुर",
+   "state": "महाराष्ट्र",
+   "lat": 17.66,
+   "lon": 75.91,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dhanbad",
+   "hi": "धनबाद",
+   "state": "झारखंड",
+   "lat": 23.8,
+   "lon": 86.43,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jamshedpur",
+   "hi": "जमशेदपुर",
+   "state": "झारखंड",
+   "lat": 22.8,
+   "lon": 86.18,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bokaro",
+   "hi": "बोकारो",
+   "state": "झारखंड",
+   "lat": 23.67,
+   "lon": 86.15,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gaya",
+   "hi": "गया",
+   "state": "बिहार",
+   "lat": 24.8,
+   "lon": 85.0,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Muzaffarpur",
+   "hi": "मुज़फ़्फ़रपुर",
+   "state": "बिहार",
+   "lat": 26.12,
+   "lon": 85.39,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "मुजफ्फरपुर"
+   ]
+  },
+  {
+   "name": "Bhagalpur",
+   "hi": "भागलपुर",
+   "state": "बिहार",
+   "lat": 25.24,
+   "lon": 86.97,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Darbhanga",
+   "hi": "दरभंगा",
+   "state": "बिहार",
+   "lat": 26.17,
+   "lon": 85.9,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gorakhpur",
+   "hi": "गोरखपुर",
+   "state": "उत्तर प्रदेश",
+   "lat": 26.76,
+   "lon": 83.37,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bareilly",
+   "hi": "बरेली",
+   "state": "उत्तर प्रदेश",
+   "lat": 28.35,
+   "lon": 79.42,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Aligarh",
+   "hi": "अलीगढ़",
+   "state": "उत्तर प्रदेश",
+   "lat": 27.9,
+   "lon": 78.08,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Moradabad",
+   "hi": "मुरादाबाद",
+   "state": "उत्तर प्रदेश",
+   "lat": 28.84,
+   "lon": 78.78,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Mathura",
+   "hi": "मथुरा",
+   "state": "उत्तर प्रदेश",
+   "lat": 27.49,
+   "lon": 77.67,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ayodhya",
+   "hi": "अयोध्या",
+   "state": "उत्तर प्रदेश",
+   "lat": 26.8,
+   "lon": 82.2,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Faizabad",
+    "फैज़ाबाद"
+   ]
+  },
+  {
+   "name": "Jhansi",
+   "hi": "झाँसी",
+   "state": "उत्तर प्रदेश",
+   "lat": 25.45,
+   "lon": 78.57,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "झांसी"
+   ]
+  },
+  {
+   "name": "Siliguri",
+   "hi": "सिलीगुड़ी",
+   "state": "पश्चिम बंगाल",
+   "lat": 26.73,
+   "lon": 88.4,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Durgapur",
+   "hi": "दुर्गापुर",
+   "state": "पश्चिम बंगाल",
+   "lat": 23.52,
+   "lon": 87.31,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Asansol",
+   "hi": "आसनसोल",
+   "state": "पश्चिम बंगाल",
+   "lat": 23.68,
+   "lon": 86.98,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Puducherry",
+   "hi": "पुदुच्चेरी",
+   "state": "पुदुच्चेरी",
+   "lat": 11.93,
+   "lon": 79.83,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Pondicherry",
+    "पांडिचेरी"
+   ]
+  },
+  {
+   "name": "Port Blair",
+   "hi": "पोर्ट ब्लेयर",
+   "state": "अंडमान-निकोबार",
+   "lat": 11.62,
+   "lon": 92.73,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kathmandu",
+   "hi": "काठमांडू",
+   "state": "नेपाल",
+   "lat": 27.72,
+   "lon": 85.32,
+   "tz": "Asia/Kathmandu",
+   "aka": []
+  },
+  {
+   "name": "Dhaka",
+   "hi": "ढाका",
+   "state": "बांग्लादेश",
+   "lat": 23.81,
+   "lon": 90.41,
+   "tz": "Asia/Dhaka",
+   "aka": []
+  },
+  {
+   "name": "Colombo",
+   "hi": "कोलंबो",
+   "state": "श्रीलंका",
+   "lat": 6.93,
+   "lon": 79.86,
+   "tz": "Asia/Colombo",
+   "aka": []
+  },
+  {
+   "name": "Karachi",
+   "hi": "कराची",
+   "state": "पाकिस्तान",
+   "lat": 24.86,
+   "lon": 67.01,
+   "tz": "Asia/Karachi",
+   "aka": []
+  },
+  {
+   "name": "Lahore",
+   "hi": "लाहौर",
+   "state": "पाकिस्तान",
+   "lat": 31.55,
+   "lon": 74.34,
+   "tz": "Asia/Karachi",
+   "aka": []
+  },
+  {
+   "name": "Dubai",
+   "hi": "दुबई",
+   "state": "यूएई",
+   "lat": 25.2,
+   "lon": 55.27,
+   "tz": "Asia/Dubai",
+   "aka": []
+  },
+  {
+   "name": "Abu Dhabi",
+   "hi": "अबू धाबी",
+   "state": "यूएई",
+   "lat": 24.45,
+   "lon": 54.38,
+   "tz": "Asia/Dubai",
+   "aka": []
+  },
+  {
+   "name": "Doha",
+   "hi": "दोहा",
+   "state": "क़तर",
+   "lat": 25.29,
+   "lon": 51.53,
+   "tz": "Asia/Qatar",
+   "aka": []
+  },
+  {
+   "name": "Riyadh",
+   "hi": "रियाद",
+   "state": "सऊदी अरब",
+   "lat": 24.71,
+   "lon": 46.68,
+   "tz": "Asia/Riyadh",
+   "aka": []
+  },
+  {
+   "name": "Muscat",
+   "hi": "मस्कट",
+   "state": "ओमान",
+   "lat": 23.59,
+   "lon": 58.41,
+   "tz": "Asia/Muscat",
+   "aka": []
+  },
+  {
+   "name": "Kuwait City",
+   "hi": "कुवैत सिटी",
+   "state": "कुवैत",
+   "lat": 29.38,
+   "lon": 47.99,
+   "tz": "Asia/Kuwait",
+   "aka": []
+  },
+  {
+   "name": "Singapore",
+   "hi": "सिंगापुर",
+   "state": "सिंगापुर",
+   "lat": 1.35,
+   "lon": 103.82,
+   "tz": "Asia/Singapore",
+   "aka": []
+  },
+  {
+   "name": "Kuala Lumpur",
+   "hi": "कुआलालंपुर",
+   "state": "मलेशिया",
+   "lat": 3.14,
+   "lon": 101.69,
+   "tz": "Asia/Kuala_Lumpur",
+   "aka": []
+  },
+  {
+   "name": "Bangkok",
+   "hi": "बैंकॉक",
+   "state": "थाईलैंड",
+   "lat": 13.76,
+   "lon": 100.5,
+   "tz": "Asia/Bangkok",
+   "aka": []
+  },
+  {
+   "name": "Hong Kong",
+   "hi": "हांगकांग",
+   "state": "हांगकांग",
+   "lat": 22.32,
+   "lon": 114.17,
+   "tz": "Asia/Hong_Kong",
+   "aka": []
+  },
+  {
+   "name": "Tokyo",
+   "hi": "टोक्यो",
+   "state": "जापान",
+   "lat": 35.68,
+   "lon": 139.69,
+   "tz": "Asia/Tokyo",
+   "aka": []
+  },
+  {
+   "name": "London",
+   "hi": "लंदन",
+   "state": "यूके",
+   "lat": 51.51,
+   "lon": -0.13,
+   "tz": "Europe/London",
+   "aka": []
+  },
+  {
+   "name": "Paris",
+   "hi": "पेरिस",
+   "state": "फ़्रांस",
+   "lat": 48.86,
+   "lon": 2.35,
+   "tz": "Europe/Paris",
+   "aka": []
+  },
+  {
+   "name": "Frankfurt",
+   "hi": "फ़्रैंकफ़र्ट",
+   "state": "जर्मनी",
+   "lat": 50.11,
+   "lon": 8.68,
+   "tz": "Europe/Berlin",
+   "aka": []
+  },
+  {
+   "name": "New York",
+   "hi": "न्यूयॉर्क",
+   "state": "अमेरिका",
+   "lat": 40.71,
+   "lon": -74.01,
+   "tz": "America/New_York",
+   "aka": []
+  },
+  {
+   "name": "Chicago",
+   "hi": "शिकागो",
+   "state": "अमेरिका",
+   "lat": 41.88,
+   "lon": -87.63,
+   "tz": "America/Chicago",
+   "aka": []
+  },
+  {
+   "name": "Houston",
+   "hi": "ह्यूस्टन",
+   "state": "अमेरिका",
+   "lat": 29.76,
+   "lon": -95.37,
+   "tz": "America/Chicago",
+   "aka": []
+  },
+  {
+   "name": "Los Angeles",
+   "hi": "लॉस एंजिल्स",
+   "state": "अमेरिका",
+   "lat": 34.05,
+   "lon": -118.24,
+   "tz": "America/Los_Angeles",
+   "aka": []
+  },
+  {
+   "name": "San Francisco",
+   "hi": "सैन फ़्रांसिस्को",
+   "state": "अमेरिका",
+   "lat": 37.77,
+   "lon": -122.42,
+   "tz": "America/Los_Angeles",
+   "aka": []
+  },
+  {
+   "name": "Toronto",
+   "hi": "टोरंटो",
+   "state": "कनाडा",
+   "lat": 43.65,
+   "lon": -79.38,
+   "tz": "America/Toronto",
+   "aka": []
+  },
+  {
+   "name": "Sydney",
+   "hi": "सिडनी",
+   "state": "ऑस्ट्रेलिया",
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": "Australia/Sydney",
+   "aka": []
+  },
+  {
+   "name": "Melbourne",
+   "hi": "मेलबर्न",
+   "state": "ऑस्ट्रेलिया",
+   "lat": -37.81,
+   "lon": 144.96,
+   "tz": "Australia/Melbourne",
+   "aka": []
+  },
+  {
+   "name": "Perth",
+   "hi": "पर्थ",
+   "state": "ऑस्ट्रेलिया",
+   "lat": -31.95,
+   "lon": 115.86,
+   "tz": "Australia/Perth",
+   "aka": []
+  },
+  {
+   "name": "Auckland",
+   "hi": "ऑकलैंड",
+   "state": "न्यूज़ीलैंड",
+   "lat": -36.85,
+   "lon": 174.76,
+   "tz": "Pacific/Auckland",
+   "aka": []
+  },
+  {
+   "name": "Johannesburg",
+   "hi": "जोहान्सबर्ग",
+   "state": "दक्षिण अफ़्रीका",
+   "lat": -26.2,
+   "lon": 28.05,
+   "tz": "Africa/Johannesburg",
+   "aka": []
+  },
+  {
+   "name": "Nairobi",
+   "hi": "नैरोबी",
+   "state": "केन्या",
+   "lat": -1.29,
+   "lon": 36.82,
+   "tz": "Africa/Nairobi",
+   "aka": []
+  },
+  {
+   "name": "Port Louis",
+   "hi": "पोर्ट लुई",
+   "state": "मॉरीशस",
+   "lat": -20.16,
+   "lon": 57.5,
+   "tz": "Indian/Mauritius",
+   "aka": []
+  },
+  {
+   "name": "Korba",
+   "hi": "कोरबा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.35,
+   "lon": 82.68,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Korba (C.G.)"
+   ]
+  },
+  {
+   "name": "Durg",
+   "hi": "दुर्ग",
+   "state": "छत्तीसगढ़",
+   "lat": 21.19,
+   "lon": 81.28,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Rajnandgaon",
+   "hi": "राजनांदगांव",
+   "state": "छत्तीसगढ़",
+   "lat": 21.1,
+   "lon": 81.03,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Raigarh",
+   "hi": "रायगढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 21.9,
+   "lon": 83.4,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jagdalpur",
+   "hi": "जगदलपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 19.08,
+   "lon": 82.03,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Bastar"
+   ]
+  },
+  {
+   "name": "Ambikapur",
+   "hi": "अंबिकापुर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.12,
+   "lon": 83.2,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Surguja"
+   ]
+  },
+  {
+   "name": "Dhamtari",
+   "hi": "धमतरी",
+   "state": "छत्तीसगढ़",
+   "lat": 20.71,
+   "lon": 81.55,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Mahasamund",
+   "hi": "महासमुंद",
+   "state": "छत्तीसगढ़",
+   "lat": 21.11,
+   "lon": 82.1,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kanker",
+   "hi": "कांकेर",
+   "state": "छत्तीसगढ़",
+   "lat": 20.27,
+   "lon": 81.49,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kawardha",
+   "hi": "कवर्धा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.01,
+   "lon": 81.23,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Kabirdham"
+   ]
+  },
+  {
+   "name": "Janjgir",
+   "hi": "जांजगीर",
+   "state": "छत्तीसगढ़",
+   "lat": 22.01,
+   "lon": 82.58,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Janjgir-Champa",
+    "Champa"
+   ]
+  },
+  {
+   "name": "Champa",
+   "hi": "चांपा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.04,
+   "lon": 82.65,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Mungeli",
+   "hi": "मुंगेली",
+   "state": "छत्तीसगढ़",
+   "lat": 22.07,
+   "lon": 81.69,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Baloda Bazar",
+   "hi": "बलौदा बाज़ार",
+   "state": "छत्तीसगढ़",
+   "lat": 21.66,
+   "lon": 82.16,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bemetara",
+   "hi": "बेमेतरा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.72,
+   "lon": 81.53,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Balod",
+   "hi": "बालोद",
+   "state": "छत्तीसगढ़",
+   "lat": 20.73,
+   "lon": 81.21,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gariaband",
+   "hi": "गरियाबंद",
+   "state": "छत्तीसगढ़",
+   "lat": 20.63,
+   "lon": 82.06,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kondagaon",
+   "hi": "कोंडागांव",
+   "state": "छत्तीसगढ़",
+   "lat": 19.59,
+   "lon": 81.66,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Narayanpur",
+   "hi": "नारायणपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 19.72,
+   "lon": 81.25,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dantewada",
+   "hi": "दंतेवाड़ा",
+   "state": "छत्तीसगढ़",
+   "lat": 18.9,
+   "lon": 81.35,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bijapur",
+   "hi": "बीजापुर (छ.ग.)",
+   "state": "छत्तीसगढ़",
+   "lat": 18.79,
+   "lon": 80.82,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Sukma",
+   "hi": "सुकमा",
+   "state": "छत्तीसगढ़",
+   "lat": 18.39,
+   "lon": 81.66,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jashpur",
+   "hi": "जशपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 22.89,
+   "lon": 84.14,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Jashpurnagar"
+   ]
+  },
+  {
+   "name": "Surajpur",
+   "hi": "सूरजपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.21,
+   "lon": 82.87,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Baikunthpur",
+   "hi": "बैकुंठपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.26,
+   "lon": 82.56,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Koriya",
+    "Korea"
+   ]
+  },
+  {
+   "name": "Balrampur (C.G.)",
+   "hi": "बलरामपुर (छ.ग.)",
+   "state": "छत्तीसगढ़",
+   "lat": 23.11,
+   "lon": 83.61,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Ramanujganj"
+   ]
+  },
+  {
+   "name": "Pendra",
+   "hi": "पेंड्रा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.77,
+   "lon": 81.96,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Gaurela-Pendra-Marwahi",
+    "Gaurela"
+   ]
+  },
+  {
+   "name": "Sakti",
+   "hi": "सक्ती",
+   "state": "छत्तीसगढ़",
+   "lat": 22.03,
+   "lon": 82.96,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Manendragarh",
+   "hi": "मनेंद्रगढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 23.21,
+   "lon": 82.21,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Chirmiri"
+   ]
+  },
+  {
+   "name": "Chirmiri",
+   "hi": "चिरमिरी",
+   "state": "छत्तीसगढ़",
+   "lat": 23.19,
+   "lon": 82.35,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Khairagarh",
+   "hi": "खैरागढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 21.42,
+   "lon": 80.98,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Mohla",
+   "hi": "मोहला",
+   "state": "छत्तीसगढ़",
+   "lat": 20.59,
+   "lon": 80.72,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Manpur"
+   ]
+  },
+  {
+   "name": "Sarangarh",
+   "hi": "सारंगढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 21.59,
+   "lon": 83.08,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bhatapara",
+   "hi": "भाटापारा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.73,
+   "lon": 81.94,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dalli-Rajhara",
+   "hi": "दल्ली-राजहरा",
+   "state": "छत्तीसगढ़",
+   "lat": 20.58,
+   "lon": 81.08,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Rajhara"
+   ]
+  },
+  {
+   "name": "Tilda",
+   "hi": "तिल्दा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.55,
+   "lon": 81.79,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Tilda Newra"
+   ]
+  },
+  {
+   "name": "Kharsia",
+   "hi": "खरसिया",
+   "state": "छत्तीसगढ़",
+   "lat": 21.99,
+   "lon": 83.1,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Chhal",
+   "hi": "छाल",
+   "state": "छत्तीसगढ़",
+   "lat": 22.14,
+   "lon": 83.55,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Chhal (Raigarh)"
+   ]
+  },
+  {
+   "name": "Dharamjaigarh",
+   "hi": "धरमजयगढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 22.47,
+   "lon": 83.23,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Katghora",
+   "hi": "कटघोरा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.5,
+   "lon": 82.54,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Pathalgaon",
+   "hi": "पत्थलगांव",
+   "state": "छत्तीसगढ़",
+   "lat": 22.56,
+   "lon": 83.46,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kunkuri",
+   "hi": "कुनकुरी",
+   "state": "छत्तीसगढ़",
+   "lat": 22.74,
+   "lon": 83.95,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Takhatpur",
+   "hi": "तखतपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 22.13,
+   "lon": 81.87,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Ratanpur",
+   "hi": "रतनपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 22.29,
+   "lon": 82.17,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Arang",
+   "hi": "आरंग",
+   "state": "छत्तीसगढ़",
+   "lat": 21.2,
+   "lon": 81.97,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Abhanpur",
+   "hi": "अभनपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 21.07,
+   "lon": 81.75,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Naya Raipur",
+   "hi": "नया रायपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 21.16,
+   "lon": 81.79,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Atal Nagar"
+   ]
+  },
+  {
+   "name": "Bhilai Nagar",
+   "hi": "भिलाई नगर",
+   "state": "छत्तीसगढ़",
+   "lat": 21.21,
+   "lon": 81.38,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Charama",
+   "hi": "चारामा",
+   "state": "छत्तीसगढ़",
+   "lat": 20.48,
+   "lon": 81.37,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bagbahara",
+   "hi": "बागबाहरा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.03,
+   "lon": 82.2,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Saraipali",
+   "hi": "सरायपाली",
+   "state": "छत्तीसगढ़",
+   "lat": 21.33,
+   "lon": 83.0,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Pithora",
+   "hi": "पिथौरा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.25,
+   "lon": 82.52,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Simga",
+   "hi": "सिमगा",
+   "state": "छत्तीसगढ़",
+   "lat": 21.63,
+   "lon": 81.7,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Kurud",
+   "hi": "कुरूद",
+   "state": "छत्तीसगढ़",
+   "lat": 20.83,
+   "lon": 81.72,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gunderdehi",
+   "hi": "गुंडरदेही",
+   "state": "छत्तीसगढ़",
+   "lat": 20.95,
+   "lon": 81.28,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dongargarh",
+   "hi": "डोंगरगढ़",
+   "state": "छत्तीसगढ़",
+   "lat": 21.19,
+   "lon": 80.75,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Lormi",
+   "hi": "लोरमी",
+   "state": "छत्तीसगढ़",
+   "lat": 22.27,
+   "lon": 81.7,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Pandaria",
+   "hi": "पंडरिया",
+   "state": "छत्तीसगढ़",
+   "lat": 22.23,
+   "lon": 81.41,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Akaltara",
+   "hi": "अकलतरा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.03,
+   "lon": 82.43,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Shivrinarayan",
+   "hi": "शिवरीनारायण",
+   "state": "छत्तीसगढ़",
+   "lat": 21.72,
+   "lon": 82.59,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bagicha",
+   "hi": "बगीचा",
+   "state": "छत्तीसगढ़",
+   "lat": 22.86,
+   "lon": 83.72,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Pratappur",
+   "hi": "प्रतापपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.47,
+   "lon": 83.0,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Wadrafnagar",
+   "hi": "वाड्रफनगर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.66,
+   "lon": 83.47,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Premnagar",
+   "hi": "प्रेमनगर",
+   "state": "छत्तीसगढ़",
+   "lat": 23.17,
+   "lon": 82.68,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bhanupratappur",
+   "hi": "भानुप्रतापपुर",
+   "state": "छत्तीसगढ़",
+   "lat": 20.29,
+   "lon": 81.08,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Keshkal",
+   "hi": "केशकाल",
+   "state": "छत्तीसगढ़",
+   "lat": 20.09,
+   "lon": 81.59,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Geedam",
+   "hi": "गीदम",
+   "state": "छत्तीसगढ़",
+   "lat": 18.98,
+   "lon": 81.39,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bacheli",
+   "hi": "बचेली",
+   "state": "छत्तीसगढ़",
+   "lat": 18.72,
+   "lon": 81.26,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Kirandul"
+   ]
+  },
+  {
+   "name": "Konta",
+   "hi": "कोंटा",
+   "state": "छत्तीसगढ़",
+   "lat": 17.8,
+   "lon": 81.39,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bastar",
+   "hi": "बस्तर",
+   "state": "छत्तीसगढ़",
+   "lat": 19.25,
+   "lon": 81.95,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Anuppur",
+   "hi": "अनूपपुर",
+   "state": "मध्य प्रदेश",
+   "lat": 23.1,
+   "lon": 81.69,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Amarkantak"
+   ]
+  },
+  {
+   "name": "Shahdol",
+   "hi": "शहडोल",
+   "state": "मध्य प्रदेश",
+   "lat": 23.3,
+   "lon": 81.36,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Dindori",
+   "hi": "डिंडोरी",
+   "state": "मध्य प्रदेश",
+   "lat": 22.94,
+   "lon": 81.08,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Umaria",
+   "hi": "उमरिया",
+   "state": "मध्य प्रदेश",
+   "lat": 23.52,
+   "lon": 80.84,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Sidhi",
+   "hi": "सीधी",
+   "state": "मध्य प्रदेश",
+   "lat": 24.42,
+   "lon": 81.88,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Sambalpur",
+   "hi": "संबलपुर",
+   "state": "ओडिशा",
+   "lat": 21.47,
+   "lon": 83.97,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jharsuguda",
+   "hi": "झारसुगुड़ा",
+   "state": "ओडिशा",
+   "lat": 21.86,
+   "lon": 84.01,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Rourkela",
+   "hi": "राउरकेला",
+   "state": "ओडिशा",
+   "lat": 22.26,
+   "lon": 84.85,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bargarh",
+   "hi": "बरगढ़",
+   "state": "ओडिशा",
+   "lat": 21.33,
+   "lon": 83.62,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Koraput",
+   "hi": "कोरापुट",
+   "state": "ओडिशा",
+   "lat": 18.81,
+   "lon": 82.71,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Jeypore",
+   "hi": "जयपुर (ओडिशा)",
+   "state": "ओडिशा",
+   "lat": 18.86,
+   "lon": 82.57,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Nabarangpur",
+   "hi": "नबरंगपुर",
+   "state": "ओडिशा",
+   "lat": 19.23,
+   "lon": 82.55,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gumla",
+   "hi": "गुमला",
+   "state": "झारखंड",
+   "lat": 23.04,
+   "lon": 84.54,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Simdega",
+   "hi": "सिमडेगा",
+   "state": "झारखंड",
+   "lat": 22.62,
+   "lon": 84.51,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Garhwa",
+   "hi": "गढ़वा",
+   "state": "झारखंड",
+   "lat": 24.16,
+   "lon": 83.81,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Daltonganj",
+   "hi": "डालटनगंज",
+   "state": "झारखंड",
+   "lat": 24.04,
+   "lon": 84.07,
+   "tz": "Asia/Kolkata",
+   "aka": [
+    "Medininagar",
+    "Palamu"
+   ]
+  },
+  {
+   "name": "Hazaribagh",
+   "hi": "हज़ारीबाग़",
+   "state": "झारखंड",
+   "lat": 23.99,
+   "lon": 85.36,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Chandrapur",
+   "hi": "चंद्रपुर",
+   "state": "महाराष्ट्र",
+   "lat": 19.95,
+   "lon": 79.3,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gondia",
+   "hi": "गोंदिया",
+   "state": "महाराष्ट्र",
+   "lat": 21.46,
+   "lon": 80.19,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Gadchiroli",
+   "hi": "गढ़चिरौली",
+   "state": "महाराष्ट्र",
+   "lat": 20.18,
+   "lon": 80.0,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  },
+  {
+   "name": "Bhadrachalam",
+   "hi": "भद्राचलम",
+   "state": "तेलंगाना",
+   "lat": 17.67,
+   "lon": 80.89,
+   "tz": "Asia/Kolkata",
+   "aka": []
+  }
+ ]
 }

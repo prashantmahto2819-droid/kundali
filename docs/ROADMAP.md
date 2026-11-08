@@ -23,6 +23,10 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
+## Patri header
+- [x] Traditional janma-patri header (vara, tithi, nakshatra-pada-lord, yoga, karana, sunrise/sunset, ishta kaal, masa, ritu, ayana, Vikram/Shaka samvat, tropical Sun sign) + Avakahada chakra (varna, vashya, yoni, gana, nadi, tattva, name syllable) on the web summary and in the report; checked against the Korba printout. Pending: adhika masa, purnimanta option, sunrise disc/refraction option, ghata chakra.
+- [x] City list: 242 places incl. all Chhattisgarh districts/towns and neighbouring MP/Odisha/Jharkhand towns.
+
 ## Accuracy gate
 - [x] First real reference chart (Korba 1991, family printout, N.C. Lahiri): lagna sign, Moon sign/nakshatra/pada, ayanamsa (−0.2′), tithi, paksha, yoga, Ketu balance (−2.2 days), avakahada all match. Pending: a reference with planet degrees (Jagannatha Hora export) and one more birth year/place.
 

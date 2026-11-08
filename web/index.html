@@ -78,6 +78,13 @@
           <option value="25.3176,82.9739">वाराणसी</option>
           <option value="26.8467,80.9462">लखनऊ</option>
           <option value="23.2599,77.4126">भोपाल</option>
+          <option value="21.2514,81.6296">रायपुर</option>
+          <option value="22.0797,82.1409">बिलासपुर</option>
+          <option value="22.35,82.68">कोरबा</option>
+          <option value="21.19,81.28">दुर्ग-भिलाई</option>
+          <option value="21.90,83.40">रायगढ़</option>
+          <option value="19.08,82.03">जगदलपुर</option>
+          <option value="23.12,83.20">अंबिकापुर</option>
           <option value="">अन्य (नीचे अक्षांश/देशांतर भरें)</option>
         </select></div>
       <div><label>अक्षांश (उत्तर +)</label><input id="lat" type="number" step="0.0001" value="23.1815"></div>
@@ -104,6 +111,10 @@
       <button type="button" data-sub="s-numer">अंक</button>
     </nav>
     <section class="sub on" id="s-summary">
+    <div class="grid">
+      <div class="card"><b>जन्म विवरण</b><div id="patri1"></div></div>
+      <div class="card"><b>अवकहड़ा चक्र</b><div id="patri2"></div></div>
+    </div>
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
@@ -387,6 +398,27 @@ function showHouse(h, kind) {
   $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
+function renderPatri(c) {
+  const P = c.patri; if (!P) return;
+  const b = P.birth, a = P.avakahada;
+  const kv = rows => '<table>' + rows.map(([k, v]) => `<tr><th style="width:45%">${k}</th><td>${v}</td></tr>`).join('') + '</table>';
+  $('patri1').innerHTML = kv([
+    ['वार', esc(b.vara.name_hi)], ['तिथि', `${esc(b.tithi.paksha_hi)} ${esc(b.tithi.name_hi)}`],
+    ['नक्षत्र-चरण', `${esc(b.nakshatra.name_hi)}-${b.nakshatra.pada} (स्वामी ${esc(b.nakshatra.lord_hi)})`],
+    ['योग', esc(b.yoga.name_hi)], ['करण', esc(b.karana.name_hi)],
+    ['सूर्योदय / सूर्यास्त', b.sunrise ? `${esc(b.sunrise)} / ${esc(b.sunset)}` : '—'],
+    ['इष्टकाल (घटी:पल)', b.ishta_kaal ? esc(b.ishta_kaal.text) : '—'],
+    ['मास (अमांत)', esc(b.masa.name_hi) + ' <span class="muted">≈</span>'], ['ऋतु', esc(b.ritu.name_hi)], ['अयन', esc(b.ayana.name_hi)],
+    ['विक्रम संवत्', b.vikram_samvat + ' <span class="muted">≈</span>'], ['शक संवत्', b.shaka_samvat + ' <span class="muted">≈</span>'],
+    ['सूर्य राशि (पाश्चात्य)', esc(b.sun_sign_tropical.name_hi)], ['अयनांश (लाहिरी)', esc(b.ayanamsa)],
+  ]) + `<div class="muted" style="font-size:.8rem;margin-top:6px">${esc(P.note_hi)}</div>`;
+  $('patri2').innerHTML = kv([
+    ['लग्न-लग्नेश', `${esc(a.lagna.name_hi)}-${esc(a.lagna.lord_hi)}`], ['राशि-राशि स्वामी', `${esc(a.rashi.name_hi)}-${esc(a.rashi.lord_hi)}`],
+    ['नक्षत्र स्वामी', esc(a.nakshatra_lord.name_hi)], ['वर्ण', esc(a.varna.name_hi)], ['वश्य', esc(a.vashya.name_hi)],
+    ['योनि', esc(a.yoni.name_hi)], ['गण', esc(a.gana.name_hi)], ['नाड़ी', esc(a.nadi.name_hi)], ['तत्व', esc(a.tattva.name_hi)],
+    ['नाम अक्षर', `<b>${esc(a.name_syllable.pada)}</b> <span class="muted">(${esc(a.name_syllable.all)})</span>`],
+  ]);
+}
 function render(c) {
   chart = c;
   $('out').hidden = false; if (window.showTab) window.showTab('t-kundali');
@@ -395,6 +427,7 @@ function render(c) {
   const m = c.planets.find(p => p.name === 'Moon');
   $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
+  renderPatri(c);
   const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
   const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde}))}));
   drawChart($('d1'), d1, 'd1'); renderVarga($('vsel').value);

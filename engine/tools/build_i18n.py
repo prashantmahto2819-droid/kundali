@@ -66,6 +66,23 @@ for f in (ROOT / "data" / "rules").glob("*.json"):
     for r in json.loads(f.read_text(encoding="utf-8")).get("rules", []):
         put(r["text_hi"], r["text_en"])
 
+import json as _json  # noqa: E402
+for _pl in _json.loads((ROOT / "data" / "places.json").read_text(encoding="utf-8"))["places"]:
+    put(_pl["hi"], _pl["name"])                         # city names shown in the dropdown / search
+from jyotish import patri as _patri  # noqa: E402
+for _en, _hi in _patri.HI.items():
+    put(_hi, _en)
+for _en, _hi in _patri.TATTVA_HI.items():
+    put(_hi, _en)
+for _en, _hi in _patri.RITU_HI.items():
+    put(_hi, _en)
+for _i, _hi in enumerate(_patri.MASA_HI):
+    put(_hi, _patri.MASA[_i])
+for _i, _hi in enumerate(_patri.SYLLABLES):
+    put(_hi, _patri.SYLLABLES_EN[_i])
+    for _a, _b in zip(_hi.split(), _patri.SYLLABLES_EN[_i].split()):
+        put(_a, _b)
+put(_patri.NOTE_HI, _patri.NOTE_EN)
 from jyotish import ask as _ask  # noqa: E402
 put(_ask.SAFE["hi"], _ask.SAFE["en"])
 put(_ask.DISCLAIMER["hi"], _ask.DISCLAIMER["en"])
@@ -157,6 +174,15 @@ UI = {
  "पश्चिम": "West", "वायव्य (उत्तर-पश्चिम)": "Vayavya (north-west)", "केंद्र (ब्रह्मस्थान)": "Centre (Brahmasthan)",
  "+ कमरा जोड़िए": "+ Add room", "जाँचिए": "Check", "कमरा": "Room", "दिशा": "Direction", "स्थिति": "Status",
  "कारण / सुझाव": "Reason / suggestion", "उत्तम": "excellent",
+ "दुर्ग-भिलाई": "Durg-Bhilai",
+ # patri
+ "जन्म विवरण": "Birth details", "अवकहड़ा चक्र": "Avakahada chakra", "वार": "Weekday", "नक्षत्र-चरण": "Nakshatra-pada",
+ "सूर्योदय / सूर्यास्त": "Sunrise / sunset", "इष्टकाल (घटी:पल)": "Ishta kaal (ghati:pala)", "मास (अमांत)": "Lunar month (amanta)",
+ "मास (अमांत) ≈": "Lunar month (amanta) ≈", "ऋतु": "Season (ritu)", "अयन": "Ayana", "विक्रम संवत्": "Vikram samvat", "शक संवत्": "Shaka samvat",
+ "विक्रम संवत् ≈": "Vikram samvat ≈", "शक संवत् ≈": "Shaka samvat ≈",
+ "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
+ "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
+ "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
  # tabs
  "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
  "पंचांग व मुहूर्त": "Panchang & muhurta", "योग व संकेत": "Yogas & indications", "दशा व समय-रेखा": "Dasha & timeline",

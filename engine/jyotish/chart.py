@@ -16,6 +16,7 @@ from .muhurta import day_table
 from .rules import match_rules
 from .timeutil import delta_t, julian_day, local_time_issue, local_to_utc, year_fraction
 from .lalkitab import lalkitab
+from .patri import details as patri_details
 from .relations import relations
 from .strength import strength
 from .timeline import dasha_timeline
@@ -157,6 +158,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["timeline"] = dasha_timeline(chart, now)
     chart["relations"] = relations(chart)
     chart["lalkitab"] = lalkitab(chart)
+    chart["patri"] = patri_details(chart)
     chart["yogas"] = detect_yogas(chart)
     chart["readings"] = match_rules(chart)
     return chart
