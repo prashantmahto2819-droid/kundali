@@ -317,7 +317,9 @@
       <button type="button" id="askgo" style="width:auto">पूछिए</button>
     </div>
     <div id="askerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="asksugg" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
     <div id="askout"></div>
+    <details id="askhist" style="margin-top:10px;display:none"><summary class="muted">पिछले प्रश्न</summary><div id="askhistlist"></div></details>
   </div>
   </section>
   <section class="tab" id="t-mine">
@@ -618,6 +620,7 @@ function render(c) {
   $('summary').innerHTML = `<span>लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)</span>`;
   renderTiles(c); renderToday(c);
+  if (window.renderAskSuggestions) window.renderAskSuggestions(c);
   try { const q = new URLSearchParams({n: c.input.name || '', d: c.input.date, t: c.input.time, tz: c.input.tz, lat: c.input.lat, lon: c.input.lon}); history.replaceState(null, '', location.pathname + '?' + q); } catch (e) {}
   const fc = $('formcard'); fc.classList.add('compact');
   window.updateFormSum = () => {
@@ -1123,6 +1126,7 @@ async function openReport(path, body) {
       if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const srcs = (d.sources || []).map(s => `<li><code>${esc(s.id)}</code> ${esc(s.text)}</li>`).join('');
       const answer = esc(d.answer).replace(/\n/g, '<br>');
+      if (window.saveAskHistory && d.mode !== 'refused') window.saveAskHistory(q, d.answer);
       $('askout').innerHTML = `<div class="banner" style="margin-top:8px;white-space:normal">${answer}</div>` +
         (srcs ? `<details style="margin-top:6px"><summary class="muted">स्रोत (${d.sources.length})</summary><ul style="font-size:.85rem">${srcs}</ul></details>` : '') +
         `<div class="muted" style="font-size:.8rem;margin-top:6px">${esc(d.disclaimer || '')}</div>`;
@@ -1131,6 +1135,36 @@ async function openReport(path, body) {
   };
   $('askgo').addEventListener('click', go);
   $('askq').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  // suggested questions: generic until a chart is made, then drawn from that chart
+  const EN = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  window.renderAskSuggestions = c => {
+    let qs;
+    if (!c) qs = EN() ? ['What does Saturn in the 10th house mean?', 'What is Sade Sati?', 'Number 5 traits', 'What does the 7th house signify?', 'Jupiter retrograde', 'Vastu: kitchen direction']
+                  : ['शनि 10वें भाव में क्या फल देता है?', 'साढ़ेसाती क्या है?', 'मूलांक 5 का स्वभाव', '7वाँ भाव क्या बताता है?', 'गुरु वक्री हो तो?', 'वास्तु: रसोई की दिशा'];
+    else {
+      const m = c.planets.find(p => p.name === 'Moon'), md = (c.dasha_running || []).find(d => d.level === 1);
+      const strong = [...c.strength.planets].sort((a, b) => a.rank - b.rank)[0], sat = c.planets.find(p => p.name === 'Saturn');
+      qs = EN() ? [`What does my Lagna ${c.lagna.sign_name} mean?`, `My Moon is in ${m.nakshatra}: what does that show?`, `What does ${md ? md.lord : 'the running'} mahadasha bring for me?`,
+                  `Where is my Saturn and what does house ${sat.house} mean?`, `Is my ${strong.name} strong?`, 'What is my Moolank?']
+                : [`मेरा लग्न ${c.lagna.sign_name_hi} है, इसका क्या अर्थ है?`, `मेरा चंद्र ${m.nakshatra_hi} नक्षत्र में है, क्या बताता है?`, `${md ? pH(c, md.lord) : 'चल रही'} महादशा मेरे लिए क्या लाएगी?`,
+                   `मेरा शनि कहाँ है और ${sat.house}वाँ भाव क्या बताता है?`, `क्या मेरा ${strong.name_hi} बलवान है?`, 'मेरा मूलांक क्या है?'];
+    }
+    $('asksugg').innerHTML = qs.map(q => `<button type="button" class="ghost" style="width:auto;padding:4px 10px;font-size:.85rem;font-weight:500" data-q="${esc(q)}">${esc(q)}</button>`).join('');
+  };
+  $('asksugg').addEventListener('click', e => { const q = e.target.dataset.q; if (q) { $('askq').value = q; go(); } });
+  renderAskSuggestions(null);
+  // history (per browser, last 20)
+  const KEY = 'kundali_ask_history';
+  const loadHist = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+  window.renderAskHistory = () => {
+    const h = loadHist(); $('askhist').style.display = h.length ? '' : 'none';
+    $('askhistlist').innerHTML = h.map((x, i) => `<div style="margin:6px 0;padding:6px 0;border-top:1px solid color-mix(in srgb,var(--line) 25%,transparent)"><a href="#" data-hq="${esc(x.q)}"><b>${esc(x.q)}</b></a><div class="muted" style="font-size:.85rem;white-space:pre-wrap">${esc(x.a.slice(0, 300))}${x.a.length > 300 ? '…' : ''}</div></div>`).join('') +
+      (h.length ? `<button type="button" class="ghost" style="width:auto;font-size:.8rem" id="askhistclear">इतिहास मिटाएँ</button>` : '');
+    const cl = $('askhistclear'); if (cl) cl.onclick = () => { try { localStorage.removeItem(KEY); } catch (e) {} renderAskHistory(); };
+  };
+  $('askhistlist').addEventListener('click', e => { const q = e.target.closest('[data-hq]')?.dataset.hq; if (q) { e.preventDefault(); $('askq').value = q; go(); } });
+  window.saveAskHistory = (q, a) => { try { const h = loadHist().filter(x => x.q !== q); h.unshift({q, a, t: Date.now()}); localStorage.setItem(KEY, JSON.stringify(h.slice(0, 20))); } catch (e) {} renderAskHistory(); };
+  renderAskHistory();
 })();
 
 // ---- Language toggle (Hindi <-> English). Partial by design: a text is translated only if it can be translated
@@ -1209,6 +1243,7 @@ async function openReport(path, body) {
       apply(document.body);
     } else restore();
     if (window.rerenderLearn) window.rerenderLearn();      // the learn panel is written directly in the chosen language
+    if (window.renderAskSuggestions) window.renderAskSuggestions((typeof chart !== "undefined" && chart) || null);
   }
   const mo = new MutationObserver(muts => { if (lang !== 'en' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
