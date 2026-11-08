@@ -11,7 +11,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 |---|------|------|-------|-------|
 | 1 | Planet-in-house readings (Hindi + English) | `data/rules/planet_in_house.json` | 108 | tendency language; cite BPHS/Phaladeepika chapter where possible |
 | 2 | Dignity / retrograde readings | `data/rules/dignity_retrograde.json` | 26 | neecha-bhanga conditions are computed; text needs check |
-| 3 | Yoga definitions and texts | `engine/jyotish/yogas.py` + `data/knowledge/yogas.json` | — | which yogas count, cancellation rules |
+| 3 | Yoga definitions and texts | `engine/jyotish/yogas.py` | — | which yogas count, cancellation rules |
 | 4 | Ghata chakra table (11 of 12 rows unverified) | `engine/jyotish/patri.py` (`GHATA`) | 12 rows | Dhanu row matches a printed patri; check the rest against Muhurta Chintamani |
 | 5 | Shadbala conventions | `engine/jyotish/strength.py` (`assumptions`) | — | abda/masa lords from Kali ahargana; yuddha winner by disc; cheshta half-sum kendra |
 | 6 | Ashtakavarga reductions, gochara verdicts | `engine/jyotish/ashtakavarga.py`, `gochara.py` | — | shodhana method, Sade Sati phases |
