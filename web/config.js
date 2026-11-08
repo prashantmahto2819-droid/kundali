@@ -1,3 +1,6 @@
-// Fill these two after creating the Supabase project (see README "Login"). Leave empty to hide login.
-// Both values are public by design: the URL and the *publishable* (anon) key. Never put a secret/service_role key here.
-window.KUNDALI_CONFIG = { SUPABASE_URL: "", SUPABASE_PUBLISHABLE_KEY: "" };
+// Supabase project "kundali app" (ap-south-1). Both values are public by design: the project URL and the
+// *publishable* key. Never put a secret/service_role key here. Leave both empty to hide the login card.
+window.KUNDALI_CONFIG = {
+  SUPABASE_URL: "https://feipwckrdzkslgbenxtv.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY: "sb_publishable_MwLtdsIiRnCNwCUKeoJjkQ_LGllBURH"
+};

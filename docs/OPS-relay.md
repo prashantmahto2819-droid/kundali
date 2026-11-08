@@ -43,7 +43,8 @@ cd kundali/deploy
 ```
 CADDY_NETWORK=wa-gateway_default
 CORS_ORIGINS=
-# optional: KUNDALI_AUTH=optional|required (default optional), SUPABASE_URL=https://<project>.supabase.co
+SUPABASE_URL=https://feipwckrdzkslgbenxtv.supabase.co
+# optional: KUNDALI_AUTH=optional|required (default optional)
 ```
 API keys and usage live in a Docker volume (`kundali-data`), so they survive rebuilds. Create a customer key with
 `docker exec kundali-api python tools/admin.py create-org "<name>"` then `docker exec kundali-api python tools/admin.py create-key <org_id>` (see README "Access control").
