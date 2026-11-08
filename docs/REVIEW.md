@@ -30,6 +30,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 15 | Muhurta finder: activity nakshatra/weekday lists, scoring weights | `engine/jyotish/muhurta_find.py` (`ACTIVITIES`) | 6 | draft |
 | 16 | Prashna: topic house groups (favour/deny), verdict rule | `engine/jyotish/prashna.py` (`TOPICS`) | 10 | draft |
 | 17 | Birth-time rectification aid: event→house map (marriage 7/2/11, child 5/2/11, job 10/6/2/11, property 4/11, travel 9/12/3, education 4/5/9), dasha-lord connection rule | `engine/jyotish/rectify.py` (`EVENT_HOUSES`) | 6 | draft; signature = lagna + navamsa lagna + Moon nakshatra |
+| 18 | Festival rules: month/tithi/moment per festival (`FESTIVALS`), Ekadashi names, kshaya handling; compare one year with a printed panchang | `engine/jyotish/festivals.py` | 33 | draft; 2025 Diwali/Holi/Navratri checked against published dates |
 | 12 | Name syllables per pada | `engine/jyotish/patri.py` (`SYLLABLES`) | 108 | standard almanac table; verify spelling |
 
 ## B. Calculations — compare against trusted software (JHora / AstroSage, Lahiri, mean node, whole sign)

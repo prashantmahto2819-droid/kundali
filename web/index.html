@@ -356,6 +356,17 @@
     <div id="muerr" style="color:#c62828;margin-top:6px"></div>
     <div id="muout"></div>
   </div>
+  <div class="card" id="festcard">
+    <b>त्योहार और व्रत कैलेंडर</b>
+    <div class="muted" style="font-size:.85rem">इस ऐप के अपने पंचांग से: 32 प्रमुख त्योहार, 24 एकादशी (नाम सहित), पूर्णिमा-अमावस्या, अधिक मास। स्थान कुंडली वाला या ऊपर चुना शहर।</div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <div><label>वर्ष</label><input id="fyear" type="number" min="1950" max="2099" style="max-width:110px"></div>
+      <div><label>दिखाइए</label><select id="fkind" style="width:auto"><option value="festival">त्योहार</option><option value="ekadashi">एकादशी</option><option value="purnima">पूर्णिमा / अमावस्या</option><option value="all">सब</option></select></div>
+      <button type="button" id="fgo" style="width:auto">देखिए</button>
+    </div>
+    <div id="ferr" style="color:#c62828;margin-top:6px"></div>
+    <div id="fout"></div>
+  </div>
   </section>
   <section class="tab" id="t-prashna">
   <div class="card" id="prashnacard">
@@ -1478,6 +1489,26 @@ async function openReport(path, body) {
 // ---- Muhurta finder
 (function muhurtaUI() {
   $('mu_start').value = new Date().toISOString().slice(0, 10);
+  // festival calendar
+  $('fyear').value = new Date().getFullYear();
+  const MON_HI = ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+  $('fgo').onclick = async () => {
+    $('ferr').textContent = ''; $('fout').innerHTML = '<div class="muted">गणना हो रही है…</div>';
+    try {
+      let lat = +$('lat').value || 28.61, lon = +$('lon').value || 77.2, tz = $('tz').value.trim() || 'Asia/Kolkata';
+      const q = $('mu_city').value.trim();
+      if (q) { const r = await apiFetch('/v1/places?q=' + encodeURIComponent(q) + '&limit=1'); const d = await r.json(); if (d.results && d.results[0]) { lat = d.results[0].lat; lon = d.results[0].lon; tz = d.results[0].tz || tz; } }
+      const r = await apiFetch(`/v1/festivals?year=${+$('fyear').value}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`);
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const kind = $('fkind').value;
+      const ev = d.events.filter(e => kind === 'all' ? true : kind === 'purnima' ? (e.kind === 'purnima' || e.kind === 'amavasya') : e.kind === kind);
+      const today = new Date().toISOString().slice(0, 10);
+      const byMonth = {}; ev.forEach(e => (byMonth[+e.date.slice(5, 7) - 1] = byMonth[+e.date.slice(5, 7) - 1] || []).push(e));
+      $('fout').innerHTML = (d.adhika_masa.length ? `<div class="banner">अधिक मास: ${d.adhika_masa.map(a => `${esc(a.masa_hi)} (${a.start} → ${a.end || '…'})`).join(', ')} — इस मास में त्योहार नहीं गिने गए।</div>` : '') +
+        Object.keys(byMonth).sort((a, b) => a - b).map(m => `<h4 style="margin:12px 0 4px">${MON_HI[m]}</h4><table>${byMonth[m].map(e => `<tr${e.date === today ? ' style="font-weight:700"' : ''}${e.date < today ? ' class="muted"' : ''}><td style="white-space:nowrap">${e.date.slice(8)} <span>${MON_HI[m].slice(0, 3)}</span></td><td><b>${esc(e.name_hi)}</b>${e.note_hi ? `<br><span class="muted" style="font-size:.8rem">${esc(e.note_hi)}</span>` : ''}</td><td class="muted">${e.tithi_hi ? `<span>${esc(e.masa_hi)}</span> <span>${esc(e.tithi_hi)}</span>` : ''}</td></tr>`).join('')}</table>`).join('') +
+        `<div class="muted" style="font-size:.8rem;margin-top:8px">${esc(d.note_hi)}</div>`;
+    } catch (err) { $('fout').innerHTML = ''; $('ferr').textContent = 'त्रुटि: ' + err.message; }
+  };
   $('muf').addEventListener('submit', async e => {
     e.preventDefault(); $('muerr').textContent = ''; $('muout').innerHTML = '<div class="muted">खोज रहा हूँ…</div>';
     try {

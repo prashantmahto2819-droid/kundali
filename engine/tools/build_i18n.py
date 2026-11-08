@@ -195,6 +195,26 @@ for _hi, _en in (("पंचाधिकारियों में से, ल
                  ("मुन्था = जन्म-लग्न राशि + पूरे हुए वर्ष (हर वर्ष एक राशि आगे)।", "Muntha = birth-Lagna sign + completed years (one sign forward each year)."),
                  ("मुन्था:", "Muntha:"), ("राशि, वर्ष-कुंडली के भाव", "sign, in house"), ("में।", "of the annual chart."), ("वर्षफल देखिए", "Show varshaphal"), ("वर्ष (वर्षफल)", "Year (varshaphal)")):
     put(_hi, _en)
+# festivals
+from jyotish import festivals as _fe
+for _k, _hi, _en, _m, _t, _mo, _nhi, _nen in _fe.FESTIVALS:
+    put(_hi, _en)
+    if _nhi: put(_nhi, _nen)
+put("मकर संक्रांति", "Makar Sankranti"); put("सूर्य का निरयन मकर प्रवेश (लाहिड़ी)।", "The Sun's sidereal ingress into Makara (Lahiri).")
+put("क्षय तिथि: उस दिन लिया गया जिसमें तिथि समाप्त हुई।", "Kshaya tithi: the day on which the tithi ended was taken.")
+_fc = _fe.calendar(2026, 22.35, 82.68, "Asia/Kolkata")
+put(_fc["note_hi"], _fc["note_en"])
+for _e in _fc["events"]:
+    if _e["kind"] != "festival":
+        put(_e["name_hi"], _e["name_en"])
+for _hi, _en in (("त्योहार और व्रत कैलेंडर", "Festival and vrat calendar"),
+                 ("इस ऐप के अपने पंचांग से: 32 प्रमुख त्योहार, 24 एकादशी (नाम सहित), पूर्णिमा-अमावस्या, अधिक मास। स्थान कुंडली वाला या ऊपर चुना शहर।", "From this app's own panchang: 32 major festivals, 24 Ekadashis (named), Purnima/Amavasya, adhika masa. Location: the chart's or the city chosen above."),
+                 ("दिखाइए", "Show"), ("त्योहार", "Festivals"), ("एकादशी", "Ekadashi"), ("पूर्णिमा / अमावस्या", "Purnima / Amavasya"), ("सब", "All"), ("देखिए", "Show"),
+                 ("— इस मास में त्योहार नहीं गिने गए।", "— festivals are not counted in this month."), ("अधिक मास:", "Adhika masa:")):
+    EXACT.setdefault(_hi, _en)
+for _i, (_hi, _en) in enumerate((("जनवरी", "January"), ("फ़रवरी", "February"), ("मार्च", "March"), ("अप्रैल", "April"), ("मई", "May"), ("जून", "June"), ("जुलाई", "July"), ("अगस्त", "August"), ("सितंबर", "September"), ("अक्टूबर", "October"), ("नवंबर", "November"), ("दिसंबर", "December"))):
+    EXACT.setdefault(_hi, _en); EXACT.setdefault(_hi[:3], _en[:3])
+FEST_PATTERNS = [("अधिक मास: {1} — इस मास में त्योहार नहीं गिने गए।", "Adhika masa: {1} — festivals are not counted in this month.")]
 # year overlay
 from jyotish import timeline as _tl
 for _h, (_hi, _en) in _tl.KEY_HOUSES.items():
@@ -315,7 +335,7 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + FEST_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

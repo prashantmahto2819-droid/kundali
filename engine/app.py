@@ -302,6 +302,14 @@ def vastu_catalog():
     return handlers.vastu_catalog()
 
 
+@app.get("/v1/festivals")
+def festivals(year: int | None = None, lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata"):
+    try:
+        return handlers.festivals_from_query({"year": year, "lat": lat, "lon": lon, "tz": tz})
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.get("/v1/vastu/plan/catalog")
 def vastu_plan_catalog():
     return handlers.vastu_plan_catalog()

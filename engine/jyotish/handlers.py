@@ -492,3 +492,21 @@ def palm_trace_catalog() -> dict:
 def palm_trace_report_from_payload(payload: dict) -> str:
     from . import report
     return _localize(report.render_palm_trace(palm_trace_from_payload(payload)), payload)
+
+
+def festivals_from_query(q: dict) -> dict:
+    """GET /v1/festivals?year=2026&lat=..&lon=..&tz=Asia/Kolkata"""
+    from . import festivals
+    try:
+        year = int(q.get("year") or datetime.now(timezone.utc).year)
+        lat = float(q.get("lat") or 28.61); lon = float(q.get("lon") or 77.2)
+    except (TypeError, ValueError):
+        raise BadRequest("year, lat and lon must be numbers")
+    tz = q.get("tz") or "Asia/Kolkata"
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        raise BadRequest(f"Unknown time zone '{tz}'") from exc
+    if not 1950 <= year <= 2099 or not (-66 <= lat <= 66) or not (-180 <= lon <= 180):
+        raise BadRequest("year must be 1950-2099 and lat within -66..66")
+    return festivals.calendar(year, lat, lon, tz)
