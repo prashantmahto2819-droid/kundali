@@ -303,7 +303,7 @@
 "योग": "Yoga",
 "करण": "Karana",
 "योग और दोष": "Yogas and doshas",
-"नहीं": "No",
+"नहीं": "no",
 "बना है": "Present",
 "(ड्राफ़्ट: विद्वान-समीक्षा बाकी)": "(draft: scholar review pending)",
 "ड्राफ़्ट (समीक्षा बाकी)": "Draft (review pending)",
@@ -470,6 +470,17 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"विवरण बदलें": "Edit details",
+"इस कुंडली के बारे में पूछिए": "Ask about this chart",
+"सेव करें": "Save",
+"आज का गोचर": "Today's transits",
+"जन्म-समय": "Birth time",
+"पहला चरण": "first phase",
+"मध्य चरण": "middle phase",
+"अंतिम चरण": "last phase",
+"लग्न 3 घंटे तक नहीं बदलता": "Lagna stable for 3 hours",
+"सावधानी": "caution",
+"कुंडली ऐप · गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश); फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन हैं।": "Kundali app · astronomical computation (NASA JPL DE440s, Lahiri ayanamsa); interpretations are traditional guidance, not predictions or professional advice. Readings are drafts pending scholar review.",
 "लाल किताब": "Lal Kitab",
 "लाल किताब: ग्रह और घर": "Lal Kitab: planets and houses",
 "लाल किताब वर्षफल (वर्ष-कुंडली)": "Lal Kitab varshphal (annual chart)",
@@ -2288,6 +2299,14 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"{1} तक",
+"until {1}"
+],
+[
+"लग्न {1} मिनट में बदलता",
+"Lagna changes in {1} min"
 ],
 [
 "{1} से {2}: जीवन का {3}वाँ वर्ष (चक्र वर्ष {4})। {5}",

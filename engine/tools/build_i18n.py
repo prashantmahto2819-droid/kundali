@@ -227,7 +227,10 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "लाल किताब": "Lal Kitab", "लाल किताब: ग्रह और घर": "Lal Kitab: planets and houses", "लाल किताब वर्षफल (वर्ष-कुंडली)": "Lal Kitab varshphal (annual chart)",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "विवरण बदलें": "Edit details", "इस कुंडली के बारे में पूछिए": "Ask about this chart", "सेव करें": "Save", "चल रही दशा": "Running dasha", "आज का गोचर": "Today's transits",
+ "जन्म-समय": "Birth time", "पहला चरण": "first phase", "मध्य चरण": "middle phase", "अंतिम चरण": "last phase", "नहीं": "no", "लग्न 3 घंटे तक नहीं बदलता": "Lagna stable for 3 hours", "सावधानी": "caution",
+ "कुंडली ऐप · गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश); फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन हैं।":
+ "Kundali app · astronomical computation (NASA JPL DE440s, Lahiri ayanamsa); interpretations are traditional guidance, not predictions or professional advice. Readings are drafts pending scholar review.", "लाल किताब": "Lal Kitab", "लाल किताब: ग्रह और घर": "Lal Kitab: planets and houses", "लाल किताब वर्षफल (वर्ष-कुंडली)": "Lal Kitab varshphal (annual chart)",
  "वर्ष (जन्मदिन से)": "Year (from the birthday)", "देखिए": "Show", "पक्का घर": "Pakka ghar", "घर (लग्न से)": "House (from Lagna)", "घर (मेष से)": "House (from Mesha)", "उपाय (ड्राफ़्ट)": "Remedy (draft)",
  "जन्म घर": "Natal house", "इस वर्ष का घर": "House this year", "जीवन भर के शनि-गुरु गोचर": "Saturn and Jupiter transits over life", "जीवन भर के शनि गोचर": "Saturn transits over life", "गुरु के भाव-वार काल": "Jupiter periods by house",
  "साढ़ेसाती": "Sade Sati", "बीत चुकी": "past", "चल रही": "running", "आगामी": "upcoming", "इस अवधि में नहीं": "none in this span", "अष्टम शनि:": "Ashtama Shani:", "कंटक शनि (चौथा):": "Kantaka Shani (4th):",
@@ -441,7 +444,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} से {2}: जीवन का {3}वाँ वर्ष (चक्र वर्ष {4})। {5}", "{1} to {2}: year {3} of life (cycle year {4}). {5}"), ("अष्टम शनि: {1}", "Ashtama Shani: {1}"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} तक", "until {1}"), ("लग्न {1} मिनट में बदलता", "Lagna changes in {1} min"), ("{1} से {2}: जीवन का {3}वाँ वर्ष (चक्र वर्ष {4})। {5}", "{1} to {2}: year {3} of life (cycle year {4}). {5}"), ("अष्टम शनि: {1}", "Ashtama Shani: {1}"),
                    ("{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}", "{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}"), ("{1}: {2}–{3} · {4}: {5}–{6}", "{1}: {2}–{3} · {4}: {5}–{6}"), ("{1}: {2}–{3}", "{1}: {2}–{3}"), ("प्रश्न लग्न: {1} {2}° · समय: {3}", "Prashna Lagna: {1} {2}° · time: {3}"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"),
                    ("{1} का भाव {2}; उसके भाव-स्पष्ट का उप-स्वामी {3} है।", "House {2} rules {1}; the sub-lord of its cusp is {3}."),
                    ("{1} भाव {2} का कारक है: अनुकूल भाव {3}, प्रतिकूल भाव {4}।", "{1} signifies houses {2}: favouring {3}, denying {4}."),

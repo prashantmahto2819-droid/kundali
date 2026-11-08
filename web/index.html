@@ -47,6 +47,26 @@
   .subtabs button { padding:6px 12px; font-size:.9rem; }
   .tabs button.on, .subtabs button.on { color:var(--accent); border-bottom-color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
   .tab, .sub { display:none; } .tab.on, .sub.on { display:block; }
+  /* design pass: card headers, stat tiles, compact form, sticky sub-tabs, footer */
+  .card > b:first-child { display:block; font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; color:var(--accent); margin:0 0 8px; padding-bottom:6px; border-bottom:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0; }
+  .tile { background:var(--card); border:1px solid color-mix(in srgb,var(--line) 35%,transparent); border-radius:12px; padding:10px 12px; min-height:72px; }
+  .tile .k { font-size:.74rem; color:var(--muted); letter-spacing:.03em; }
+  .tile .v { font-size:1.15rem; font-weight:700; color:var(--ink); line-height:1.3; margin-top:2px; }
+  .tile .s { font-size:.78rem; color:var(--muted); }
+  .tile.accent { background:linear-gradient(135deg, color-mix(in srgb,var(--accent) 14%,var(--card)), var(--card)); }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 4px; }
+  .actions button { width:auto; padding:8px 14px; }
+  .actions button.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  #formcard.compact form, #formcard.compact #err { display:none; }
+  #formcard.compact { padding:10px 16px; }
+  #formbar { display:none; align-items:center; gap:10px; flex-wrap:wrap; font-size:.95rem; }
+  #formcard.compact #formbar { display:flex; }
+  #formbar button { width:auto; padding:6px 12px; font-size:.85rem; }
+  .subtabs { position:sticky; top:49px; z-index:4; background:var(--bg); }
+  #note { font-size:.78rem; color:var(--muted); background:transparent; border:0; padding:2px 0; }
+  footer { max-width:1100px; margin:24px auto 0; padding:16px; color:var(--muted); font-size:.8rem; border-top:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
+  @media (max-width:600px) { .tile .v { font-size:1.02rem; } h1 { font-size:1.3rem; } }
 </style>
 </head>
 <body>
@@ -69,7 +89,8 @@
 </nav>
 <main>
   <section class="tab on" id="t-kundali">
-  <div class="card">
+  <div class="card" id="formcard">
+    <div id="formbar"><span id="formsum"></span><button type="button" id="formedit" class="ghost">विवरण बदलें</button></div>
     <form id="f">
       <div><label>नाम (वैकल्पिक)</label><input id="name" placeholder="नाम"></div>
       <div><label>जन्म तारीख</label><input id="date" type="date" required value="1990-05-17"></div>
@@ -107,8 +128,9 @@
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="banner" id="warns" style="background:#fdecea;border-color:#e0a09a" hidden></div>
+    <div class="tiles" id="tiles"></div>
     <div class="card" id="summary"></div>
-    <div style="margin:8px 0"><button type="button" id="repbtn" style="width:auto">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button> <span class="muted" id="reperr"></span></div>
+    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
       <button type="button" data-sub="s-planets">ग्रह व बल</button>
@@ -317,6 +339,7 @@
 
   </section>
 </main>
+<footer>कुंडली ऐप · गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश); फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन हैं।</footer>
 <div id="offline" class="banner" style="display:none;max-width:1100px;margin:8px auto">ऑफ़लाइन: कुंडली बनाने के लिए इंटरनेट चाहिए; सीखने की सामग्री खुली रहेगी।</div>
 <script src="config.js"></script>
 <script>
@@ -337,6 +360,11 @@ const apiFetch = (path, opts = {}) => {        // every API call goes through he
   if (window.authToken && !headers.Authorization) headers.Authorization = 'Bearer ' + window.authToken;
   return fetch(API + path, Object.assign({}, opts, {headers}));
 };
+document.addEventListener('DOMContentLoaded', () => {
+  $('formedit').onclick = () => $('formcard').classList.remove('compact');
+  $('askbtn').onclick = () => { if (window.showTab) window.showTab('t-ask'); $('askq').focus(); };
+  $('savebtn').onclick = () => { if (window.showTab) window.showTab('t-mine'); const b = $('lsave'); if (b && b.offsetParent) b.click(); };
+});
 // ---- Tabs (top sections) and sub-tabs (chart results)
 (function tabsUI() {
   const wire = (nav, attr, cls, key) => {
@@ -516,6 +544,23 @@ function showHouse(h, kind) {
 }
 window.rerenderLearn = () => { if (!lastLearn || !chart) return; lastLearn[0] === 'planet' ? showPlanet(lastLearn[1]) : showHouse(lastLearn[1], lastLearn[2]); };
 
+const pH = (c, n) => c.planets.find(p => p.name === n)?.name_hi || n;
+function renderTiles(c) {
+  const m = c.planets.find(p => p.name === 'Moon'), run = c.dasha_running || [];
+  const md = run.find(d => d.level === 1), ad = run.find(d => d.level === 2);
+  const ss = c.gochara?.sade_sati, go = c.gochara?.planets || [];
+  const sup = go.filter(r => r.verdict === 'supportive').length, ch = go.filter(r => r.verdict === 'challenging').length;
+  const S = c.sensitivity?.items?.lagna_sign, margin = S?.margin_minutes;
+  const PH = {rising: 'पहला चरण', peak: 'मध्य चरण', setting: 'अंतिम चरण'};
+  const tile = (k, v, s, cls = '') => `<div class="tile ${cls}"><div class="k">${k}</div><div class="v">${v}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
+  $('tiles').innerHTML =
+    tile('लग्न', esc(c.lagna.sign_name_hi), `${esc(c.lagna.dms)} · ${esc(c.lagna.nakshatra_hi)} ${c.lagna.pada}`, 'accent') +
+    tile('चंद्र राशि', esc(m.sign_name_hi), `${esc(m.nakshatra_hi)} पाद ${m.pada}`) +
+    tile('चल रही दशा', md ? `${esc(pH(c, md.lord))}${ad ? ' / ' + esc(pH(c, ad.lord)) : ''}` : '—', md ? `${esc(md.end.slice(0, 10))} तक` : '') +
+    tile('साढ़ेसाती', ss?.active ? 'चल रही' : (ss?.ashtama ? 'अष्टम शनि' : 'नहीं'), ss?.active ? esc(PH[ss.phase] || '') : '') +
+    tile('आज का गोचर', `${sup} <span class="muted" style="font-weight:400">शुभ</span> · ${ch} <span class="muted" style="font-weight:400">सावधानी</span>`, esc((c.gochara?.as_of || '').slice(0, 10))) +
+    tile('जन्म-समय', margin == null ? 'स्थिर' : (margin > 15 ? 'स्थिर' : margin > 5 ? 'सावधान' : 'संवेदनशील'), margin == null ? 'लग्न 3 घंटे तक नहीं बदलता' : `लग्न ${margin} मिनट में बदलता`);
+}
 function renderPatri(c) {
   const P = c.patri; if (!P) return;
   const b = P.birth, a = P.avakahada;
@@ -548,8 +593,11 @@ function render(c) {
   $('note').textContent = `गणना इंजन: ${c.backend}. ${c.backend_note}`;
   $('warns').hidden = !c.input_warnings.length; $('warns').innerHTML = c.input_warnings.map(w => '⚠ ' + esc(w.text_hi)).join('<br>');
   const m = c.planets.find(p => p.name === 'Moon');
-  $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
-    चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
+  $('summary').innerHTML = `<span>लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
+    चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)</span>`;
+  renderTiles(c);
+  const fc = $('formcard'); fc.classList.add('compact');
+  $('formsum').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> · ${esc(c.input.date)} ${esc(c.input.time)} · ${esc($('citysearch').value || $('city').options[$('city').selectedIndex]?.text || '')} <span class="muted">(${c.input.lat}, ${c.input.lon})</span>`;
   renderPatri(c);
   if (c.sensitivity) {
     const S = c.sensitivity; $('senswhy').textContent = S.note_hi;
@@ -894,6 +942,7 @@ $('vgo2').addEventListener('click', async () => {
     $('lperr').textContent = '';
     const {data} = await sb.auth.getSession();
     token = data.session ? data.session.access_token : null; window.authToken = token;
+    $('savebtn').style.display = token ? '' : 'none';
     $('signedout').style.display = token ? 'none' : ''; $('signedin').style.display = token ? '' : 'none';
     if (!token) return;
     $('who').textContent = data.session.user.email;
