@@ -84,7 +84,53 @@ def check_file(path: Path, tol_arcmin: float) -> tuple[list[dict], bool]:
         ok = ok and not bad
         rows.append({"what": "Dasha balance (years)", "diff_arcmin": None, "ok": not bad,
                      "note": f"difference {d:+.3f} y (year length {chart['dasha']['year_days']})"})
+    def same(label, got_v, exp_v, note=""):
+        nonlocal ok
+        eq = str(got_v).strip().lower() == str(exp_v).strip().lower()
+        ok = ok and eq
+        rows.append({"what": label, "diff_arcmin": None, "ok": eq, "note": note or f"got {got_v}, expected {exp_v}"})
+
+    sign_of = lambda lon: SIGNS[int(lon // 30) % 12]
+    if "lagna_sign" in exp:            # sign only (printouts that give no degree)
+        same("Lagna sign", sign_of(chart["lagna"]["longitude"]), SIGNS[_sign_index(exp["lagna_sign"])])
+    if "moon_sign" in exp:
+        same("Moon sign", sign_of(got["Moon"]["longitude"]), SIGNS[_sign_index(exp["moon_sign"])])
+    if "moon_pada" in exp:
+        same("Moon pada", got["Moon"]["pada"], exp["moon_pada"])
+    if "ayanamsa" in exp:              # '23:44:34' or '23°44′34″'
+        nums = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", str(exp["ayanamsa"]))] + [0, 0, 0]
+        want = nums[0] + nums[1] / 60 + nums[2] / 3600
+        d = (chart["ayanamsa_value"] - want) * 60
+        bad = abs(d) > tol_arcmin
+        ok = ok and not bad
+        rows.append({"what": "Ayanamsa", "diff_arcmin": round(d, 2), "ok": not bad})
+    pc = chart["panchang"]
+    if "tithi" in exp:
+        same("Tithi", pc["tithi"]["name"], exp["tithi"])
+    if "paksha" in exp:
+        same("Paksha", pc["tithi"]["paksha"], exp["paksha"])
+    if "yoga" in exp:
+        same("Yoga", pc["yoga"]["name"], exp["yoga"])
+    if "balance_dmy" in exp:           # '2y 9m 14d' as printed by Indian programs; tolerance 3 days
+        y, m, d = (int(x) for x in re.findall(r"\d+", exp["balance_dmy"])[:3])
+        want_days = y * 365.25 + m * 30.44 + d
+        got_days = chart["dasha"]["balance_at_birth_years"] * 365.25
+        diff = got_days - want_days
+        bad = abs(diff) > 3
+        ok = ok and not bad
+        rows.append({"what": "Dasha balance (d/m/y)", "diff_arcmin": None, "ok": not bad,
+                     "note": f"difference {diff:+.1f} days"})
     return rows, ok
+
+
+def _sign_index(word: str) -> int:
+    w = word.strip().lower()
+    if w in _NAMES:
+        return _NAMES[w]
+    hit = next((i for n, i in _NAMES.items() if len(w) >= 3 and n.startswith(w)), None)
+    if hit is None:
+        raise ValueError(f"unknown sign '{word}'")
+    return hit
 
 
 def main() -> int:

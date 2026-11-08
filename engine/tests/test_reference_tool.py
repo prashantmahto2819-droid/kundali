@@ -41,3 +41,28 @@ def test_check_file_reports_failure_and_success(tmp_path, monkeypatch):
     bad.write_text(json.dumps({"input": inp, "expected": {"planets": {"Sun": str((sun + 0.5) % 360)}}}))
     rows, ok = cr.check_file(bad, 1.0)
     assert not ok and rows[0]["diff_arcmin"] == pytest.approx(-30, abs=0.01)
+
+
+def test_real_reference_charts_pass(monkeypatch):
+    """The accuracy gate: every real reference file in tests/reference must pass (1 arc-minute)."""
+    monkeypatch.setenv("KUNDALI_BACKEND", "analytic")
+    folder = Path(__file__).resolve().parent / "reference"
+    files = sorted(p for p in folder.glob("*.json") if not p.name.startswith("_"))
+    assert files, "no reference charts"
+    for f in files:
+        rows, ok = cr.check_file(f, 1.0)
+        assert ok, (f.name, [r for r in rows if not r["ok"]])
+
+
+def test_sign_only_and_panchang_fields(tmp_path, monkeypatch):
+    monkeypatch.setenv("KUNDALI_BACKEND", "analytic")
+    inp = {"date": "1991-11-10", "time": "14:20", "tz": "Asia/Kolkata", "lat": 22.3667, "lon": 82.7667}
+    f = tmp_path / "x.json"
+    f.write_text(json.dumps({"input": inp, "expected": {"lagna_sign": "Aquarius", "moon_sign": "Sagittarius", "moon_pada": 3,
+                                                         "ayanamsa": "23°44′34″", "tithi": "Chaturthi", "paksha": "Shukla",
+                                                         "yoga": "Sukarma", "balance_dmy": "2y 9m 14d"}}))
+    rows, ok = cr.check_file(f, 1.0)
+    assert ok, rows
+    f.write_text(json.dumps({"input": inp, "expected": {"lagna_sign": "Leo", "balance_dmy": "3y 0m 0d"}}))
+    rows, ok = cr.check_file(f, 1.0)
+    assert not ok and sum(not r["ok"] for r in rows) == 2

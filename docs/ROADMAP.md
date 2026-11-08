@@ -23,6 +23,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
+## Accuracy gate
+- [x] First real reference chart (Korba 1991, family printout, N.C. Lahiri): lagna sign, Moon sign/nakshatra/pada, ayanamsa (−0.2′), tithi, paksha, yoga, Ketu balance (−2.2 days), avakahada all match. Pending: a reference with planet degrees (Jagannatha Hora export) and one more birth year/place.
+
 ## Next
 1. Phase 1 (in progress): [x] sunrise/sunset, sunrise-based vara, Rahu Kaal, Choghadiya, Abhijit; [x] D2/D3/D4/D7/D10/D12; [x] numerology; [ ] geocoding + timezone lookup, rectification warnings, bhava-chalit option, D16-D60.
 2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v1: Vashya/Yoni/Gana to verify; parihara pending), [x] numerology, [x] tarot (v1: majors hand-written, minors composed from rank x suit; scholar/reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).

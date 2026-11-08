@@ -1,0 +1,18 @@
+{
+  "name": "Bhagwat Mahto (family printout)",
+  "source": "Printed janma-patri, Gajendra Kumar Soni, Chhal (Chhattisgarh), czoneindia.com software; ayanamsa N.C. Lahiri. Printout gives signs, nakshatra-pada, panchang and dasha balance but no planet degrees.",
+  "input": {"date": "1991-11-10", "time": "14:20", "tz": "Asia/Kolkata", "lat": 22.3667, "lon": 82.7667},
+  "expected": {
+    "lagna_sign": "Kumbha",
+    "moon_sign": "Dhanu",
+    "moon_nakshatra": "Mula",
+    "moon_pada": 3,
+    "birth_dasha_lord": "Ketu",
+    "balance_dmy": "2y 9m 14d",
+    "ayanamsa": "23:44:34",
+    "tithi": "Chaturthi",
+    "paksha": "Shukla",
+    "yoga": "Sukarma"
+  },
+  "notes": "Printout also shows tropical Sun sign Vrishchika (Scorpio), sunrise about 06:10 local vs engine 06:07 (disc/refraction convention differs), Avakahada: varna Kshatriya, vashya Manav/Chatushpad, yoni Shwan, gana Rakshas, nadi Adya."
+}
