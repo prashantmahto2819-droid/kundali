@@ -171,6 +171,36 @@ UI_RECTIFY = {"जन्म-समय संशोधन सहायक": "Birt
               "समय": "Time", "नवांश-लग्न": "Navamsa Lagna", "चंद्र-नक्षत्र": "Moon nakshatra", "घटना-मेल": "Event match", "घटना": "Event", "दशा / अंतर्दशा": "Dasha / antardasha", "मेल": "Match", "हाँ": "Yes", "नहीं": "No"}
 for hi, en in UI_RECTIFY.items():
     EXACT.setdefault(hi, en)
+# tajika layer
+from jyotish import tajika as _tj
+for name, hi, *_ in _tj.SAHAMS:
+    put(hi, name)
+for _, (en, hi, _n) in _tj.ASPECTS.items():
+    put(hi, en.capitalize() + hi[hi.find("("):] if "(" in hi else en.capitalize())
+UI_TAJIKA = {"ताजिक परत (ड्राफ़्ट)": "Tajika layer (draft)", "वर्षेश: {1}": "Year lord: {1}", "(दिन की वर्ष-प्रवेश कुंडली)": "(day-time annual chart)", "(रात्रि की वर्ष-प्रवेश कुंडली)": "(night-time annual chart)",
+             "पंचवर्गीय बल": "Panchavargiya bala", "क्षेत्र": "Kshetra", "उच्च": "Uchcha", "हद्दा": "Hadda", "द्रेष्काण": "Drekkana", "कुल": "Total", "पंचाधिकारी": "Office-bearers (panchadhikari)",
+             "पद": "Office", "बल": "Strength", "लग्न को देखता है": "Aspects the Lagna", "सहम (12)": "Sahams (12)", "सहम": "Saham", "सूत्र": "Formula", "मुद्दा दशा": "Mudda dasha",
+             "ताजिक दृष्टियाँ (इत्थशाल / ईसराफ)": "Tajika aspects (ithasala / ishrafa)", "दृष्टि": "Aspect", "अंतर": "Orb", "अवस्था": "Phase", "कोई दृष्टि दीप्तांश के भीतर नहीं": "No aspect within the deeptamsha orbs",
+             "इत्थशाल (बनता हुआ)": "Ithasala (applying)", "ईसराफ (बीतता हुआ)": "Ishrafa (separating)", "अति बली": "very strong", "बली": "strong", "निर्बल": "weak",
+             "मुन्थेश": "Muntha lord", "जन्म-लग्नेश": "Birth-Lagna lord", "वर्ष-लग्नेश": "Varsha-Lagna lord", "त्रिराशीश": "Trirashi lord", "दिन/रात्रि-पति": "Day/night lord",
+             "लग्नेश": "Lagna lord", "पुण्य-सहम": "Punya saham", "(रात्रि में उलट)": "(reversed at night)"}
+for hi, en in UI_TAJIKA.items():
+    EXACT.setdefault(hi, en)
+for _hi, _en in (("पंचाधिकारियों में से, लग्न को देखने वालों में सबसे बली ग्रह वर्षेश है।", "Among the office-bearers, the strongest that aspects the Lagna is the year lord."),
+                 ("कोई पंचाधिकारी लग्न को नहीं देखता; सबसे बली ग्रह वर्षेश लिया गया।", "No office-bearer aspects the Lagna; the strongest overall is taken as year lord."),
+                 ("यह सौर-वापसी (वर्षफल) कुंडली है: जिस क्षण सूर्य जन्म के सूर्य-अंश पर लौटता है। ताजिक परत (वर्षेश, सहम, मुद्दा दशा, इत्थशाल) ड्राफ़्ट है; पाठ केवल दिशा-संकेत हैं।",
+                  "This is the solar-return (varshaphal) chart: the moment the Sun returns to its natal degree. The Tajika layer (year lord, sahams, mudda dasha, ithasala) is a draft; texts are only pointers."),
+                 ("मुन्था = जन्म-लग्न राशि + पूरे हुए वर्ष (हर वर्ष एक राशि आगे)।", "Muntha = birth-Lagna sign + completed years (one sign forward each year)."),
+                 ("मुन्था:", "Muntha:"), ("राशि, वर्ष-कुंडली के भाव", "sign, in house"), ("में।", "of the annual chart."), ("वर्षफल देखिए", "Show varshaphal"), ("वर्ष (वर्षफल)", "Year (varshaphal)")):
+    put(_hi, _en)
+TAJIKA_PATTERNS = [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+                   ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
+                   ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
+                   ("वर्षेश: {1}", "Year lord: {1}")]
+_tj_sample = _tj.tajika.__doc__  # noqa
+put("ताजिक परत (ड्राफ़्ट): पंचवर्गीय बल, पंचाधिकारी व वर्षेश, 12 सहम, मुद्दा दशा और इत्थशाल/ईसराफ दृष्टियाँ। 16 ताजिक योग (इक्कबाल, इंदुवार आदि) अभी नहीं जोड़े गए; सूत्र समीक्षा के लिए साथ दिखाए गए हैं।",
+    "Tajika layer (draft): panchavargiya bala, office-bearers and year lord, 12 sahams, mudda dasha and ithasala/ishrafa aspects. The 16 Tajika yogas (Ikkavala, Induvara etc.) are not yet included; formulas are shown for review.")
+put("ताजिक परत (वर्षेश, सहम, मुद्दा दशा, इत्थशाल) ड्राफ़्ट है; पाठ केवल दिशा-संकेत हैं।", "The Tajika layer (year lord, sahams, mudda dasha, ithasala) is a draft; texts are only pointers.")
 
 UI = {
  # --- report-specific strings are in REPORT below ---
@@ -517,7 +547,7 @@ EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की 
 REPORT.update({"स्वराशि/उच्च में": "in own/exalted sign", "उच्च राशि में": "in exalted sign", "नीच राशि में": "in debilitated sign",
                "सामान्य स्थिति": "ordinary condition", "ड्राफ़्ट": "draft"})
 
-PATTERNS += EXTRA_PATTERNS
+PATTERNS += EXTRA_PATTERNS + TAJIKA_PATTERNS
 for hi, en in REPORT.items():
     EXACT[hi] = en
 for hi, en in REPORT_WORDS.items():

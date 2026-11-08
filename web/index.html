@@ -1010,6 +1010,23 @@ $('repbtn').addEventListener('click', async () => {
   };
 })();
 
+function renderTajika(t) {
+  if (!t) return '';
+  const pv = Object.entries(t.panchavargiya).map(([p, b]) => `<tr><td>${esc(KBname(p))}</td><td>${b.kshetra}</td><td>${b.uchcha}</td><td>${b.hadda}</td><td>${b.drekkana}</td><td>${b.navamsa}</td><td><b>${b.total}</b></td><td>${esc(b.grade_hi)}</td></tr>`).join('');
+  const pa = t.panchadhikaris.map(r => `<tr${r.planet === t.varshesha ? ' style="font-weight:700"' : ''}><td>${esc(r.role_hi)}</td><td>${esc(r.planet_hi)}</td><td>${r.bala}</td><td>${r.aspects_lagna ? 'हाँ' : 'नहीं'}</td></tr>`).join('');
+  const sh = t.sahams.map(x => `<tr><td>${esc(x.name_hi)}</td><td>${esc(x.sign_name_hi)} ${x.degree_in_sign}°</td><td class="muted">${esc(x.formula_hi)}${x.plus_30 ? ' +30°' : ''}</td></tr>`).join('');
+  const md = t.mudda_dasha.map(m => `<details><summary>${esc(m.lord_hi)} — ${m.start} → ${m.end} (${m.days} दिन)</summary><table>${m.children.map(c => `<tr><td>${esc(c.lord_hi)}</td><td>${c.start}</td><td>${c.end}</td></tr>`).join('')}</table></details>`).join('');
+  const asp = t.aspects.length ? t.aspects.map(a => `<tr><td>${esc(a.planets_hi.join(' – '))}</td><td>${esc(a.aspect_hi)}</td><td>${a.orb}°</td><td>${esc(a.phase_hi)}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">कोई दृष्टि दीप्तांश के भीतर नहीं</td></tr>';
+  return `<h4 style="margin:12px 0 4px">ताजिक परत (ड्राफ़्ट)</h4>
+    <p><b>वर्षेश: ${esc(t.varshesha_hi)}</b> <span class="muted">(${t.day_return ? 'दिन की वर्ष-प्रवेश कुंडली' : 'रात्रि की वर्ष-प्रवेश कुंडली'})</span><br><span class="muted">${esc(t.varshesha_rule_hi)}</span></p>
+    <details><summary>पंचवर्गीय बल</summary><table><tr><th>ग्रह</th><th>क्षेत्र</th><th>उच्च</th><th>हद्दा</th><th>द्रेष्काण</th><th>नवांश</th><th>कुल</th><th>स्थिति</th></tr>${pv}</table></details>
+    <details><summary>पंचाधिकारी</summary><table><tr><th>पद</th><th>ग्रह</th><th>बल</th><th>लग्न को देखता है</th></tr>${pa}</table></details>
+    <details><summary>सहम (12)</summary><table><tr><th>सहम</th><th>स्थिति</th><th>सूत्र</th></tr>${sh}</table></details>
+    <details><summary>मुद्दा दशा</summary>${md}</details>
+    <details><summary>ताजिक दृष्टियाँ (इत्थशाल / ईसराफ)</summary><table><tr><th>ग्रह</th><th>दृष्टि</th><th>अंतर</th><th>अवस्था</th></tr>${asp}</table></details>
+    <div class="muted" style="font-size:.8rem">${esc(t.note_hi)}</div>`;
+}
+
 $('vgo2').addEventListener('click', async () => {
   $('verr2').textContent = ''; $('vout2').innerHTML = '';
   try {
@@ -1019,6 +1036,7 @@ $('vgo2').addEventListener('click', async () => {
     $('vout2').innerHTML = `<p><b>${v.year}</b> (आयु ${v.age}): सूर्य-वापसी <b>${esc(v.return_local)}</b> (${esc(v.tz)}) · वर्ष-लग्न <b>${esc(v.lagna.sign_name_hi)}</b> ${esc(v.lagna.dms)}</p>
       <p>मुन्था: <b>${esc(v.muntha.sign_hi)}</b> राशि, वर्ष-कुंडली के भाव <b>${v.muntha.house}</b> में। <span class="muted">${esc(v.muntha.rule_hi)}</span></p>
       <table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव</th></tr>${v.planets.map(p => `<tr><td>${esc(p.name_hi)}${p.retrograde?' (व)':''}</td><td>${esc(p.sign_name_hi)}</td><td>${esc(p.dms)}</td><td>${p.house}</td></tr>`).join('')}</table>
+      ${renderTajika(v.tajika)}
       <div class="banner">${esc(v.note_hi)}</div>`;
   } catch (err) { $('verr2').textContent = 'त्रुटि: ' + err.message; }
 });

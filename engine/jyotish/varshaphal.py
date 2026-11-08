@@ -9,7 +9,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from . import compute_chart
+from . import compute_chart, tajika
 from .constants import SIGNS_HI
 from .transit import positions_at
 
@@ -65,7 +65,12 @@ def varshaphal(natal: dict, year: int, lat: float | None = None, lon: float | No
     muntha_sign = (natal["lagna"]["sign"] + age) % 12
     muntha_house = (muntha_sign - chart["lagna"]["sign"]) % 12 + 1
     sun_return = next(p["longitude"] for p in chart["planets"] if p["name"] == "Sun")
+    before = positions_at(t - timedelta(days=0.5), backend, system)
+    after = positions_at(t + timedelta(days=0.5), backend, system)
+    speeds = {p: (after[p]["longitude"] - before[p]["longitude"] + 180.0) % 360.0 - 180.0 for p in before}
+    taj = tajika.tajika(chart, natal["lagna"]["sign"], muntha_sign, speeds, t)
     return {
+        "tajika": taj,
         "year": year, "age": age, "return_utc": t.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "return_local": local.strftime("%Y-%m-%d %H:%M:%S"), "tz": use_tz, "lat": use_lat, "lon": use_lon,
         "sun_error_arcsec": round(abs(_diff(sun_return, natal_sun)) * 3600, 4),
@@ -74,5 +79,5 @@ def varshaphal(natal: dict, year: int, lat: float | None = None, lon: float | No
         "lagna": chart["lagna"], "planets": chart["planets"], "houses": chart["houses"],
         "panchang": chart["panchang"], "confidence": "draft",
         "note_hi": ("यह सौर-वापसी (वर्षफल) कुंडली है: जिस क्षण सूर्य जन्म के सूर्य-अंश पर लौटता है। "
-                    "ताजिक की पूरी विधि (वर्षेश, सहम, मुद्दा दशा) अभी शामिल नहीं है; पाठ केवल दिशा-संकेत हैं।"),
+                    "ताजिक परत (वर्षेश, सहम, मुद्दा दशा, इत्थशाल) ड्राफ़्ट है; पाठ केवल दिशा-संकेत हैं।"),
     }
