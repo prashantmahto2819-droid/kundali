@@ -109,3 +109,6 @@ Signed-in users send `Authorization: Bearer <access_token>`; the token is verifi
 | `SUPABASE_JWT_SECRET` | only for legacy projects that still sign with HS256 |
 
 Web page: fill `web/config.js` with the project URL and the **publishable** key (public by design; never a secret key). The "मेरी कुंडलियाँ" card (email-link login, save / open / delete) appears only when both are set.
+
+## Hindi / English
+The web page has a language button; the report accepts `"lang": "en"` (`POST /v1/report`). English is produced by a dictionary (`data/i18n_en.json`, rebuilt with `python engine/tools/build_i18n.py`) with **all-or-nothing** matching: a text is shown in English only if it can be translated completely, so a sentence is never half Hindi, half English. The report is fully English; on the web page the Vastu and palmistry question lists and some help texts are still Hindi. Rules (`readings`) carry both `text_hi` and `text_en`.

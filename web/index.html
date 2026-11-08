@@ -38,6 +38,7 @@
 </head>
 <body>
 <header>
+  <button type="button" id="langbtn" style="float:right;width:auto;padding:4px 14px;margin:0" title="Language">English</button>
   <h1>कुंडली <span class="chip">पहला संस्करण</span></h1>
   <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
 </header>
@@ -480,7 +481,7 @@ $('repbtn').addEventListener('click', async () => {
   $('reperr').textContent = '';
   const w = window.open('', '_blank');
   try {
-    const r = await fetch(API + '/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(window.lastBody)});
+    const r = await fetch(API + '/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, lang: window.getLang ? window.getLang() : 'hi'})});
     if (!r.ok) throw new Error((await r.json()).detail || 'त्रुटि');
     const html = await r.text();
     w.document.open(); w.document.write(html); w.document.close();
@@ -597,6 +598,86 @@ $('vgo2').addEventListener('click', async () => {
     } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
   };
   refresh();
+})();
+
+// ---- Language toggle (Hindi <-> English). Partial by design: a text is translated only if it can be translated
+// completely (never half Hindi, half English). Dictionary: data/i18n_en.json (built by engine/tools/build_i18n.py).
+(function langUI() {
+  let lang = 'hi', D = null, rxPhrases = null, pats = [];
+  try { lang = localStorage.getItem('kundali_lang') || 'hi'; } catch (e) {}
+  window.getLang = () => lang;
+  const DEV = 'ऀ-ॿ', hasDev = t => new RegExp('[' + DEV + ']').test(t);
+  const originals = new WeakMap(), attrOrig = new WeakMap();
+  const esc2 = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const ord = n => n + (n % 100 >= 10 && n % 100 <= 20 ? 'th' : ({1:'st', 2:'nd', 3:'rd'}[n % 10] || 'th'));
+  function build() {
+    rxPhrases = new RegExp('(?<![' + DEV + '])(' + Object.keys(D.phrases).sort((a, b) => b.length - a.length).map(esc2).join('|') + ')(?![' + DEV + '])', 'g');
+    pats = (D.patterns || []).map(([hi, en]) => {
+      const parts = hi.split(/\{(\d+)\}/);
+      const rx = new RegExp('^' + parts.map((x, i) => i % 2 === 0 ? esc2(x) : '(.+?)').join('') + '$');
+      return {rx, en, order: parts.filter((_, i) => i % 2 === 1).map(Number)};
+    });
+  }
+  function tr(core) {
+    if (!hasDev(core)) return core;
+    if (Object.prototype.hasOwnProperty.call(D.exact, core)) return D.exact[core];
+    for (const p of pats) {
+      const m = core.match(p.rx); if (!m) continue;
+      const g = m.slice(1).map(tr); if (g.includes(null)) continue;
+      return p.en.replace(/\{(\d+)\}/g, (_, k) => g[p.order.indexOf(+k)]);
+    }
+    const out = core.replace(rxPhrases, m => D.phrases[m]).replace(new RegExp('(\\d+)(?:वाँ|वें|वीं)(?![' + DEV + '])', 'g'), (_, n) => ord(+n));
+    if (!hasDev(out)) return out;
+    for (const sep of ['; ', ', ', ' / ']) if (core.includes(sep)) {
+      const parts = core.split(sep).map(tr); if (!parts.includes(null)) return parts.join(sep);
+    }
+    return null;
+  }
+  function trText(text) {
+    const core = text.trim().replace(/\s+/g, ' ');
+    const out = hasDev(core) ? tr(core) : null;
+    return out === null ? text : text.replace(text.trim(), out);
+  }
+  let busy = false;
+  function apply(root) {
+    if (!D) return;
+    busy = true;
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let n; const nodes = []; while ((n = w.nextNode())) nodes.push(n);
+    for (const node of nodes) {
+      if (!node.parentElement || ['SCRIPT', 'STYLE'].includes(node.parentElement.tagName)) continue;
+      if (!originals.has(node) && hasDev(node.nodeValue)) originals.set(node, node.nodeValue);
+      if (originals.has(node)) { const t = trText(originals.get(node)); if (t !== node.nodeValue) node.nodeValue = t; }
+    }
+    (root.querySelectorAll ? root.querySelectorAll('[placeholder],[title]') : []).forEach(el => {
+      for (const a of ['placeholder', 'title']) {
+        const v = el.getAttribute(a); if (v === null) continue;
+        const key = a; const m = attrOrig.get(el) || {}; if (!(key in m) && hasDev(v)) { m[key] = v; attrOrig.set(el, m); }
+        if (m[key] !== undefined) el.setAttribute(a, trText(m[key]));
+      }
+    });
+    mo.takeRecords(); busy = false;
+  }
+  function restore() {
+    busy = true;
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) if (originals.has(n)) n.nodeValue = originals.get(n);
+    document.querySelectorAll('[placeholder],[title]').forEach(el => { const m = attrOrig.get(el); if (m) for (const a in m) el.setAttribute(a, m[a]); });
+    mo.takeRecords(); busy = false;
+  }
+  async function set(l) {
+    lang = l; try { localStorage.setItem('kundali_lang', l); } catch (e) {}
+    document.documentElement.lang = l; $('langbtn').textContent = l === 'en' ? 'हिन्दी' : 'English';
+    if (l === 'en') {
+      if (!D) { try { D = await (await fetch(API + '/data/i18n_en.json')).json(); build(); } catch (e) { lang = 'hi'; return; } }
+      apply(document.body);
+    } else restore();
+  }
+  const mo = new MutationObserver(muts => { if (lang !== 'en' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
+    muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
+  mo.observe(document.body, {childList: true, subtree: true, characterData: true});
+  $('langbtn').onclick = () => set(lang === 'en' ? 'hi' : 'en');
+  if (lang === 'en') set('en');
 })();
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)

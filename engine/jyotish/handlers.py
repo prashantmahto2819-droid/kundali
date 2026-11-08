@@ -129,8 +129,11 @@ def places_from_query(q: str, limit: int = 8) -> dict:
 
 def report_from_payload(payload: dict) -> str:
     """Printable Hindi HTML report for the same payload as /v1/chart."""
-    from . import report
-    return report.render(chart_from_payload(payload))
+    from . import i18n, report
+    html = report.render(chart_from_payload(payload))
+    if str(payload.get("lang", "hi")).lower() == "en":
+        html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
+    return html
 
 
 def vastu_from_payload(payload: dict) -> dict:

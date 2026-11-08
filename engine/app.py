@@ -45,6 +45,7 @@ class ChartRequest(BaseModel):
     year_days: float = 365.25
     as_of: str | None = None
     dasha_level: int = 2
+    lang: str = "hi"
 
 
 @app.api_route("/v1/people", methods=["GET", "POST"])
