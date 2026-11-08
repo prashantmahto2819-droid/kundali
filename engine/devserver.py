@@ -9,19 +9,32 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from jyotish import handlers
+from jyotish import access, handlers
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class Handler(BaseHTTPRequestHandler):
+    extra_headers: dict = {}
+
     def _send(self, code, body: bytes, ctype="application/json; charset=utf-8"):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
+        for k, v in self.extra_headers.items():
+            self.send_header(k, v)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(body)
+
+    def _guard(self, path) -> bool:
+        """Apply the access guard; on failure the response is already sent and False is returned."""
+        status, body, hdrs, _org = access.guard(self.headers, path)
+        self.extra_headers = hdrs
+        if status != 200:
+            self._json(status, body)
+            return False
+        return True
 
     def _json(self, code, obj):
         self._send(code, json.dumps(obj, ensure_ascii=False).encode("utf-8"))
@@ -30,11 +43,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "*")
+        self.send_header("Access-Control-Expose-Headers", "X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After")
         self.send_header("Access-Control-Allow-Methods", "GET, POST")
         self.end_headers()
 
     def do_GET(self):
         path, _, query = self.path.partition("?")
+        if not self._guard(path):
+            return
         if path == "/health":
             return self._json(200, handlers.health())
         if path == "/v1/palm/catalog":
@@ -62,6 +78,8 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, target.read_bytes(), ctype)
 
     def do_POST(self):
+        if not self._guard(self.path.split("?")[0]):
+            return
         routes = {"/v1/chart": handlers.chart_from_payload,
                   "/v1/numerology": handlers.numerology_from_payload,
                   "/v1/match": handlers.match_from_payload,

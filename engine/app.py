@@ -7,11 +7,12 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from jyotish import handlers
+from jyotish import access, handlers
 
 app = FastAPI(title="Kundali Engine", version=handlers.ENGINE_VERSION)
 app.add_middleware(
@@ -19,6 +20,18 @@ app.add_middleware(
     allow_origins=[o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o],
     allow_methods=["GET", "POST"], allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def api_key_guard(request: Request, call_next):
+    """KUNDALI_AUTH = off | optional | required  (see jyotish/access.py)."""
+    status, body, hdrs, _org = access.guard(request.headers, request.url.path)
+    if status != 200:
+        return JSONResponse(body, status_code=status, headers=hdrs)
+    response = await call_next(request)
+    for k, v in hdrs.items():
+        response.headers[k] = v
+    return response
 
 
 class ChartRequest(BaseModel):

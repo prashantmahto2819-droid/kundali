@@ -70,3 +70,22 @@ License: not decided yet (proprietary by default).
 - Test on the Vivid Relay server behind its Caddy: `docs/OPS-relay.md` (ordered steps) with `deploy/docker-compose.relay.yml`, `deploy/Caddyfile.snippet`, `deploy/smoke.sh`.
 - Standalone VPS with Cloudflare Tunnel: `docs/OPS.md`.
 - The FastAPI app also serves `web/` and `data/` (set `KUNDALI_SERVE_WEB=0` to turn off). The FastAPI/Docker path has not been run yet (no network here); the dev server and `smoke.sh` have.
+
+## Access control & API keys (multi-tenant core)
+Every `/v1/*` request can be tied to an **organisation** with a plan and a daily limit.
+
+| Env var | Meaning |
+|---|---|
+| `KUNDALI_AUTH` | `off` (default, dev) · `optional` (public web page works anonymously, a bad key is rejected) · `required` (API customers) |
+| `KUNDALI_DB` | SQLite file for orgs/keys/usage (default `kundali_access.db`; Postgres/Supabase later) |
+
+Send the key as `X-API-Key: kd_...`. Responses carry `X-RateLimit-Limit` / `X-RateLimit-Remaining`; over the limit gives `429` + `Retry-After`. Keys are stored only as SHA-256 hashes (shown once at creation). `/health` is never guarded.
+
+```bash
+cd engine
+python tools/admin.py create-org "Acme"
+python tools/admin.py create-key <org_id>      # prints the key once
+python tools/admin.py usage <org_id>
+python tools/admin.py set-plan <org_id> pro    # free 200/day, pro 20000/day, unlimited
+python tools/admin.py revoke <key_prefix>
+```
