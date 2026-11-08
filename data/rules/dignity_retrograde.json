@@ -1,0 +1,421 @@
+{
+ "_comment": "Dignity (exalted/debilitated/own sign) and retrograde tendencies. Own wording, tendency language, all draft. Neecha-bhanga (cancellation) is not computed yet.",
+ "rules": [
+  {
+   "id": "sun_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Sun",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "सूर्य उच्च राशि (मेष) में है: आत्मविश्वास, नेतृत्व और प्रतिष्ठा के गुण सहज रूप से प्रबल होते हैं; ज़िम्मेदारी मिलने पर चमकने की क्षमता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Moon",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "चंद्र उच्च राशि (वृषभ) में है: मन स्थिर रहता है; भावनाओं में संतुलन और सुख-सुविधा व पोषण की सहज क्षमता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mars",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "मंगल उच्च राशि (मकर) में है: अनुशासित साहस, सहनशक्ति और लक्ष्य-केंद्रित ऊर्जा।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mercury",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "बुध उच्च राशि (कन्या) में है: तीक्ष्ण विश्लेषण, बारीकी और व्यवस्थित, व्यावहारिक बुद्धि।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Jupiter",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "गुरु उच्च राशि (कर्क) में है: करुणा, ज्ञान और उदार मार्गदर्शन की सहज क्षमता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Venus",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "शुक्र उच्च राशि (मीन) में है: गहरा स्नेह, कलात्मक संवेदना और निःस्वार्थ भाव।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_exalted",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Saturn",
+    "dignity": "exalted"
+   },
+   "text_en": null,
+   "text_hi": "शनि उच्च राशि (तुला) में है: न्यायप्रिय, संतुलित अनुशासन; धैर्य और निष्पक्षता से सफलता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Sun",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "सूर्य नीच राशि (तुला) में है: आत्मविश्वास के लिए दूसरों की स्वीकृति पर निर्भरता और निर्णय में दुविधा की प्रवृत्ति; समन्वय सीखकर बल पाया जा सकता है। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Moon",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "चंद्र नीच राशि (वृश्चिक) में है: भावनाओं की तीव्रता और भीतर दबी बेचैनी; भावनात्मक संतुलन के अभ्यास की सलाह। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mars",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "मंगल नीच राशि (कर्क) में है: ऊर्जा भावनाओं से प्रभावित होती है; साहस दिखाने में झिझक या अप्रत्यक्ष क्रोध; संतुलित अभिव्यक्ति सीखने की सीख। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mercury",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "बुध नीच राशि (मीन) में है: सोच कल्पना में बह सकती है; तथ्य और विवरण पर ध्यान बढ़ाने की सलाह। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Jupiter",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "गुरु नीच राशि (मकर) में है: ज्ञान में अति-व्यावहारिकता या संकोच; विश्वास और उदारता विकसित करने की सीख। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Venus",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "शुक्र नीच राशि (कन्या) में है: रिश्तों और सुख में अत्यधिक आलोचनात्मक दृष्टि; सरलता से आनंद लेना सीखने की सलाह। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_debilitated",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Saturn",
+    "dignity": "debilitated"
+   },
+   "text_en": null,
+   "text_hi": "शनि नीच राशि (मेष) में है: अधीरता और अनुशासन में असंतुलन की प्रवृत्ति; धैर्य का अभ्यास विशेष रूप से महत्वपूर्ण। परंपरा में नीचभंग जैसी स्थितियाँ इसे बदल सकती हैं; हमारा इंजन अभी उन्हें नहीं जाँचता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Sun",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "सूर्य स्वराशि में है, इसलिए अधिकार/आत्मबल से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Moon",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "चंद्र स्वराशि में है, इसलिए मन/माता से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mars",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "मंगल स्वराशि में है, इसलिए साहस/ऊर्जा से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Mercury",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "बुध स्वराशि में है, इसलिए बुद्धि/संवाद से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Jupiter",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "गुरु स्वराशि में है, इसलिए ज्ञान/विस्तार से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Venus",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "शुक्र स्वराशि में है, इसलिए सुख/संबंध/कला से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_own_sign",
+   "category": "planet_dignity",
+   "when": {
+    "planet": "Saturn",
+    "dignity": "own"
+   },
+   "text_en": null,
+   "text_hi": "शनि स्वराशि में है, इसलिए अनुशासन/कर्म से जुड़े गुण स्थिर और सहज रूप से व्यक्त होते हैं (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_retrograde",
+   "category": "planet_retrograde",
+   "when": {
+    "planet": "Mars",
+    "retrograde": true
+   },
+   "text_en": null,
+   "text_hi": "मंगल वक्री है: ऊर्जा भीतर की ओर मुड़ती है; निर्णय सोचकर और देर से लेने की प्रवृत्ति; साहस और क्रोध की अभिव्यक्ति असामान्य ढंग से।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_retrograde",
+   "category": "planet_retrograde",
+   "when": {
+    "planet": "Mercury",
+    "retrograde": true
+   },
+   "text_en": null,
+   "text_hi": "बुध वक्री है: सोच भीतर लौटती है; पुनर्विचार, संशोधन और आत्म-चिंतन की प्रवृत्ति; संवाद में स्पष्टता का अभ्यास उपयोगी।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_retrograde",
+   "category": "planet_retrograde",
+   "when": {
+    "planet": "Jupiter",
+    "retrograde": true
+   },
+   "text_en": null,
+   "text_hi": "गुरु वक्री है: ज्ञान और आस्था के प्रति स्वतंत्र, आत्म-अन्वेषी दृष्टिकोण; सिद्धांतों को खुद परखने की प्रवृत्ति।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_retrograde",
+   "category": "planet_retrograde",
+   "when": {
+    "planet": "Venus",
+    "retrograde": true
+   },
+   "text_en": null,
+   "text_hi": "शुक्र वक्री है: संबंधों और मूल्यों पर गहन पुनर्विचार; पुराने विषयों पर लौटने की प्रवृत्ति और भावनाओं में गहराई।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_retrograde",
+   "category": "planet_retrograde",
+   "when": {
+    "planet": "Saturn",
+    "retrograde": true
+   },
+   "text_en": null,
+   "text_hi": "शनि वक्री है: ज़िम्मेदारियाँ भीतर की प्रेरणा से निभाने की प्रवृत्ति; परिणाम देर से, पर पुख्ता।",
+   "source": {
+    "text": "Dignity and retrograde principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  }
+ ]
+}

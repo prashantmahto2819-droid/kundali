@@ -23,6 +23,19 @@ def test_library_is_complete_and_safe():
 
 def test_every_planet_gets_exactly_one_reading():
     c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
-    assert len(c["readings"]) == 9
-    assert sorted(r["planet"] for r in c["readings"]) == sorted(p["name"] for p in c["planets"])
-    assert len(load_rules()) == 108
+    house = [r for r in c["readings"] if r["category"] == "planet_in_house"]
+    assert sorted(r["planet"] for r in house) == sorted(p["name"] for p in c["planets"])
+    assert len(load_rules()) == 108 + 7 + 7 + 7 + 5
+
+
+def test_dignity_and_retrograde_rules_fire_correctly():
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    ids = {r["rule_id"] for r in c["readings"]}
+    pl = {p["name"]: p for p in c["planets"]}
+    assert pl["Venus"]["dignity"] == "exalted" and "venus_exalted" in ids
+    assert pl["Saturn"]["dignity"] == "own" and "saturn_own_sign" in ids
+    assert ("mercury_retrograde" in ids) == pl["Mercury"]["retrograde"]
+    assert "sun_debilitated" not in ids
+    blob = open(__import__("pathlib").Path(__file__).resolve().parents[2] / "data" / "rules" / "dignity_retrograde.json", encoding="utf-8").read()
+    for bad in ("मृत्यु", "बीमारी", "रोग", "दरिद्र", "विनाश"):
+        assert bad not in blob

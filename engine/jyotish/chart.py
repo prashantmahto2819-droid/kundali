@@ -129,7 +129,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["day"] = day_table(local_dt, lat, lon, tz)
     if chart["day"].get("available"):  # the Vedic day starts at sunrise
         chart["panchang"]["vara"] = chart["day"]["vedic_vara"]
-        chart["panchang"]["note"] = "Vara follows the sunrise-based Vedic day."
+        chart["panchang"]["note"] = "वार सूर्योदय से शुरू होने वाले वैदिक दिन के अनुसार है।"
     chart["ashtakavarga"] = ashtakavarga({**{p["name"]: p["sign"] for p in planets}, "Lagna": lagna_sign}, lagna_sign)
     chart["gochara"] = gochara(chart, positions_at(now, backend, ayanamsa_system), now)
     chart["yogas"] = detect_yogas(chart)
