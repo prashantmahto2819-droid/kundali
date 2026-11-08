@@ -117,3 +117,10 @@ def test_numerology_is_retrievable():
     assert top("मेरा भाग्यांक क्या है", chart=ch)[0] == "chart/bhagyank_hi"
     assert top("my name number", chart=ch)[0] == "chart/namank"
     assert not any(s.startswith("knowledge/numbers") for s in top("number 3 traits"))
+
+
+def test_lo_shu_is_answerable():
+    ch = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    r = ask.ask("Which numbers are missing in my Lo Shu grid?", chart=ch)
+    assert r["sources"][0]["id"] == "chart/lo_shu" and "2, 3, 4, 6" in r["answer"]
+    assert top("मेरे लो-शू ग्रिड में कौन से अंक नहीं हैं", chart=ch)[0] == "chart/lo_shu_hi"

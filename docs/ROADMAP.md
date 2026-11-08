@@ -24,7 +24,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
 ## Patri header
-- [x] Traditional janma-patri header (vara, tithi, nakshatra-pada-lord, yoga, karana, sunrise/sunset, ishta kaal, masa, ritu, ayana, Vikram/Shaka samvat, tropical Sun sign) + Avakahada chakra (varna, vashya, yoni, gana, nadi, tattva, name syllable) on the web summary and in the report; checked against the Korba printout. Pending: adhika masa, purnimanta option, sunrise disc/refraction option, ghata chakra.
+- [x] Traditional janma-patri header (vara, tithi, nakshatra-pada-lord, yoga, karana, sunrise/sunset, ishta kaal, masa, ritu, ayana, Vikram/Shaka samvat, tropical Sun sign) + Avakahada chakra (varna, vashya, yoni, gana, nadi, tattva, name syllable) on the web summary and in the report; checked against the Korba printout. Done since: adhika masa from real lunations, disc-centre sunrise + ishta kaal, ghata chakra (draft table). Pending: purnimanta option, ghata-chakra scholar check.
 - [x] City list: 242 places incl. all Chhattisgarh districts/towns and neighbouring MP/Odisha/Jharkhand towns.
 
 ## Accuracy gate
@@ -39,6 +39,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 
 - [x] Vastu v1 (room x direction rating, 16 rooms, Hindi). Pending: floor-plan/plot analysis, 16-zone model, scholar review.
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
+- [x] Shadbala v2: cheshta bala now for all seven (BPHS half-sum kendra with Meeus mean longitudes); ranking by full total. Pending: abda, masa, yuddha, ishta/kashta.
 - [x] Rule library v1: 9 planets x 12 houses (Hindi, draft, tendency language). Pending: English text, sign/dignity/aspect rules, classical citations, scholar sign-off.
 - [x] Dignity (exalted/debilitated/own) and retrograde rules v1 (26, Hindi, draft). Pending: neecha-bhanga, sign/aspect/conjunction rules, English text.
 - [x] Hindi/English toggle (web page + report + vastu + palmistry data; dictionary-based, all-or-nothing)

@@ -127,6 +127,15 @@ def numerology_passages(birth_date: str, name: str | None = None) -> list[dict]:
         {"id": "chart/personal_year", "lang": "en", "text": f"Your personal year number for {py['year']} is {py['number']} ({py['planet']})."},
         {"id": "chart/personal_year_hi", "lang": "hi", "text": f"{py['year']} के लिए आपका वैयक्तिक वर्ष अंक {py['number']} ({py['planet']}) है।"},
     ]
+    ls = r.get("lo_shu") or {}
+    if ls:
+        miss, rep = ls.get("missing", []), ls.get("repeated", [])
+        out.append({"id": "chart/lo_shu", "lang": "en", "text": "Your Lo Shu grid (numbers of the birth date): missing numbers "
+                    + (", ".join(map(str, miss)) or "none") + "; repeated numbers " + (", ".join(map(str, rep)) or "none")
+                    + ". A missing number is read as a quality to develop, a repeated one as an emphasised quality."})
+        out.append({"id": "chart/lo_shu_hi", "lang": "hi", "text": "आपका लो-शू ग्रिड (जन्म-तारीख़ के अंक): अनुपस्थित अंक "
+                    + (", ".join(map(str, miss)) or "कोई नहीं") + "; दोहराए अंक " + (", ".join(map(str, rep)) or "कोई नहीं")
+                    + "। अनुपस्थित अंक को विकसित करने योग्य गुण और दोहराए अंक को प्रबल गुण के रूप में पढ़ा जाता है।"})
     if name and r.get("namank"):
         c = r["namank"]["chaldean"]
         out.append({"id": "chart/namank", "lang": "en", "text": f"Your name number (Chaldean) is {c['number']} (compound {c['compound']}), ruled by {c['planet']}."})

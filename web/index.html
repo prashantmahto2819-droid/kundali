@@ -473,8 +473,8 @@ function render(c) {
   // Partial strength
   const stg = c.strength;
   $('stwhy').textContent = stg.why_hi + ' ' + stg.missing_hi;
-  $('sttable').innerHTML = `<table><tr><th>ग्रह</th><th>उच्च</th><th>दिक्</th><th>केंद्रादि</th><th>नैसर्गिक</th><th>कुल</th><th>क्रम</th></tr>` +
-    stg.planets.map(r => `<tr><td>${esc(r.name_hi)}</td><td>${r.uccha}</td><td>${r.dig}</td><td>${r.kendradi}</td><td>${r.naisargika}</td><td><b>${r.total}</b></td><td>${r.rank}</td></tr>`).join('') + '</table>';
+  $('sttable').innerHTML = `<table><tr><th>ग्रह</th><th>स्थान</th><th>दिक्</th><th>काल</th><th>चेष्टा</th><th>दृग्</th><th>नैसर्गिक</th><th>कुल</th><th>रूप</th><th>क्रम</th></tr>` +
+    stg.planets.map(r => `<tr><td>${esc(r.name_hi)}</td><td>${r.sthana}</td><td>${r.dig}</td><td>${r.kala}</td><td>${r.cheshta}</td><td>${r.drik}</td><td>${r.naisargika}</td><td><b>${r.total}</b></td><td>${r.rupas}</td><td>${r.rank}</td></tr>`).join('') + '</table>';
 
   $('vyear').value = $('vyear').value || (new Date().getFullYear());
 

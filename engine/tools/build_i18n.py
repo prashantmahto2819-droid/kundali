@@ -149,7 +149,7 @@ UI = {
  "राहुकाल": "Rahu Kaal", "यमगंड": "Yamaganda", "गुलिक": "Gulika", "अभिजित": "Abhijit",
  "चौघड़िया (दिन)": "Choghadiya (day)", "चौघड़िया (रात)": "Choghadiya (night)", "शुभ": "good", "अशुभ": "inauspicious", "सम": "neutral",
  "अंक ज्योतिष": "Numerology", "मूलांक": "Moolank (birth number)", "भाग्यांक": "Bhagyank (destiny number)",
- "लो-शू ग्रिड": "Lo Shu grid", "शास्त्रीय संकेत (ड्राफ़्ट नियम)": "Classical indications (draft rules)",
+ "लो-शू ग्रिड": "Lo Shu grid", "(ड्राफ़्ट)": "(draft)", "शास्त्रीय संकेत (ड्राफ़्ट नियम)": "Classical indications (draft rules)",
  "वर्षफल (सौर-वापसी कुंडली)": "Varshaphal (solar-return chart)", "वर्षफल देखिए": "Show Varshaphal",
  "जीवन समय-रेखा (दशा के अनुसार)": "Life timeline (by dasha)", "बीता": "past", "चल रही": "running", "आगे": "ahead",
  "अंतर्दशा:": "Antardasha:", "विंशोत्तरी दशा": "Vimshottari dasha", "अभी चल रही:": "Running now:",
@@ -191,6 +191,7 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
+ "चेष्टा": "Cheshta", "रूप": "Rupas", "स्थान": "Sthana", "काल": "Kala", "दृग्": "Drik",
  # tabs
  "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
  "पंचांग व मुहूर्त": "Panchang & muhurta", "योग व संकेत": "Yogas & indications", "दशा व समय-रेखा": "Dasha & timeline",
@@ -230,8 +231,8 @@ REPORT = {
    "In Ashtakavarga each planet gives 0 to 8 bindus in every sign (the seven planets and the Lagna contribute). The higher the Sarvashtakavarga (SAV) total of a house, the more easily its results are considered to flow. The average is about 28; 30+ is strong and below 25 is weak — a rule of thumb, not a final verdict.",
  "गोचर में हर ग्रह जन्म-चंद्र राशि से कुछ ख़ास भावों में शुभ माना जाता है। हमने इसे उस राशि में ग्रह के अष्टकवर्ग बिंदुओं (4 या अधिक = सहायक) से मिलाया है। ‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध अभी लागू नहीं है; यह दिशा-संकेत है, भविष्यवाणी नहीं।":
    "In transit, each planet is considered favourable in certain houses from the natal Moon sign. We cross-checked this with the planet's Ashtakavarga bindus in that sign (4 or more = supportive). ‘Mixed’ means the two indications differ. Vedha is not applied yet; this is a directional indication, not a prediction.",
- "चेष्टाबल (सूर्य-चंद्र को छोड़कर), अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण षड्बल नहीं है। कुल अंकों की तुलना शास्त्रीय न्यूनतम-आवश्यकता तालिका से न करें; केवल एक ही कुंडली के ग्रहों की आपस में तुलना करें।":
-   "Cheshta bala (except Sun and Moon), abda bala, masa bala and yuddha bala are not included yet, so this is not the full Shadbala. Do not compare the totals with the classical minimum-requirement tables; compare only the planets of one chart with each other.",
+ "अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण षड्बल नहीं है। कुल अंकों की तुलना शास्त्रीय न्यूनतम-आवश्यकता तालिका से न करें; केवल एक ही कुंडली के ग्रहों की आपस में तुलना करें।":
+   "Abda bala, masa bala and yuddha bala are not included yet, so this is not the full Shadbala. Do not compare the totals with the classical minimum-requirement tables; compare only the planets of one chart with each other.",
  "यह समय-रेखा बताती है कि किस दशा में जीवन के कौन-से क्षेत्र सक्रिय रहते हैं, घटनाओं की भविष्यवाणी नहीं। बल-संकेत दशेश की स्थिति (गरिमा, भाव, अष्टकवर्ग बिंदु) से बनता है; गोचर, दृष्टियाँ और योग अभी शामिल नहीं हैं।":
    "This timeline shows which areas of life are active in which dasha, not predictions of events. The strength indication is built from the dasha lord's condition (dignity, house, Ashtakavarga bindus); transits, aspects and yogas are not included yet.",
  "दृष्टि: हर ग्रह अपने से 7वें भाव को देखता है; मंगल 4 और 8, गुरु 5 और 9, शनि 3 और 10, राहु-केतु 5 और 9 को भी देखते हैं। यहाँ पूरी-राशि दृष्टि गिनी गई है (अंशों के हिसाब से दृष्टि-बल षड्बल के दृग्बल में है)।":
@@ -371,7 +372,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("स्रोत ({1})", "Sources ({1})")]
+EXTRA_PATTERNS += [("स्रोत ({1})", "Sources ({1})"), ("{1}-{2} (स्वामी {3})", "{1}-{2} (lord {3})")]
 EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की प्रधानता ({2} कार्ड): {3} पर ज़ोर।", "Dominance of {1} ({2} cards): emphasis on {3}.")]
 REPORT.update({"स्वराशि/उच्च में": "in own/exalted sign", "उच्च राशि में": "in exalted sign", "नीच राशि में": "in debilitated sign",
                "सामान्य स्थिति": "ordinary condition", "ड्राफ़्ट": "draft"})

@@ -37,7 +37,7 @@ def test_chart_integration():
     for r in s["planets"]:
         assert 0 <= r["uccha"] <= 60 and 0 <= r["dig"] <= 60 and r["kendradi"] in (60, 30, 15)
         assert r["total"] == pytest.approx(r["sthana"] + r["dig"] + r["kala"] + r["cheshta"] + r["naisargika"] + r["drik"], abs=0.1)
-        assert r["comparable"] == pytest.approx(r["total"] - r["cheshta"], abs=0.02)
+        assert r["comparable"] == pytest.approx(r["total"], abs=0.02) and 0 <= r["cheshta"] <= 120
         assert 0 <= r["sthana"] <= 60 + 315 + 30 + 60 + 15
     assert sorted(r["rank"] for r in s["planets"]) == list(range(1, 8))
     venus = next(r for r in s["planets"] if r["name"] == "Venus")
@@ -94,3 +94,18 @@ def test_saptavargaja_and_ojayugma_ranges():
         assert 14 <= st.saptavargaja_bala(p, lons) <= 7 * 45
         assert st.ojayugma_bala(p, lons[p]) in (0.0, 15.0, 30.0)
     assert st.ojayugma_bala("Moon", 38.0) == 30.0       # 8 deg Taurus: even sign in D1 and in D9 (Pisces)
+
+
+def test_cheshta_bala_motion():
+    jd = 2448029.5                                                  # 1990-05-17 (TT ~ UT)
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    rows = {r["name"]: r for r in c["strength"]["planets"]}
+    retro = {p["name"]: p["retrograde"] for p in c["planets"]}
+    assert retro["Saturn"] and rows["Saturn"]["cheshta"] > 35          # retrograde: far from conjunction, strong
+    assert retro["Mercury"] and rows["Mercury"]["cheshta"] > 40
+    k = compute_chart("1991-11-10", "14:20", "Asia/Kolkata", 22.3667, 82.7667)
+    mars = next(r for r in k["strength"]["planets"] if r["name"] == "Mars")
+    assert mars["cheshta"] < 5                                           # Mars conjunct the Sun: minimal motional strength
+    for n in ("Mars", "Mercury", "Jupiter", "Venus", "Saturn"):
+        assert 0 <= st.cheshta_bala(n, 123.4, jd) <= 60
+    assert "cheshta" not in " ".join(c["strength"]["missing"])

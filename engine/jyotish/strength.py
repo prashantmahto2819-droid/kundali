@@ -220,6 +220,35 @@ def drik_bala(target: str, lons: dict) -> float:
     return total / 4.0
 
 
+# ---- Cheshta bala (BPHS 27): motional strength of the five true planets ------------------------
+# Mean longitudes (Meeus, Astronomical Algorithms Table 31.A; T = Julian centuries from J2000, tropical).
+_MEAN = {"Sun": (280.46646, 36000.76983), "Mercury": (252.250906, 149474.0722491), "Venus": (181.979801, 58519.2130302),
+         "Mars": (355.433, 19141.6964471), "Jupiter": (34.351519, 3036.3027748), "Saturn": (50.077444, 1223.5110686)}
+
+
+def _mean_lon(name: str, jd_tt: float) -> float:
+    a, b = _MEAN[name]
+    return (a + b * (jd_tt - 2451545.0) / 36525.0) % 360.0
+
+
+def cheshta_bala(name: str, true_tropical: float, jd_tt: float) -> float:
+    """Kendra = sheeghrochcha - (madhyama + sphuta)/2 (reduced to 0-180); bala = kendra/3 virupas (0-60).
+
+    Superior planets: madhyama = the planet's own mean longitude, sheeghrochcha = mean Sun.
+    Mercury/Venus: madhyama = mean Sun, sheeghrochcha = the planet's own mean (heliocentric) longitude."""
+    mean_sun = _mean_lon("Sun", jd_tt)
+    own = _mean_lon(name, jd_tt)
+    if name in ("Mercury", "Venus"):
+        madhya, sheeghra = mean_sun, own
+    else:
+        madhya, sheeghra = own, mean_sun
+    kendra = (sheeghra - ((madhya + true_tropical) / 2.0)) % 360.0
+    # the half-sum is ambiguous by 180 degrees; take the kendra consistent with the true-minus-mean sense
+    if kendra > 180.0:
+        kendra = 360.0 - kendra
+    return kendra / 3.0
+
+
 def strength(chart: dict) -> dict:
     lagna_lon = chart["lagna"]["longitude"]
     lons = {p["name"]: p["longitude"] for p in chart["planets"]}
@@ -240,7 +269,12 @@ def strength(chart: dict) -> dict:
             kala.update({"natonnata": natonnata_bala(n, tc), "tribhaga": tribhaga_bala(n, tc),
                          "vara": 45.0 if n == tc["vara_lord"] else 0.0,
                          "hora": 60.0 if n == tc["hora_lord"] else 0.0})
-        cheshta = ay if n == "Sun" else pk if n == "Moon" else None
+        if n == "Sun":
+            cheshta = ay
+        elif n == "Moon":
+            cheshta = pk
+        else:
+            cheshta = cheshta_bala(n, lon + ayan, chart["jd_ut"] + 69.0 / 86400.0)
         parts = {"sthana": sum(sthana.values()), "dig": dig_bala(n, lon, lagna_lon), "kala": sum(kala.values()),
                  "cheshta": cheshta or 0.0, "naisargika": NAISARGIKA[n], "drik": drik_bala(n, lons)}
         total = sum(parts.values())
@@ -249,20 +283,20 @@ def strength(chart: dict) -> dict:
                      **{k: round(v, 2) for k, v in parts.items()},
                      "detail": {"sthana": {k: round(v, 2) for k, v in sthana.items()},
                                 "kala": {k: round(v, 2) for k, v in kala.items()}},
-                     "cheshta_known": cheshta is not None,
+                     "cheshta_known": True,
                      "total": round(total, 2), "rupas": round(total / 60.0, 2),
-                     "comparable": round(total - parts["cheshta"], 2)})
-    # Rank without cheshta, because it is only known for Sun and Moon (it would unfairly favour them).
-    for i, r in enumerate(sorted(rows, key=lambda r: -r["comparable"]), 1):
+                     "comparable": round(total, 2)})
+    for i, r in enumerate(sorted(rows, key=lambda r: -r["total"]), 1):
         r["rank"] = i
-    missing = ["cheshta (Mars, Mercury, Jupiter, Venus, Saturn)", "abda", "masa", "yuddha"]
+    missing = ["abda", "masa", "yuddha"]
     if not tc:
         missing += ["natonnata", "tribhaga", "vara", "hora (sunrise/sunset unavailable)"]
     return {"planets": rows, "unit": "virupa", "complete": False, "missing": missing,
-            "missing_hi": ("चेष्टाबल (सूर्य-चंद्र को छोड़कर), अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण "
+            "missing_hi": ("अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण "
                            "षड्बल नहीं है। कुल अंकों की तुलना शास्त्रीय न्यूनतम-आवश्यकता तालिका से न करें; "
                            "केवल एक ही कुंडली के ग्रहों की आपस में तुलना करें।"),
-            "assumptions": ["Mercury counted as benefic in paksha and drik bala",
+            "assumptions": ["cheshta bala from Meeus mean longitudes and the BPHS half-sum kendra, reduced to 0-180",
+                            "Mercury counted as benefic in paksha and drik bala",
                             "Moon benefic in drik bala only when waxing",
                             "Sun's ayana bala doubled",
                             "ayana bala uses ecliptic longitude only (planet latitude ignored)",
