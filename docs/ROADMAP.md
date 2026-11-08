@@ -32,6 +32,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 ## Operations
 - [x] Relay server: backup-relay.sh (SQLite online backup, 30-day retention, optional R2), restore-relay.sh, healthwatch.sh (webhook alert on state change); steps in OPS-relay.md §10.
 
+## Yogas
+- [x] Yoga batch 2: Sunapha/Anapha/Durudhara/Kemadruma, Vesi/Vasi/Ubhayachari, Adhi, Amala, Viparita Raja (Harsha/Sarala/Vimala), Parivartana, Dhana (2/11 with 5/9), Raja (kendra–trikona), Lakshmi, Saraswati. 27 yogas total, all draft.
+
 ## Dasha
 - [x] Running chain resolved to pratyantar (3rd level); pratyantars of the running antardasha listed on web and in the report.
 

@@ -470,6 +470,27 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"सुनफा योग": "Sunapha Yoga",
+"अनफा योग": "Anapha Yoga",
+"दुरुधरा योग": "Durudhara Yoga",
+"केमद्रुम योग": "Kemadruma Yoga",
+"वेशि योग": "Vesi Yoga",
+"वासि योग": "Vasi Yoga",
+"उभयचरी योग": "Ubhayachari Yoga",
+"अधि योग": "Adhi Yoga",
+"अमला योग": "Amala Yoga",
+"हर्ष योग (विपरीत राजयोग)": "Harsha Yoga (Viparita Raja)",
+"सरल योग (विपरीत राजयोग)": "Sarala Yoga (Viparita Raja)",
+"विमल योग (विपरीत राजयोग)": "Vimala Yoga (Viparita Raja)",
+"परिवर्तन योग": "Parivartana Yoga (exchange)",
+"धन योग (2/11 व 5/9 के स्वामी)": "Dhana Yoga (lords of 2/11 with 5/9)",
+"राजयोग (केंद्र-त्रिकोण स्वामी)": "Raja Yoga (kendra–trikona lords)",
+"लक्ष्मी योग": "Lakshmi Yoga",
+"सरस्वती योग": "Saraswati Yoga",
+"चंद्र से दूसरे और बारहवें में (सूर्य के अलावा) कोई ग्रह नहीं, और चंद्र से केंद्र में भी कोई ग्रह नहीं (जो प्रचलित परिहार है)।": "No planet (other than the Sun) in the 2nd or 12th from the Moon, and none in a kendra from the Moon (a common cancellation).",
+"गुरु, शुक्र और बुध तीनों केंद्र, त्रिकोण या दूसरे भाव में, और गुरु स्वराशि/उच्च में (मित्र राशि यहाँ नहीं जाँची गई)।": "Jupiter, Venus and Mercury each in a kendra, trikona or the 2nd, with Jupiter in own/exalted sign (friendly sign not checked here).",
+"दो ग्रह एक-दूसरे की राशि में: कोई नहीं।": "Two planets occupy each other's signs: none.",
+"कोई नहीं।": "none.",
 "चल रही अंतर्दशा के प्रत्यंतर": "Pratyantar dashas of the running antardasha",
 "प्रत्यंतर": "Pratyantar",
 "PDF (प्रिंट)": "PDF (print)",
@@ -2350,6 +2371,70 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"चंद्र से दूसरे भाव में सूर्य के अलावा कोई ग्रह: {1}।",
+"A planet other than the Sun in the 2nd from the Moon: {1}."
+],
+[
+"चंद्र से बारहवें भाव में सूर्य के अलावा कोई ग्रह: {1}।",
+"A planet other than the Sun in the 12th from the Moon: {1}."
+],
+[
+"चंद्र के दोनों ओर ग्रह: दूसरे में {1}, बारहवें में {2}।",
+"Planets on both sides of the Moon: 2nd {1}, 12th {2}."
+],
+[
+"सूर्य से दूसरे भाव में चंद्र के अलावा ग्रह: {1}।",
+"A planet other than the Moon in the 2nd from the Sun: {1}."
+],
+[
+"सूर्य से बारहवें भाव में चंद्र के अलावा ग्रह: {1}।",
+"A planet other than the Moon in the 12th from the Sun: {1}."
+],
+[
+"सूर्य के दोनों ओर ग्रह: {1} / {2}।",
+"Planets on both sides of the Sun: {1} / {2}."
+],
+[
+"चंद्र से 6/7/8 में शुभ ग्रह: {1} (यहाँ दो या अधिक गिने गए)।",
+"Benefics in the 6th/7th/8th from the Moon: {1} (two or more counted here)."
+],
+[
+"लग्न से दसवें में शुभ ग्रह ({1}) या चंद्र से दसवें में ({2})।",
+"A natural benefic in the 10th from the Lagna ({1}) or from the Moon ({2})."
+],
+[
+"{1}वें भाव का स्वामी ({2}) {3}वें भाव में है; 6, 8 या 12 में हो तो यह योग गिना जाता है।",
+"Lord of the {1}th ({2}) is in house {3}; counted when it falls in 6, 8 or 12."
+],
+[
+"दो ग्रह एक-दूसरे की राशि में: {1}।",
+"Two planets occupy each other's signs: {1}."
+],
+[
+"धन भावों (2, 11) के स्वामी आपस में या त्रिकोण (5, 9) के स्वामी के साथ: {1}।",
+"Lords of the wealth houses (2, 11) joined with each other or with trikona lords (5, 9): {1}."
+],
+[
+"केंद्र (1/4/7/10) का स्वामी त्रिकोण (5/9) के स्वामी से युति या परिवर्तन में: {1}।",
+"A kendra lord (1/4/7/10) joined with a trikona lord (5/9) by conjunction or exchange: {1}."
+],
+[
+"नवमेश ({1}) स्वराशि/उच्च में केंद्र या त्रिकोण में, और शुक्र स्वराशि/उच्च में। यहाँ: {2} भाव {3} में, शुक्र {4}।",
+"Lord of the 9th ({1}) in own/exalted sign in a kendra or trikona, and Venus in own/exalted sign. Here: {2} in house {3}; Venus {4}."
+],
+[
+"{1}–{2}",
+"{1}–{2}"
+],
+[
+"{1} शुभ · {2} सावधानी",
+"{1} favourable · {2} caution"
+],
+[
+"महादशा {1} ({2} → {3}) · अंतर्दशा {4} ({5} → {6}) · प्रत्यंतर {7} ({8} → {9})",
+"Mahadasha {1} ({2} → {3}) · Antardasha {4} ({5} → {6}) · Pratyantar {7} ({8} → {9})"
 ],
 [
 "वेध: {1}",
