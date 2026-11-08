@@ -162,6 +162,13 @@ def render(chart: dict) -> str:
         kpl = [[e(v["name_hi"]) + (" (व)" if v["retrograde"] else ""), e(v["sign_name_hi"]), dm(v["degree_in_sign"]), str(v["house"]), e(H(v["star_lord"])), f'<b>{e(H(v["sub_lord"]))}</b>', e(H(v["sub_sub_lord"]))] for v in K["planets"].values()]
         kp_html = (f'<h2>कृष्णमूर्ति पद्धति (KP)</h2>{_table(["भाव-स्पष्ट", "राशि", "अंश", "राशि-स्वामी", "नक्षत्र-स्वामी", "उप-स्वामी", "उप-उप"], kc)}'
                    f'{_table(["ग्रह", "राशि", "अंश", "भाव (KP)", "नक्षत्र-स्वामी", "उप-स्वामी", "उप-उप"], kpl)}<p class="small">{e(K["note_hi"])}</p>')
+    J = chart.get("jaimini")
+    jm_html = ""
+    if J:
+        kr = [[e(k["karaka_hi"]), f'<b>{e(k["planet_hi"])}</b>', f'{k["degree_in_sign"]}°', e(k["signifies_hi"])] for k in J["chara_karakas"]["scheme7"]]
+        pd = [[e(p["name_hi"]), str(p["house"]), e(p["pada_sign_name_hi"]) + (" (अपवाद)" if p["exception_applied"] else ""), str(p["pada_house"])] for p in J["arudha_padas"]]
+        jm_html = (f'<h2>जैमिनी: चर कारक और आरूढ़ पद</h2>{_table(["कारक", "ग्रह", "अंश", "विषय"], kr)}'
+                   f'<p>कारकांश: <b>{e(J["karakamsa"]["sign_name_hi"])}</b></p>{_table(["पद", "भाव", "पद की राशि", "लग्न से भाव"], pd)}<p class="small">{e(J["note_hi"])}</p>')
     S, T = chart.get("sensitivity"), chart.get("transit_calendar")
     sens_html = tc_html = ""
     if S:
@@ -234,6 +241,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 
 {tc_html}
 {kp_html}
+{jm_html}
 <h2>विंशोत्तरी दशा</h2>
 <p>जन्म के समय {e(PLANETS_HI[chart["dasha"]["birth_nakshatra_lord"]])} की दशा शेष: {chart["dasha"]["balance_at_birth_years"]:.2f} वर्ष (वर्ष = {chart["dasha"]["year_days"]} दिन)।</p>
 {_table(["महादशा", "आरंभ", "समाप्ति"], maha_rows)}

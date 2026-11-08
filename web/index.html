@@ -110,6 +110,7 @@
       <button type="button" data-sub="s-varsha">वर्षफल</button>
       <button type="button" data-sub="s-numer">अंक</button>
       <button type="button" data-sub="s-kp">KP</button>
+      <button type="button" data-sub="s-jaimini">जैमिनी</button>
     </nav>
     <section class="sub on" id="s-summary">
     <div class="grid">
@@ -180,6 +181,10 @@
     <div class="card"><b>कृष्णमूर्ति पद्धति (KP)</b><div class="muted" style="font-size:.85rem" id="kpwhy"></div>
       <div id="kpcusps" style="overflow-x:auto"></div><div id="kpplanets" style="overflow-x:auto;margin-top:8px"></div>
       <details><summary>भाव-कारक (चार स्तर)</summary><div id="kpsig" style="overflow-x:auto"></div></details></div>
+    </section>
+    <section class="sub" id="s-jaimini">
+    <div class="card"><b>जैमिनी: चर कारक</b><div class="muted" style="font-size:.85rem" id="jmwhy"></div><div id="jmkarakas" style="overflow-x:auto"></div></div>
+    <div class="card"><b>आरूढ़ पद</b><div id="jmpadas" style="overflow-x:auto"></div></div>
     </section>
     <section class="sub" id="s-numer">
     <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
@@ -495,6 +500,14 @@ function render(c) {
     const L = a => a.length ? a.map(H).map(esc).join(', ') : '—';
     $('kpsig').innerHTML = `<table><tr><th>भाव</th><th>क: भावस्थ ग्रहों के नक्षत्र में</th><th>ख: भावस्थ</th><th>ग: भावेश के नक्षत्र में</th><th>घ: भावेश</th></tr>` +
       Object.entries(K.significators).map(([h, s]) => `<tr><td>${h}</td><td>${L(s.a_in_star_of_occupants)}</td><td>${L(s.b_occupants)}</td><td>${L(s.c_in_star_of_owners)}</td><td>${L(s.d_owners)}</td></tr>`).join('') + '</table>';
+  }
+  if (c.jaimini) {
+    const J = c.jaimini; $('jmwhy').textContent = J.note_hi + ` कारकांश: ${J.karakamsa.sign_name_hi}।`;
+    $('jmkarakas').innerHTML = `<table><tr><th>कारक</th><th>ग्रह</th><th>अंश</th><th>विषय</th></tr>` +
+      J.chara_karakas.scheme7.map(k => `<tr><td>${esc(k.karaka_hi)}</td><td><b>${esc(k.planet_hi)}</b></td><td>${k.degree_in_sign}°</td><td class="muted">${esc(k.signifies_hi)}</td></tr>`).join('') + '</table>' +
+      `<details><summary>8-कारक (राहु सहित)</summary><div class="muted">${J.chara_karakas.scheme8.map(k => `${esc(k.karaka_hi)}: ${esc(k.planet_hi)}`).join(' · ')}</div></details>`;
+    $('jmpadas').innerHTML = `<table><tr><th>पद</th><th>भाव</th><th>पद की राशि</th><th>लग्न से भाव</th></tr>` +
+      J.arudha_padas.map(p => `<tr><td>${esc(p.name_hi)}</td><td>${p.house}</td><td><b>${esc(p.pada_sign_name_hi)}</b>${p.exception_applied ? ' <span class="chip">अपवाद</span>' : ''}</td><td>${p.pada_house}</td></tr>`).join('') + '</table>';
   }
   if (c.transit_calendar) {
     const T = c.transit_calendar; $('tcwhy').textContent = T.note_hi;

@@ -89,6 +89,14 @@ put(_ch["note_hi"], _ch["note_en"])
 _full = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
 put(_full["sensitivity"]["note_hi"], _full["sensitivity"]["note_en"])
 put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
+put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
+from jyotish import jaimini as _jm  # noqa: E402
+for _k, _hi in _jm.KARAKA_HI.items():
+    put(_hi, _k)
+for _k, _hi in _jm.KARAKA_MEANS_HI.items():
+    put(_hi, _jm.KARAKA_MEANS[_k])
+for _h, _hi in _jm.PADA_HI.items():
+    put(_hi, _jm.PADA_EN[_h])
 put(_full["transit_calendar"]["note_hi"], _full["transit_calendar"]["note_en"])
 for _en, _hi in _patri.GHATA_HI.items():
     put(_hi, _en)
@@ -198,7 +206,9 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "भाव-स्पष्ट": "Cusp", "राशि-स्वामी": "Sign lord",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "व": "R", "जैमिनी: चर कारक": "Jaimini: chara karakas", "आरूढ़ पद": "Arudha padas",
+ "जैमिनी: चर कारक और आरूढ़ पद": "Jaimini: chara karakas and arudha padas", "कारक": "Karaka", "विषय": "Signifies", "पद": "Pada", "पद की राशि": "Pada sign", "लग्न से भाव": "House from Lagna",
+ "8-कारक (राहु सहित)": "8-karaka scheme (with Rahu)", "अपवाद": "exception", "(अपवाद)": "(exception)", "कारकांश:": "Karakamsa:", "भाव-स्पष्ट": "Cusp", "राशि-स्वामी": "Sign lord",
  "नक्षत्र-स्वामी": "Star lord", "उप-स्वामी": "Sub lord", "उप-उप": "Sub-sub", "भाव (KP)": "House (KP)", "भाव-कारक (चार स्तर)": "House significators (four levels)",
  "क: भावस्थ ग्रहों के नक्षत्र में": "A: in stars of occupants", "ख: भावस्थ": "B: occupants", "ग: भावेश के नक्षत्र में": "C: in stars of owners", "घ: भावेश": "D: owners", "जन्म-समय की संवेदनशीलता": "Birth-time sensitivity", "पहले": "earlier", "बाद": "later",
  "स्थिर (15 मिनट तक)": "stable (up to 15 min)", "सावधान (5-15 मिनट)": "caution (5-15 min)", "संवेदनशील (5 मिनट से कम)": "sensitive (under 5 min)",
@@ -392,7 +402,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} (अपवाद)", "{1} (exception)"), ("{1} कारकांश: {2}।", "{1} Karakamsa: {2}."), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
                    ("⚠ {1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
                     "⚠ The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."), ("{1}: {2} {3} → {4} (चंद्र से {5}, लग्न से {6})", "{1}: {2} {3} → {4} (from Moon {5}, from Lagna {6})"),
                    ("{1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
