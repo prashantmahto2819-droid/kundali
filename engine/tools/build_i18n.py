@@ -227,7 +227,7 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "आज क्या ख़ास है": "What matters today", "दशा:": "Dasha:", "शनि:": "Saturn:", "गुरु:": "Jupiter:", "आगे:": "Ahead:", "सक्रिय क्षेत्र:": "active areas:",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "लिंक कॉपी करें": "Copy link", "लिंक कॉपी हो गया।": "Link copied.", "आज क्या ख़ास है": "What matters today", "दशा:": "Dasha:", "शनि:": "Saturn:", "गुरु:": "Jupiter:", "आगे:": "Ahead:", "सक्रिय क्षेत्र:": "active areas:",
  "दशा और गोचर को साथ पढ़ने का संक्षेप; पूरा विवरण संबंधित टैब में।": "A short reading of dasha and transits together; full detail in the related tabs.",
  "चल रही है (पहला चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (first phase); traditionally a time for patience and discipline.",
  "चल रही है (मध्य चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (middle phase); traditionally a time for patience and discipline.",

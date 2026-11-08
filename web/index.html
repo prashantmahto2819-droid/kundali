@@ -45,6 +45,7 @@
   .tabs { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid color-mix(in srgb,var(--line) 40%,transparent); }
   .tabs, .subtabs { display:flex; gap:4px; overflow-x:auto; padding:6px 16px; max-width:1100px; margin:auto; scrollbar-width:thin; }
   .subtabs { padding:8px 0 0; border-bottom:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
+  .tabs button svg { vertical-align:-3px; margin-right:2px; opacity:.8; }
   .tabs button, .subtabs button { width:auto; white-space:nowrap; background:transparent; color:var(--muted); border:0; border-bottom:3px solid transparent; border-radius:8px 8px 0 0; padding:8px 14px; font-weight:600; }
   .subtabs button { padding:6px 12px; font-size:.9rem; }
   .tabs button.on, .subtabs button.on { color:var(--accent); border-bottom-color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
@@ -79,15 +80,15 @@
   <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
 </header>
 <nav class="tabs" id="tabs">
-  <button type="button" class="on" data-tab="t-kundali">कुंडली</button>
-  <button type="button" data-tab="t-match">मिलान</button>
-  <button type="button" data-tab="t-tarot">टैरो</button>
-  <button type="button" data-tab="t-vastu">वास्तु</button>
-  <button type="button" data-tab="t-palm">हस्तरेखा</button>
-  <button type="button" data-tab="t-muhurta">मुहूर्त</button>
-  <button type="button" data-tab="t-prashna">प्रश्न</button>
-  <button type="button" data-tab="t-ask">पूछिए</button>
-  <button type="button" data-tab="t-mine" id="tab-mine" style="display:none">मेरी कुंडलियाँ</button>
+  <button type="button" class="on" data-tab="t-kundali"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3v18M3 12h18"/></svg> कुंडली</button>
+  <button type="button" data-tab="t-match"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 0 .1M16 7a4 4 0 1 0 0 .1M4 20c0-3 2-5 4-5s4 2 4 5M12 20c0-3 2-5 4-5s4 2 4 5"/></svg> मिलान</button>
+  <button type="button" data-tab="t-tarot"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M12 8l1.5 3 3 .5-2.2 2 .6 3-2.9-1.6L9.1 16.5l.6-3-2.2-2 3-.5z"/></svg> टैरो</button>
+  <button type="button" data-tab="t-vastu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6"/></svg> वास्तु</button>
+  <button type="button" data-tab="t-palm"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V6a1.5 1.5 0 0 1 3 0v6M11 12V4a1.5 1.5 0 0 1 3 0v8M14 12V5a1.5 1.5 0 0 1 3 0v8M17 10a1.5 1.5 0 0 1 3 0v4c0 4-3 7-7 7h-1c-3 0-5-2-7-5l-2-3a1.5 1.5 0 0 1 2.5-1.5L8 13"/></svg> हस्तरेखा</button>
+  <button type="button" data-tab="t-muhurta"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> मुहूर्त</button>
+  <button type="button" data-tab="t-prashna"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7M12 17h.01"/></svg> प्रश्न</button>
+  <button type="button" data-tab="t-ask"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z"/></svg> पूछिए</button>
+  <button type="button" data-tab="t-mine" id="tab-mine" style="display:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg> मेरी कुंडलियाँ</button>
 </nav>
 <main>
   <section class="tab on" id="t-kundali">
@@ -133,7 +134,7 @@
     <div class="tiles" id="tiles"></div>
     <div class="card" id="summary"></div>
     <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaylist"></div></div>
-    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
+    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
       <button type="button" data-sub="s-planets">ग्रह व बल</button>
@@ -366,6 +367,7 @@ const apiFetch = (path, opts = {}) => {        // every API call goes through he
 document.addEventListener('DOMContentLoaded', () => {
   $('formedit').onclick = () => $('formcard').classList.remove('compact');
   $('askbtn').onclick = () => { if (window.showTab) window.showTab('t-ask'); $('askq').focus(); };
+  $('sharebtn').onclick = async () => { try { await navigator.clipboard.writeText(location.href); $('reperr').textContent = 'लिंक कॉपी हो गया।'; } catch (e) { $('reperr').textContent = location.href; } setTimeout(() => { $('reperr').textContent = ''; }, 3000); };
   $('savebtn').onclick = () => { if (window.showTab) window.showTab('t-mine'); const b = $('lsave'); if (b && b.offsetParent) b.click(); };
 });
 // ---- Tabs (top sections) and sub-tabs (chart results)
@@ -615,8 +617,14 @@ function render(c) {
   $('summary').innerHTML = `<span>लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)</span>`;
   renderTiles(c); renderToday(c);
+  try { const q = new URLSearchParams({n: c.input.name || '', d: c.input.date, t: c.input.time, tz: c.input.tz, lat: c.input.lat, lon: c.input.lon}); history.replaceState(null, '', location.pathname + '?' + q); } catch (e) {}
   const fc = $('formcard'); fc.classList.add('compact');
-  $('formsum').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> · ${esc(c.input.date)} ${esc(c.input.time)} · ${esc($('citysearch').value || $('city').options[$('city').selectedIndex]?.text || '')} <span class="muted">(${c.input.lat}, ${c.input.lon})</span>`;
+  window.updateFormSum = () => {
+    const near = (window.placesList || []).map(pl => ({pl, d: Math.hypot(pl.lat - c.input.lat, pl.lon - c.input.lon)})).sort((a, b) => a.d - b.d)[0];
+    const placeName = $('citysearch').value || (near && near.d < 0.25 ? near.pl.hi : '');
+    $('formsum').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> · ${esc(c.input.date)} ${esc(c.input.time)} · ${esc(placeName)} <span class="muted">(${c.input.lat}, ${c.input.lon})</span>`;
+  };
+  window.updateFormSum();
   renderPatri(c);
   if (c.sensitivity) {
     const S = c.sensitivity; $('senswhy').textContent = S.note_hi;
@@ -1168,6 +1176,13 @@ $('vgo2').addEventListener('click', async () => {
 })();
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
+(function openFromLink() {                         // a shared link carries the birth details and opens that chart
+  const q = new URLSearchParams(location.search);
+  if (!q.get('d') || !q.get('t')) return;
+  $('name').value = q.get('n') || ''; $('date').value = q.get('d'); $('time').value = q.get('t');
+  if (q.get('tz')) $('tz').value = q.get('tz'); if (q.get('lat')) $('lat').value = q.get('lat'); if (q.get('lon')) $('lon').value = q.get('lon');
+  $('f').requestSubmit();
+})();
 if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); setTimeout(() => $('vgo').click(), 400); }
 </script>
 </body>
