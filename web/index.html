@@ -106,6 +106,7 @@
   </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
+    <div class="banner" id="warns" style="background:#fdecea;border-color:#e0a09a" hidden></div>
     <div class="card" id="summary"></div>
     <div><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button> <span class="muted" id="reperr"></span></div>
     <div class="grid">
@@ -292,6 +293,7 @@ function render(c) {
   chart = c;
   $('out').hidden = false;
   $('note').textContent = `गणना इंजन: ${c.backend}. ${c.backend_note}`;
+  $('warns').hidden = !c.input_warnings.length; $('warns').innerHTML = c.input_warnings.map(w => '⚠ ' + esc(w.text_hi)).join('<br>');
   const m = c.planets.find(p => p.name === 'Moon');
   $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;

@@ -120,6 +120,7 @@ def render(chart: dict) -> str:
     day_html = ""
     if day.get("available"):
         day_html = (f'<p>सूर्योदय {e(day["sunrise"][11:16])} · सूर्यास्त {e(day["sunset"][11:16])} (स्थानीय समय)।</p>')
+    warn_html = "".join(f'<div class="banner" style="background:#fdecea;border-color:#e0a09a">⚠ {e(w["text_hi"])}</div>' for w in chart.get("input_warnings", []))
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
     caution = ("यह विकास-संस्करण की गणना है; ग्रह-स्थिति में कुछ कला तक अंतर संभव है और सटीकता का सत्यापन बाकी है। "
                if dev else "") + "सभी व्याख्याएँ ‘ड्राफ़्ट’ हैं और विद्वान-समीक्षा के अधीन हैं।"
@@ -139,6 +140,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h1>कुंडली रिपोर्ट</h1>
 <div class="meta"><b>{e(name)}</b> · जन्म: {e(inp["date"])} {e(inp["time"])} ({e(inp["tz"])}) · अक्षांश {inp["lat"]}, देशांतर {inp["lon"]} · अयनांश: लाहिड़ी {e(chart["ayanamsa_dms"])}</div>
 <div class="banner">{e(caution)}</div>
+{warn_html}
 
 <h2>सारांश</h2>
 <table class="sum">

@@ -85,3 +85,19 @@ def local_to_utc(date_str: str, time_str: str, tz_name: str) -> datetime:
     y, mo, d = (int(p) for p in date_str.split("-"))
     local = datetime(y, mo, d, parts[0], parts[1], parts[2], tzinfo=ZoneInfo(tz_name))
     return local.astimezone(timezone.utc)
+
+
+def local_time_issue(date_str: str, time_str: str, tz_name: str) -> str | None:
+    """'nonexistent' when the clock skipped this wall time (spring-forward gap),
+    'ambiguous' when it happened twice (autumn fall-back), otherwise None."""
+    parts = [int(p) for p in time_str.split(":")]
+    while len(parts) < 3:
+        parts.append(0)
+    y, mo, d = (int(p) for p in date_str.split("-"))
+    tz = ZoneInfo(tz_name)
+    a = datetime(y, mo, d, parts[0], parts[1], parts[2], tzinfo=tz, fold=0)
+    b = a.replace(fold=1)
+    if a.utcoffset() == b.utcoffset():
+        return None
+    back = a.astimezone(timezone.utc).astimezone(tz).replace(tzinfo=None)
+    return "nonexistent" if back != a.replace(tzinfo=None) else "ambiguous"

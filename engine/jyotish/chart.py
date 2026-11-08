@@ -14,7 +14,7 @@ from .ephemeris import get_backend, mean_node, norm360
 from .panchang import panchang
 from .muhurta import day_table
 from .rules import match_rules
-from .timeutil import delta_t, julian_day, local_to_utc, year_fraction
+from .timeutil import delta_t, julian_day, local_time_issue, local_to_utc, year_fraction
 from .strength import strength
 from .timeline import dasha_timeline
 from .transit import gochara, positions_at
@@ -33,6 +33,22 @@ def dms(deg: float) -> str:
     if m == 60:
         m, d = 0, d + 1
     return f"{d}°{m:02d}′{s:02d}″"
+
+
+def input_warnings(date: str, time: str, tz: str, lat: float, utc_year: int) -> list[dict]:
+    out = []
+    issue = local_time_issue(date, time, tz)
+    if issue == "nonexistent":
+        out.append({"code": "time_nonexistent", "text_hi": "यह स्थानीय समय उस दिन घड़ी में था ही नहीं (डे-लाइट सेविंग में घड़ी आगे बढ़ी थी)। "
+                    "गणना में एक घंटे का अंतर हो सकता है; असली जन्म-समय जाँचिए।"})
+    elif issue == "ambiguous":
+        out.append({"code": "time_ambiguous", "text_hi": "यह स्थानीय समय उस दिन दो बार आया था (घड़ी पीछे की गई थी)। "
+                    "हमने पहली बार वाला समय माना है; ठीक समय पता हो तो जाँच लीजिए।"})
+    if abs(lat) > 66.5:
+        out.append({"code": "polar_latitude", "text_hi": "ध्रुवीय क्षेत्र में लग्न और भाव अविश्वसनीय हो सकते हैं और सूर्योदय-आधारित गणनाएँ उपलब्ध नहीं हो सकतीं।"})
+    if utc_year < 1900 or utc_year > 2100:
+        out.append({"code": "date_outside_verified_range", "text_hi": "यह तारीख 1900–2100 की सत्यापित सीमा से बाहर है; ग्रह-स्थिति की सटीकता कम हो सकती है।"})
+    return out
 
 
 def _house_of(sign: int, lagna_sign: int) -> int:
@@ -126,6 +142,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
         "panchang": panchang(sid["Sun"], sid["Moon"], local_date),
         "dasha": dasha, "dasha_running": running, "as_of": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
+    chart["input_warnings"] = input_warnings(date, time, tz, lat, birth_utc.year)
     chart["vargas"] = all_vargas(asc, planets)
     local_dt = birth_utc.astimezone(ZoneInfo(tz))
     chart["day"] = day_table(local_dt, lat, lon, tz)
