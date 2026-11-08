@@ -157,6 +157,20 @@ for d in (C.TITHI_HI, C.PAKSHA_HI, C.YOGA_HI, C.KARANA_HI):
         put(hi, en)
 for en, hi in C.PLANETS_SHORT_HI.items():
     EXACT[hi] = en[:2]
+# birth-time rectification aid
+from jyotish import rectify as _rc
+_rc_sample = _rc.rectify("2000-01-01", "12:00", "Asia/Kolkata", 22.0, 82.0, 10, 5, [])
+put(_rc_sample["note_hi"], _rc_sample["note_en"])
+for k, hi in _rc.EVENT_HI.items():
+    put(hi, {"marriage": "Marriage", "child": "Child", "job": "Job / work", "property": "Property", "travel": "Abroad / travel", "education": "Education"}[k])
+UI_RECTIFY = {"जन्म-समय संशोधन सहायक": "Birth-time rectification aid",
+              "दिए समय के आस-पास की वे अवधियाँ जिनमें लग्न, नवांश-लग्न और चंद्र-नक्षत्र नहीं बदलते। जीवन की घटनाएँ (वर्ष) दें तो हर अवधि को दशा-जाँच से अंक मिलते हैं। यह प्रमाण नहीं, संकेत है।":
+              "Stretches around the given time within which the Lagna, navamsa Lagna and Moon nakshatra do not change. Give life events (years) and each stretch is scored by a dasha check. A hint, not a proof.",
+              "± मिनट": "± minutes", "चरण (मिनट)": "Step (minutes)", "+ घटना": "+ Event", "अवधियाँ देखिए": "Show stretches", "हटाइए": "Remove", "वर्ष": "Year",
+              "गणना हो रही है…": "Calculating…", "घटनाओं से सबसे मेल खाती अवधियाँ:": "Stretches that best match the events:", "शीर्ष अवधि की दशा-जाँच": "Dasha check of the top stretch",
+              "समय": "Time", "नवांश-लग्न": "Navamsa Lagna", "चंद्र-नक्षत्र": "Moon nakshatra", "घटना-मेल": "Event match", "घटना": "Event", "दशा / अंतर्दशा": "Dasha / antardasha", "मेल": "Match", "हाँ": "Yes", "नहीं": "No"}
+for hi, en in UI_RECTIFY.items():
+    EXACT.setdefault(hi, en)
 
 UI = {
  # --- report-specific strings are in REPORT below ---

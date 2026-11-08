@@ -236,10 +236,35 @@ class PrashnaReportRequest(PrashnaRequest):
     lang: str = "hi"
 
 
+class RectifyEvent(BaseModel):
+    type: str
+    year: int = Field(..., ge=1900, le=2100)
+    month: int | None = Field(None, ge=1, le=12)
+
+
+class RectifyRequest(BaseModel):
+    date: str
+    time: str
+    tz: str
+    lat: float
+    lon: float
+    range_min: int = Field(120, ge=5, le=720)
+    step_min: int = Field(2, ge=1, le=10)
+    events: list[RectifyEvent] = []
+
+
 @app.post("/v1/prashna/report", response_class=HTMLResponse)
 def prashna_report(req: PrashnaReportRequest):
     try:
         return HTMLResponse(handlers.prashna_report_from_payload(req.model_dump(exclude_none=True)))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/rectify")
+def rectify(req: RectifyRequest):
+    try:
+        return handlers.rectify_from_payload(req.model_dump(exclude_none=True))
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 

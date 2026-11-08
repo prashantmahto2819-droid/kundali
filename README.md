@@ -103,6 +103,8 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 ### Astrologer tools
 `PUT /v1/people/{id}` updates `name`, `place` or the private `note` (2000 chars). `GET/PUT /v1/me` reads/sets the org's profile (`brand_name`, `phone`, `website`, `address`, `line`); when a signed-in user or API key calls `POST /v1/report`, that profile is printed at the top of the report. The web page shows a note box per saved person and a profile form under "मेरी कुंडलियाँ".
 
+`POST /v1/rectify` (birth-time rectification aid): body = birth details + `range_min` (5–720, default 120), `step_min` (1–10, default 2), optional `events: [{type, year, month?}]` with type in marriage / child / job / property / travel / education. Returns the stretches around the given time within which Lagna, navamsa Lagna and Moon nakshatra stay the same, and, with events, a score per stretch (running dasha/antardasha lords at the event connected to the event's houses) plus the top 5. Draft rule set (`docs/REVIEW.md` A.17); it narrows a time, it does not prove it. Web: card under the sensitivity table in the summary sub-tab.
+
 ## Login (Supabase Auth)
 Signed-in users send `Authorization: Bearer <access_token>`; the token is verified locally and mapped to a personal organisation (created on first login). Quota and saved people then work exactly as for API keys.
 

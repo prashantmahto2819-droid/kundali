@@ -154,6 +154,17 @@
       <div class="card"><b>अवकहड़ा चक्र</b><div id="patri2"></div></div>
     </div>
     <div class="card"><b>जन्म-समय की संवेदनशीलता</b><div class="muted" style="font-size:.85rem" id="senswhy"></div><div id="sens"></div></div>
+    <div class="card"><b>जन्म-समय संशोधन सहायक</b>
+      <div class="muted" style="font-size:.85rem">दिए समय के आस-पास की वे अवधियाँ जिनमें लग्न, नवांश-लग्न और चंद्र-नक्षत्र नहीं बदलते। जीवन की घटनाएँ (वर्ष) दें तो हर अवधि को दशा-जाँच से अंक मिलते हैं। यह प्रमाण नहीं, संकेत है।</div>
+      <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:6px">
+        <div><label>± मिनट</label><input id="rcrange" type="number" min="5" max="720" value="120" style="max-width:100px"></div>
+        <div><label>चरण (मिनट)</label><input id="rcstep" type="number" min="1" max="10" value="2" style="max-width:100px"></div>
+        <button type="button" class="ghost" id="rcadd" style="width:auto">+ घटना</button>
+        <button type="button" id="rcgo" style="width:auto">अवधियाँ देखिए</button>
+      </div>
+      <div id="rcevents" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
+      <div class="err" id="rcerr"></div><div id="rcout"></div>
+    </div>
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
@@ -636,6 +647,7 @@ function render(c) {
     $('sens').innerHTML = `<table><tr><th></th><th>पहले</th><th>बाद</th><th>स्थिति</th></tr>` + Object.values(S.items).map(v =>
       `<tr><td>${esc(v.label_hi)}</td><td>${f(v.minutes_earlier)}</td><td>${f(v.minutes_later)}</td><td class="${v.stable_within_15_min ? 'yes' : ''}">${v.stable_within_15_min ? 'स्थिर (15 मिनट तक)' : v.stable_within_5_min ? 'सावधान (5-15 मिनट)' : 'संवेदनशील (5 मिनट से कम)'}</td></tr>`).join('') + '</table>';
   }
+  setupRectify();
   if (c.lalkitab) {
     const L = c.lalkitab; $('lkwhy').textContent = L.views_note_hi;
     $('lktable').innerHTML = `<table><tr><th>ग्रह</th><th>पक्का घर</th><th>घर (लग्न से)</th><th>घर (मेष से)</th><th>स्थिति</th><th>उपाय (ड्राफ़्ट)</th></tr>` +
@@ -776,6 +788,31 @@ function render(c) {
   $('dasha').innerHTML = `<p><b>अभी चल रही:</b> ${run.map(r => `${lbl[r.level-1]} ${esc(KBname(r.lord))} (${fmt(r.start)} → ${fmt(r.end)})`).join(' · ')}</p>${prHtml}` +
     c.dasha.mahadashas.map(md => `<details><summary>${esc(KBname(md.lord))} महादशा — ${fmt(md.start)} → ${fmt(md.end)}</summary>
       <table>${(md.children||[]).map(ad => `<tr><td>${esc(KBname(ad.lord))}</td><td>${fmt(ad.start)}</td><td>${fmt(ad.end)}</td></tr>`).join('')}</table></details>`).join('');
+}
+const RC_EVENTS = {marriage:'विवाह', child:'संतान', job:'नौकरी/कार्य', property:'संपत्ति', travel:'विदेश/यात्रा', education:'शिक्षा'};
+function rcEventRow() {
+  const row = document.createElement('div'); row.className = 'rcrow'; row.style.cssText = 'display:flex;gap:8px;align-items:center';
+  row.innerHTML = `<select class="rctype" style="width:auto">${Object.entries(RC_EVENTS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+    <input class="rcyear" type="number" min="1900" max="2100" placeholder="वर्ष" style="max-width:110px">
+    <button type="button" class="ghost" style="width:auto" onclick="this.parentNode.remove()">हटाइए</button>`;
+  return row;
+}
+function setupRectify() {
+  if (window._rcReady) return; window._rcReady = true;
+  $('rcadd').onclick = () => $('rcevents').appendChild(rcEventRow());
+  $('rcgo').onclick = async () => {
+    $('rcerr').textContent = ''; $('rcout').innerHTML = '<div class="muted">गणना हो रही है…</div>';
+    const events = [...document.querySelectorAll('#rcevents .rcrow')].map(r => ({type: r.querySelector('.rctype').value, year: +r.querySelector('.rcyear').value})).filter(e => e.year);
+    try {
+      const r = await apiFetch('/v1/rectify', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...window.lastBody, range_min: +$('rcrange').value, step_min: +$('rcstep').value, events})});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const scored = events.length;
+      const rows = d.windows.map(w => `<tr${w.contains_given_time ? ' style="font-weight:700"' : ''}><td>${w.from} – ${w.to}${w.contains_given_time ? ' ◀' : ''}</td><td>${esc(w.lagna_hi)}</td><td>${esc(w.navamsa_lagna_hi)}</td><td>${esc(w.moon_nakshatra_hi)}</td>${scored ? `<td class="${w.event_hits === scored ? 'yes' : ''}">${w.event_hits}/${scored}</td>` : ''}</tr>`).join('');
+      const best = scored ? `<p><b>घटनाओं से सबसे मेल खाती अवधियाँ:</b> ${d.ranked.map(w => `${w.from}–${w.to} (${esc(w.lagna_hi)}, ${w.event_hits}/${scored})`).join(' · ')}</p>` : '';
+      const detail = scored && d.ranked[0] ? `<details><summary>शीर्ष अवधि की दशा-जाँच</summary><table><tr><th>घटना</th><th>वर्ष</th><th>दशा / अंतर्दशा</th><th>मेल</th></tr>${d.ranked[0].event_detail.map(e => `<tr><td>${esc(e.type_hi)}</td><td>${e.year}</td><td>${e.lords_hi.join(' / ')}</td><td class="${e.supports ? 'yes' : ''}">${e.supports ? 'हाँ' : 'नहीं'}</td></tr>`).join('')}</table></details>` : '';
+      $('rcout').innerHTML = `${best}<table><tr><th>समय</th><th>लग्न</th><th>नवांश-लग्न</th><th>चंद्र-नक्षत्र</th>${scored ? '<th>घटना-मेल</th>' : ''}</tr>${rows}</table>${detail}<div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
+    } catch (err) { $('rcout').innerHTML = ''; $('rcerr').textContent = 'त्रुटि: ' + err.message; }
+  };
 }
 const HI = {Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'};
 const KBname = n => HI[n] || n;

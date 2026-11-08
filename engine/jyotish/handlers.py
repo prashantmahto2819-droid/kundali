@@ -374,3 +374,45 @@ def _wrap(fn):
 
 for _n in [n for n in list(globals()) if n.endswith("_from_payload") or n.endswith("_from_query") or n in ("vastu_catalog",)]:
     globals()[_n] = _wrap(globals()[_n])
+
+
+def rectify_from_payload(payload: dict) -> dict:
+    """POST /v1/rectify  {date, time, tz, lat, lon, range_min?: 5-720, step_min?: 1-10, events?: [{type, year, month?}]}"""
+    from . import rectify
+    try:
+        date, time_, tz = payload["date"], payload["time"], payload["tz"]
+        lat, lon = float(payload["lat"]), float(payload["lon"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise BadRequest("Required fields: date (YYYY-MM-DD), time (HH:MM), tz (IANA), lat, lon") from exc
+    if not _DATE.match(str(date)) or not _TIME.match(str(time_)):
+        raise BadRequest("date must be YYYY-MM-DD and time HH:MM[:SS]")
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+        raise BadRequest("lat must be within -90..90 and lon within -180..180 (east positive)")
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        raise BadRequest(f"Unknown time zone '{tz}'") from exc
+    try:
+        range_min = int(payload.get("range_min", 120)); step_min = int(payload.get("step_min", 2))
+    except (TypeError, ValueError):
+        raise BadRequest("range_min and step_min must be integers")
+    if not 5 <= range_min <= 720 or not 1 <= step_min <= 10:
+        raise BadRequest("range_min must be 5-720 and step_min 1-10")
+    events = payload.get("events") or []
+    if not isinstance(events, list) or len(events) > 12:
+        raise BadRequest("events must be a list of up to 12 entries like {type, year}")
+    clean = []
+    for ev in events:
+        if not isinstance(ev, dict) or ev.get("type") not in rectify.EVENT_HOUSES:
+            raise BadRequest(f"event type must be one of {', '.join(rectify.EVENT_HOUSES)}")
+        try:
+            year = int(ev.get("year")); month = int(ev.get("month") or 7)
+        except (TypeError, ValueError):
+            raise BadRequest("event year must be an integer")
+        if not 1900 <= year <= 2100 or not 1 <= month <= 12:
+            raise BadRequest("event year must be 1900-2100 and month 1-12")
+        clean.append({"type": ev["type"], "year": year, "month": month})
+    try:
+        return rectify.rectify(str(date), str(time_)[:5], tz, lat, lon, range_min, step_min, clean)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
