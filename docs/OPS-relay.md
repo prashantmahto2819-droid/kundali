@@ -5,6 +5,9 @@ The Kundali container publishes no ports; the Caddy that Relay already uses forw
 
 > I could not look at your Relay server, so steps 2 and 3 tell you what to read there. Paste me the outputs and I will adjust the files.
 
+## Values found on your server (2026-11-08)
+Relay folder `/root/wa-gateway`, Caddyfile `/root/wa-gateway/Caddyfile`, Caddy container `wa-gateway-caddy-1`, network `wa-gateway_default`, 3.7 GB RAM (3 GB available), 19 GB free disk. Steps 2 and 3 are therefore done; use these values below.
+
 ## 1. Choose the sub-domain
 For example `kundali.vividbrandify.com`. Replace it everywhere below if you pick another.
 
