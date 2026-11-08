@@ -643,7 +643,7 @@ function render(c) {
       try {
         const r = await apiFetch('/v1/lalkitab/varshphal', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...window.lastBody, year: +$('lkyear').value})});
         const v = await r.json(); if (!r.ok) throw new Error(v.detail || 'त्रुटि');
-        $('lkvnote').textContent = `${v.from} से ${v.to}: जीवन का ${v.year_of_life}वाँ वर्ष (चक्र वर्ष ${v.cycle_year})। ${v.method_note_hi}`;
+        $('lkvnote').textContent = `${v.from} से ${v.to}: जीवन का ${v.year_of_life}वाँ वर्ष। ${v.method_note_hi}` + (v.source_typo ? ` (स्रोत की छपी सारणी में इस वर्ष की पंक्ति में एक अंक दोहराया है: ${v.source_typo})` : '');
         $('lkvout').innerHTML = `<table><tr><th>ग्रह</th><th>जन्म घर</th><th>इस वर्ष का घर</th><th>स्थिति</th></tr>` + v.planets.map(p => `<tr><td>${esc(p.name_hi)}</td><td>${p.natal_house}</td><td><b>${p.annual_house}</b></td><td>${esc(p.text_hi)}</td></tr>`).join('') + '</table>';
       } catch (e) { $('lkverr').textContent = 'त्रुटि: ' + e.message; }
     };

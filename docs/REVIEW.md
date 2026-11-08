@@ -19,7 +19,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 7 | Matching: vashya matrix, parihara | `engine/jyotish/matching.py` | — | vashya and yoni matrices are from memory; add nadi/bhakoot cancellations |
 | 8 | Timeline themes per dasha lord | `engine/jyotish/timeline.py` | — | which houses/themes a dasha activates |
 | 9 | Varshaphal (Tajika) | `engine/jyotish/varshaphal.py` | — | muntha, year lord rules |
-| 10a | Lal Kitab varshphal table: enter the original 35-year house table (12 rows x 35) | `data/lalkitab_varshphal.json` (`table`) | 420 cells | one column verified from a published example; needs the book page |
+| 10a | Lal Kitab varshphal table (120 years x 12, transcribed from the Astrostudents chart): resolve the two printed duplicates (years 76 and 96) against the book | `data/lalkitab_varshphal.json` | 2 rows | 46th-year row verified |
 | 10 | Lal Kitab planet/house texts and upay | `data/lalkitab.json` | 9×12 | marked draft; pakka-ghar logic |
 | 11 | Nakshatra/sign/house/planet teaching texts | `data/knowledge/*.json` | — | learn panel; Hindi and English |
 | 13 | KP layer: ayanamsa constant, Placidus cusps vs a KP program, sub-lord table, significator levels | `engine/jyotish/kp.py` | — | draft; compare one chart with a KP software |
