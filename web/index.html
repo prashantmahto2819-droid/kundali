@@ -864,7 +864,7 @@ $('tf').addEventListener('submit', async e => {
 // City search over data/places.json (offline list; manual lat/lon still works)
 (async function placeSearch() {
   let places = [];
-  try { places = (await (await fetch('data/places.json')).json()).places; } catch (e) { return; }
+  try { places = (await (await fetch('data/places.json')).json()).places; window.placesList = places; if (window.updateFormSum) window.updateFormSum(); } catch (e) { return; }
   const label = p => `${p.name} · ${p.hi}, ${p.state}`;
   $('placelist').innerHTML = places.map(p => `<option value="${esc(label(p))}">`).join('');
   const bind = (inp, la, lo, tz) => $(inp).addEventListener('change', () => {
