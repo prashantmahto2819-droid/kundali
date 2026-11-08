@@ -771,7 +771,9 @@ function render(c) {
 
   const run = c.dasha_running, lbl = ['महादशा','अंतर्दशा','प्रत्यंतर'];
   const fmt = s => s.slice(0,10);
-  $('dasha').innerHTML = `<p><b>अभी चल रही:</b> ${run.map(r => `${lbl[r.level-1]} ${esc(KBname(r.lord))} (${fmt(r.start)} → ${fmt(r.end)})`).join(' · ')}</p>` +
+  const pr = c.pratyantars_now || [];
+  const prHtml = pr.length ? `<details open><summary>चल रही अंतर्दशा के प्रत्यंतर</summary><table><tr><th>प्रत्यंतर</th><th>आरंभ</th><th>समाप्ति</th></tr>${pr.map(p => `<tr${p.running ? ' style="font-weight:700"' : ''}><td>${esc(p.lord_hi)}${p.running ? ' ◀' : ''}</td><td>${fmt(p.start)}</td><td>${fmt(p.end)}</td></tr>`).join('')}</table></details>` : '';
+  $('dasha').innerHTML = `<p><b>अभी चल रही:</b> ${run.map(r => `${lbl[r.level-1]} ${esc(KBname(r.lord))} (${fmt(r.start)} → ${fmt(r.end)})`).join(' · ')}</p>${prHtml}` +
     c.dasha.mahadashas.map(md => `<details><summary>${esc(KBname(md.lord))} महादशा — ${fmt(md.start)} → ${fmt(md.end)}</summary>
       <table>${(md.children||[]).map(ad => `<tr><td>${esc(KBname(ad.lord))}</td><td>${fmt(ad.start)}</td><td>${fmt(ad.end)}</td></tr>`).join('')}</table></details>`).join('');
 }

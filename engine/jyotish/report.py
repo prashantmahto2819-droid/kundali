@@ -96,6 +96,8 @@ def render(chart: dict, brand: dict | None = None) -> str:
     dasha_run = " · ".join(f'{LEVEL_HI.get(r["level"], "")} {e(PLANETS_HI[r["lord"]])} ({_d(r["start"])} → {_d(r["end"])})'
                            for r in run)
     maha_rows = [[e(PLANETS_HI[m["lord"]]), _d(m["start"]), _d(m["end"])] for m in chart["dasha"]["mahadashas"]]
+    pr_rows = [[e(p["lord_hi"]) + (" ◀ अभी" if p["running"] else ""), _d(p["start"]), _d(p["end"])] for p in chart.get("pratyantars_now", [])]
+    pr_html = (f'<p><b>चल रही अंतर्दशा के प्रत्यंतर</b></p>{_table(["प्रत्यंतर", "आरंभ", "समाप्ति"], pr_rows)}') if pr_rows else ""
     sav = av["sav"]
     sav_head = ["भाव"] + [str(i + 1) for i in range(12)] + ["कुल"]
     sav_rows = [["राशि"] + [e(SIGNS_HI[(lg["sign"] + h) % 12]) for h in range(12)] + [""],
@@ -299,6 +301,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>विंशोत्तरी दशा</h2>
 <p>जन्म के समय {e(PLANETS_HI[chart["dasha"]["birth_nakshatra_lord"]])} की दशा शेष: {chart["dasha"]["balance_at_birth_years"]:.2f} वर्ष (वर्ष = {chart["dasha"]["year_days"]} दिन)।</p>
 {_table(["महादशा", "आरंभ", "समाप्ति"], maha_rows)}
+{pr_html}
 
 <h2>जीवन समय-रेखा</h2>
 <p class="small">{e(chart["timeline"]["note_hi"])}</p>

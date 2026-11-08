@@ -100,7 +100,7 @@ def test_known_chart_shape(india_1947):
     assert p["Ketu"]["longitude"] == pytest.approx((p["Rahu"]["longitude"] + 180) % 360)
     assert c["dasha"]["birth_nakshatra_lord"] == "Saturn"
     assert len(c["houses"]) == 12 and sum(len(h["planets"]) for h in c["houses"]) == 9
-    assert [d["level"] for d in c["dasha_running"]] == [1, 2]
+    assert [d["level"] for d in c["dasha_running"]] == [1, 2, 3]   # running chain always resolved to the pratyantar
 
 
 def test_house_numbers_consistent(india_1947):

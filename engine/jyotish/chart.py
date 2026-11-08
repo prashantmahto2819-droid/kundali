@@ -131,7 +131,16 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
 
     dasha = vimshottari(sid["Moon"], birth_utc, year_days=year_days, max_level=dasha_level)
     now = as_of or datetime.now(timezone.utc)
-    running = current_periods(dasha, now)
+    # the running chain is always resolved to the pratyantar (3rd level), whatever depth the tree carries
+    deep = dasha if dasha_level >= 3 else vimshottari(sid["Moon"], birth_utc, year_days=year_days, max_level=3)
+    running = current_periods(deep, now)
+    ad_now = next((r for r in running if r["level"] == 2), None)
+    pratyantars = []
+    if ad_now:
+        md_node = next(m for m in deep["mahadashas"] if m["start"] <= running[0]["start"] <= m["end"] and m["lord"] == running[0]["lord"])
+        ad_node = next(a for a in md_node["children"] if a["lord"] == ad_now["lord"] and a["start"] == ad_now["start"])
+        pratyantars = [{"lord": c["lord"], "lord_hi": PLANETS_HI[c["lord"]], "start": c["start"], "end": c["end"],
+                        "running": c["start"] <= now.strftime("%Y-%m-%dT%H:%M:%SZ") < c["end"]} for c in ad_node.get("children", [])]
 
     local_date = datetime.strptime(date, "%Y-%m-%d")
     chart = {
@@ -159,7 +168,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
                    "note_en": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. "
                               "A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both."},
         "panchang": panchang(sid["Sun"], sid["Moon"], local_date),
-        "dasha": dasha, "dasha_running": running, "as_of": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "dasha": dasha, "dasha_running": running, "pratyantars_now": pratyantars, "as_of": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     chart["input_warnings"] = input_warnings(date, time, tz, lat, birth_utc.year)
     chart["vargas"] = all_vargas(asc, planets)
