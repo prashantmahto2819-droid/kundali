@@ -10,7 +10,7 @@ REST (shared by devserver.py and app.py):
     GET    /v1/people/{id}
     GET    /v1/people/{id}/chart
     DELETE /v1/people/{id}
-Always requires a valid API key (even when KUNDALI_AUTH=off), because the data belongs to an org.
+Always requires a valid API key or a Supabase login token (even when KUNDALI_AUTH=off), because the data belongs to an org.
 """
 from __future__ import annotations
 
@@ -76,9 +76,9 @@ def remove(store, org_id: str, pid: str) -> bool:
 def api(method: str, path: str, headers, payload: dict | None = None, store=None) -> tuple[int, dict]:
     """Route /v1/people*. Returns (status, body)."""
     store = store or access.default_store()
-    org = store.authenticate(headers.get(access.HEADER) or headers.get("X-API-Key"))
+    org, err = access.resolve(headers, store)
     if org is None:
-        return 401, {"detail": "a valid API key is required for saved people"}
+        return 401, {"detail": err or "sign in or send an API key to use saved people"}
     parts = [p for p in path.split("?")[0].split("/") if p][2:]       # after v1/people
     try:
         if not parts:

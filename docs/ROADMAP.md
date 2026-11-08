@@ -16,7 +16,8 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Data-driven rule format with source field and review status
 - [x] Multi-tenant SQL schema, deploy files, ops guide
 - [x] Access core: orgs, hashed API keys, daily quotas (KUNDALI_AUTH)
-- [x] Saved people per org (API; web UI + Supabase login still to do)
+- [x] Saved people per org (API + web card)
+- [x] Supabase login: token verification, user->org, web card (needs the real project keys to go live)
 - [x] Dev web page with North-Indian charts and click-to-learn
 - [ ] **Gate:** 50 test charts compared against a trusted reference (planet degrees, lagna, dasha dates) with JPL backend
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)

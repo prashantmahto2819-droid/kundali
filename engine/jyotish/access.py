@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS api_keys(id TEXT PRIMARY KEY, org_id TEXT NOT NULL RE
   key_hash TEXT NOT NULL UNIQUE, label TEXT, active INTEGER NOT NULL DEFAULT 1, created TEXT NOT NULL, last_used TEXT);
 CREATE TABLE IF NOT EXISTS usage(org_id TEXT NOT NULL, day TEXT NOT NULL, endpoint TEXT NOT NULL, count INTEGER NOT NULL,
   PRIMARY KEY(org_id, day, endpoint));
+CREATE TABLE IF NOT EXISTS user_orgs(user_id TEXT PRIMARY KEY, org_id TEXT NOT NULL REFERENCES orgs(id), email TEXT);
 """
 
 
@@ -81,6 +82,19 @@ class Store:
             cur = self._db.execute("UPDATE api_keys SET active=0 WHERE id=? OR prefix=?", (key_id, key_id))
             self._db.commit()
             return cur.rowcount > 0
+
+    def org_for_user(self, user_id: str, email: str = "") -> dict:
+        """Personal organisation of a signed-in user (created on first login)."""
+        with self._lock:
+            r = self._db.execute("SELECT org_id FROM user_orgs WHERE user_id=?", (user_id,)).fetchone()
+        if r:
+            return self.get_org(r["org_id"])
+        org = self.create_org(email or f"user-{user_id[:8]}")
+        with self._lock:
+            self._db.execute("INSERT OR IGNORE INTO user_orgs VALUES(?,?,?)", (user_id, org["id"], email))
+            self._db.commit()
+            r = self._db.execute("SELECT org_id FROM user_orgs WHERE user_id=?", (user_id,)).fetchone()
+        return self.get_org(r["org_id"])
 
     def get_org(self, org_id: str) -> dict | None:
         with self._lock:
@@ -155,6 +169,20 @@ def auth_mode() -> str:
     return m if m in ("off", "optional", "required") else "off"
 
 
+def resolve(headers, store, verifier=None):
+    """-> (org | None, error | None). API key or Supabase Bearer token."""
+    from . import auth_supabase
+    key = headers.get(HEADER) or headers.get("X-API-Key")
+    if key:
+        org = store.authenticate(key)
+        return (org, None) if org else (None, "invalid or revoked API key")
+    token = auth_supabase.bearer(headers)
+    if token:
+        who = (verifier or auth_supabase.verify)(token)
+        return (store.org_for_user(who["user_id"], who["email"]), None) if who else (None, "invalid or expired login token")
+    return None, None
+
+
 def guard(headers, path: str, store: Store | None = None, mode: str | None = None,
           now: datetime | None = None) -> tuple[int, dict, dict, dict | None]:
     """-> (status, body, response_headers, org). status 200 means 'go ahead'.
@@ -166,15 +194,14 @@ def guard(headers, path: str, store: Store | None = None, mode: str | None = Non
     mode = mode or auth_mode()
     if mode == "off" or not path.startswith("/v1/"):
         return 200, {}, {}, None
-    key = headers.get(HEADER) or headers.get("X-API-Key")
-    if not key:
-        if mode == "required":
-            return 401, {"detail": "API key required (send it in the X-API-Key header)"}, {}, None
-        return 200, {}, {}, None
     store = store or default_store()
-    org = store.authenticate(key)
+    org, err = resolve(headers, store)
+    if err:
+        return 401, {"detail": err}, {}, None
     if org is None:
-        return 401, {"detail": "invalid or revoked API key"}, {}, None
+        if mode == "required":
+            return 401, {"detail": "API key or login required (X-API-Key or Authorization: Bearer)"}, {}, None
+        return 200, {}, {}, None
     h = store.hit(org, path, now)
     rl = {"X-RateLimit-Limit": "unlimited" if h["limit"] is None else str(h["limit"]),
           "X-RateLimit-Remaining": "unlimited" if h["remaining"] is None else str(h["remaining"])}

@@ -99,3 +99,13 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 | `GET /v1/people` | list |
 | `GET /v1/people/{id}` · `DELETE /v1/people/{id}` | read / remove |
 | `GET /v1/people/{id}/chart` | full chart of the saved person |
+
+## Login (Supabase Auth)
+Signed-in users send `Authorization: Bearer <access_token>`; the token is verified locally and mapped to a personal organisation (created on first login). Quota and saved people then work exactly as for API keys.
+
+| Env var | Meaning |
+|---|---|
+| `SUPABASE_URL` | `https://<ref>.supabase.co` (new projects: tokens verified via the project's JWKS, ES256/RS256) |
+| `SUPABASE_JWT_SECRET` | only for legacy projects that still sign with HS256 |
+
+Web page: fill `web/config.js` with the project URL and the **publishable** key (public by design; never a secret key). The "मेरी कुंडलियाँ" card (email-link login, save / open / delete) appears only when both are set.

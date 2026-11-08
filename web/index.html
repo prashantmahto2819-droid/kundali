@@ -42,6 +42,14 @@
   <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
 </header>
 <main>
+  <div class="card" id="authcard" style="display:none">
+    <b>मेरी कुंडलियाँ</b>
+    <div id="signedout"><label>ईमेल से लॉगिन (लिंक ईमेल पर आएगा)</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lemail" type="email" placeholder="आपका ईमेल" style="flex:1;min-width:180px"><button type="button" id="lgo">लॉगिन लिंक भेजें</button></div>
+      <div class="muted" id="lmsg"></div></div>
+    <div id="signedin" style="display:none"><span class="muted" id="who"></span> <button type="button" id="lsave">इस कुंडली को सेव करें</button> <button type="button" id="lout">लॉग-आउट</button>
+      <div id="plist" style="margin-top:8px"></div><div id="perr" style="color:#c62828"></div></div>
+  </div>
   <div class="card">
     <form id="f">
       <div><label>नाम (वैकल्पिक)</label><input id="name" placeholder="नाम"></div>
@@ -156,6 +164,7 @@
     <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
   </div>
 </main>
+<script src="config.js"></script>
 <script>
 const API = new URLSearchParams(location.search).get('api') || '';
 const $ = id => document.getElementById(id);
@@ -538,6 +547,57 @@ $('vgo2').addEventListener('click', async () => {
       <div class="banner">${esc(v.note_hi)}</div>`;
   } catch (err) { $('verr2').textContent = 'त्रुटि: ' + err.message; }
 });
+
+// ---- Login (Supabase) and saved people. Hidden unless config.js is filled.
+(async function loginUI() {
+  const cfg = window.KUNDALI_CONFIG || {};
+  if (!cfg.SUPABASE_URL || !cfg.SUPABASE_PUBLISHABLE_KEY) return;
+  try {
+    await new Promise((ok, no) => { const sc = document.createElement('script');
+      sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
+  } catch (e) { return; }
+  const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY);
+  $('authcard').style.display = '';
+  let token = null;
+  const call = async (method, path, body) => {
+    const r = await fetch(API + path, {method, headers:{'Content-Type':'application/json', Authorization:'Bearer ' + token}, body: body ? JSON.stringify(body) : undefined});
+    const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि'); return d;
+  };
+  async function refresh() {
+    $('perr').textContent = '';
+    const {data} = await sb.auth.getSession();
+    token = data.session ? data.session.access_token : null;
+    $('signedout').style.display = token ? 'none' : ''; $('signedin').style.display = token ? '' : 'none';
+    if (!token) return;
+    $('who').textContent = data.session.user.email;
+    try {
+      const {people} = await call('GET', '/v1/people');
+      $('plist').innerHTML = people.length ? people.map(p => `<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><b>${esc(p.name)}</b><span class="muted">${esc(p.birth.date)} ${esc(p.birth.time)} ${esc(p.place || '')}</span><button type="button" data-open="${esc(p.id)}">खोलें</button><button type="button" data-del="${esc(p.id)}">हटाएँ</button></div>`).join('') : '<span class="muted">अभी कोई कुंडली सेव नहीं है।</span>';
+      window._people = Object.fromEntries(people.map(p => [p.id, p]));
+    } catch (e) { $('perr').textContent = 'त्रुटि: ' + e.message; }
+  }
+  sb.auth.onAuthStateChange(refresh);
+  $('lgo').onclick = async () => {
+    const email = $('lemail').value.trim(); if (!email) return;
+    const {error} = await sb.auth.signInWithOtp({email, options:{emailRedirectTo: location.origin + location.pathname}});
+    $('lmsg').textContent = error ? 'त्रुटि: ' + error.message : 'लिंक भेज दिया गया है। ईमेल खोलकर उस पर क्लिक कीजिए।';
+  };
+  $('lout').onclick = () => sb.auth.signOut();
+  $('lsave').onclick = async () => {
+    try {
+      await call('POST', '/v1/people', {name: $('name').value.trim() || 'बिना नाम', date: $('date').value, time: $('time').value, tz: $('tz').value, lat: +$('lat').value, lon: +$('lon').value, place: $('citysearch').value});
+      refresh();
+    } catch (e) { $('perr').textContent = 'त्रुटि: ' + e.message; }
+  };
+  $('plist').onclick = async e => {
+    const open = e.target.dataset.open, del = e.target.dataset.del;
+    try {
+      if (open) { const p = window._people[open]; $('name').value = p.name; $('date').value = p.birth.date; $('time').value = p.birth.time; $('tz').value = p.birth.tz; $('lat').value = p.birth.lat; $('lon').value = p.birth.lon; $('f').requestSubmit(); }
+      if (del) { await call('DELETE', '/v1/people/' + del); refresh(); }
+    } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
+  };
+  refresh();
+})();
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
 if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); setTimeout(() => $('vgo').click(), 400); }
