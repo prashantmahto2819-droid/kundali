@@ -66,6 +66,12 @@ for f in (ROOT / "data" / "rules").glob("*.json"):
     for r in json.loads(f.read_text(encoding="utf-8")).get("rules", []):
         put(r["text_hi"], r["text_en"])
 
+from jyotish import ask as _ask  # noqa: E402
+put(_ask.SAFE["hi"], _ask.SAFE["en"])
+put(_ask.DISCLAIMER["hi"], _ask.DISCLAIMER["en"])
+put("इस प्रश्न का उत्तर मेरी सामग्री में नहीं मिला। कृपया ग्रह, भाव, राशि, नक्षत्र या दशा के बारे में पूछिए।",
+    "I could not find this in my material. Please ask about a planet, house, sign, nakshatra or dasha.")
+
 from jyotish import tarot  # noqa: E402
 for c in tarot.deck():
     put(c["name_hi"], c["name"])
@@ -151,6 +157,11 @@ UI = {
  "पश्चिम": "West", "वायव्य (उत्तर-पश्चिम)": "Vayavya (north-west)", "केंद्र (ब्रह्मस्थान)": "Centre (Brahmasthan)",
  "+ कमरा जोड़िए": "+ Add room", "जाँचिए": "Check", "कमरा": "Room", "दिशा": "Direction", "स्थिति": "Status",
  "कारण / सुझाव": "Reason / suggestion", "उत्तम": "excellent",
+ # ask
+ "पूछिए (ज्योतिष सहायक)": "Ask (astrology assistant)", "पूछिए": "Ask", "खोज रहा हूँ…": "Searching…", "स्रोत": "Sources",
+ "ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद \"मेरा\" वाले प्रश्न उसी कुंडली से जुड़ते हैं।":
+ "Ask about planets, houses, signs, nakshatras, dashas, yogas, Vastu or tarot. Answers come only from this app's own content. After you make a chart, questions with \"my\" use that chart.",
+ "जैसे: शनि 10वें भाव में क्या फल देता है?": "e.g. What does Saturn in the 10th house indicate?",
  # palmistry
  "हस्तरेखा (मार्गदर्शित)": "Palmistry (guided)", "पढ़िए": "Read", "लंबी": "long", "मध्यम": "medium", "छोटी": "short",
  "सीधी": "straight", "साफ़": "clear", "हल्की": "faint", "नहीं दिखती": "not visible", "दिखती है": "visible",
@@ -322,6 +333,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
+EXTRA_PATTERNS += [("स्रोत ({1})", "Sources ({1})")]
 EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की प्रधानता ({2} कार्ड): {3} पर ज़ोर।", "Dominance of {1} ({2} cards): emphasis on {3}.")]
 REPORT.update({"स्वराशि/उच्च में": "in own/exalted sign", "उच्च राशि में": "in exalted sign", "नीच राशि में": "in debilitated sign",
                "सामान्य स्थिति": "ordinary condition", "ड्राफ़्ट": "draft"})

@@ -113,6 +113,16 @@
     <div id="perr" style="color:#c62828;margin-top:6px"></div>
     <div id="pout"></div>
   </div>
+  <div class="card" id="askcard">
+    <b>पूछिए (ज्योतिष सहायक)</b>
+    <div class="muted" style="font-size:.85rem">ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद "मेरा" वाले प्रश्न उसी कुंडली से जुड़ते हैं।</div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <input id="askq" maxlength="500" placeholder="जैसे: शनि 10वें भाव में क्या फल देता है?" style="flex:1 1 280px">
+      <button type="button" id="askgo" style="width:auto">पूछिए</button>
+    </div>
+    <div id="askerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="askout"></div>
+  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="banner" id="warns" style="background:#fdecea;border-color:#e0a09a" hidden></div>
@@ -598,6 +608,33 @@ $('vgo2').addEventListener('click', async () => {
     } catch (err) { $('lperr').textContent = 'त्रुटि: ' + err.message; }
   };
   refresh();
+})();
+
+// ---- Ask (RAG chat over the app's own content)
+(function askUI() {
+  const go = async () => {
+    const q = $('askq').value.trim();
+    $('askerr').textContent = '';
+    if (!q) return;
+    $('askgo').disabled = true;
+    $('askout').innerHTML = '<div class="muted" style="margin-top:8px">खोज रहा हूँ…</div>';
+    try {
+      const lang = window.getLang ? window.getLang() : 'hi';
+      const payload = {question: q, lang};
+      if (window.lastBody) payload.chart = window.lastBody;
+      const r = await fetch(API + '/v1/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const srcs = (d.sources || []).map(s => `<li><code>${esc(s.id)}</code> ${esc(s.text)}</li>`).join('');
+      const answer = esc(d.answer).replace(/\n/g, '<br>');
+      $('askout').innerHTML = `<div class="banner" style="margin-top:8px;white-space:normal">${answer}</div>` +
+        (srcs ? `<details style="margin-top:6px"><summary class="muted">स्रोत (${d.sources.length})</summary><ul style="font-size:.85rem">${srcs}</ul></details>` : '') +
+        `<div class="muted" style="font-size:.8rem;margin-top:6px">${esc(d.disclaimer || '')}</div>`;
+    } catch (err) { $('askout').innerHTML = ''; $('askerr').textContent = 'त्रुटि: ' + err.message; }
+    finally { $('askgo').disabled = false; }
+  };
+  $('askgo').addEventListener('click', go);
+  $('askq').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
 })();
 
 // ---- Language toggle (Hindi <-> English). Partial by design: a text is translated only if it can be translated

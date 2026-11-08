@@ -313,6 +313,12 @@
 "स्थिति": "Status",
 "कारण / सुझाव": "Reason / suggestion",
 "उत्तम": "excellent",
+"पूछिए (ज्योतिष सहायक)": "Ask (astrology assistant)",
+"पूछिए": "Ask",
+"खोज रहा हूँ…": "Searching…",
+"स्रोत": "Sources",
+"ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद \"मेरा\" वाले प्रश्न उसी कुंडली से जुड़ते हैं।": "Ask about planets, houses, signs, nakshatras, dashas, yogas, Vastu or tarot. Answers come only from this app's own content. After you make a chart, questions with \"my\" use that chart.",
+"जैसे: शनि 10वें भाव में क्या फल देता है?": "e.g. What does Saturn in the 10th house indicate?",
 "हस्तरेखा (मार्गदर्शित)": "Palmistry (guided)",
 "पढ़िए": "Read",
 "लंबी": "long",
@@ -942,6 +948,9 @@
 "गुरु वक्री है: ज्ञान और आस्था के प्रति स्वतंत्र, आत्म-अन्वेषी दृष्टिकोण; सिद्धांतों को खुद परखने की प्रवृत्ति।": "Jupiter is retrograde: an independent, self-exploring approach to knowledge and faith; a tendency to test doctrines for oneself.",
 "शुक्र वक्री है: संबंधों और मूल्यों पर गहन पुनर्विचार; पुराने विषयों पर लौटने की प्रवृत्ति और भावनाओं में गहराई।": "Venus is retrograde: deep reconsideration of relationships and values; a tendency to revisit old themes and depth in feeling.",
 "शनि वक्री है: ज़िम्मेदारियाँ भीतर की प्रेरणा से निभाने की प्रवृत्ति; परिणाम देर से, पर पुख्ता।": "Saturn is retrograde: a tendency to carry out responsibilities from inner motivation; results come late but solid.",
+"इस विषय पर मैं भविष्यवाणी नहीं कर सकता। ज्योतिष परंपरागत मार्गदर्शन है, स्वास्थ्य, आयु, धन या क़ानूनी फ़ैसलों का आधार नहीं। कृपया इसके लिए डॉक्टर, वित्तीय सलाहकार या वकील जैसे विशेषज्ञ से मिलिए। चाहें तो मैं कुंडली के स्वभाव, दशा या भाव के बारे में समझा सकता हूँ।": "I can't make predictions on this. Astrology is traditional guidance, not a basis for decisions about health, lifespan, money or the law. Please consult a doctor, financial adviser or lawyer as appropriate. I can explain the chart's temperament, dasha or houses if you like.",
+"यह परंपरागत मार्गदर्शन (ड्राफ़्ट) है, भविष्यवाणी या पेशेवर सलाह नहीं।": "This is traditional guidance (draft), not a prediction or professional advice.",
+"इस प्रश्न का उत्तर मेरी सामग्री में नहीं मिला। कृपया ग्रह, भाव, राशि, नक्षत्र या दशा के बारे में पूछिए।": "I could not find this in my material. Please ask about a planet, house, sign, nakshatra or dasha.",
 "दंड का इक्का": "Ace of Wands",
 "जोश, काम की लगन और महत्वाकांक्षा के क्षेत्र में: ऊर्जा का नया बीज।": "A new seed of energy, in matters of drive, work-passion and ambition.",
 "जोश, काम की लगन और महत्वाकांक्षा के क्षेत्र में: रुका या विलंबित बीज।": "A seed that is blocked or delayed, in matters of drive, work-passion and ambition.",
@@ -1402,6 +1411,10 @@
 [
 "{1} ({2} पाद {3}) · चंद्र राशि:",
 "{1} ({2} pada {3}) · Moon sign:"
+],
+[
+"स्रोत ({1})",
+"Sources ({1})"
 ],
 [
 "{1} (गणना: {2})",
