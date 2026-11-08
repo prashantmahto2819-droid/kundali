@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import matching, numerology, places, tarot
+from . import matching, numerology, places, tarot, vastu
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -131,3 +131,20 @@ def report_from_payload(payload: dict) -> str:
     """Printable Hindi HTML report for the same payload as /v1/chart."""
     from . import report
     return report.render(chart_from_payload(payload))
+
+
+def vastu_from_payload(payload: dict) -> dict:
+    items = payload.get("items")
+    if not isinstance(items, list) or not items or len(items) > 40:
+        raise BadRequest("items must be a list of 1-40 entries like {room, direction}")
+    try:
+        return vastu.evaluate(items)
+    except (ValueError, TypeError, AttributeError) as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def vastu_catalog() -> dict:
+    k = vastu.knowledge()
+    return {"rooms": {key: {"hi": r["hi"], "ideal": r["ideal"]} for key, r in k["rooms"].items()},
+            "directions": {key: {"hi": d["hi"], "element_hi": d["element_hi"], "lord_hi": d["lord_hi"],
+                                 "theme_hi": d["theme_hi"]} for key, d in k["directions"].items()}}

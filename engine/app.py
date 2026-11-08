@@ -107,3 +107,26 @@ def report(req: ChartRequest):
         return HTMLResponse(handlers.report_from_payload(req.model_dump(exclude_none=True)))
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+class VastuItem(BaseModel):
+    room: str
+    direction: str | None = None
+    degrees: float | None = None
+
+
+class VastuRequest(BaseModel):
+    items: list[VastuItem]
+
+
+@app.post("/v1/vastu")
+def vastu(req: VastuRequest):
+    try:
+        return handlers.vastu_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/vastu/catalog")
+def vastu_catalog():
+    return handlers.vastu_catalog()

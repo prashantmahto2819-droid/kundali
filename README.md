@@ -41,6 +41,8 @@ The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Ya
 
 `POST /v1/report` (same body as `/v1/chart`) returns a printable Hindi HTML report (charts as inline SVG, planets, panchang, dasha, ashtakavarga, gochara, yogas). The web page has a button that opens it; print to PDF from the browser, or run `python tools/make_pdf.py DATE TIME TZ LAT LON out.pdf [NAME]` where Playwright/Chromium is installed (Chromium shapes Devanagari correctly).
 
+`POST /v1/vastu` with `{"items":[{"room":"kitchen","direction":"SE"}]}` (or `degrees` instead of `direction`) rates each room against traditional direction guidance and suggests simple, non-structural fixes; `GET /v1/vastu/catalog` lists rooms and directions. Draft, original wording; schools differ.
+
 `POST /v1/match` with `{"boy": {...}, "girl": {...}}` (same birth fields as `/v1/chart`) returns the 36-point ashtakoota score with per-koota detail and confidence, plus a manglik comparison.
 
 `POST /v1/tarot` with `{"spread": "single|three|celtic", "question": "...", "seed": 7, "reversals": true}` draws from the 78-card deck (own wording, draft, Hindi + English). Omit `seed` for a random draw; the same seed gives the same draw.

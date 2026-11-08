@@ -88,6 +88,14 @@
     <div id="terr" style="color:#c62828;margin-top:6px"></div>
     <div id="tout"></div>
   </div>
+  <div class="card" id="vastucard">
+    <b>वास्तु जाँच</b>
+    <div class="muted" style="font-size:.85rem">अपने घर के कमरे और उनकी दिशा चुनिए। यह परंपरागत मार्गदर्शन है।</div>
+    <div id="vrows" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button type="button" id="vadd">+ कमरा जोड़िए</button> <button type="button" id="vgo">जाँचिए</button></div>
+    <div id="verr" style="color:#c62828;margin-top:6px"></div>
+    <div id="vout"></div>
+  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="card" id="summary"></div>
@@ -419,8 +427,36 @@ $('repbtn').addEventListener('click', async () => {
   } catch (err) { if (w) w.close(); $('reperr').textContent = 'त्रुटि: ' + err.message; }
 });
 
+// Vastu check
+(async function vastuUI() {
+  let cat; try { cat = await (await fetch(API + '/v1/vastu/catalog')).json(); } catch (e) { $('vastucard').style.display = 'none'; return; }
+  const roomOpts = Object.entries(cat.rooms).map(([k, r]) => `<option value="${k}">${esc(r.hi)}</option>`).join('');
+  const dirOpts = Object.entries(cat.directions).map(([k, d]) => `<option value="${k}">${esc(d.hi)}</option>`).join('');
+  const add = (room, dir) => {
+    const row = document.createElement('div'); row.className = 'vrow'; row.style.cssText = 'display:flex;gap:8px;margin-bottom:6px';
+    row.innerHTML = `<select class="vroom">${roomOpts}</select><select class="vdir">${dirOpts}</select><button type="button" class="vdel">×</button>`;
+    if (room) row.querySelector('.vroom').value = room; if (dir) row.querySelector('.vdir').value = dir;
+    row.querySelector('.vdel').onclick = () => row.remove(); $('vrows').appendChild(row);
+  };
+  [['kitchen','SE'], ['pooja','NE'], ['master_bedroom','SW']].forEach(([r, d]) => add(r, d));
+  $('vadd').onclick = () => add();
+  const RC = {ideal:'yes', ok:'yes', neutral:'muted', avoid:'muted'};
+  $('vgo').onclick = async () => {
+    $('verr').textContent = ''; $('vout').innerHTML = '';
+    const items = [...document.querySelectorAll('.vrow')].map(r => ({room:r.querySelector('.vroom').value, direction:r.querySelector('.vdir').value}));
+    try {
+      const r = await fetch(API + '/v1/vastu', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({items})});
+      const v = await r.json(); if (!r.ok) throw new Error(v.detail || 'त्रुटि');
+      $('vout').innerHTML = `<table style="margin-top:8px"><tr><th>कमरा</th><th>दिशा</th><th>स्थिति</th><th>कारण / सुझाव</th></tr>` +
+        v.items.map(i => `<tr><td>${esc(i.room_hi)}</td><td>${esc(i.direction_hi)}</td><td><span class="chip ${RC[i.rating]}">${esc(i.rating_hi)}</span></td>
+          <td class="muted">${esc(i.why_hi)}${i.rating==='avoid' ? `<br><b>सुझाव:</b> ${esc(i.fix_hi)}` : ''}${i.rating!=='ideal' ? `<br>उत्तम दिशा: ${esc(i.ideal_hi.join(', '))}` : ''}</td></tr>`).join('') +
+        `</table><ul class="muted">${v.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(v.disclaimer_hi)} अर्थ ड्राफ़्ट हैं।</div>`;
+    } catch (err) { $('verr').textContent = 'त्रुटि: ' + err.message; }
+  };
+})();
+
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
-if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); }
+if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); setTimeout(() => $('vgo').click(), 400); }
 </script>
 </body>
 </html>
