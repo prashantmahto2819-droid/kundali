@@ -67,3 +67,23 @@ def test_purnimanta_name():
     assert (b["name"], b["purnimanta"]) == ("Kartika", "Kartika")              # shukla paksha: same name
     k = patri.details(JBP)["birth"]["masa"]                                      # 1990-05-17 is Vaishakha krishna
     assert (k["name"], k["purnimanta"]) == ("Vaishakha", "Jyeshtha")
+
+
+def test_lunation_search_uses_the_fast_backend_and_is_cheap():
+    """Regression: on the JPL server each chart hung because the new-moon search called the slow backend ~140 times."""
+    import time
+    from jyotish import ephemeris, patri as P
+    assert isinstance(P._LUNATION_BACKEND, ephemeris.AnalyticBackend)
+    calls = {"n": 0}
+    real = P._LUNATION_BACKEND.positions
+
+    def counting(jd):
+        calls["n"] += 1
+        return real(jd)
+    P._LUNATION_BACKEND.positions = counting
+    try:
+        t = time.time()
+        P.lunar_month(P._LUNATION_BACKEND, 2448570.87, 23.74)
+        assert time.time() - t < 0.5 and calls["n"] < 200
+    finally:
+        P._LUNATION_BACKEND.positions = real

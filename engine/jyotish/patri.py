@@ -12,7 +12,10 @@ from __future__ import annotations
 
 from . import matching as M
 from .core import ayanamsa, norm360
-from .ephemeris import get_backend
+from .ephemeris import AnalyticBackend
+
+_LUNATION_BACKEND = AnalyticBackend()   # new-moon search needs ~100 Sun/Moon evaluations; the analytic Moon is within
+                                        # 0.01 deg of DE440s (about a minute of time), so the slow JPL backend is not used here
 from .constants import NAKSHATRAS, NAKSHATRAS_HI, PLANETS_HI, SIGNS, SIGNS_HI, SIGN_LORDS
 
 NAK_LORDS = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"] * 3
@@ -143,7 +146,7 @@ def details(chart: dict) -> dict:
     # lunar month from the actual lunations (new moons found in the ephemeris), amanta reckoning
     try:
         jd_tt = chart["jd_ut"] + 69.0 / 86400.0
-        lm = lunar_month(get_backend(), jd_tt, chart["ayanamsa_value"])
+        lm = lunar_month(_LUNATION_BACKEND, jd_tt, chart["ayanamsa_value"])
         masa_i, adhika = lm["index"], lm["adhika"]
     except Exception:                                               # backend unavailable: tithi-based estimate
         days_since_amavasya = ((t["number"] - 1) + t.get("fraction_elapsed", 0.5)) * (29.53 / 30)
