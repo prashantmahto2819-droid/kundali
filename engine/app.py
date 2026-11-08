@@ -62,6 +62,21 @@ async def saved_people(request: Request, rest: str = ""):
     return JSONResponse(body, status_code=status)
 
 
+class AskRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=500)
+    lang: str | None = None
+    chart: ChartRequest | None = None
+
+
+@app.post("/v1/ask")
+def ask_question(req: AskRequest):
+    """Answers from the app's own content (and the person's chart); see jyotish/ask.py."""
+    try:
+        return handlers.ask_from_payload(req.model_dump(exclude_none=True))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
 @app.get("/health")
 def health():
     return handlers.health()

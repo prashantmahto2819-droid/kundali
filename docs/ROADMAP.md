@@ -26,7 +26,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 ## Next
 1. Phase 1 (in progress): [x] sunrise/sunset, sunrise-based vara, Rahu Kaal, Choghadiya, Abhijit; [x] D2/D3/D4/D7/D10/D12; [x] numerology; [ ] geocoding + timezone lookup, rectification warnings, bhava-chalit option, D16-D60.
 2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v1: Vashya/Yoni/Gana to verify; parihara pending), [x] numerology, [x] tarot (v1: majors hand-written, minors composed from rank x suit; scholar/reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).
-3. Phase 3: RAG chat and course content.
+3. Phase 3: [x] RAG chat v1 (`/v1/ask`: BM25 retrieval + guardrails + optional LLM; LLM path and FastAPI route untested offline), [ ] course content, [ ] numerology passages in retrieval, [ ] retrieval quality evaluation set.
 4. Phase 4: palmistry (needs a labelled palm dataset) and vastu overlay.
 5. Phase 5: Lal Kitab, KP, Jaimini, astrologer tools, mobile app.
 

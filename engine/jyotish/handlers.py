@@ -184,3 +184,16 @@ def varshaphal_from_payload(payload: dict) -> dict:
         return varshaphal.varshaphal(natal, year, lat, lon, tz, backend())
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc
+
+
+def ask_from_payload(payload: dict) -> dict:
+    """POST /v1/ask  {question, lang?, chart?: {date,time,tz,lat,lon}}"""
+    from . import ask
+    q = payload.get("question")
+    if not isinstance(q, str):
+        raise BadRequest("question (text, 1-500 characters) is required")
+    chart = chart_from_payload(payload["chart"]) if payload.get("chart") else None
+    try:
+        return ask.ask(q, payload.get("lang"), chart)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
