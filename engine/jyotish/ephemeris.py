@@ -166,7 +166,7 @@ class JPLBackend:
         for name, key in self._KEYS.items():
             app = earth.at(t).observe(self._eph[key]).apparent()
             _, lon, _ = app.ecliptic_latlon(epoch="date")
-            out[name] = norm360(lon.degrees)
+            out[name] = float(norm360(float(lon.degrees)))
         return out
 
 

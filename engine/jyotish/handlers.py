@@ -197,3 +197,28 @@ def ask_from_payload(payload: dict) -> dict:
         return ask.ask(q, payload.get("lang"), chart)
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc
+
+
+# ---- JSON safety net ------------------------------------------------------------------
+def plain(obj):
+    """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""
+    if isinstance(obj, dict):
+        return {k: plain(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [plain(v) for v in obj]
+    if hasattr(obj, "tolist") and not isinstance(obj, (str, bytes)):
+        return plain(obj.tolist())
+    if hasattr(obj, "item") and type(obj).__module__ == "numpy":
+        return obj.item()
+    return obj
+
+
+def _wrap(fn):
+    def inner(*a, **k):
+        return plain(fn(*a, **k))
+    inner.__name__, inner.__doc__ = fn.__name__, fn.__doc__
+    return inner
+
+
+for _n in [n for n in list(globals()) if n.endswith("_from_payload") or n.endswith("_from_query") or n in ("vastu_catalog",)]:
+    globals()[_n] = _wrap(globals()[_n])

@@ -98,3 +98,11 @@ def test_handler_and_http(tmp_path, monkeypatch):
             assert json.loads(r.read())["mode"] == "refused"
     finally:
         srv.shutdown()
+
+
+def test_plain_converts_numpy():
+    np = pytest.importorskip("numpy")
+    out = handlers.plain({"a": np.bool_(True), "b": [np.float64(1.5), np.int64(2)], "c": np.array([1, 2])})
+    assert out == {"a": True, "b": [1.5, 2], "c": [1, 2]}
+    assert type(out["a"]) is bool
+    json.dumps(out)
