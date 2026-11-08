@@ -13,6 +13,11 @@ NAMES = {
     "D9": ("Navamsha", "नवांश"), "D10": ("Dashamsha", "दशमांश"),
     "D12": ("Dwadashamsha", "द्वादशांश"),
 }
+MEANING_EN = {
+    "D1": "overall life and body", "D2": "wealth and assets", "D3": "siblings and courage",
+    "D4": "fortune and fixed property", "D7": "children", "D9": "marriage and dharma, the inner strength of a planet",
+    "D10": "career and profession", "D12": "parents",
+}
 MEANING_HI = {
     "D1": "समग्र जीवन और शरीर", "D2": "धन और संपत्ति", "D3": "भाई-बहन और साहस",
     "D4": "भाग्य और अचल संपत्ति", "D7": "संतान", "D9": "विवाह और धर्म, ग्रह का भीतरी बल",
@@ -65,7 +70,7 @@ def varga_chart(asc_lon: float, planets: list[dict], varga: str) -> dict:
         sign = (lagna + h - 1) % 12
         houses.append({"house": h, "sign": sign,
                        "planets": [n for n, s in signs.items() if s == sign]})
-    return {"name": NAMES[varga][0], "name_hi": NAMES[varga][1], "meaning_hi": MEANING_HI[varga],
+    return {"name": NAMES[varga][0], "name_hi": NAMES[varga][1], "meaning_hi": MEANING_HI[varga], "meaning_en": MEANING_EN[varga],
             "lagna_sign": lagna, "planet_signs": signs, "houses": houses}
 
 

@@ -314,6 +314,7 @@ function drawChart(svg, cells, kind) {
 }
 
 const SIGNS_HI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+const SIGNS_EN = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrishchika','Dhanu','Makara','Kumbha','Meena'];
 function renderVarga(key) {
   if (!chart) return;
   const v = chart.vargas[key], pm = planetMap();
@@ -363,40 +364,73 @@ async function renderNumerology(body) {
 
 function planetMap() { return Object.fromEntries(chart.planets.map(p => [p.name, p])); }
 
+const EN = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+const T = (hi, en) => EN() ? en : hi;                       // learn panel is rendered directly in the chosen language
+const pName = n => { const p = planetMap()[n]; return p ? (EN() ? p.name : p.name_hi) : n; };
+const sName = p => EN() ? p.sign_name : p.sign_name_hi;
+const DIGNITY_EN = {exalted:'exalted', debilitated:'debilitated', own:'own sign'};
 function rashiNakInfo(p) {
   const sg = KB.signs?.signs?.[p.sign], nk = KB.nakshatras?.nakshatras?.[p.nakshatra_index ?? -1] ||
     KB.nakshatras?.nakshatras?.find(x => x.hi === p.nakshatra_hi || x.name === p.nakshatra);
   let out = '';
-  if (sg) out += `<p><b>राशि ${esc(sg.hi)}:</b> ${esc(sg.element_hi)} तत्व, ${esc(sg.modality_hi)} स्वभाव, स्वामी ${esc(planetMap()[sg.lord]?.name_hi || sg.lord)}। ${esc(sg.traits_hi)}</p>`;
-  if (nk) out += `<p><b>नक्षत्र ${esc(nk.hi)}:</b> स्वामी ${esc(planetMap()[nk.lord]?.name_hi || nk.lord)}, देवता ${esc(nk.deity_hi)}, प्रतीक ${esc(nk.symbol_hi)}, गण ${esc(nk.gana_hi)}। ${esc(nk.traits_hi)}</p>`;
+  if (sg) out += EN()
+    ? `<p><b>Sign ${esc(sg.name)}:</b> ${esc(sg.element_en)} element, ${esc(sg.modality_en)} sign, lord ${esc(pName(sg.lord))}. ${esc(sg.traits_en)}</p>`
+    : `<p><b>राशि ${esc(sg.hi)}:</b> ${esc(sg.element_hi)} तत्व, ${esc(sg.modality_hi)} स्वभाव, स्वामी ${esc(pName(sg.lord))}। ${esc(sg.traits_hi)}</p>`;
+  if (nk) out += EN()
+    ? `<p><b>Nakshatra ${esc(nk.name)}:</b> lord ${esc(pName(nk.lord))}, deity ${esc(nk.deity_en)}, symbol ${esc(nk.symbol_en)}, gana ${esc(nk.gana)}. ${esc(nk.traits_en)}</p>`
+    : `<p><b>नक्षत्र ${esc(nk.hi)}:</b> स्वामी ${esc(pName(nk.lord))}, देवता ${esc(nk.deity_hi)}, प्रतीक ${esc(nk.symbol_hi)}, गण ${esc(nk.gana_hi)}। ${esc(nk.traits_hi)}</p>`;
   return out;
 }
+let lastLearn = null;                                        // re-rendered when the language changes
 function showPlanet(name) {
   const k = KB.planets?.planets?.[name], p = planetMap()[name];
   if (!k || !p) return;
-  $('learn').innerHTML = `<h3>${esc(k.name_hi)} — ${esc(k.name_en)}</h3>
-    <p><b>आपकी कुंडली में:</b> ${esc(p.sign_name_hi)} राशि, ${esc(p.dms)}, भाव ${p.house}, ${esc(p.nakshatra_hi)} नक्षत्र (पाद ${p.pada})${p.retrograde?', वक्री':''}${p.dignity?', '+esc(p.dignity):''}</p>
+  lastLearn = ['planet', name];
+  const dig = p.dignity ? ', ' + (EN() ? DIGNITY_EN[p.dignity] || p.dignity : DIGNITY_HI[p.dignity] || p.dignity) : '';
+  $('learn').innerHTML = EN()
+    ? `<h3>${esc(k.name_en)}</h3>
+    <p><b>In your chart:</b> ${esc(p.sign_name)}, ${esc(p.dms)}, house ${p.house}, ${esc(p.nakshatra)} nakshatra (pada ${p.pada})${p.retrograde?', retrograde':''}${dig}</p>
+    <p><b>Signifies:</b> ${k.signifies_en.map(esc).join(' · ')}</p>
+    <p><b>Why:</b> ${esc(k.why_en)}</p>${rashiNakInfo(p)}
+    <p class="muted">Nature: ${esc(k.nature)}. Aspects houses: ${p.aspects_houses.join(', ')}.</p>`
+    : `<h3>${esc(k.name_hi)} — ${esc(k.name_en)}</h3>
+    <p><b>आपकी कुंडली में:</b> ${esc(p.sign_name_hi)} राशि, ${esc(p.dms)}, भाव ${p.house}, ${esc(p.nakshatra_hi)} नक्षत्र (पाद ${p.pada})${p.retrograde?', वक्री':''}${dig}</p>
     <p><b>कारकत्व:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>
     <p><b>क्यों:</b> ${esc(k.why_hi || k.why_en)}</p>${rashiNakInfo(p)}
     <p class="muted">स्वभाव: ${esc(k.nature_hi || k.nature)}. दृष्टि भाव: ${p.aspects_houses.join(', ')}.</p>`;
+  if (window.showSub) window.showSub('s-summary');            // the learn panel lives in the summary sub-tab
   $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function showHouse(h, kind) {
   const k = KB.houses?.houses?.[h]; if (!k) return;
+  lastLearn = ['house', h, kind];
+  const none = T('कोई नहीं', 'none');
   if (kind !== 'd1') {
     const v = chart.vargas[kind], vh = v.houses[h-1];
-    $('learn').innerHTML = `<h3>${esc(v.name_hi)} (${kind}) — भाव ${h}: ${esc(k.name_hi)}</h3>
-      <p>इस वर्ग में राशि: <b>${esc(SIGNS_HI[vh.sign])}</b>. ग्रह: ${vh.planets.length ? vh.planets.map(n => planetMap()[n].name_hi).join(', ') : 'कोई नहीं'}.</p>
+    const pl = vh.planets.length ? vh.planets.map(pName).join(', ') : none;
+    $('learn').innerHTML = EN()
+      ? `<h3>${esc(v.name)} (${kind}) — house ${h}: ${esc(k.name_en)}</h3>
+      <p>Sign in this varga: <b>${esc(SIGNS_EN[vh.sign])}</b>. Planets: ${pl}.</p>
+      <p><b>Theme of this varga:</b> ${esc(v.meaning_en || v.meaning_hi)}. <b>House themes:</b> ${k.signifies_en.map(esc).join(' · ')}</p>`
+      : `<h3>${esc(v.name_hi)} (${kind}) — भाव ${h}: ${esc(k.name_hi)}</h3>
+      <p>इस वर्ग में राशि: <b>${esc(SIGNS_HI[vh.sign])}</b>. ग्रह: ${pl}.</p>
       <p><b>इस वर्ग का विषय:</b> ${esc(v.meaning_hi)}. <b>भाव के विषय:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>`;
     return;
   }
   const hs = chart.houses[h-1];
-  $('learn').innerHTML = `<h3>भाव ${h} — ${esc(k.name_hi)}</h3>
-    <p>${kind==='d9' ? 'नवांश में ' : ''}इस भाव में राशि: <b>${esc(hs.sign_name_hi)}</b>, स्वामी: <b>${esc(chart.planets.find(p=>p.name===hs.lord)?.name_hi || hs.lord)}</b> (भाव ${hs.lord_house} में)</p>
+  const pl = hs.planets.length ? hs.planets.map(pName).join(', ') : none;
+  $('learn').innerHTML = EN()
+    ? `<h3>House ${h} — ${esc(k.name_en)}</h3>
+    <p>Sign in this house: <b>${esc(hs.sign_name)}</b>, lord: <b>${esc(pName(hs.lord))}</b> (in house ${hs.lord_house})</p>
+    <p><b>Themes:</b> ${k.signifies_en.map(esc).join(' · ')}</p>
+    <p class="muted">Type: ${esc(k.type)}. Planets here: ${pl}.</p>`
+    : `<h3>भाव ${h} — ${esc(k.name_hi)}</h3>
+    <p>इस भाव में राशि: <b>${esc(hs.sign_name_hi)}</b>, स्वामी: <b>${esc(pName(hs.lord))}</b> (भाव ${hs.lord_house} में)</p>
     <p><b>विषय:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>
-    <p class="muted">प्रकार: ${esc(k.type)}. इस भाव में ग्रह: ${hs.planets.length ? hs.planets.map(n=>planetMap()[n].name_hi).join(', ') : 'कोई नहीं'}.</p>`;
+    <p class="muted">प्रकार: ${esc(k.type)}. इस भाव में ग्रह: ${pl}.</p>`;
   $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
+window.rerenderLearn = () => { if (!lastLearn || !chart) return; lastLearn[0] === 'planet' ? showPlanet(lastLearn[1]) : showHouse(lastLearn[1], lastLearn[2]); };
 
 function renderPatri(c) {
   const P = c.patri; if (!P) return;
@@ -828,6 +862,7 @@ $('vgo2').addEventListener('click', async () => {
       if (!D) { try { D = await (await fetch(API + '/data/i18n_en.json')).json(); build(); } catch (e) { lang = 'hi'; return; } }
       apply(document.body);
     } else restore();
+    if (window.rerenderLearn) window.rerenderLearn();      // the learn panel is written directly in the chosen language
   }
   const mo = new MutationObserver(muts => { if (lang !== 'en' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })

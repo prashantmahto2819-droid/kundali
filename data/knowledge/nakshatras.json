@@ -15,7 +15,10 @@
     0.0,
     13.3333
    ],
-   "traits_hi": "तेज़ शुरुआत, उपचार और गति; पहल करने वाला स्वभाव।"
+   "traits_hi": "तेज़ शुरुआत, उपचार और गति; पहल करने वाला स्वभाव।",
+   "deity_en": "Ashwini Kumaras",
+   "symbol_en": "horse's head",
+   "traits_en": "Quick starts, healing and speed; an initiating nature."
   },
   {
    "index": 1,
@@ -30,7 +33,10 @@
     13.3333,
     26.6667
    ],
-   "traits_hi": "सहनशीलता, ज़िम्मेदारी निभाना और जीवन के गहरे चक्रों की समझ; संयम और तीव्र भावनाएँ।"
+   "traits_hi": "सहनशीलता, ज़िम्मेदारी निभाना और जीवन के गहरे चक्रों की समझ; संयम और तीव्र भावनाएँ।",
+   "deity_en": "Yama",
+   "symbol_en": "yoni (symbol of birth)",
+   "traits_en": "Endurance, carrying responsibility and an understanding of life's deeper cycles; restraint with intense feelings."
   },
   {
    "index": 2,
@@ -45,7 +51,10 @@
     26.6667,
     40.0
    ],
-   "traits_hi": "तीक्ष्णता और शुद्ध करने वाली स्पष्टवादिता; नेतृत्व और आलोचनात्मक दृष्टि।"
+   "traits_hi": "तीक्ष्णता और शुद्ध करने वाली स्पष्टवादिता; नेतृत्व और आलोचनात्मक दृष्टि।",
+   "deity_en": "Agni",
+   "symbol_en": "razor / flame",
+   "traits_en": "Sharpness and purifying frankness; leadership and a critical eye."
   },
   {
    "index": 3,
@@ -60,7 +69,10 @@
     40.0,
     53.3333
    ],
-   "traits_hi": "सृजन, आकर्षण और पोषण; सौंदर्य और स्थिर वृद्धि की चाह।"
+   "traits_hi": "सृजन, आकर्षण और पोषण; सौंदर्य और स्थिर वृद्धि की चाह।",
+   "deity_en": "Brahma (Prajapati)",
+   "symbol_en": "chariot / ox-cart",
+   "traits_en": "Creation, attraction and nurturing; a wish for beauty and steady growth."
   },
   {
    "index": 4,
@@ -75,7 +87,10 @@
     53.3333,
     66.6667
    ],
-   "traits_hi": "जिज्ञासु, खोजी मन; यात्रा, सीखने और कोमल चंचलता।"
+   "traits_hi": "जिज्ञासु, खोजी मन; यात्रा, सीखने और कोमल चंचलता।",
+   "deity_en": "Soma",
+   "symbol_en": "deer's head",
+   "traits_en": "A curious, searching mind; travel, learning and gentle restlessness."
   },
   {
    "index": 5,
@@ -90,7 +105,10 @@
     66.6667,
     80.0
    ],
-   "traits_hi": "भावनात्मक तूफ़ान के बाद की स्पष्टता; शोध, बदलाव और तीव्र बुद्धि।"
+   "traits_hi": "भावनात्मक तूफ़ान के बाद की स्पष्टता; शोध, बदलाव और तीव्र बुद्धि।",
+   "deity_en": "Rudra",
+   "symbol_en": "teardrop / diamond",
+   "traits_en": "Clarity after an emotional storm; research, change and a sharp intellect."
   },
   {
    "index": 6,
@@ -105,7 +123,10 @@
     80.0,
     93.3333
    ],
-   "traits_hi": "वापसी, पुनः आरंभ और आशा; सरल, उदार और सहनशील स्वभाव।"
+   "traits_hi": "वापसी, पुनः आरंभ और आशा; सरल, उदार और सहनशील स्वभाव।",
+   "deity_en": "Aditi",
+   "symbol_en": "quiver / bow",
+   "traits_en": "Return, fresh starts and hope; a simple, generous, forgiving nature."
   },
   {
    "index": 7,
@@ -120,7 +141,10 @@
     93.3333,
     106.6667
    ],
-   "traits_hi": "पोषण, सेवा और मार्गदर्शन; परंपरा में अत्यंत शुभ नक्षत्र माना जाता है।"
+   "traits_hi": "पोषण, सेवा और मार्गदर्शन; परंपरा में अत्यंत शुभ नक्षत्र माना जाता है।",
+   "deity_en": "Brihaspati",
+   "symbol_en": "cow's udder / lotus",
+   "traits_en": "Nourishment, service and guidance; traditionally held to be a highly auspicious nakshatra."
   },
   {
    "index": 8,
@@ -135,7 +159,10 @@
     106.6667,
     120.0
    ],
-   "traits_hi": "गहरी सूझ, रहस्य और सम्मोहक वाणी; भीतर की जटिलताओं को समझने की क्षमता।"
+   "traits_hi": "गहरी सूझ, रहस्य और सम्मोहक वाणी; भीतर की जटिलताओं को समझने की क्षमता।",
+   "deity_en": "Naga (serpent)",
+   "symbol_en": "coiled serpent",
+   "traits_en": "Deep insight, secrecy and hypnotic speech; the ability to understand inner complexities."
   },
   {
    "index": 9,
@@ -150,7 +177,10 @@
     120.0,
     133.3333
    ],
-   "traits_hi": "वंश, प्रतिष्ठा और राजसी गरिमा; परंपरा और सम्मान का भाव।"
+   "traits_hi": "वंश, प्रतिष्ठा और राजसी गरिमा; परंपरा और सम्मान का भाव।",
+   "deity_en": "Pitris (ancestors)",
+   "symbol_en": "royal throne",
+   "traits_en": "Lineage, status and regal dignity; a sense of tradition and honour."
   },
   {
    "index": 10,
@@ -165,7 +195,10 @@
     133.3333,
     146.6667
    ],
-   "traits_hi": "आनंद, कला और विश्राम; उदारता और रिश्तों में गर्मजोशी।"
+   "traits_hi": "आनंद, कला और विश्राम; उदारता और रिश्तों में गर्मजोशी।",
+   "deity_en": "Bhaga",
+   "symbol_en": "front legs of a bed / swing",
+   "traits_en": "Enjoyment, art and rest; generosity and warmth in relationships."
   },
   {
    "index": 11,
@@ -180,7 +213,10 @@
     146.6667,
     160.0
    ],
-   "traits_hi": "मित्रता, अनुबंध और सेवा; भरोसेमंद सहयोग।"
+   "traits_hi": "मित्रता, अनुबंध और सेवा; भरोसेमंद सहयोग।",
+   "deity_en": "Aryaman",
+   "symbol_en": "back legs of a bed",
+   "traits_en": "Friendship, contracts and service; dependable cooperation."
   },
   {
    "index": 12,
@@ -195,7 +231,10 @@
     160.0,
     173.3333
    ],
-   "traits_hi": "कुशल हाथ, शिल्प और व्यावहारिक चतुराई; सेवा और उपचार।"
+   "traits_hi": "कुशल हाथ, शिल्प और व्यावहारिक चतुराई; सेवा और उपचार।",
+   "deity_en": "Savitar",
+   "symbol_en": "hand",
+   "traits_en": "Skilled hands, craft and practical cleverness; service and healing."
   },
   {
    "index": 13,
@@ -210,7 +249,10 @@
     173.3333,
     186.6667
    ],
-   "traits_hi": "सौंदर्य-रचना, डिज़ाइन और बारीक कौशल; आकर्षक प्रस्तुति।"
+   "traits_hi": "सौंदर्य-रचना, डिज़ाइन और बारीक कौशल; आकर्षक प्रस्तुति।",
+   "deity_en": "Tvashtar (Vishwakarma)",
+   "symbol_en": "shining jewel / pearl",
+   "traits_en": "Creating beauty, design and fine skill; an attractive presentation."
   },
   {
    "index": 14,
@@ -225,7 +267,10 @@
     186.6667,
     200.0
    ],
-   "traits_hi": "स्वतंत्रता, लचीलापन और व्यापार; हवा की तरह अनुकूलन।"
+   "traits_hi": "स्वतंत्रता, लचीलापन और व्यापार; हवा की तरह अनुकूलन।",
+   "deity_en": "Vayu",
+   "symbol_en": "young shoot swaying in the wind",
+   "traits_en": "Independence, flexibility and trade; adapting like the wind."
   },
   {
    "index": 15,
@@ -240,7 +285,10 @@
     200.0,
     213.3333
    ],
-   "traits_hi": "लक्ष्य के प्रति दृढ़ता और प्रतिस्पर्धा; सफलता के लिए एकाग्रता।"
+   "traits_hi": "लक्ष्य के प्रति दृढ़ता और प्रतिस्पर्धा; सफलता के लिए एकाग्रता।",
+   "deity_en": "Indra-Agni",
+   "symbol_en": "triumphal arch / potter's wheel",
+   "traits_en": "Firmness towards a goal and competition; focus for success."
   },
   {
    "index": 16,
@@ -255,7 +303,10 @@
     213.3333,
     226.6667
    ],
-   "traits_hi": "मित्रता, भक्ति और सहयोग; दूर रहकर भी रिश्ते निभाने की क्षमता।"
+   "traits_hi": "मित्रता, भक्ति और सहयोग; दूर रहकर भी रिश्ते निभाने की क्षमता।",
+   "deity_en": "Mitra",
+   "symbol_en": "lotus",
+   "traits_en": "Friendship, devotion and cooperation; the ability to keep relationships even at a distance."
   },
   {
    "index": 17,
@@ -270,7 +321,10 @@
     226.6667,
     240.0
    ],
-   "traits_hi": "वरिष्ठता, संरक्षण और आत्मसम्मान; ज़िम्मेदारी का भार उठाने की प्रवृत्ति।"
+   "traits_hi": "वरिष्ठता, संरक्षण और आत्मसम्मान; ज़िम्मेदारी का भार उठाने की प्रवृत्ति।",
+   "deity_en": "Indra",
+   "symbol_en": "earring / umbrella",
+   "traits_en": "Seniority, protection and self-respect; a tendency to carry the burden of responsibility."
   },
   {
    "index": 18,
@@ -285,7 +339,10 @@
     240.0,
     253.3333
    ],
-   "traits_hi": "जड़ तक पहुँचने की खोज; पुराने ढाँचे तोड़कर नींव नए सिरे से बनाने की प्रवृत्ति।"
+   "traits_hi": "जड़ तक पहुँचने की खोज; पुराने ढाँचे तोड़कर नींव नए सिरे से बनाने की प्रवृत्ति।",
+   "deity_en": "Nirriti",
+   "symbol_en": "bunch of roots",
+   "traits_en": "A search that goes to the root; a tendency to break old structures and rebuild the foundation afresh."
   },
   {
    "index": 19,
@@ -300,7 +357,10 @@
     253.3333,
     266.6667
    ],
-   "traits_hi": "अजेय उत्साह, प्रेरणा और अनुनय; विश्वास के साथ आगे बढ़ना।"
+   "traits_hi": "अजेय उत्साह, प्रेरणा और अनुनय; विश्वास के साथ आगे बढ़ना।",
+   "deity_en": "Apah (waters)",
+   "symbol_en": "winnowing fan / elephant's tusk",
+   "traits_en": "Unstoppable enthusiasm, inspiration and persuasion; moving ahead with confidence."
   },
   {
    "index": 20,
@@ -315,7 +375,10 @@
     266.6667,
     280.0
    ],
-   "traits_hi": "स्थायी विजय, सिद्धांत और धैर्य; लंबे समय की जीत की प्रवृत्ति।"
+   "traits_hi": "स्थायी विजय, सिद्धांत और धैर्य; लंबे समय की जीत की प्रवृत्ति।",
+   "deity_en": "Vishvedevas",
+   "symbol_en": "elephant's tusk / legs of a bed",
+   "traits_en": "Lasting victory, principle and patience; a tendency to win over the long term."
   },
   {
    "index": 21,
@@ -330,7 +393,10 @@
     280.0,
     293.3333
    ],
-   "traits_hi": "सुनना, सीखना और ज्ञान का संचार; परंपरा का वहन।"
+   "traits_hi": "सुनना, सीखना और ज्ञान का संचार; परंपरा का वहन।",
+   "deity_en": "Vishnu",
+   "symbol_en": "ear / three footprints",
+   "traits_en": "Listening, learning and passing on knowledge; carrying tradition."
   },
   {
    "index": 22,
@@ -345,7 +411,10 @@
     293.3333,
     306.6667
    ],
-   "traits_hi": "लय, संगीत और समृद्धि; महत्वाकांक्षा और समूह में सक्रियता।"
+   "traits_hi": "लय, संगीत और समृद्धि; महत्वाकांक्षा और समूह में सक्रियता।",
+   "deity_en": "Vasus",
+   "symbol_en": "drum",
+   "traits_en": "Rhythm, music and prosperity; ambition and activity in groups."
   },
   {
    "index": 23,
@@ -360,7 +429,10 @@
     306.6667,
     320.0
    ],
-   "traits_hi": "उपचार, गोपनीयता और अकेले शोध; स्वतंत्र और रहस्यमय स्वभाव।"
+   "traits_hi": "उपचार, गोपनीयता और अकेले शोध; स्वतंत्र और रहस्यमय स्वभाव।",
+   "deity_en": "Varuna",
+   "symbol_en": "empty circle / hundred physicians",
+   "traits_en": "Healing, privacy and solitary research; an independent, mysterious nature."
   },
   {
    "index": 24,
@@ -375,7 +447,10 @@
     320.0,
     333.3333
    ],
-   "traits_hi": "तीव्र आदर्शवाद, तपस्या और परिवर्तन की आग; अलग राह।"
+   "traits_hi": "तीव्र आदर्शवाद, तपस्या और परिवर्तन की आग; अलग राह।",
+   "deity_en": "Aja Ekapada",
+   "symbol_en": "sword / front legs of a cot",
+   "traits_en": "Intense idealism, austerity and the fire of transformation; a path of one's own."
   },
   {
    "index": 25,
@@ -390,7 +465,10 @@
     333.3333,
     346.6667
    ],
-   "traits_hi": "गहरी शांति, करुणा और अनुशासित साधना; धैर्य और गहराई।"
+   "traits_hi": "गहरी शांति, करुणा और अनुशासित साधना; धैर्य और गहराई।",
+   "deity_en": "Ahirbudhnya",
+   "symbol_en": "back legs of a cot / twins",
+   "traits_en": "Deep calm, compassion and disciplined practice; patience and depth."
   },
   {
    "index": 26,
@@ -405,7 +483,10 @@
     346.6667,
     360.0
    ],
-   "traits_hi": "सुरक्षा, करुणा और यात्रा का अंत; संरक्षक और संवेदनशील स्वभाव।"
+   "traits_hi": "सुरक्षा, करुणा और यात्रा का अंत; संरक्षक और संवेदनशील स्वभाव।",
+   "deity_en": "Pushan",
+   "symbol_en": "fish / drum",
+   "traits_en": "Safety, compassion and the end of a journey; a protective, sensitive nature."
   }
  ]
 }

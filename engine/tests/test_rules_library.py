@@ -53,3 +53,16 @@ def test_every_rule_has_english_text_in_tendency_language():
         assert "इंजन अभी उन्हें नहीं जाँचता" not in r["text_hi"]
     mars = next(r for r in rules if r["id"] == "mars_in_7")
     assert "Mangal Dosha" in mars["text_en"]
+
+
+def test_knowledge_files_have_english_for_learn_panel():
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2] / "data" / "knowledge"
+    n = json.loads((root / "nakshatras.json").read_text(encoding="utf-8"))["nakshatras"]
+    s = json.loads((root / "signs.json").read_text(encoding="utf-8"))
+    s = s["signs"] if isinstance(s, dict) else s
+    assert len(n) == 27 and all(x["deity_en"] and x["symbol_en"] and len(x["traits_en"]) > 20 for x in n)
+    assert len(s) == 12 and all(x["element_en"] in ("Fire", "Earth", "Air", "Water") and x["modality_en"] in ("movable", "fixed", "dual") and x["traits_en"] for x in s)
+    from jyotish import vargas
+    assert set(vargas.MEANING_EN) == set(vargas.MEANING_HI)

@@ -25,6 +25,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 
 ## Patri header
 - [x] Traditional janma-patri header (vara, tithi, nakshatra-pada-lord, yoga, karana, sunrise/sunset, ishta kaal, masa, ritu, ayana, Vikram/Shaka samvat, tropical Sun sign) + Avakahada chakra (varna, vashya, yoni, gana, nadi, tattva, name syllable) on the web summary and in the report; checked against the Korba printout. Done since: adhika masa from real lunations, disc-centre sunrise + ishta kaal, ghata chakra (draft table). Purnimanta month name shown alongside amanta. Pending: ghata-chakra scholar check.
+- [x] Learn panel (planet/house/varga click) rendered directly in Hindi or English; nakshatra and sign knowledge carry English deity/symbol/traits.
 - [x] City list: 242 places incl. all Chhattisgarh districts/towns and neighbouring MP/Odisha/Jharkhand towns.
 
 ## Accuracy gate
