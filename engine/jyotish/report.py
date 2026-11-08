@@ -76,7 +76,8 @@ def _d(s: str) -> str:
 def _table(head: list[str], rows: list[list[str]]) -> str:
     th = "".join(f"<th>{e(h)}</th>" for h in head)
     body = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows)
-    return f"<table><tr>{th}</tr>{body}</table>"
+    head_row = f"<tr>{th}</tr>" if any(h.strip() for h in head) else ""      # key-value tables carry no header
+    return f"<table>{head_row}{body}</table>"
 
 
 def render(chart: dict, brand: dict | None = None) -> str:
@@ -171,8 +172,8 @@ def render(chart: dict, brand: dict | None = None) -> str:
         cd_html = ""
         if cd:
             rows = [[e(p["sign_name_hi"]), str(p["years"]), e(p["start"]), e(p["end"])] for p in cd["periods"]]
-            run = cd.get("running")
-            cd_html = (f'<h3>चर दशा</h3>' + (f'<p>अभी: <b>{e(run["sign_name_hi"])}</b> ({e(run["start"])} → {e(run["end"])})</p>' if run else "")
+            cdr = cd.get("running")
+            cd_html = (f'<h3>चर दशा</h3>' + (f'<p>अभी: <b>{e(cdr["sign_name_hi"])}</b> ({e(cdr["start"])} → {e(cdr["end"])})</p>' if cdr else "")
                        + _table(["राशि", "वर्ष", "आरंभ", "समाप्ति"], rows) + f'<p class="small">{e(cd["note_hi"])}</p>')
         jm_html = (f'<h2>जैमिनी: चर कारक और आरूढ़ पद</h2>{_table(["कारक", "ग्रह", "अंश", "विषय"], kr)}'
                    f'<p>कारकांश: <b>{e(J["karakamsa"]["sign_name_hi"])}</b></p>{_table(["पद", "भाव", "पद की राशि", "लग्न से भाव"], pd)}<p class="small">{e(J["note_hi"])}</p>{cd_html}')
@@ -205,6 +206,34 @@ def render(chart: dict, brand: dict | None = None) -> str:
         day_html = (f'<p>सूर्योदय {e(day["sunrise"][11:16])} · सूर्यास्त {e(day["sunset"][11:16])} (स्थानीय समय)।</p>')
     warn_html = "".join(f'<div class="banner" style="background:#fdecea;border-color:#e0a09a">⚠ {e(w["text_hi"])}</div>' for w in chart.get("input_warnings", []))
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    # at-a-glance tiles + "what matters today" (same content as the web summary)
+    md = next((r for r in run if r["level"] == 1), None); ad = next((r for r in run if r["level"] == 2), None)
+    sup = sum(1 for r in go["planets"] if r.get("verdict") == "supportive"); chal = sum(1 for r in go["planets"] if r.get("verdict") == "challenging")
+    sens = (chart.get("sensitivity") or {}).get("items", {}).get("lagna_sign", {})
+    margin = sens.get("margin_minutes")
+    stab = "स्थिर" if margin is None or margin > 15 else ("सावधान" if margin > 5 else "संवेदनशील")
+    tiles = [("लग्न", e(lg["sign_name_hi"]), f'{e(lg["dms"])} · {e(lg["nakshatra_hi"])} {lg["pada"]}'),
+             ("चंद्र राशि", e(moon["sign_name_hi"]), f'{e(moon["nakshatra_hi"])} पाद {moon["pada"]}'),
+             ("चल रही दशा", (e(PLANETS_HI[md["lord"]]) + (" / " + e(PLANETS_HI[ad["lord"]]) if ad else "")) if md else "—", f'{_d(md["end"])} तक' if md else ""),
+             ("साढ़ेसाती", "चल रही" if ss["active"] else ("अष्टम शनि" if ss["ashtama"] else "नहीं"), {"rising": "पहला चरण", "peak": "मध्य चरण", "setting": "अंतिम चरण"}.get(ss["phase"], "") if ss["active"] else ""),
+             ("आज का गोचर", f"{sup} शुभ · {chal} सावधानी", e(go["as_of"][:10])),
+             ("जन्म-समय", stab, "लग्न 3 घंटे तक नहीं बदलता" if margin is None else f"लग्न {margin} मिनट में बदलता")]
+    tiles_html = '<div class="tiles">' + "".join(f'<div class="tile"><div class="k">{k}</div><div class="v">{v}</div><div class="s">{sub}</div></div>' for k, v, sub in tiles) + "</div>"
+    today = []
+    runp = next((p for p in chart["timeline"]["periods"] if p["phase"] == "running"), None)
+    if runp:
+        today.append(f'<b>दशा:</b> {e(runp["lord_hi"])} महादशा' + (f', {e(PLANETS_HI[ad["lord"]])} अंतर्दशा ({_d(ad["end"])} तक)' if ad else "")
+                     + f' — {e(runp["profile"]["tag_hi"])}; सक्रिय क्षेत्र: {e(", ".join(t["themes_hi"][0] for t in runp["profile"]["themes"][:2]))}।')
+    for nm in ("Saturn", "Jupiter"):
+        r = next((x for x in go["planets"] if x["name"] == nm), None)
+        if r and r.get("text_hi"):
+            today.append(e(r["text_hi"]))
+    if ss["active"]:
+        today.append(f'<b>साढ़ेसाती</b> चल रही है ({ {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] } चरण); धैर्य और अनुशासन का समय माना जाता है।')
+    ing = (chart.get("transit_calendar") or {}).get("ingress") or []
+    if ing:
+        g = ing[0]; today.append(f'<b>आगे:</b> {e(g["date"])} को {e(g["planet_hi"])} {e(g["to_sign_hi"])} में (चंद्र से {g["house_from_moon"]}वाँ)।')
+    today_html = '<p><b>आज क्या ख़ास है</b></p><ul>' + "".join(f"<li>{t}</li>" for t in today) + "</ul>" if today else ""
     brand_html = ""
     if brand and brand.get("brand_name"):
         bits = [e(brand["brand_name"])] + [e(brand[k]) for k in ("phone", "website", "address") if brand.get(k)]
@@ -217,7 +246,9 @@ def render(chart: dict, brand: dict | None = None) -> str:
 <title>कुंडली रिपोर्ट — {e(name)}</title>
 <style>
 @page {{ size: A4; margin: 14mm; }}
-.two {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }} .two table th {{ width:45%; }}
+.two {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }}
+.tiles {{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:6px 0 10px; }} .tile {{ border:1px solid #d8c8a8; border-radius:8px; padding:6px 8px; }}
+.tile .k {{ font-size:10px; color:#6b5a44; }} .tile .v {{ font-size:14px; font-weight:700; }} .tile .s {{ font-size:10px; color:#6b5a44; }} .two table th {{ width:45%; }}
 body {{ font-family: 'Noto Sans Devanagari','Noto Serif Devanagari','FreeSans','Mangal',sans-serif; color:#2b2118; font-size:12.5px; line-height:1.55; }}
 h1 {{ font-size:22px; margin:0 0 2px; color:#7a4a12; }} h2 {{ font-size:15px; margin:18px 0 6px; color:#7a4a12; border-bottom:1px solid #d8c8a8; padding-bottom:2px; page-break-after:avoid; }}
 .meta {{ color:#6b5a44; }} .banner {{ background:#fff4d6; border:1px solid #e3c878; padding:6px 10px; border-radius:6px; margin:10px 0; font-size:11.5px; }}
@@ -233,6 +264,8 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 {warn_html}
 
 <h2>सारांश</h2>
+{tiles_html}
+{today_html}
 <table class="sum">
 <tr><td>लग्न</td><td>{e(lg["sign_name_hi"])} {e(lg["dms"])} · {e(lg["nakshatra_hi"])} पाद {lg["pada"]} · स्वामी {e(PLANETS_HI[lg["lord"]])}</td></tr>
 <tr><td>चंद्र राशि / नक्षत्र</td><td>{e(moon["sign_name_hi"])} · {e(moon["nakshatra_hi"])} पाद {moon["pada"]}</td></tr>
