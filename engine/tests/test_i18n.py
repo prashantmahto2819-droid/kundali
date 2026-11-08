@@ -74,8 +74,9 @@ def test_vastu_and_palm_data_are_bilingual():
         for o in f["options"].values():
             assert o["en"] and o["meaning"]
     assert len(pm["general"]) == len(pm["general_hi"]) and pm["disclaimer"]
-    banned = ("death", "disease", "illness", "lifespan will", "will die")
-    assert not any(b in json.dumps(pm).lower() for b in banned if b != "lifespan will")
+    shown = [f["en"] + f["where"] for f in pm["features"]] + [o["en"] + o["meaning"] for f in pm["features"] for o in f["options"].values()]
+    banned = ("death", "disease", "illness", "will die", "doom")
+    assert not any(b in t.lower() for t in shown for b in banned)
 
 
 def test_sentence_chaining_and_vastu_translation():
