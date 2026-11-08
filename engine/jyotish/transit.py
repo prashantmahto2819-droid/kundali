@@ -6,7 +6,7 @@ We combine that with the planet's ashtakavarga points in the sign it is transiti
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .constants import PLANETS, PLANETS_HI, SIGNS, SIGNS_HI
 from .core import ayanamsa, sign_of
@@ -81,3 +81,60 @@ def gochara(chart: dict, now_pos: dict[str, dict], when: datetime) -> dict:
                        "हमने इसे उस राशि में ग्रह के अष्टकवर्ग बिंदुओं (4 या अधिक = सहायक) से मिलाया है। "
                        "‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध अभी लागू नहीं है; "
                        "यह दिशा-संकेत है, भविष्यवाणी नहीं।")}
+
+
+# ---- 12-month transit calendar ------------------------------------------------------------------
+from functools import lru_cache
+
+
+@lru_cache(maxsize=64)
+def _slow_ingress(first_iso: str, months: int, system: str) -> tuple:
+    """Sign-ingress dates of the slow planets from a daily scan on the analytic backend (cached per start month)."""
+    from datetime import timedelta
+    from .ephemeris import AnalyticBackend
+    fast = AnalyticBackend()
+    first = datetime.strptime(first_iso, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+
+    def signs(dt):
+        jd_ut = julian_day(dt)
+        jd_tt = jd_ut + delta_t(year_fraction(dt)) / 86400.0
+        pos = fast.positions(jd_tt)
+        pos["Rahu"] = mean_node(jd_tt)
+        pos["Ketu"] = norm360(pos["Rahu"] + 180.0)
+        ayan = ayanamsa(jd_tt, system)
+        return {p: sign_of(norm360(pos[p] - ayan)) for p in ("Jupiter", "Saturn", "Rahu", "Ketu", "Mars")}
+    out, prev, day = [], signs(first), first
+    end = first + timedelta(days=int(30.5 * months) + 1)
+    while day < end:
+        day += timedelta(days=1)
+        cur = signs(day)
+        for p, sg in cur.items():
+            if sg != prev[p]:
+                out.append({"planet": p, "date": day.strftime("%Y-%m-%d"), "from": prev[p], "to": sg})
+        prev = cur
+    return tuple(out)
+def transit_calendar(chart: dict, start: datetime, backend, system: str = "lahiri", months: int = 12) -> dict:
+    """Month-by-month signs of all planets (from the main backend) plus sign-ingress dates of the slow planets
+    found by a daily scan on the fast analytic backend (accurate to about a day for Saturn)."""
+    from datetime import timedelta
+    from .ephemeris import AnalyticBackend
+    moon_sign = next(p for p in chart["planets"] if p["name"] == "Moon")["sign"]
+    lagna_sign = chart["lagna"]["sign"]
+    rows = []
+    first = start.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    for i in range(months):
+        y, m = first.year + (first.month - 1 + i) // 12, (first.month - 1 + i) % 12 + 1
+        when = first.replace(year=y, month=m)
+        pos = positions_at(when, backend, system)
+        rows.append({"month": when.strftime("%Y-%m"), "planets": {
+            p: {"sign": v["sign"], "sign_name_hi": SIGNS_HI[v["sign"]], "sign_name": SIGNS[v["sign"]],
+                "house_from_moon": (v["sign"] - moon_sign) % 12 + 1, "house_from_lagna": (v["sign"] - lagna_sign) % 12 + 1,
+                "retrograde": v["retrograde"]} for p, v in pos.items()}})
+    ingress = [{**g, "house_from_moon": (g["to"] - moon_sign) % 12 + 1, "house_from_lagna": (g["to"] - lagna_sign) % 12 + 1,
+                "from_sign_hi": SIGNS_HI[g["from"]], "to_sign": SIGNS[g["to"]], "to_sign_hi": SIGNS_HI[g["to"]], "planet_hi": PLANETS_HI[g["planet"]]}
+               for g in _slow_ingress(first.strftime("%Y-%m-%d"), months, system)]
+    for g in ingress:
+        g.pop("from"), g.pop("to")
+    return {"from": first.strftime("%Y-%m-%d"), "months": rows, "ingress": ingress,
+            "note_hi": "हर महीने की पहली तारीख़ (UTC) की ग्रह-राशियाँ, और धीमे ग्रहों (गुरु, शनि, राहु-केतु, मंगल) के राशि-प्रवेश की तारीख़ें (±1 दिन)। चंद्र से भाव गोचर-फल के लिए, लग्न से भाव कुंडली के लिए।",
+            "note_en": "Planet signs on the 1st of each month (UTC) and sign-ingress dates of the slow planets (Jupiter, Saturn, Rahu-Ketu, Mars), accurate to about a day. House from the Moon is for transit results, from the Lagna for the chart."}

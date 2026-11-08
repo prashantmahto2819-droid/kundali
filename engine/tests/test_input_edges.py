@@ -27,7 +27,7 @@ def test_warnings_in_chart_and_report():
     assert "time_ambiguous" in codes(compute_chart("1990-10-28", "01:30", "Europe/London", 51.5, -0.1))
     assert "polar_latitude" in codes(compute_chart("2000-06-21", "12:00", "UTC", 78.2, 15.6))
     assert "date_outside_verified_range" in codes(compute_chart("2150-01-01", "12:00", "UTC", 28.6, 77.2))
-    assert codes(compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)) == set()
+    assert codes(compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)) <= {"birth_time_sensitive"}   # navamsa lagna 5 min
     html = handlers.report_from_payload({"date": "1990-03-25", "time": "01:30", "tz": "Europe/London", "lat": 51.5, "lon": -0.1})
     assert "⚠" in html
 

@@ -468,6 +468,25 @@
 "तत्व": "Element (tattva)",
 "नाम अक्षर": "Name syllable",
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
+"जन्म-समय की संवेदनशीलता": "Birth-time sensitivity",
+"पहले": "earlier",
+"बाद": "later",
+"स्थिर (15 मिनट तक)": "stable (up to 15 min)",
+"सावधान (5-15 मिनट)": "caution (5-15 min)",
+"संवेदनशील (5 मिनट से कम)": "sensitive (under 5 min)",
+"स्थिर": "stable",
+"सावधान": "caution",
+"संवेदनशील": "sensitive",
+"लग्न राशि": "Lagna sign",
+"नवांश लग्न": "Navamsa Lagna",
+"चंद्र राशि": "Moon sign",
+"चंद्र नक्षत्र (दशा स्वामी)": "Moon nakshatra (dasha lord)",
+"आगामी 12 महीनों का गोचर": "Transits of the next 12 months",
+"मास-वार ग्रह-राशियाँ": "Month-by-month planet signs",
+"अगले 12 महीनों में धीमे ग्रहों का कोई राशि-प्रवेश नहीं।": "No sign ingress of the slow planets in the next 12 months.",
+"धीमे ग्रहों का कोई राशि-प्रवेश नहीं।": "No sign ingress of the slow planets.",
+"माह": "Month",
+"राशि के साथ छोटा अंक = चंद्र से भाव। व = वक्री।": "Small number next to the sign = house from the Moon. R = retrograde.",
 "दोष:": "Dosha:",
 "(परिहार मिला)": "(cancelled)",
 "परिहार:": "Parihara:",
@@ -1641,6 +1660,8 @@
 "दे दो चा ची": "De Do Cha Chi",
 "मास असली अमावस्याओं से, अधिक मास सहित (अमांत और पूर्णिमांत दोनों नाम); संवत् चैत्र शुक्ल से। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।": "Masa from the actual new moons incl. adhika masa (amanta and purnimanta names); samvat from Chaitra Shukla. Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one.",
 "भाव-चलित (श्रीपति): लग्न और दशम (MC) के बीच के चतुर्थांशों को तीन भागों में बाँटकर भाव-मध्य निकाले गए हैं। जो ग्रह राशि-भाव से अलग भाव में दिखें, वे भाव-संधि के पास हैं; फलादेश में दोनों देखे जाते हैं।": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both.",
+"जन्म-समय की संवेदनशीलता: बताया गया है कि घड़ी में कितने मिनट की चूक से लग्न, नवांश लग्न, चंद्र राशि या नक्षत्र बदल जाता है। खाली का मतलब है 3 घंटे के भीतर नहीं बदलता।": "Birth-time sensitivity: how many minutes of clock error would change the Lagna, navamsa Lagna, Moon sign or nakshatra. Blank means no change within 3 hours.",
+"हर महीने की पहली तारीख़ (UTC) की ग्रह-राशियाँ, और धीमे ग्रहों (गुरु, शनि, राहु-केतु, मंगल) के राशि-प्रवेश की तारीख़ें (±1 दिन)। चंद्र से भाव गोचर-फल के लिए, लग्न से भाव कुंडली के लिए।": "Planet signs on the 1st of each month (UTC) and sign-ingress dates of the slow planets (Jupiter, Saturn, Rahu-Ketu, Mars), accurate to about a day. House from the Moon is for transit results, from the Lagna for the chart.",
 "विष्कम्भ": "Vishkambha",
 "शिव": "Shiva",
 "व्याघात": "Vyaghata",
@@ -1996,6 +2017,26 @@
 [
 "{1} ({2} पाद {3}) · चंद्र राशि:",
 "{1} ({2} pada {3}) · Moon sign:"
+],
+[
+"{1} मिनट",
+"{1} min"
+],
+[
+"(चंद्र से {1}, लग्न से {2})",
+"(from Moon {1}, from Lagna {2})"
+],
+[
+"⚠ {1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
+"⚠ The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."
+],
+[
+"{1}: {2} {3} → {4} (चंद्र से {5}, लग्न से {6})",
+"{1}: {2} {3} → {4} (from Moon {5}, from Lagna {6})"
+],
+[
+"{1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
+"The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."
 ],
 [
 "परिहार सहित योग: {1} / 36",

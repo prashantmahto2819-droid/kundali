@@ -86,6 +86,9 @@ put(_patri.NOTE_HI, _patri.NOTE_EN)
 from jyotish import compute_chart as _cc  # noqa: E402
 _ch = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)["chalit"]
 put(_ch["note_hi"], _ch["note_en"])
+_full = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+put(_full["sensitivity"]["note_hi"], _full["sensitivity"]["note_en"])
+put(_full["transit_calendar"]["note_hi"], _full["transit_calendar"]["note_en"])
 for _en, _hi in _patri.GHATA_HI.items():
     put(_hi, _en)
 put("अधिक", "Adhika")
@@ -194,7 +197,12 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "दोष:": "Dosha:", "(परिहार मिला)": "(cancelled)", "परिहार:": "Parihara:",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "जन्म-समय की संवेदनशीलता": "Birth-time sensitivity", "पहले": "earlier", "बाद": "later",
+ "स्थिर (15 मिनट तक)": "stable (up to 15 min)", "सावधान (5-15 मिनट)": "caution (5-15 min)", "संवेदनशील (5 मिनट से कम)": "sensitive (under 5 min)",
+ "स्थिर": "stable", "सावधान": "caution", "संवेदनशील": "sensitive", "लग्न राशि": "Lagna sign", "नवांश लग्न": "Navamsa Lagna", "चंद्र राशि": "Moon sign",
+ "चंद्र नक्षत्र (दशा स्वामी)": "Moon nakshatra (dasha lord)", "आगामी 12 महीनों का गोचर": "Transits of the next 12 months", "मास-वार ग्रह-राशियाँ": "Month-by-month planet signs",
+ "अगले 12 महीनों में धीमे ग्रहों का कोई राशि-प्रवेश नहीं।": "No sign ingress of the slow planets in the next 12 months.", "धीमे ग्रहों का कोई राशि-प्रवेश नहीं।": "No sign ingress of the slow planets.",
+ "माह": "Month", "राशि के साथ छोटा अंक = चंद्र से भाव। व = वक्री।": "Small number next to the sign = house from the Moon. R = retrograde.", "दोष:": "Dosha:", "(परिहार मिला)": "(cancelled)", "परिहार:": "Parihara:",
  "भकूट या नाड़ी दोष नहीं।": "No Bhakoot or Nadi dosha.", "भकूट दोष": "Bhakoot dosha", "नाड़ी दोष": "Nadi dosha",
  "एक ही राशि, अलग नक्षत्र": "same Moon sign, different nakshatras", "एक ही नक्षत्र, अलग चरण": "same nakshatra, different padas",
  "एक ही नक्षत्र, अलग राशि": "same nakshatra in different signs", "दोनों का जन्म-नक्षत्र एक ही है": "same birth nakshatra", "भाव-मध्य (12)": "House middles (12)", "सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
@@ -381,6 +389,11 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
+EXTRA_PATTERNS += [("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
+                   ("⚠ {1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
+                    "⚠ The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."), ("{1}: {2} {3} → {4} (चंद्र से {5}, लग्न से {6})", "{1}: {2} {3} → {4} (from Moon {5}, from Lagna {6})"),
+                   ("{1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
+                    "The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care.")]
 EXTRA_PATTERNS += [("परिहार सहित योग: {1} / 36", "Total with parihara: {1} / 36"), ("{1} दोष (परिहार मिला)", "{1} dosha (cancelled)"), ("{1} दोष", "{1} dosha"),
                    ("दोनों राशियों का स्वामी {1} है", "both Moon-sign lords are {1}"), ("राशि-स्वामी {1} और {2} परस्पर मित्र हैं", "Moon-sign lords {1} and {2} are mutual friends")]
 EXTRA_PATTERNS += [("{1}: राशि-भाव {2} → चलित भाव {3}", "{1}: rasi house {2} → chalit house {3}"), ("दशम भाव-मध्य (MC): {1} {2}", "Tenth house middle (MC): {1} {2}"), ("दशम भाव-मध्य (MC):", "Tenth house middle (MC):")]

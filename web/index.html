@@ -115,6 +115,7 @@
       <div class="card"><b>जन्म विवरण</b><div id="patri1"></div></div>
       <div class="card"><b>अवकहड़ा चक्र</b><div id="patri2"></div></div>
     </div>
+    <div class="card"><b>जन्म-समय की संवेदनशीलता</b><div class="muted" style="font-size:.85rem" id="senswhy"></div><div id="sens"></div></div>
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
@@ -155,6 +156,7 @@
     </div>
     </section>
     <section class="sub" id="s-gochara">
+    <div class="card"><b>आगामी 12 महीनों का गोचर</b><div class="muted" style="font-size:.85rem" id="tcwhy"></div><div id="tcingress"></div><details><summary>मास-वार ग्रह-राशियाँ</summary><div id="tctable" style="overflow-x:auto"></div></details></div>
     <div class="card"><b>अष्टकवर्ग</b>
       <div class="muted" style="font-size:.85rem" id="avwhy"></div>
       <div id="avsav" style="overflow-x:auto"></div>
@@ -470,6 +472,19 @@ function render(c) {
   $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
   renderPatri(c);
+  if (c.sensitivity) {
+    const S = c.sensitivity; $('senswhy').textContent = S.note_hi;
+    const f = v => v == null ? '—' : v + ' मिनट';
+    $('sens').innerHTML = `<table><tr><th></th><th>पहले</th><th>बाद</th><th>स्थिति</th></tr>` + Object.values(S.items).map(v =>
+      `<tr><td>${esc(v.label_hi)}</td><td>${f(v.minutes_earlier)}</td><td>${f(v.minutes_later)}</td><td class="${v.stable_within_15_min ? 'yes' : ''}">${v.stable_within_15_min ? 'स्थिर (15 मिनट तक)' : v.stable_within_5_min ? 'सावधान (5-15 मिनट)' : 'संवेदनशील (5 मिनट से कम)'}</td></tr>`).join('') + '</table>';
+  }
+  if (c.transit_calendar) {
+    const T = c.transit_calendar; $('tcwhy').textContent = T.note_hi;
+    $('tcingress').innerHTML = T.ingress.length ? '<ul>' + T.ingress.map(g => `<li><b>${esc(g.date)}</b>: ${esc(g.planet_hi)} ${esc(g.from_sign_hi)} → <b>${esc(g.to_sign_hi)}</b> (चंद्र से ${g.house_from_moon}, लग्न से ${g.house_from_lagna})</li>`).join('') + '</ul>' : '<p class="muted">अगले 12 महीनों में धीमे ग्रहों का कोई राशि-प्रवेश नहीं।</p>';
+    const P = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
+    $('tctable').innerHTML = `<table><tr><th>माह</th>${P.map(p => `<th>${esc(c.planets.find(x => x.name === p).name_hi)}</th>`).join('')}</tr>` +
+      T.months.map(m => `<tr><td>${esc(m.month)}</td>${P.map(p => `<td>${esc(m.planets[p].sign_name_hi)}${m.planets[p].retrograde && !['Rahu','Ketu'].includes(p) ? '<sup>व</sup>' : ''}<span class="muted"> ${m.planets[p].house_from_moon}</span></td>`).join('')}</tr>`).join('') + '</table><div class="muted" style="font-size:.8rem">राशि के साथ छोटा अंक = चंद्र से भाव। व = वक्री।</div>';
+  }
   if (c.chalit) {
     const ch = c.chalit;
     $('chwhy').textContent = ch.note_hi;

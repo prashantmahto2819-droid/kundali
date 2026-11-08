@@ -153,6 +153,16 @@ def render(chart: dict) -> str:
                          ["घात प्रहर", str(g["prahar"])], ["घात चंद्र", e(g["chandra_hi"])], ["स्त्री घात चंद्र", e(g["stri_chandra_hi"])]]
         patri_html = (f'<h2>जन्म विवरण</h2><div class="two">{_table(["", ""], birth_rows)}{_table(["", ""], ava_rows)}</div>'
                       f'<p class="small">{e(P["note_hi"])}</p>')
+    S, T = chart.get("sensitivity"), chart.get("transit_calendar")
+    sens_html = tc_html = ""
+    if S:
+        f = lambda v: "—" if v is None else f"{v} मिनट"
+        sens_rows = [[e(v["label_hi"]), f(v["minutes_earlier"]), f(v["minutes_later"]),
+                      "स्थिर" if v["stable_within_15_min"] else ("सावधान" if v["stable_within_5_min"] else "संवेदनशील")] for v in S["items"].values()]
+        sens_html = f'<h2>जन्म-समय की संवेदनशीलता</h2>{_table(["", "पहले", "बाद", "स्थिति"], sens_rows)}<p class="small">{e(S["note_hi"])}</p>'
+    if T:
+        ing = "".join(f'<li><b>{e(g["date"])}</b>: {e(g["planet_hi"])} {e(g["from_sign_hi"])} → <b>{e(g["to_sign_hi"])}</b> (चंद्र से {g["house_from_moon"]}, लग्न से {g["house_from_lagna"]})</li>' for g in T["ingress"])
+        tc_html = f'<h2>आगामी 12 महीनों का गोचर</h2><ul>{ing or "<li>धीमे ग्रहों का कोई राशि-प्रवेश नहीं।</li>"}</ul><p class="small">{e(T["note_hi"])}</p>'
     ch = chart.get("chalit")
     chalit_html = ""
     if ch:
@@ -204,6 +214,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 {_table(["ग्रह", "राशि", "अंश", "भाव", "नक्षत्र (पाद)", "स्थिति"], planets_rows)}
 
 {chalit_html}
+{sens_html}
 <h2>पंचांग</h2>
 <table class="sum">
 <tr><td>वार</td><td>{e(pc["vara"]["name_hi"])}</td></tr>
@@ -212,6 +223,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <tr><td>योग / करण</td><td>{e(pc["yoga"]["name_hi"])} / {e(pc["karana"]["name_hi"])}</td></tr>
 </table>{day_html}
 
+{tc_html}
 <h2>विंशोत्तरी दशा</h2>
 <p>जन्म के समय {e(PLANETS_HI[chart["dasha"]["birth_nakshatra_lord"]])} की दशा शेष: {chart["dasha"]["balance_at_birth_years"]:.2f} वर्ष (वर्ष = {chart["dasha"]["year_days"]} दिन)।</p>
 {_table(["महादशा", "आरंभ", "समाप्ति"], maha_rows)}
