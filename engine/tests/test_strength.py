@@ -124,3 +124,13 @@ def test_abda_masa_yuddha():
     wars = st.yuddha_adjust(rows, {"Jupiter": 100.0, "Venus": 100.5, "Mars": 10.0, "Mercury": 200.0, "Saturn": 300.0})
     assert wars == [{"winner": "Jupiter", "loser": "Venus", "gap_deg": 0.5, "adjust": round(100 / (190.4 - 16.6), 2)}]
     assert rows[0]["yuddha"] > 0 and rows[1]["yuddha"] == -rows[0]["yuddha"]
+
+
+def test_ishta_kashta():
+    import math
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    for r in c["strength"]["planets"]:
+        u, ch = min(r["uccha"], 60.0), min(r["cheshta"], 60.0)
+        assert r["ishta"] == pytest.approx(math.sqrt(u * ch), abs=0.05)
+        assert r["kashta"] == pytest.approx(math.sqrt((60 - u) * (60 - ch)), abs=0.05)
+        assert 0 <= r["ishta"] <= 60 and 0 <= r["kashta"] <= 60

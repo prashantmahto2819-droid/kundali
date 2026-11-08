@@ -43,7 +43,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 
 - [x] Vastu v1 (room x direction rating, 16 rooms, Hindi). Pending: floor-plan/plot analysis, 16-zone model, scholar review.
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
-- [x] Shadbala v2: cheshta bala now for all seven (BPHS half-sum kendra with Meeus mean longitudes); ranking by full total. Abda, masa (ahargana lords) and yuddha (planetary war) added: Shadbala v1 complete; pending ishta/kashta phala and scholar check of conventions.
+- [x] Shadbala v2: cheshta bala now for all seven (BPHS half-sum kendra with Meeus mean longitudes); ranking by full total. Abda, masa (ahargana lords) and yuddha (planetary war) added: Shadbala v1 complete; ishta/kashta phala added; pending scholar check of conventions.
 - [x] Rule library v1: 9 planets x 12 houses (Hindi, draft, tendency language). Pending: English text, sign/dignity/aspect rules, classical citations, scholar sign-off.
 - [x] Dignity (exalted/debilitated/own) and retrograde rules v1 (26, Hindi, draft). Pending: neecha-bhanga, sign/aspect/conjunction rules, English text.
 - [x] Hindi/English toggle (web page + report + vastu + palmistry data; dictionary-based, all-or-nothing)

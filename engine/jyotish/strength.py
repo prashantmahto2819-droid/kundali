@@ -309,7 +309,10 @@ def strength(chart: dict) -> dict:
         parts = {"sthana": sum(sthana.values()), "dig": dig_bala(n, lon, lagna_lon), "kala": sum(kala.values()),
                  "cheshta": cheshta or 0.0, "naisargika": NAISARGIKA[n], "drik": drik_bala(n, lons)}
         total = sum(parts.values())
-        rows.append({"name": n, "name_hi": names_hi[n],
+        # Ishta / Kashta phala (BPHS): geometric means of uccha and cheshta bala (each capped at 60)
+        u, ch = min(sthana["uccha"], 60.0), min(cheshta, 60.0)
+        ishta, kashta = math.sqrt(u * ch), math.sqrt((60.0 - u) * (60.0 - ch))
+        rows.append({"name": n, "name_hi": names_hi[n], "ishta": round(ishta, 2), "kashta": round(kashta, 2),
                      "uccha": round(sthana["uccha"], 2), "kendradi": round(sthana["kendradi"], 2),
                      **{k: round(v, 2) for k, v in parts.items()},
                      "detail": {"sthana": {k: round(v, 2) for k, v in sthana.items()},

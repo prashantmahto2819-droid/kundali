@@ -198,7 +198,7 @@ UI = {
  "भकूट या नाड़ी दोष नहीं।": "No Bhakoot or Nadi dosha.", "भकूट दोष": "Bhakoot dosha", "नाड़ी दोष": "Nadi dosha",
  "एक ही राशि, अलग नक्षत्र": "same Moon sign, different nakshatras", "एक ही नक्षत्र, अलग चरण": "same nakshatra, different padas",
  "एक ही नक्षत्र, अलग राशि": "same nakshatra in different signs", "दोनों का जन्म-नक्षत्र एक ही है": "same birth nakshatra", "भाव-मध्य (12)": "House middles (12)", "सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
- "चेष्टा": "Cheshta", "रूप": "Rupas", "स्थान": "Sthana", "काल": "Kala", "दृग्": "Drik",
+ "चेष्टा": "Cheshta", "इष्ट": "Ishta", "कष्ट": "Kashta", "रूप": "Rupas", "स्थान": "Sthana", "काल": "Kala", "दृग्": "Drik",
  # tabs
  "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
  "पंचांग व मुहूर्त": "Panchang & muhurta", "योग व संकेत": "Yogas & indications", "दशा व समय-रेखा": "Dasha & timeline",
