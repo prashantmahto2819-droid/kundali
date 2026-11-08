@@ -1,0 +1,114 @@
+{
+ "_comment": "12 rashis: element, modality, lord are traditional; traits are tendencies in own wording (draft).",
+ "review_status": "draft",
+ "signs": [
+  {
+   "index": 0,
+   "name": "Mesha",
+   "hi": "मेष",
+   "element_hi": "अग्नि",
+   "modality_hi": "चर",
+   "lord": "Mars",
+   "traits_hi": "साहसी, सीधा और पहल करने वाला; धैर्य और सोच-समझकर चलने का अभ्यास उपयोगी।"
+  },
+  {
+   "index": 1,
+   "name": "Vrishabha",
+   "hi": "वृषभ",
+   "element_hi": "पृथ्वी",
+   "modality_hi": "स्थिर",
+   "lord": "Venus",
+   "traits_hi": "स्थिर, इंद्रिय-सुख और सुंदरता का प्रेमी; धीमा पर टिकाऊ; बदलाव से हिचक।"
+  },
+  {
+   "index": 2,
+   "name": "Mithuna",
+   "hi": "मिथुन",
+   "element_hi": "वायु",
+   "modality_hi": "द्विस्वभाव",
+   "lord": "Mercury",
+   "traits_hi": "जिज्ञासु, बातूनी और बहुमुखी; एक ही चीज़ पर टिकने का अभ्यास उपयोगी।"
+  },
+  {
+   "index": 3,
+   "name": "Karka",
+   "hi": "कर्क",
+   "element_hi": "जल",
+   "modality_hi": "चर",
+   "lord": "Moon",
+   "traits_hi": "भावुक, देखभाल करने वाला और घर-परिवार से जुड़ा; सुरक्षा की गहरी चाह।"
+  },
+  {
+   "index": 4,
+   "name": "Simha",
+   "hi": "सिंह",
+   "element_hi": "अग्नि",
+   "modality_hi": "स्थिर",
+   "lord": "Sun",
+   "traits_hi": "आत्मविश्वासी, उदार और मान चाहने वाला; नेतृत्व की स्वाभाविक प्रवृत्ति।"
+  },
+  {
+   "index": 5,
+   "name": "Kanya",
+   "hi": "कन्या",
+   "element_hi": "पृथ्वी",
+   "modality_hi": "द्विस्वभाव",
+   "lord": "Mercury",
+   "traits_hi": "विश्लेषणशील, व्यवस्थित और सेवा-भावी; आत्म-आलोचना से बचने की सीख।"
+  },
+  {
+   "index": 6,
+   "name": "Tula",
+   "hi": "तुला",
+   "element_hi": "वायु",
+   "modality_hi": "चर",
+   "lord": "Venus",
+   "traits_hi": "संतुलन, न्याय और सहयोग का पक्षधर; निर्णय में देर की प्रवृत्ति।"
+  },
+  {
+   "index": 7,
+   "name": "Vrishchika",
+   "hi": "वृश्चिक",
+   "element_hi": "जल",
+   "modality_hi": "स्थिर",
+   "lord": "Mars",
+   "traits_hi": "गहरा, तीव्र और रहस्यप्रिय; दृढ़ संकल्प और भावनात्मक गहराई।"
+  },
+  {
+   "index": 8,
+   "name": "Dhanu",
+   "hi": "धनु",
+   "element_hi": "अग्नि",
+   "modality_hi": "द्विस्वभाव",
+   "lord": "Jupiter",
+   "traits_hi": "आशावादी, स्वतंत्रता और ज्ञान का खोजी; स्पष्टवादी।"
+  },
+  {
+   "index": 9,
+   "name": "Makara",
+   "hi": "मकर",
+   "element_hi": "पृथ्वी",
+   "modality_hi": "चर",
+   "lord": "Saturn",
+   "traits_hi": "महत्वाकांक्षी, अनुशासित और व्यावहारिक; लंबी मेहनत से मंज़िल पाने वाला।"
+  },
+  {
+   "index": 10,
+   "name": "Kumbha",
+   "hi": "कुंभ",
+   "element_hi": "वायु",
+   "modality_hi": "स्थिर",
+   "lord": "Saturn",
+   "traits_hi": "स्वतंत्र विचारक, मानवीय और अलग ढंग से सोचने वाला; समूह और समाज से जुड़ाव।"
+  },
+  {
+   "index": 11,
+   "name": "Meena",
+   "hi": "मीन",
+   "element_hi": "जल",
+   "modality_hi": "द्विस्वभाव",
+   "lord": "Jupiter",
+   "traits_hi": "कल्पनाशील, करुणामय और आध्यात्मिक; सीमाएँ तय करना सीखने की सलाह।"
+  }
+ ]
+}

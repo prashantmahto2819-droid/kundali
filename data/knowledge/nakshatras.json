@@ -1,0 +1,411 @@
+{
+ "_comment": "27 nakshatras: lord, deity, symbol are traditional facts; traits are tendency statements in own wording (draft).",
+ "review_status": "draft",
+ "nakshatras": [
+  {
+   "index": 0,
+   "name": "Ashwini",
+   "hi": "अश्विनी",
+   "lord": "Ketu",
+   "deity_hi": "अश्विनी कुमार",
+   "symbol_hi": "घोड़े का सिर",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    0.0,
+    13.3333
+   ],
+   "traits_hi": "तेज़ शुरुआत, उपचार और गति; पहल करने वाला स्वभाव।"
+  },
+  {
+   "index": 1,
+   "name": "Bharani",
+   "hi": "भरणी",
+   "lord": "Venus",
+   "deity_hi": "यम",
+   "symbol_hi": "योनि (जन्म का प्रतीक)",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    13.3333,
+    26.6667
+   ],
+   "traits_hi": "सहनशीलता, ज़िम्मेदारी निभाना और जीवन के गहरे चक्रों की समझ; संयम और तीव्र भावनाएँ।"
+  },
+  {
+   "index": 2,
+   "name": "Krittika",
+   "hi": "कृत्तिका",
+   "lord": "Sun",
+   "deity_hi": "अग्नि",
+   "symbol_hi": "उस्तरा / ज्वाला",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    26.6667,
+    40.0
+   ],
+   "traits_hi": "तीक्ष्णता और शुद्ध करने वाली स्पष्टवादिता; नेतृत्व और आलोचनात्मक दृष्टि।"
+  },
+  {
+   "index": 3,
+   "name": "Rohini",
+   "hi": "रोहिणी",
+   "lord": "Moon",
+   "deity_hi": "ब्रह्मा (प्रजापति)",
+   "symbol_hi": "रथ / बैलगाड़ी",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    40.0,
+    53.3333
+   ],
+   "traits_hi": "सृजन, आकर्षण और पोषण; सौंदर्य और स्थिर वृद्धि की चाह।"
+  },
+  {
+   "index": 4,
+   "name": "Mrigashira",
+   "hi": "मृगशिरा",
+   "lord": "Mars",
+   "deity_hi": "सोम",
+   "symbol_hi": "हिरण का सिर",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    53.3333,
+    66.6667
+   ],
+   "traits_hi": "जिज्ञासु, खोजी मन; यात्रा, सीखने और कोमल चंचलता।"
+  },
+  {
+   "index": 5,
+   "name": "Ardra",
+   "hi": "आर्द्रा",
+   "lord": "Rahu",
+   "deity_hi": "रुद्र",
+   "symbol_hi": "आँसू की बूँद / हीरा",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    66.6667,
+    80.0
+   ],
+   "traits_hi": "भावनात्मक तूफ़ान के बाद की स्पष्टता; शोध, बदलाव और तीव्र बुद्धि।"
+  },
+  {
+   "index": 6,
+   "name": "Punarvasu",
+   "hi": "पुनर्वसु",
+   "lord": "Jupiter",
+   "deity_hi": "अदिति",
+   "symbol_hi": "तरकश / धनुष",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    80.0,
+    93.3333
+   ],
+   "traits_hi": "वापसी, पुनः आरंभ और आशा; सरल, उदार और सहनशील स्वभाव।"
+  },
+  {
+   "index": 7,
+   "name": "Pushya",
+   "hi": "पुष्य",
+   "lord": "Saturn",
+   "deity_hi": "बृहस्पति",
+   "symbol_hi": "गाय का थन / कमल",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    93.3333,
+    106.6667
+   ],
+   "traits_hi": "पोषण, सेवा और मार्गदर्शन; परंपरा में अत्यंत शुभ नक्षत्र माना जाता है।"
+  },
+  {
+   "index": 8,
+   "name": "Ashlesha",
+   "hi": "आश्लेषा",
+   "lord": "Mercury",
+   "deity_hi": "नाग (सर्प)",
+   "symbol_hi": "कुंडली मारे सर्प",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    106.6667,
+    120.0
+   ],
+   "traits_hi": "गहरी सूझ, रहस्य और सम्मोहक वाणी; भीतर की जटिलताओं को समझने की क्षमता।"
+  },
+  {
+   "index": 9,
+   "name": "Magha",
+   "hi": "मघा",
+   "lord": "Ketu",
+   "deity_hi": "पितर",
+   "symbol_hi": "राजसिंहासन",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    120.0,
+    133.3333
+   ],
+   "traits_hi": "वंश, प्रतिष्ठा और राजसी गरिमा; परंपरा और सम्मान का भाव।"
+  },
+  {
+   "index": 10,
+   "name": "Purva Phalguni",
+   "hi": "पूर्वाफाल्गुनी",
+   "lord": "Venus",
+   "deity_hi": "भग",
+   "symbol_hi": "पलंग के अगले पाए / झूला",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    133.3333,
+    146.6667
+   ],
+   "traits_hi": "आनंद, कला और विश्राम; उदारता और रिश्तों में गर्मजोशी।"
+  },
+  {
+   "index": 11,
+   "name": "Uttara Phalguni",
+   "hi": "उत्तराफाल्गुनी",
+   "lord": "Sun",
+   "deity_hi": "अर्यमा",
+   "symbol_hi": "पलंग के पिछले पाए",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    146.6667,
+    160.0
+   ],
+   "traits_hi": "मित्रता, अनुबंध और सेवा; भरोसेमंद सहयोग।"
+  },
+  {
+   "index": 12,
+   "name": "Hasta",
+   "hi": "हस्त",
+   "lord": "Moon",
+   "deity_hi": "सविता",
+   "symbol_hi": "हाथ",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    160.0,
+    173.3333
+   ],
+   "traits_hi": "कुशल हाथ, शिल्प और व्यावहारिक चतुराई; सेवा और उपचार।"
+  },
+  {
+   "index": 13,
+   "name": "Chitra",
+   "hi": "चित्रा",
+   "lord": "Mars",
+   "deity_hi": "त्वष्टा (विश्वकर्मा)",
+   "symbol_hi": "चमकता रत्न / मोती",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    173.3333,
+    186.6667
+   ],
+   "traits_hi": "सौंदर्य-रचना, डिज़ाइन और बारीक कौशल; आकर्षक प्रस्तुति।"
+  },
+  {
+   "index": 14,
+   "name": "Swati",
+   "hi": "स्वाति",
+   "lord": "Rahu",
+   "deity_hi": "वायु",
+   "symbol_hi": "हवा में झूमता नवांकुर",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    186.6667,
+    200.0
+   ],
+   "traits_hi": "स्वतंत्रता, लचीलापन और व्यापार; हवा की तरह अनुकूलन।"
+  },
+  {
+   "index": 15,
+   "name": "Vishakha",
+   "hi": "विशाखा",
+   "lord": "Jupiter",
+   "deity_hi": "इंद्र-अग्नि",
+   "symbol_hi": "विजय-द्वार / कुम्हार का चाक",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    200.0,
+    213.3333
+   ],
+   "traits_hi": "लक्ष्य के प्रति दृढ़ता और प्रतिस्पर्धा; सफलता के लिए एकाग्रता।"
+  },
+  {
+   "index": 16,
+   "name": "Anuradha",
+   "hi": "अनुराधा",
+   "lord": "Saturn",
+   "deity_hi": "मित्र",
+   "symbol_hi": "कमल",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    213.3333,
+    226.6667
+   ],
+   "traits_hi": "मित्रता, भक्ति और सहयोग; दूर रहकर भी रिश्ते निभाने की क्षमता।"
+  },
+  {
+   "index": 17,
+   "name": "Jyeshtha",
+   "hi": "ज्येष्ठा",
+   "lord": "Mercury",
+   "deity_hi": "इंद्र",
+   "symbol_hi": "कुंडल / छत्र",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    226.6667,
+    240.0
+   ],
+   "traits_hi": "वरिष्ठता, संरक्षण और आत्मसम्मान; ज़िम्मेदारी का भार उठाने की प्रवृत्ति।"
+  },
+  {
+   "index": 18,
+   "name": "Mula",
+   "hi": "मूल",
+   "lord": "Ketu",
+   "deity_hi": "निरृति",
+   "symbol_hi": "जड़ों का गुच्छा",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    240.0,
+    253.3333
+   ],
+   "traits_hi": "जड़ तक पहुँचने की खोज; पुराने ढाँचे तोड़कर नींव नए सिरे से बनाने की प्रवृत्ति।"
+  },
+  {
+   "index": 19,
+   "name": "Purva Ashadha",
+   "hi": "पूर्वाषाढ़ा",
+   "lord": "Venus",
+   "deity_hi": "आपः (जल)",
+   "symbol_hi": "सूप / हाथी का दाँत",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    253.3333,
+    266.6667
+   ],
+   "traits_hi": "अजेय उत्साह, प्रेरणा और अनुनय; विश्वास के साथ आगे बढ़ना।"
+  },
+  {
+   "index": 20,
+   "name": "Uttara Ashadha",
+   "hi": "उत्तराषाढ़ा",
+   "lord": "Sun",
+   "deity_hi": "विश्वेदेव",
+   "symbol_hi": "हाथी का दाँत / पलंग के पाए",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    266.6667,
+    280.0
+   ],
+   "traits_hi": "स्थायी विजय, सिद्धांत और धैर्य; लंबे समय की जीत की प्रवृत्ति।"
+  },
+  {
+   "index": 21,
+   "name": "Shravana",
+   "hi": "श्रवण",
+   "lord": "Moon",
+   "deity_hi": "विष्णु",
+   "symbol_hi": "कान / तीन पदचिह्न",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    280.0,
+    293.3333
+   ],
+   "traits_hi": "सुनना, सीखना और ज्ञान का संचार; परंपरा का वहन।"
+  },
+  {
+   "index": 22,
+   "name": "Dhanishta",
+   "hi": "धनिष्ठा",
+   "lord": "Mars",
+   "deity_hi": "वसु",
+   "symbol_hi": "ढोल",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    293.3333,
+    306.6667
+   ],
+   "traits_hi": "लय, संगीत और समृद्धि; महत्वाकांक्षा और समूह में सक्रियता।"
+  },
+  {
+   "index": 23,
+   "name": "Shatabhisha",
+   "hi": "शतभिषा",
+   "lord": "Rahu",
+   "deity_hi": "वरुण",
+   "symbol_hi": "खाली घेरा / सौ वैद्य",
+   "gana": "Rakshasa",
+   "gana_hi": "राक्षस",
+   "span_deg": [
+    306.6667,
+    320.0
+   ],
+   "traits_hi": "उपचार, गोपनीयता और अकेले शोध; स्वतंत्र और रहस्यमय स्वभाव।"
+  },
+  {
+   "index": 24,
+   "name": "Purva Bhadrapada",
+   "hi": "पूर्वभाद्रपद",
+   "lord": "Jupiter",
+   "deity_hi": "अज एकपाद",
+   "symbol_hi": "तलवार / शय्या के अगले पाए",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    320.0,
+    333.3333
+   ],
+   "traits_hi": "तीव्र आदर्शवाद, तपस्या और परिवर्तन की आग; अलग राह।"
+  },
+  {
+   "index": 25,
+   "name": "Uttara Bhadrapada",
+   "hi": "उत्तरभाद्रपद",
+   "lord": "Saturn",
+   "deity_hi": "अहिर्बुध्न्य",
+   "symbol_hi": "शय्या के पिछले पाए / जुड़वाँ",
+   "gana": "Manushya",
+   "gana_hi": "मनुष्य",
+   "span_deg": [
+    333.3333,
+    346.6667
+   ],
+   "traits_hi": "गहरी शांति, करुणा और अनुशासित साधना; धैर्य और गहराई।"
+  },
+  {
+   "index": 26,
+   "name": "Revati",
+   "hi": "रेवती",
+   "lord": "Mercury",
+   "deity_hi": "पूषा",
+   "symbol_hi": "मछली / ढोल",
+   "gana": "Deva",
+   "gana_hi": "देव",
+   "span_deg": [
+    346.6667,
+    360.0
+   ],
+   "traits_hi": "सुरक्षा, करुणा और यात्रा का अंत; संरक्षक और संवेदनशील स्वभाव।"
+  }
+ ]
+}

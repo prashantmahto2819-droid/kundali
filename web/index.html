@@ -150,7 +150,7 @@
 const API = new URLSearchParams(location.search).get('api') || '';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let chart = null, KB = {planets:null, houses:null};
+let chart = null, KB = {planets:null, houses:null, nakshatras:null, signs:null};
 
 $('city').addEventListener('change', e => {
   if (!e.target.value) return;
@@ -244,14 +244,22 @@ async function renderNumerology(body) {
 
 function planetMap() { return Object.fromEntries(chart.planets.map(p => [p.name, p])); }
 
+function rashiNakInfo(p) {
+  const sg = KB.signs?.signs?.[p.sign], nk = KB.nakshatras?.nakshatras?.[p.nakshatra_index ?? -1] ||
+    KB.nakshatras?.nakshatras?.find(x => x.hi === p.nakshatra_hi || x.name === p.nakshatra);
+  let out = '';
+  if (sg) out += `<p><b>राशि ${esc(sg.hi)}:</b> ${esc(sg.element_hi)} तत्व, ${esc(sg.modality_hi)} स्वभाव, स्वामी ${esc(planetMap()[sg.lord]?.name_hi || sg.lord)}। ${esc(sg.traits_hi)}</p>`;
+  if (nk) out += `<p><b>नक्षत्र ${esc(nk.hi)}:</b> स्वामी ${esc(planetMap()[nk.lord]?.name_hi || nk.lord)}, देवता ${esc(nk.deity_hi)}, प्रतीक ${esc(nk.symbol_hi)}, गण ${esc(nk.gana_hi)}। ${esc(nk.traits_hi)}</p>`;
+  return out;
+}
 function showPlanet(name) {
   const k = KB.planets?.planets?.[name], p = planetMap()[name];
   if (!k || !p) return;
   $('learn').innerHTML = `<h3>${esc(k.name_hi)} — ${esc(k.name_en)}</h3>
     <p><b>आपकी कुंडली में:</b> ${esc(p.sign_name_hi)} राशि, ${esc(p.dms)}, भाव ${p.house}, ${esc(p.nakshatra_hi)} नक्षत्र (पाद ${p.pada})${p.retrograde?', वक्री':''}${p.dignity?', '+esc(p.dignity):''}</p>
     <p><b>कारकत्व:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>
-    <p><b>क्यों:</b> ${esc(k.why_en)}</p>
-    <p class="muted">स्थिति: ${esc(k.nature)}. दृष्टि भाव: ${p.aspects_houses.join(', ')}.</p>`;
+    <p><b>क्यों:</b> ${esc(k.why_hi || k.why_en)}</p>${rashiNakInfo(p)}
+    <p class="muted">स्वभाव: ${esc(k.nature_hi || k.nature)}. दृष्टि भाव: ${p.aspects_houses.join(', ')}.</p>`;
   $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function showHouse(h, kind) {
@@ -343,8 +351,9 @@ $('f').addEventListener('submit', async e => {
   const body = {name:$('name').value || null, date:$('date').value, time:$('time').value, tz:$('tz').value.trim(), lat:+$('lat').value, lon:+$('lon').value};
   try {
     if (!KB.planets) {
-      const [p, h] = await Promise.all([fetch(API + '/data/knowledge/planets.json'), fetch(API + '/data/knowledge/houses.json')]);
+      const [p, h, n, sg] = await Promise.all(['planets', 'houses', 'nakshatras', 'signs'].map(f => fetch(API + '/data/knowledge/' + f + '.json')));
       if (p.ok) KB.planets = await p.json(); if (h.ok) KB.houses = await h.json();
+      if (n.ok) KB.nakshatras = await n.json(); if (sg.ok) KB.signs = await sg.json();
     }
     const r = await fetch(API + '/v1/chart', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
     const data = await r.json();

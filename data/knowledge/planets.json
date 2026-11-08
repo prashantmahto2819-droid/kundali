@@ -1,51 +1,255 @@
 {
-  "_comment": "Traditional significations (karakatva), summarised in our own words for the learning layer. Review status: draft.",
-  "review_status": "draft",
-  "planets": {
-    "Sun": {"name_en": "Sun (Surya)", "name_hi": "सूर्य", "nature": "malefic (hot, royal)",
-      "signifies_en": ["soul and self", "father", "authority, government", "vitality, bones", "status and fame"],
-      "signifies_hi": ["आत्मा और स्वयं", "पिता", "अधिकार, सरकार", "जीवन-शक्ति, हड्डियाँ", "मान-प्रतिष्ठा"],
-      "rules": ["Simha"], "exalted": "Mesha", "debilitated": "Tula", "day": "Ravivara",
-      "why_en": "The Sun is the centre of the system and gives light to all, so tradition links it to the core self, authority and the 'father' principle."},
-    "Moon": {"name_en": "Moon (Chandra)", "name_hi": "चंद्र", "nature": "benefic when waxing",
-      "signifies_en": ["mind and emotions", "mother", "public, popularity", "nourishment, fluids", "sleep and comfort"],
-      "signifies_hi": ["मन और भावनाएँ", "माता", "जनता, लोकप्रियता", "पोषण, तरल पदार्थ", "नींद और सुख"],
-      "rules": ["Karka"], "exalted": "Vrishabha", "debilitated": "Vrishchika", "day": "Somavara",
-      "why_en": "The Moon changes fastest and phases with the month, so tradition links it to the changing mind and moods. Also the basis of the nakshatra and the Vimshottari dasha."},
-    "Mars": {"name_en": "Mars (Mangala)", "name_hi": "मंगल", "nature": "malefic (fiery)",
-      "signifies_en": ["energy and courage", "younger siblings", "land and property", "blood, muscles", "conflict, competition"],
-      "signifies_hi": ["ऊर्जा और साहस", "छोटे भाई-बहन", "भूमि और संपत्ति", "रक्त, मांसपेशियाँ", "संघर्ष, प्रतिस्पर्धा"],
-      "rules": ["Mesha", "Vrishchika"], "exalted": "Makara", "debilitated": "Karka", "day": "Mangalavara",
-      "why_en": "Red, fast and forceful in appearance, Mars stands for drive, action and the fighter."},
-    "Mercury": {"name_en": "Mercury (Budha)", "name_hi": "बुध", "nature": "neutral (takes the nature of companions)",
-      "signifies_en": ["intellect and speech", "trade and commerce", "writing, maths", "skin, nerves", "communication, youth"],
-      "signifies_hi": ["बुद्धि और वाणी", "व्यापार", "लेखन, गणित", "त्वचा, नाड़ी", "संवाद, युवावस्था"],
-      "rules": ["Mithuna", "Kanya"], "exalted": "Kanya", "debilitated": "Meena", "day": "Budhavara",
-      "why_en": "Mercury is the quickest planet and never strays far from the Sun, so it stands for agility of thought and exchange."},
-    "Jupiter": {"name_en": "Jupiter (Guru)", "name_hi": "गुरु", "nature": "greatest benefic",
-      "signifies_en": ["wisdom and teachers", "children", "wealth and expansion", "dharma, law", "faith, blessings"],
-      "signifies_hi": ["ज्ञान और गुरु", "संतान", "धन और विस्तार", "धर्म, विधि", "श्रद्धा, आशीर्वाद"],
-      "rules": ["Dhanu", "Meena"], "exalted": "Karka", "debilitated": "Makara", "day": "Guruvara",
-      "why_en": "The largest planet, seen as the guide (guru) that expands whatever it touches."},
-    "Venus": {"name_en": "Venus (Shukra)", "name_hi": "शुक्र", "nature": "benefic",
-      "signifies_en": ["love and marriage", "comforts and luxury", "arts and beauty", "vehicles", "reproductive health"],
-      "signifies_hi": ["प्रेम और विवाह", "सुख-सुविधा", "कला और सौंदर्य", "वाहन", "प्रजनन स्वास्थ्य"],
-      "rules": ["Vrishabha", "Tula"], "exalted": "Meena", "debilitated": "Kanya", "day": "Shukravara",
-      "why_en": "The brightest planet in the sky, tied to attraction, harmony and pleasure."},
-    "Saturn": {"name_en": "Saturn (Shani)", "name_hi": "शनि", "nature": "malefic (slow, disciplining)",
-      "signifies_en": ["discipline and duty", "delay and obstacles", "service and labour", "longevity", "karma and justice"],
-      "signifies_hi": ["अनुशासन और कर्तव्य", "विलंब और बाधा", "सेवा और श्रम", "आयु", "कर्म और न्याय"],
-      "rules": ["Makara", "Kumbha"], "exalted": "Tula", "debilitated": "Mesha", "day": "Shanivara",
-      "why_en": "The slowest of the visible planets, so tradition links it to time, patience, limits and the slow ripening of karma."},
-    "Rahu": {"name_en": "Rahu (north lunar node)", "name_hi": "राहु", "nature": "shadow planet (malefic)",
-      "signifies_en": ["obsession and ambition", "foreign and unconventional things", "illusion, technology", "sudden events"],
-      "signifies_hi": ["जुनून और महत्वाकांक्षा", "विदेशी और अपरंपरागत", "भ्रम, तकनीक", "अचानक घटनाएँ"],
-      "rules": [], "exalted": null, "debilitated": null, "day": null,
-      "why_en": "Rahu and Ketu are not bodies but the two points where the Moon's orbit crosses the Sun's path; eclipses happen there, which is why tradition treats them as 'shadow' planets."},
-    "Ketu": {"name_en": "Ketu (south lunar node)", "name_hi": "केतु", "nature": "shadow planet (malefic)",
-      "signifies_en": ["detachment and spirituality", "past-life tendencies", "liberation (moksha)", "sudden separation"],
-      "signifies_hi": ["वैराग्य और अध्यात्म", "पूर्व-जन्म के संस्कार", "मोक्ष", "अचानक वियोग"],
-      "rules": [], "exalted": null, "debilitated": null, "day": null,
-      "why_en": "Always exactly opposite Rahu on the same axis; tradition reads it as the principle of letting go."}
+ "_comment": "Traditional significations (karakatva), summarised in our own words for the learning layer. Review status: draft.",
+ "review_status": "draft",
+ "planets": {
+  "Sun": {
+   "name_en": "Sun (Surya)",
+   "name_hi": "सूर्य",
+   "nature": "malefic (hot, royal)",
+   "signifies_en": [
+    "soul and self",
+    "father",
+    "authority, government",
+    "vitality, bones",
+    "status and fame"
+   ],
+   "signifies_hi": [
+    "आत्मा और स्वयं",
+    "पिता",
+    "अधिकार, सरकार",
+    "जीवन-शक्ति, हड्डियाँ",
+    "मान-प्रतिष्ठा"
+   ],
+   "rules": [
+    "Simha"
+   ],
+   "exalted": "Mesha",
+   "debilitated": "Tula",
+   "day": "Ravivara",
+   "why_en": "The Sun is the centre of the system and gives light to all, so tradition links it to the core self, authority and the 'father' principle.",
+   "why_hi": "सूर्य मंडल का केंद्र है और सबको प्रकाश देता है, इसलिए परंपरा में उसे आत्मा, अधिकार और पिता-तत्व से जोड़ा गया है।",
+   "nature_hi": "क्रूर (उष्ण, राजसी)"
+  },
+  "Moon": {
+   "name_en": "Moon (Chandra)",
+   "name_hi": "चंद्र",
+   "nature": "benefic when waxing",
+   "signifies_en": [
+    "mind and emotions",
+    "mother",
+    "public, popularity",
+    "nourishment, fluids",
+    "sleep and comfort"
+   ],
+   "signifies_hi": [
+    "मन और भावनाएँ",
+    "माता",
+    "जनता, लोकप्रियता",
+    "पोषण, तरल पदार्थ",
+    "नींद और सुख"
+   ],
+   "rules": [
+    "Karka"
+   ],
+   "exalted": "Vrishabha",
+   "debilitated": "Vrishchika",
+   "day": "Somavara",
+   "why_en": "The Moon changes fastest and phases with the month, so tradition links it to the changing mind and moods. Also the basis of the nakshatra and the Vimshottari dasha.",
+   "why_hi": "चंद्र पृथ्वी के सबसे निकट और तेज़ गति वाला है, और मन की तरह घटता-बढ़ता है, इसलिए उसे मन, भावनाओं और माता से जोड़ा गया है।",
+   "nature_hi": "शुक्ल पक्ष में शुभ"
+  },
+  "Mars": {
+   "name_en": "Mars (Mangala)",
+   "name_hi": "मंगल",
+   "nature": "malefic (fiery)",
+   "signifies_en": [
+    "energy and courage",
+    "younger siblings",
+    "land and property",
+    "blood, muscles",
+    "conflict, competition"
+   ],
+   "signifies_hi": [
+    "ऊर्जा और साहस",
+    "छोटे भाई-बहन",
+    "भूमि और संपत्ति",
+    "रक्त, मांसपेशियाँ",
+    "संघर्ष, प्रतिस्पर्धा"
+   ],
+   "rules": [
+    "Mesha",
+    "Vrishchika"
+   ],
+   "exalted": "Makara",
+   "debilitated": "Karka",
+   "day": "Mangalavara",
+   "why_en": "Red, fast and forceful in appearance, Mars stands for drive, action and the fighter.",
+   "why_hi": "मंगल लाल रंग और उग्र ताप का प्रतीक है, इसलिए उसे साहस, ऊर्जा, भाई और भूमि से जोड़ा गया है।",
+   "nature_hi": "क्रूर (उग्र)"
+  },
+  "Mercury": {
+   "name_en": "Mercury (Budha)",
+   "name_hi": "बुध",
+   "nature": "neutral (takes the nature of companions)",
+   "signifies_en": [
+    "intellect and speech",
+    "trade and commerce",
+    "writing, maths",
+    "skin, nerves",
+    "communication, youth"
+   ],
+   "signifies_hi": [
+    "बुद्धि और वाणी",
+    "व्यापार",
+    "लेखन, गणित",
+    "त्वचा, नाड़ी",
+    "संवाद, युवावस्था"
+   ],
+   "rules": [
+    "Mithuna",
+    "Kanya"
+   ],
+   "exalted": "Kanya",
+   "debilitated": "Meena",
+   "day": "Budhavara",
+   "why_en": "Mercury is the quickest planet and never strays far from the Sun, so it stands for agility of thought and exchange.",
+   "why_hi": "बुध सूर्य के सबसे पास और सबसे तेज़ घूमने वाला है, इसलिए उसे बुद्धि, संवाद और व्यापार से जोड़ा गया है।",
+   "nature_hi": "सम (संग के अनुसार फल)"
+  },
+  "Jupiter": {
+   "name_en": "Jupiter (Guru)",
+   "name_hi": "गुरु",
+   "nature": "greatest benefic",
+   "signifies_en": [
+    "wisdom and teachers",
+    "children",
+    "wealth and expansion",
+    "dharma, law",
+    "faith, blessings"
+   ],
+   "signifies_hi": [
+    "ज्ञान और गुरु",
+    "संतान",
+    "धन और विस्तार",
+    "धर्म, विधि",
+    "श्रद्धा, आशीर्वाद"
+   ],
+   "rules": [
+    "Dhanu",
+    "Meena"
+   ],
+   "exalted": "Karka",
+   "debilitated": "Makara",
+   "day": "Guruvara",
+   "why_en": "The largest planet, seen as the guide (guru) that expands whatever it touches.",
+   "why_hi": "गुरु सबसे बड़ा ग्रह है और धीमी, स्थिर गति से चलता है, इसलिए उसे ज्ञान, विस्तार, गुरु और संतान से जोड़ा गया है।",
+   "nature_hi": "सबसे शुभ"
+  },
+  "Venus": {
+   "name_en": "Venus (Shukra)",
+   "name_hi": "शुक्र",
+   "nature": "benefic",
+   "signifies_en": [
+    "love and marriage",
+    "comforts and luxury",
+    "arts and beauty",
+    "vehicles",
+    "reproductive health"
+   ],
+   "signifies_hi": [
+    "प्रेम और विवाह",
+    "सुख-सुविधा",
+    "कला और सौंदर्य",
+    "वाहन",
+    "प्रजनन स्वास्थ्य"
+   ],
+   "rules": [
+    "Vrishabha",
+    "Tula"
+   ],
+   "exalted": "Meena",
+   "debilitated": "Kanya",
+   "day": "Shukravara",
+   "why_en": "The brightest planet in the sky, tied to attraction, harmony and pleasure.",
+   "why_hi": "शुक्र आकाश में सबसे चमकीला है, इसलिए उसे सौंदर्य, प्रेम, कला और सुख-सुविधा से जोड़ा गया है।",
+   "nature_hi": "शुभ"
+  },
+  "Saturn": {
+   "name_en": "Saturn (Shani)",
+   "name_hi": "शनि",
+   "nature": "malefic (slow, disciplining)",
+   "signifies_en": [
+    "discipline and duty",
+    "delay and obstacles",
+    "service and labour",
+    "longevity",
+    "karma and justice"
+   ],
+   "signifies_hi": [
+    "अनुशासन और कर्तव्य",
+    "विलंब और बाधा",
+    "सेवा और श्रम",
+    "आयु",
+    "कर्म और न्याय"
+   ],
+   "rules": [
+    "Makara",
+    "Kumbha"
+   ],
+   "exalted": "Tula",
+   "debilitated": "Mesha",
+   "day": "Shanivara",
+   "why_en": "The slowest of the visible planets, so tradition links it to time, patience, limits and the slow ripening of karma.",
+   "why_hi": "शनि सबसे धीमा चलने वाला दृश्य ग्रह है, इसलिए उसे अनुशासन, समय, परिश्रम और कर्म के फल से जोड़ा गया है।",
+   "nature_hi": "क्रूर (धीमा, अनुशासित करने वाला)"
+  },
+  "Rahu": {
+   "name_en": "Rahu (north lunar node)",
+   "name_hi": "राहु",
+   "nature": "shadow planet (malefic)",
+   "signifies_en": [
+    "obsession and ambition",
+    "foreign and unconventional things",
+    "illusion, technology",
+    "sudden events"
+   ],
+   "signifies_hi": [
+    "जुनून और महत्वाकांक्षा",
+    "विदेशी और अपरंपरागत",
+    "भ्रम, तकनीक",
+    "अचानक घटनाएँ"
+   ],
+   "rules": [],
+   "exalted": null,
+   "debilitated": null,
+   "day": null,
+   "why_en": "Rahu and Ketu are not bodies but the two points where the Moon's orbit crosses the Sun's path; eclipses happen there, which is why tradition treats them as 'shadow' planets.",
+   "why_hi": "राहु-केतु चंद्र-पथ के वे बिंदु हैं जहाँ ग्रहण बनते हैं (ये भौतिक ग्रह नहीं हैं); इसलिए राहु को महत्वाकांक्षा, भ्रम और असामान्यता से जोड़ा गया है।",
+   "nature_hi": "छाया ग्रह (क्रूर)"
+  },
+  "Ketu": {
+   "name_en": "Ketu (south lunar node)",
+   "name_hi": "केतु",
+   "nature": "shadow planet (malefic)",
+   "signifies_en": [
+    "detachment and spirituality",
+    "past-life tendencies",
+    "liberation (moksha)",
+    "sudden separation"
+   ],
+   "signifies_hi": [
+    "वैराग्य और अध्यात्म",
+    "पूर्व-जन्म के संस्कार",
+    "मोक्ष",
+    "अचानक वियोग"
+   ],
+   "rules": [],
+   "exalted": null,
+   "debilitated": null,
+   "day": null,
+   "why_en": "Always exactly opposite Rahu on the same axis; tradition reads it as the principle of letting go.",
+   "why_hi": "केतु राहु के ठीक सामने का बिंदु है; इसे विरक्ति, अंतर्ज्ञान और पिछले अनुभवों के सार से जोड़ा गया है।",
+   "nature_hi": "छाया ग्रह (क्रूर)"
   }
+ }
 }
