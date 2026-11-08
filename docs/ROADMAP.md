@@ -23,6 +23,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
+## Operations
+- [x] Relay server: backup-relay.sh (SQLite online backup, 30-day retention, optional R2), restore-relay.sh, healthwatch.sh (webhook alert on state change); steps in OPS-relay.md §10.
+
 ## Patri header
 - [x] Traditional janma-patri header (vara, tithi, nakshatra-pada-lord, yoga, karana, sunrise/sunset, ishta kaal, masa, ritu, ayana, Vikram/Shaka samvat, tropical Sun sign) + Avakahada chakra (varna, vashya, yoni, gana, nadi, tattva, name syllable) on the web summary and in the report; checked against the Korba printout. Done since: adhika masa from real lunations, disc-centre sunrise + ishta kaal, ghata chakra (draft table). Purnimanta month name shown alongside amanta. Pending: ghata-chakra scholar check.
 - [x] Learn panel (planet/house/varga click) rendered directly in Hindi or English; nakshatra and sign knowledge carry English deity/symbol/traits.

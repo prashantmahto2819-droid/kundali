@@ -79,8 +79,30 @@ cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com   # must 
 ```
 If smoke prints FAIL, send `docker logs kundali-api --tail 60`. Roll back with `git checkout <previous commit>` and rebuild.
 
-## 10. Later (before real customers)
-Daily backup and uptime alert: steps 8 and 9 in `docs/OPS.md`. Restore test before the first paying customer.
+## 10. Backup, restore test and uptime alert (do this before sharing the link)
+The only state on the server is the access database (orgs, API keys, usage, saved people) in the Docker volume `kundali-data`.
+1. Daily backup (keeps 30 days in `/srv/backups/kundali`):
+   ```bash
+   chmod +x /srv/kundali/deploy/*.sh
+   /srv/kundali/deploy/backup-relay.sh                      # run once by hand; prints "backup ok: ..."
+   (crontab -l 2>/dev/null; echo "25 2 * * * /srv/kundali/deploy/backup-relay.sh >> /var/log/kundali-backup.log 2>&1") | crontab -
+   ```
+   Off-site copy (optional): create an R2 bucket (<https://developers.cloudflare.com/r2/>), install rclone, configure a remote named `r2`
+   (<https://rclone.org/s3/#cloudflare-r2>) and add `R2_BUCKET=<bucket>` to the cron line's environment.
+2. Restore test (a backup you never restored is not a backup):
+   ```bash
+   ls /srv/backups/kundali/
+   /srv/kundali/deploy/restore-relay.sh /srv/backups/kundali/<newest file>
+   ./deploy/smoke.sh https://kundali.vividbrandify.com
+   ```
+3. Uptime alert every 5 minutes, sent through a webhook you own (e.g. your Vivid Relay WhatsApp send endpoint).
+   Add to `deploy/.env`: `ALERT_URL=...`, `ALERT_TOKEN=...`, `ALERT_TO=91XXXXXXXXXX` (the script POSTs JSON `{"to","text"}`;
+   adjust the curl line in `healthwatch.sh` if your endpoint expects other fields). Then:
+   ```bash
+   /srv/kundali/deploy/healthwatch.sh                       # prints nothing when healthy and unchanged
+   (crontab -l 2>/dev/null; echo "*/5 * * * * /srv/kundali/deploy/healthwatch.sh") | crontab -
+   ```
+   An external monitor is still worth adding (UptimeRobot <https://uptimerobot.com>, free): it alerts even if the whole server is down.
 
 ## Rolling back
 ```bash
