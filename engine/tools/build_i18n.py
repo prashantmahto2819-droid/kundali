@@ -90,6 +90,7 @@ _full = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
 put(_full["sensitivity"]["note_hi"], _full["sensitivity"]["note_en"])
 put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
 put(_full["life_transits"]["note_hi"], _full["life_transits"]["note_en"])
+put(_full["gochara"]["why_hi"], "In transit each planet is held favourable in certain houses from the natal Moon sign. We combine this with the planet's ashtakavarga bindus in that sign (4 or more = supportive). 'Mixed' means the two signals disagree. Vedha is applied: a favourable house's result is held to be blocked when another planet sits at its vedha point (Sun-Saturn and Moon-Mercury do not obstruct each other); this is an indication, not a prediction.")
 from jyotish import lalkitab as _lk  # noqa: E402
 _vp = _lk.varshphal(_full, 2026)
 for _m in ("table", "mixed", "rotation"):
@@ -457,7 +458,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} · जन्म {2}", "{1} · born {2}"), ("· जन्म {1}", "· born {1}"), ("वैयक्तिक वर्ष {1}", "Personal year {1}"), ("अनुपस्थित अंक: {1} · दोहराए अंक: {2}", "Missing numbers: {1} · repeated numbers: {2}"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("वेध: {1}", "vedha: {1}"), ("{1} (वेध: {2})", "{1} (vedha: {2})"), ("{1} · जन्म {2}", "{1} · born {2}"), ("· जन्म {1}", "· born {1}"), ("वैयक्तिक वर्ष {1}", "Personal year {1}"), ("अनुपस्थित अंक: {1} · दोहराए अंक: {2}", "Missing numbers: {1} · repeated numbers: {2}"),
                    ("स्प्रेड: {1} · प्रश्न: {2} · seed {3}", "Spread: {1} · question: {2} · seed {3}"), ("स्प्रेड: {1} · seed {2}", "Spread: {1} · seed {2}"), ("{1} (योग {2}, {3})", "{1} (compound {2}, {3})"), ("{1} (योग {2})", "{1} (compound {2})"), ("(योग {1}, {2})", "(compound {1}, {2})"), ("(योग {1})", "(compound {1})"), ("मुहूर्त खोज: {1}", "Muhurta finder: {1}"), ("प्रश्न कुंडली (KP): {1}", "Prashna chart (KP): {1}"), ("मुहूर्त — {1}", "Muhurta — {1}"), ("प्रश्न कुंडली — {1}", "Prashna chart — {1}"),
                    ("{1} से {2} दिन · बनाया गया: {3}", "{2} days from {1} · generated: {3}"), ("{1} से {2} दिन (ताराबल-चंद्रबल सहित) · बनाया गया: {3}", "{2} days from {1} (with tarabala and chandrabala) · generated: {3}"),
                    ("प्रश्न लग्न: {1} {2}° · समय: {3} · KP अयनांश {4}°", "Prashna Lagna: {1} {2}° · time: {3} · KP ayanamsa {4}°"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4} · KP अयनांश {5}°", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4} · KP ayanamsa {5}°"), ("बनाया गया: {1}", "Generated: {1}"), ("कुंडली मिलान — {1} / {2}", "Kundali matching — {1} / {2}"),

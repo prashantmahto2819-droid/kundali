@@ -22,6 +22,30 @@ FAVOURABLE_FROM_MOON: dict[str, tuple[int, ...]] = {
 SUPPORTIVE_BINDUS = 4
 
 
+# Vedha (obstruction) points: a favourable transit house is blocked when another planet occupies the paired house.
+# Classical pairs (Brihat Samhita / Phaladeepika tradition). Sun-Saturn and Moon-Mercury do not obstruct each other.
+VEDHA: dict[str, dict[int, int]] = {
+    "Sun": {3: 9, 6: 12, 10: 4, 11: 5},
+    "Moon": {1: 5, 3: 9, 6: 12, 7: 2, 10: 4, 11: 8},
+    "Mars": {3: 12, 6: 9, 11: 5},
+    "Mercury": {2: 5, 4: 3, 6: 9, 8: 1, 10: 8, 11: 12},
+    "Jupiter": {2: 12, 5: 4, 7: 3, 9: 10, 11: 8},
+    "Venus": {1: 8, 2: 7, 3: 1, 4: 10, 5: 9, 8: 5, 9: 11, 11: 6, 12: 3},
+    "Saturn": {3: 12, 6: 9, 11: 5},
+    "Rahu": {3: 12, 6: 9, 11: 5}, "Ketu": {3: 12, 6: 9, 11: 5},
+}
+_NO_VEDHA_PAIRS = {frozenset({"Sun", "Saturn"}), frozenset({"Moon", "Mercury"})}
+
+
+def vedha_for(name: str, house_from_moon: int, houses_from_moon: dict[str, int]) -> list[str]:
+    """Planets that obstruct `name`'s favourable transit (empty when not favourable or not obstructed)."""
+    target = VEDHA.get(name, {}).get(house_from_moon)
+    if target is None:
+        return []
+    return sorted(o for o, h in houses_from_moon.items()
+                  if o != name and h == target and frozenset({o, name}) not in _NO_VEDHA_PAIRS)
+
+
 def sade_sati(moon_sign: int, saturn_sign: int) -> dict:
     """Saturn in the 12th, 1st or 2nd sign from the natal Moon sign is the 7.5-year Sade Sati;
     in the 8th it is Ashtama Shani (the small Panoti is counted separately by tradition)."""
@@ -58,6 +82,7 @@ def gochara(chart: dict, now_pos: dict[str, dict], when: datetime) -> dict:
     lagna_sign = chart["lagna"]["sign"]
     bav = chart["ashtakavarga"]["bav"]
     rows = []
+    hfm = {n: (now_pos[n]["sign"] - moon_sign) % 12 + 1 for n in PLANETS}
     for name in PLANETS:
         pos = now_pos[name]
         s = pos["sign"]
@@ -71,19 +96,22 @@ def gochara(chart: dict, now_pos: dict[str, dict], when: datetime) -> dict:
             row.update({"text_hi": txt["text_hi"], "text_en": txt["text_en"], "rule_id": txt["rule_id"]})
         if name in FAVOURABLE_FROM_MOON:
             fav = row["house_from_moon"] in FAVOURABLE_FROM_MOON[name]
+            blockers = vedha_for(name, row["house_from_moon"], hfm) if fav else []
             pts = bav[name]["by_sign"][s]
             sup = pts >= SUPPORTIVE_BINDUS
-            row.update({"favourable_from_moon": fav, "bindus": pts, "bindus_supportive": sup,
-                        "verdict": "supportive" if fav and sup else ("challenging" if not fav and not sup else "mixed")})
+            eff_fav = fav and not blockers
+            row.update({"favourable_from_moon": fav, "vedha_by": blockers, "vedha_by_hi": [PLANETS_HI[b] for b in blockers],
+                        "bindus": pts, "bindus_supportive": sup,
+                        "verdict": "supportive" if eff_fav and sup else ("challenging" if not eff_fav and not sup else "mixed")})
         rows.append(row)
     saturn = next(r for r in rows if r["name"] == "Saturn")
     return {"as_of": when.strftime("%Y-%m-%dT%H:%M:%SZ"), "planets": rows,
             "sade_sati": sade_sati(moon_sign, saturn["sign"]),
-            "reference": "natal Moon sign", "vedha_applied": False,
+            "reference": "natal Moon sign", "vedha_applied": True,
             "confidence": "draft",
             "why_hi": ("गोचर में हर ग्रह जन्म-चंद्र राशि से कुछ ख़ास भावों में शुभ माना जाता है। "
                        "हमने इसे उस राशि में ग्रह के अष्टकवर्ग बिंदुओं (4 या अधिक = सहायक) से मिलाया है। "
-                       "‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध अभी लागू नहीं है; "
+                       "‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध लागू है: शुभ भाव का फल तब रुका माना जाता है जब कोई दूसरा ग्रह उसके वेध-स्थान पर हो (सूर्य-शनि और चंद्र-बुध एक-दूसरे को वेध नहीं देते); "
                        "यह दिशा-संकेत है, भविष्यवाणी नहीं।")}
 
 

@@ -108,7 +108,7 @@ def render(chart: dict, brand: dict | None = None) -> str:
     go_rows = [[e(r["name_hi"]) + (" (व)" if r["retrograde"] else ""),
                 f'{e(r["sign_name_hi"])} {int(r["degree_in_sign"])}°', str(r["house_from_moon"]),
                 str(r["house_from_lagna"]), str(r.get("bindus", "–")),
-                e(VERDICT_HI.get(r.get("verdict"), "–"))] for r in go["planets"]]
+                e(VERDICT_HI.get(r.get("verdict"), "–")) + (f' (वेध: {e(", ".join(r["vedha_by_hi"]))})' if r.get("vedha_by_hi") else "")] for r in go["planets"]]
     strength_rows = [[e(r["name_hi"]), str(r["sthana"]), str(r["dig"]), str(r["kala"]), str(r["cheshta"]), str(r["drik"]),
                       str(r["naisargika"]), f'<b>{r["total"]}</b>', str(r["rupas"]), str(r["rank"]), str(r["ishta"]), str(r["kashta"])] for r in chart["strength"]["planets"]]
     timeline_rows = [[e(m["lord_hi"]) + (" ◀ अभी" if m["phase"] == "running" else ""),

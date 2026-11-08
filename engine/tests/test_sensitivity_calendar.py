@@ -44,3 +44,18 @@ def test_life_transits_sade_sati_matches_known_dates():
     assert all(1 <= j["house_from_moon"] <= 12 for j in L["jupiter_periods"]) and len(L["jupiter_periods"]) < 120
     from jyotish import report
     assert "साढ़ेसाती" in report.render(c)
+
+
+def test_vedha_blocks_a_favourable_transit():
+    from jyotish.transit import vedha_for, VEDHA
+    hfm = {"Sun": 3, "Moon": 10, "Mars": 7, "Mercury": 10, "Jupiter": 8, "Venus": 9, "Saturn": 3, "Rahu": 2, "Ketu": 8}
+    assert vedha_for("Mercury", 10, hfm) == ["Jupiter", "Ketu"]                    # Mercury's 10th is obstructed from the 8th
+    base = {**hfm, "Venus": 11}
+    assert vedha_for("Sun", 3, {**base, "Saturn": 9}) == []                          # Sun-Saturn never obstruct each other
+    assert vedha_for("Sun", 3, {**base, "Mars": 9}) == ["Mars"]
+    assert vedha_for("Mars", 7, hfm) == []                                           # not a favourable house: no vedha question
+    assert all(set(v) <= set(range(1, 13)) for v in VEDHA.values())
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    merc = next(r for r in c["gochara"]["planets"] if r["name"] == "Mercury")
+    assert merc["favourable_from_moon"] and merc["vedha_by"] == ["Jupiter", "Ketu"] and merc["verdict"] == "mixed"
+    assert c["gochara"]["vedha_applied"] is True

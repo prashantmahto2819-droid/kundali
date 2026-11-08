@@ -1938,6 +1938,7 @@
 "जन्म-समय की संवेदनशीलता: बताया गया है कि घड़ी में कितने मिनट की चूक से लग्न, नवांश लग्न, चंद्र राशि या नक्षत्र बदल जाता है। खाली का मतलब है 3 घंटे के भीतर नहीं बदलता।": "Birth-time sensitivity: how many minutes of clock error would change the Lagna, navamsa Lagna, Moon sign or nakshatra. Blank means no change within 3 hours.",
 "कृष्णमूर्ति पद्धति: KP अयनांश (लाहिरी से लगभग 5-6 कला कम), प्लेसिडस भाव, हर ग्रह और भाव-स्पष्ट के नक्षत्र-स्वामी, उप-स्वामी और उप-उप-स्वामी। कारक-सारणी चार स्तरों में है। यह ड्राफ़्ट है; KP विशेषज्ञ की समीक्षा चाहिए।": "Krishnamurti Paddhati: KP ayanamsa (about 5-6 arc-min less than Lahiri), Placidus houses, star/sub/sub-sub lord of every planet and cusp, four-level significators. Draft; needs review by a KP practitioner.",
 "साढ़ेसाती = शनि चंद्र राशि से 12वें, उसी और दूसरे भाव में (लगभग साढ़े सात वर्ष); अष्टम शनि = 8वें में; कंटक = 4थे में। गुरु के भाव-वार काल भी दिए हैं (शुभ: 2, 5, 7, 9, 11)। तारीख़ें ±2 दिन; वक्री आवाजाही से छोटे टुकड़े बन सकते हैं।": "Sade Sati = Saturn in the 12th, 1st and 2nd from the Moon sign (about 7.5 years); Ashtama = 8th; Kantaka = 4th. Jupiter's periods by house from the Moon are listed too (favourable: 2, 5, 7, 9, 11). Dates +-2 days; retrograde loops may split a period.",
+"गोचर में हर ग्रह जन्म-चंद्र राशि से कुछ ख़ास भावों में शुभ माना जाता है। हमने इसे उस राशि में ग्रह के अष्टकवर्ग बिंदुओं (4 या अधिक = सहायक) से मिलाया है। ‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध लागू है: शुभ भाव का फल तब रुका माना जाता है जब कोई दूसरा ग्रह उसके वेध-स्थान पर हो (सूर्य-शनि और चंद्र-बुध एक-दूसरे को वेध नहीं देते); यह दिशा-संकेत है, भविष्यवाणी नहीं।": "In transit each planet is held favourable in certain houses from the natal Moon sign. We combine this with the planet's ashtakavarga bindus in that sign (4 or more = supportive). 'Mixed' means the two signals disagree. Vedha is applied: a favourable house's result is held to be blocked when another planet sits at its vedha point (Sun-Saturn and Moon-Mercury do not obstruct each other); this is an indication, not a prediction.",
 "लाल किताब की 120-वर्षीय वर्षफल सारणी से (Astrostudents संकलन; 46वें वर्ष का स्तंभ प्रकाशित उदाहरण से मिलाया गया)।": "From the 120-year Lal Kitab varshphal table (Astrostudents collection; the 46th-year column cross-checked with a published example).",
 "कुछ ग्रह सत्यापित स्तंभ से, बाक़ी सरल घूर्णन से; मूल सारणी अभी पूरी नहीं भरी।": "Some planets from a verified column, the rest by simple rotation; the original table is not fully filled yet.",
 "मूल लाल किताब वर्षफल सारणी से।": "From the original Lal Kitab varshphal table.",
@@ -2349,6 +2350,14 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"वेध: {1}",
+"vedha: {1}"
+],
+[
+"{1} (वेध: {2})",
+"{1} (vedha: {2})"
 ],
 [
 "{1} · जन्म {2}",
