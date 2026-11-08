@@ -274,6 +274,17 @@ def prashna_from_payload(payload: dict) -> dict:
         raise BadRequest(str(exc)) from exc
 
 
+def lalkitab_varshphal_from_payload(payload: dict) -> dict:
+    """POST /v1/lalkitab/varshphal  {birth payload..., year?}"""
+    from . import lalkitab
+    chart = chart_from_payload(payload)
+    year = payload.get("year")
+    try:
+        return lalkitab.varshphal(chart, int(year) if year not in (None, "") else None)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
 # ---- JSON safety net ------------------------------------------------------------------
 def plain(obj):
     """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""

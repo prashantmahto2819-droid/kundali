@@ -46,3 +46,61 @@ def lalkitab(chart: dict) -> dict:
     return {"planets": rows, "disclaimer_hi": kb["disclaimer_hi"], "review_status": kb["review_status"],
             "views_note_hi": ("'लग्न' दृश्य में घर जन्म-लग्न से गिने गए हैं; 'मेष' दृश्य में मेष हमेशा पहला घर है "
                               "(लाल किताब की पारंपरिक कुंडली)। दोनों दिखाए गए हैं क्योंकि स्कूलों में मतभेद है.")}
+
+
+# ---- Varshphal (annual chart) -------------------------------------------------------------------
+_VP = Path(__file__).resolve().parents[2] / "data" / "lalkitab_varshphal.json"
+
+
+def _vp_data() -> dict:
+    return json.loads(_VP.read_text(encoding="utf-8"))
+
+
+def varshphal_house(natal_house: int, year_of_life: int, data: dict | None = None) -> tuple[int, str]:
+    """Annual house of a planet. Uses the authentic 12x35 table when filled; a verified single column when
+    present; otherwise the simple rotation used by several online calculators (NOT the original Lal Kitab table)."""
+    data = data or _vp_data()
+    cyc = (year_of_life - 1) % 35 + 1
+    col = data.get("table", {}).get(str(natal_house))
+    if col and len(col) == 35:
+        return int(col[cyc - 1]), "table"
+    vc = data.get("verified_columns", {}).get(str(cyc))
+    if vc and str(natal_house) in vc:
+        return int(vc[str(natal_house)]), "verified_column"
+    return (natal_house - 1 + (year_of_life - 1)) % 12 + 1, "rotation"
+
+
+def varshphal(chart: dict, year: int | None = None) -> dict:
+    """Lal Kitab annual chart for the year of life that starts on the birthday in `year` (default: current)."""
+    from datetime import date
+    kb = _kb()
+    data = _vp_data()
+    by = int(chart["input"]["date"][:4])
+    bm, bd = int(chart["input"]["date"][5:7]), int(chart["input"]["date"][8:10])
+    today = date.today()
+    if year is None:
+        year = today.year if (today.month, today.day) >= (bm, bd) else today.year - 1
+    yol = year - by + 1                                               # year of life beginning on that birthday
+    if yol < 1:
+        raise ValueError("year is before birth")
+    rows, methods = [], set()
+    for p in chart["planets"]:
+        natal = p["sign"] + 1                                          # Lal Kitab fixed chart: Mesha is always house 1
+        h, m = varshphal_house(natal, yol, data)
+        methods.add(m)
+        st = _status(kb, p["name"], h)
+        rows.append({"name": p["name"], "name_hi": p["name_hi"], "natal_house": natal, "annual_house": h, "status": st,
+                     "text_hi": kb["status_text_hi"][st].format(p=p["name_hi"], h=h, theme=kb["house_theme_hi"][str(h)]),
+                     "upay_hi": kb["upay_hi"][p["name"]]})
+    houses = {h: [r["name"] for r in rows if r["annual_house"] == h] for h in range(1, 13)}
+    method = "table" if methods == {"table"} else ("mixed" if "table" in methods or "verified_column" in methods else "rotation")
+    return {"year": year, "year_of_life": yol, "cycle_year": (yol - 1) % 35 + 1, "from": f"{year}-{bm:02d}-{bd:02d}",
+            "to": f"{year + 1}-{bm:02d}-{bd:02d}", "planets": rows, "houses": houses, "method": method,
+            "review_status": "unverified" if method != "table" else data.get("review_status", "draft"),
+            "method_note_hi": {"table": "मूल लाल किताब वर्षफल सारणी से।",
+                               "mixed": "कुछ ग्रह सत्यापित स्तंभ से, बाक़ी सरल घूर्णन से; मूल सारणी अभी पूरी नहीं भरी।",
+                               "rotation": "सरल घूर्णन विधि (हर वर्ष एक घर आगे), जो कई ऑनलाइन कैलकुलेटर उपयोग करते हैं; यह मूल लाल किताब की 35-वर्षीय सारणी नहीं है। मूल सारणी मिलते ही यह बदल दी जाएगी।"}[method],
+            "method_note_en": {"table": "From the original Lal Kitab varshphal table.",
+                               "mixed": "Some planets from a verified column, the rest by simple rotation; the original table is not fully filled yet.",
+                               "rotation": "Simple rotation (one house per year) as used by several online calculators; NOT the original Lal Kitab 35-year table. It will be replaced once the original table is entered."}[method],
+            "disclaimer_hi": kb["disclaimer_hi"]}

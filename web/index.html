@@ -118,6 +118,7 @@
       <button type="button" data-sub="s-gochara">अष्टकवर्ग व गोचर</button>
       <button type="button" data-sub="s-varsha">वर्षफल</button>
       <button type="button" data-sub="s-numer">अंक</button>
+      <button type="button" data-sub="s-lal">लाल किताब</button>
       <button type="button" data-sub="s-kp">KP</button>
       <button type="button" data-sub="s-jaimini">जैमिनी</button>
     </nav>
@@ -186,6 +187,12 @@
       <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button></div>
       <div id="verr2" style="color:#c62828;margin-top:6px"></div><div id="vout2"></div>
     </div>
+    </section>
+    <section class="sub" id="s-lal">
+    <div class="card"><b>लाल किताब: ग्रह और घर</b><div class="muted" style="font-size:.85rem" id="lkwhy"></div><div id="lktable" style="overflow-x:auto"></div></div>
+    <div class="card"><b>लाल किताब वर्षफल (वर्ष-कुंडली)</b>
+      <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><div><label>वर्ष (जन्मदिन से)</label><input id="lkyear" type="number" min="1900" max="2100" style="max-width:110px"></div><button type="button" id="lkgo" style="width:auto">देखिए</button></div>
+      <div class="muted" style="font-size:.85rem" id="lkvnote"></div><div id="lkverr" style="color:#c62828"></div><div id="lkvout" style="overflow-x:auto"></div></div>
     </section>
     <section class="sub" id="s-kp">
     <div class="card"><b>कृष्णमूर्ति पद्धति (KP)</b><div class="muted" style="font-size:.85rem" id="kpwhy"></div>
@@ -549,6 +556,21 @@ function render(c) {
     const f = v => v == null ? '—' : v + ' मिनट';
     $('sens').innerHTML = `<table><tr><th></th><th>पहले</th><th>बाद</th><th>स्थिति</th></tr>` + Object.values(S.items).map(v =>
       `<tr><td>${esc(v.label_hi)}</td><td>${f(v.minutes_earlier)}</td><td>${f(v.minutes_later)}</td><td class="${v.stable_within_15_min ? 'yes' : ''}">${v.stable_within_15_min ? 'स्थिर (15 मिनट तक)' : v.stable_within_5_min ? 'सावधान (5-15 मिनट)' : 'संवेदनशील (5 मिनट से कम)'}</td></tr>`).join('') + '</table>';
+  }
+  if (c.lalkitab) {
+    const L = c.lalkitab; $('lkwhy').textContent = L.views_note_hi;
+    $('lktable').innerHTML = `<table><tr><th>ग्रह</th><th>पक्का घर</th><th>घर (लग्न से)</th><th>घर (मेष से)</th><th>स्थिति</th><th>उपाय (ड्राफ़्ट)</th></tr>` +
+      L.planets.map(r => `<tr><td>${esc(r.name_hi)}</td><td>${r.pakka_ghar}</td><td>${r.views.lagna.house}</td><td>${r.views.aries.house}</td><td>${esc(r.views.aries.text_hi)}</td><td class="muted">${esc(r.upay_hi)}</td></tr>`).join('') + `</table><div class="muted" style="font-size:.8rem">${esc(L.disclaimer_hi)}</div>`;
+    $('lkyear').value = $('lkyear').value || new Date().getFullYear();
+    $('lkgo').onclick = async () => {
+      $('lkverr').textContent = ''; $('lkvout').innerHTML = '';
+      try {
+        const r = await apiFetch('/v1/lalkitab/varshphal', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...window.lastBody, year: +$('lkyear').value})});
+        const v = await r.json(); if (!r.ok) throw new Error(v.detail || 'त्रुटि');
+        $('lkvnote').textContent = `${v.from} से ${v.to}: जीवन का ${v.year_of_life}वाँ वर्ष (चक्र वर्ष ${v.cycle_year})। ${v.method_note_hi}`;
+        $('lkvout').innerHTML = `<table><tr><th>ग्रह</th><th>जन्म घर</th><th>इस वर्ष का घर</th><th>स्थिति</th></tr>` + v.planets.map(p => `<tr><td>${esc(p.name_hi)}</td><td>${p.natal_house}</td><td><b>${p.annual_house}</b></td><td>${esc(p.text_hi)}</td></tr>`).join('') + '</table>';
+      } catch (e) { $('lkverr').textContent = 'त्रुटि: ' + e.message; }
+    };
   }
   if (c.kp) {
     const K = c.kp, H = n => c.planets.find(x => x.name === n)?.name_hi || n;

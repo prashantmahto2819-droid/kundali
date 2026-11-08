@@ -1,0 +1,7 @@
+{
+ "_comment": "Lal Kitab varshphal (annual chart) house-movement table. 'table' maps the natal house (1-12) to a list of 35 annual houses for cycle years 1..35 (year of life = completed age + 1; ages beyond 35 wrap). Fill from the original Lal Kitab varshphal chakra; until then only one column is verified from a published worked example (46th year = cycle year 11, futuresamachar.com/hi/lal-kitab-varshphal-7166) and the engine uses the simple rotation fallback marked 'rotation'. review_status: unverified.",
+ "review_status": "unverified",
+ "source": "",
+ "verified_columns": {"11": {"1": 10, "2": 12, "3": 2, "4": 7, "5": 5, "6": 3, "7": 11, "8": 6, "9": 4, "10": 8, "11": 9, "12": 1}},
+ "table": {}
+}

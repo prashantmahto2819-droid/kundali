@@ -173,6 +173,18 @@ def muhurta(req: MuhurtaRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+class LalVarshRequest(ChartRequest):
+    year: int | None = Field(None, ge=1900, le=2100)
+
+
+@app.post("/v1/lalkitab/varshphal")
+def lalkitab_varshphal(req: LalVarshRequest):
+    try:
+        return handlers.lalkitab_varshphal_from_payload(req.model_dump(exclude_none=True))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 class PrashnaRequest(BaseModel):
     topic: str = "general"
     lat: float
