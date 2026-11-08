@@ -78,3 +78,18 @@ def match(req: MatchRequest):
         return handlers.match_from_payload(req.model_dump())
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+class TarotRequest(BaseModel):
+    spread: str = "three"
+    question: str | None = None
+    seed: int | str | None = None
+    reversals: bool = True
+
+
+@app.post("/v1/tarot")
+def tarot(req: TarotRequest):
+    try:
+        return handlers.tarot_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))

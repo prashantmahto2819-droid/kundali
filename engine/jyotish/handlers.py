@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import matching, numerology
+from . import matching, numerology, tarot
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -106,3 +106,18 @@ def match_from_payload(payload: dict) -> dict:
     for role in ("boy", "girl"):
         result[role + "_name"] = people[role]["chart"]["input"].get("name")
     return result
+
+
+def tarot_from_payload(payload: dict) -> dict:
+    spread = payload.get("spread", "three")
+    seed = payload.get("seed")
+    if seed is not None and not isinstance(seed, (int, str)):
+        raise BadRequest("seed must be an integer or a string")
+    question = payload.get("question")
+    if question is not None and (not isinstance(question, str) or len(question) > 300):
+        raise BadRequest("question must be text of at most 300 characters")
+    try:
+        return tarot.draw(spread, seed=seed, reversals=bool(payload.get("reversals", True)),
+                          question=question or None)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc

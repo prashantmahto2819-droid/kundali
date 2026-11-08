@@ -51,7 +51,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         routes = {"/v1/chart": handlers.chart_from_payload,
                   "/v1/numerology": handlers.numerology_from_payload,
-                  "/v1/match": handlers.match_from_payload}
+                  "/v1/match": handlers.match_from_payload,
+                  "/v1/tarot": handlers.tarot_from_payload}
         if self.path not in routes:
             return self._json(404, {"error": "not found"})
         try:

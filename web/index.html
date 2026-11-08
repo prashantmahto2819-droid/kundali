@@ -75,6 +75,17 @@
     <div id="merr" style="color:#c62828;margin-top:6px"></div>
     <div id="mout"></div>
   </div>
+  <div class="card" id="tarotcard">
+    <b>टैरो</b>
+    <div class="muted" style="font-size:.85rem">मन में अपना प्रश्न रखिए, स्प्रेड चुनिए और कार्ड खींचिए। यह आत्म-चिंतन के लिए है।</div>
+    <form id="tf" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <div style="flex:2;min-width:180px"><label>प्रश्न (वैकल्पिक)</label><input id="tq" maxlength="300"></div>
+      <div><label>स्प्रेड</label><select id="ts"><option value="single">एक कार्ड</option><option value="three" selected>भूत · वर्तमान · भविष्य</option><option value="celtic">दस-कार्ड क्रॉस</option></select></div>
+      <div><button type="submit">कार्ड खींचिए</button></div>
+    </form>
+    <div id="terr" style="color:#c62828;margin-top:6px"></div>
+    <div id="tout"></div>
+  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="card" id="summary"></div>
@@ -327,8 +338,27 @@ $('mf').addEventListener('submit', async e => {
   } catch (err) { $('merr').textContent = 'त्रुटि: ' + err.message; }
 });
 
+
+$('tf').addEventListener('submit', async e => {
+  e.preventDefault(); $('terr').textContent = ''; $('tout').innerHTML = '';
+  try {
+    const r = await fetch(API + '/v1/tarot', {method:'POST', headers:{'Content-Type':'application/json'},
+                          body:JSON.stringify({spread:$('ts').value, question:$('tq').value.trim() || null})});
+    const t = await r.json(); if (!r.ok) throw new Error(t.detail || 'त्रुटि');
+    const cards = t.cards.map(c => `<div class="card" style="margin:0;flex:1 1 200px">
+      <div class="muted" style="font-size:.8rem">${esc(c.position_hi)}</div>
+      <b>${esc(c.card.name_hi)}</b> <span class="muted">(${esc(c.card.name)})</span>
+      ${c.reversed ? '<span class="chip">उलटा</span>' : ''}
+      <div style="margin-top:6px;font-size:.92rem">${esc(c.meaning_hi)}</div></div>`).join('');
+    $('tout').innerHTML = `${t.question ? `<p><b>प्रश्न:</b> ${esc(t.question)}</p>` : ''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${cards}</div>
+      ${t.notes_hi.map(n => `<p class="muted">${esc(n)}</p>`).join('')}
+      <div class="banner">${esc(t.disclaimer_hi)} अर्थ ड्राफ़्ट हैं और समीक्षा बाकी है।</div>`;
+  } catch (err) { $('terr').textContent = 'त्रुटि: ' + err.message; }
+});
+
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
-if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); }
+if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); }
 </script>
 </body>
 </html>
