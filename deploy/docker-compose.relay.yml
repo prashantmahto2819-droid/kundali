@@ -1,0 +1,26 @@
+# Kundali on the SAME server as Vivid Relay, behind the Caddy that already runs there.
+# No ports are published; Caddy reaches the container over a shared Docker network.
+# Set CADDY_NETWORK in deploy/.env to the network name your Relay compose uses
+# (find it with:  docker network ls   and   docker inspect <caddy-container>).
+services:
+  kundali-api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: kundali-api
+    restart: unless-stopped
+    environment:
+      KUNDALI_SERVE_WEB: "1"
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [caddy]
+
+networks:
+  caddy:
+    external: true
+    name: ${CADDY_NETWORK:?set CADDY_NETWORK in deploy/.env}

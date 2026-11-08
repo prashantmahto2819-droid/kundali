@@ -3,10 +3,12 @@
 Put it behind Cloudflare (Tunnel). Restrict CORS_ORIGINS to your real site(s).
 """
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from jyotish import handlers
@@ -148,3 +150,11 @@ def palm_reading(req: PalmRequest):
 def palm_catalog():
     from jyotish import palm as _palm
     return _palm.catalog()
+
+
+# Serve the web page and the knowledge data from the same container (one deployable unit).
+# Set KUNDALI_SERVE_WEB=0 when the web/ folder is hosted elsewhere (e.g. Cloudflare Pages).
+_ROOT = Path(__file__).resolve().parents[1]
+if os.environ.get("KUNDALI_SERVE_WEB", "1") == "1" and (_ROOT / "web").is_dir():
+    app.mount("/data", StaticFiles(directory=_ROOT / "data"), name="data")
+    app.mount("/", StaticFiles(directory=_ROOT / "web", html=True), name="web")

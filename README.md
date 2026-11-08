@@ -61,3 +61,8 @@ The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Ya
 - The JPL backend code path is written but was not run in the build environment (no network); run `engine/tools/compare_backends.py` on a connected machine.
 
 License: not decided yet (proprietary by default).
+
+## Deploying
+- Test on the Vivid Relay server behind its Caddy: `docs/OPS-relay.md` (ordered steps) with `deploy/docker-compose.relay.yml`, `deploy/Caddyfile.snippet`, `deploy/smoke.sh`.
+- Standalone VPS with Cloudflare Tunnel: `docs/OPS.md`.
+- The FastAPI app also serves `web/` and `data/` (set `KUNDALI_SERVE_WEB=0` to turn off). The FastAPI/Docker path has not been run yet (no network here); the dev server and `smoke.sh` have.

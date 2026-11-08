@@ -1,0 +1,6 @@
+# Append this block to the Caddyfile that Vivid Relay already uses, then reload Caddy.
+# Replace the hostname with the sub-domain you chose.
+kundali.vividbrandify.com {
+	encode zstd gzip
+	reverse_proxy kundali-api:8000
+}
