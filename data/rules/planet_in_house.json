@@ -1,0 +1,1733 @@
+{
+ "_comment": "Planet-in-house tendencies (9 x 12). Own wording, tendency language only (no predictions of death, illness or loss). All 'draft' until a scholar adds exact classical citations and signs off. English text pending.",
+ "rules": [
+  {
+   "id": "sun_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 1वाँ भाव (स्वभाव व शरीर): आत्मविश्वास, नेतृत्व और स्वाभिमान की प्रबल प्रवृत्ति; अहंकार से बचना सीखने की सीख।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 2वाँ भाव (परिवार, वाणी, धन): परिवार, वाणी और धन में प्रतिष्ठा की चाह; वाणी में दृढ़ता, कभी-कभी कठोरता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 3वाँ भाव (साहस व प्रयास): साहस, पहल और छोटे प्रयासों में सफलता; भाई-बहनों के बीच नेतृत्व की भूमिका।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 4वाँ भाव (घर, माता, सुख): घर और माता से जुड़ी ज़िम्मेदारी; मन की बेचैनी या घर में अधिकार-भाव, इसलिए मानसिक शांति पर ध्यान की सलाह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 5वाँ भाव (बुद्धि, संतान, विद्या): तेज़ बुद्धि, शिक्षा और रचनात्मकता; संतान और मार्गदर्शन में अग्रणी भूमिका।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): प्रतिस्पर्धा और बाधाओं पर विजय की क्षमता; अनुशासित दिनचर्या और सेवा-कार्य में सफलता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 7वाँ भाव (साझेदारी व विवाह): साझेदारी में बराबरी और सम्मान की चाह; जीवनसाथी के साथ अहं के टकराव से सतर्कता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 8वाँ भाव (परिवर्तन व गूढ़ता): गहरे शोध और रहस्य में रुचि; ऊर्जा के उतार-चढ़ाव और परिवर्तन के दौर, धैर्य की सीख।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 9वाँ भाव (भाग्य, धर्म, गुरु): धर्म, गुरु और नैतिकता में आस्था; पिता या मार्गदर्शकों का प्रभाव; ऊँची शिक्षा की ओर झुकाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 10वाँ भाव (कर्म व प्रतिष्ठा): कर्मक्षेत्र में पद, मान और अधिकार की प्रबल संभावना (परंपरा में अत्यंत शुभ स्थिति मानी जाती है)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 11वाँ भाव (लाभ व मित्र): लाभ, मित्र-मंडली और बड़े लक्ष्यों की पूर्ति; प्रभावशाली लोगों से जुड़ाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "sun_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Sun",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "सूर्य (अधिकार/आत्मबल) और 12वाँ भाव (व्यय, एकांत, विदेश): एकांत, विदेश या आध्यात्मिक खोज की ओर झुकाव; ऊर्जा और खर्च के संतुलन पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 1वाँ भाव (स्वभाव व शरीर): भावुक, संवेदनशील और लोगों से जुड़ने वाला स्वभाव; मन की स्थिति चेहरे पर झलकती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 2वाँ भाव (परिवार, वाणी, धन): पारिवारिक लगाव, मधुर वाणी और भोजन में रुचि; आय में उतार-चढ़ाव संभव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 3वाँ भाव (साहस व प्रयास): कल्पनाशील संवाद, यात्राएँ और भाई-बहनों से स्नेह; मन में चंचलता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 4वाँ भाव (घर, माता, सुख): घर, माता और सुख-सुविधा से गहरा जुड़ाव (परंपरा में सशक्त स्थिति)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 5वाँ भाव (बुद्धि, संतान, विद्या): कल्पनाशील मन, रचनात्मकता और संतान से भावनात्मक लगाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): मन पर काम का दबाव और चिंता; सेवा, स्वास्थ्य-दिनचर्या और सहानुभूति से जुड़े कार्यों में सफलता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 7वाँ भाव (साझेदारी व विवाह): साथी में भावनात्मक सुरक्षा की खोज; रिश्तों में संवेदनशीलता और परस्पर पोषण।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 8वाँ भाव (परिवर्तन व गूढ़ता): गहरी भावनाएँ, अंतर्ज्ञान और मन के उतार-चढ़ाव; रहस्यमय विषयों में रुचि।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 9वाँ भाव (भाग्य, धर्म, गुरु): आस्था, यात्रा और उच्च ज्ञान की ओर मन का झुकाव; माँ या गुरुजनों का प्रभाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 10वाँ भाव (कर्म व प्रतिष्ठा): जनता से जुड़े, सेवा और देखभाल के कार्य; करियर में बदलाव आ सकते हैं।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 11वाँ भाव (लाभ व मित्र): मित्रों, समुदाय और सामाजिक संपर्क से लाभ और सुकून।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "moon_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Moon",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "चंद्र (मन/माता) और 12वाँ भाव (व्यय, एकांत, विदेश): एकांत, कल्पना, नींद और आध्यात्मिकता से जुड़ाव; मन के अकेलेपन पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 1वाँ भाव (स्वभाव व शरीर): ऊर्जावान, साहसी और सीधा स्वभाव; क्रोध और जल्दबाज़ी पर संयम की सीख। यह स्थिति मंगल-दोष की परंपरागत गणना में गिनी जाती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 2वाँ भाव (परिवार, वाणी, धन): वाणी में तीखापन या दृढ़ता; परिवार और धन के मामलों में सक्रियता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 3वाँ भाव (साहस व प्रयास): साहस, पराक्रम और खेल या प्रतिस्पर्धा में सफलता (परंपरा में शुभ)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 4वाँ भाव (घर, माता, सुख): घर में बेचैनी या संपत्ति से जुड़े प्रयास; घरेलू सौहार्द पर ध्यान। यह स्थिति मंगल-दोष की परंपरागत गणना में गिनी जाती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 5वाँ भाव (बुद्धि, संतान, विद्या): तीव्र बुद्धि, खेल या तकनीकी रुचि; भावनाओं और निर्णयों में उतावलापन।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): शत्रुओं और बाधाओं पर विजय की क्षमता (परंपरा में बहुत अनुकूल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 7वाँ भाव (साझेदारी व विवाह): साझेदारी में ऊर्जा और टकराव, दोनों की संभावना; संवाद में धैर्य ज़रूरी। यह स्थिति मंगल-दोष की परंपरागत गणना में गिनी जाती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 8वाँ भाव (परिवर्तन व गूढ़ता): साहसी, शोध-प्रेमी; अचानक बदलावों के दौर में सावधानी और धैर्य। यह स्थिति मंगल-दोष की परंपरागत गणना में गिनी जाती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 9वाँ भाव (भाग्य, धर्म, गुरु): धर्म और नीति में सक्रिय, आदर्शों के लिए संघर्ष; गुरुजनों से मतभेद संभव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 10वाँ भाव (कर्म व प्रतिष्ठा): कर्म में साहस; तकनीक, प्रशासन या रक्षा जैसे क्षेत्रों की ओर झुकाव (शुभ)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 11वाँ भाव (लाभ व मित्र): लक्ष्य-साधक; मित्रों और बड़े भाई-बहनों से लाभ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mars_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mars",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "मंगल (साहस/ऊर्जा) और 12वाँ भाव (व्यय, एकांत, विदेश): ऊर्जा का विदेश या एकांत में उपयोग; खर्च, क्रोध और नींद पर संयम की सलाह। यह स्थिति मंगल-दोष की परंपरागत गणना में गिनी जाती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 1वाँ भाव (स्वभाव व शरीर): चतुर, हाज़िरजवाब और जिज्ञासु व्यक्तित्व; युवा-सा स्वभाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 2वाँ भाव (परिवार, वाणी, धन): कुशल वाणी, गणित या लेखा में रुचि और व्यापारिक समझ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 3वाँ भाव (साहस व प्रयास): लेखन, संवाद और कौशल-आधारित कार्यों में दक्षता; भाई-बहनों से अच्छा तालमेल।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 4वाँ भाव (घर, माता, सुख): शिक्षा और घर में पढ़ने-लिखने का वातावरण; मन में विचारों की हलचल।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 5वाँ भाव (बुद्धि, संतान, विद्या): तीक्ष्ण विश्लेषण, शिक्षा और रचनात्मक लेखन; तर्क-प्रधान बुद्धि।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): विश्लेषण, सेवा और समस्या-समाधान की क्षमता; दिनचर्या में सूक्ष्म ध्यान और चिंता की प्रवृत्ति।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 7वाँ भाव (साझेदारी व विवाह): संवाद-कुशल साझेदारियाँ और व्यापार; साथी बौद्धिक रूप से मेल खाने वाला।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 8वाँ भाव (परिवर्तन व गूढ़ता): शोध, गूढ़ विद्या और छिपे विषयों की समझ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 9वाँ भाव (भाग्य, धर्म, गुरु): उच्च शिक्षा, लेखन-प्रकाशन और यात्रा में रुचि; दार्शनिक सोच।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 10वाँ भाव (कर्म व प्रतिष्ठा): व्यापार, लेखन, संचार और प्रबंधन के क्षेत्रों में सफलता की ओर झुकाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 11वाँ भाव (लाभ व मित्र): आय के कई स्रोत, नेटवर्किंग और मित्रों से बौद्धिक लाभ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "mercury_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Mercury",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "बुध (बुद्धि/संवाद) और 12वाँ भाव (व्यय, एकांत, विदेश): एकांत में चिंतन, विदेश-संपर्क और लेखन; मन की अनावश्यक चिंता पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 1वाँ भाव (स्वभाव व शरीर): आशावादी, उदार और ज्ञान-प्रिय व्यक्तित्व; सम्मान अर्जित करने की प्रवृत्ति (परंपरा में शुभ)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 2वाँ भाव (परिवार, वाणी, धन): परिवार, वाणी और धन में समृद्धि की प्रवृत्ति; सिखाने वाली मधुर वाणी।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 3वाँ भाव (साहस व प्रयास): प्रयासों में शुभता; लेखन और संवाद में संतुलन; साहस में नैतिकता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 4वाँ भाव (घर, माता, सुख): घर में सुख, शिक्षा और मानसिक शांति; माता और गुरुजनों का आशीर्वाद।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 5वाँ भाव (बुद्धि, संतान, विद्या): शिक्षा, संतान और मंत्र या ज्ञान-साधना के लिए अनुकूल (परंपरा में उत्कृष्ट)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): सेवा और स्वास्थ्य से जुड़े क्षेत्रों में मार्गदर्शन; बाधाएँ पार करने की क्षमता, पर आलस्य से सावधानी।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 7वाँ भाव (साझेदारी व विवाह): सहयोगी, उदार साथी और सम्मानजनक साझेदारियाँ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 8वाँ भाव (परिवर्तन व गूढ़ता): गूढ़ विद्या, शोध और परिवर्तन के दौर में आंतरिक संबल।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 9वाँ भाव (भाग्य, धर्म, गुरु): धर्म, गुरु-कृपा, भाग्य और उच्च शिक्षा के लिए बहुत अनुकूल (परंपरा में अपना भाव)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 10वाँ भाव (कर्म व प्रतिष्ठा): सम्मानित करियर; शिक्षण, सलाह या न्याय-संबंधी क्षेत्र।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 11वाँ भाव (लाभ व मित्र): लाभ, मित्र और बड़े लक्ष्यों की पूर्ति; समुदाय में सम्मान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "jupiter_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Jupiter",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "गुरु (ज्ञान/विस्तार) और 12वाँ भाव (व्यय, एकांत, विदेश): आध्यात्मिकता, दान, विदेश और एकांत की ओर झुकाव; खर्च का संतुलन।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 1वाँ भाव (स्वभाव व शरीर): आकर्षक, मिलनसार और सौंदर्य-प्रेमी व्यक्तित्व।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 2वाँ भाव (परिवार, वाणी, धन): सुंदर वाणी, परिवार में सौहार्द, धन-सुख और कला या भोजन में रुचि।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 3वाँ भाव (साहस व प्रयास): कलात्मक अभिव्यक्ति, सौम्य संवाद और संबंधों में सहयोगी प्रयास।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 4वाँ भाव (घर, माता, सुख): घर की सजावट, सुख-सुविधा, वाहन और मानसिक शांति।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 5वाँ भाव (बुद्धि, संतान, विद्या): रचनात्मकता, प्रेम-भाव और कला में अभिव्यक्ति; संतान से स्नेह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): सेवा-कार्य में तालमेल; रिश्तों या सुख-सुविधा में अति से बचने की सीख।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 7वाँ भाव (साझेदारी व विवाह): सामंजस्यपूर्ण साझेदारी और कलाप्रिय जीवनसाथी (कारक ग्रह का अपने कारक भाव में बल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 8वाँ भाव (परिवर्तन व गूढ़ता): गहरे संबंध, अचानक आर्थिक या भावनात्मक परिवर्तन; आत्म-मूल्य की खोज।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 9वाँ भाव (भाग्य, धर्म, गुरु): आस्था में सौंदर्य; कला-संस्कृति से जुड़ी यात्राएँ; भाग्य में अनुकूलता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 10वाँ भाव (कर्म व प्रतिष्ठा): कला, सौंदर्य, मीडिया, वित्त या सेवा-क्षेत्र में सफलता की ओर झुकाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 11वाँ भाव (लाभ व मित्र): मित्रों, सामाजिक संपर्कों और आय-स्रोतों में लाभ।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "venus_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Venus",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "शुक्र (सुख/संबंध/कला) और 12वाँ भाव (व्यय, एकांत, विदेश): एकांत में सुख, विलासिता या विदेश-संबंध; खर्च पर नियंत्रण की सलाह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 1वाँ भाव (स्वभाव व शरीर): गंभीर, अनुशासित और धैर्यवान; शुरुआती जीवन में ज़िम्मेदारियाँ और परिपक्वता देर से निखरती है।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 2वाँ भाव (परिवार, वाणी, धन): वाणी और धन में संयम; परिवार से जुड़ी ज़िम्मेदारियाँ; धीमी पर स्थिर बचत।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 3वाँ भाव (साहस व प्रयास): मेहनती और दृढ़; प्रयासों में धीरज से सफलता (परंपरा में अनुकूल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 4वाँ भाव (घर, माता, सुख): घर और माता से जुड़ी ज़िम्मेदारियाँ; मन की शांति के लिए धैर्य और स्थिर वातावरण की सलाह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 5वाँ भाव (बुद्धि, संतान, विद्या): बुद्धि में गंभीरता, देर से पर पुष्ट शिक्षा; संतान संबंधी निर्णयों में धैर्य।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): परिश्रम से बाधाओं पर विजय; सेवा और स्वास्थ्य-अनुशासन में सफलता (परंपरा में शुभ)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 7वाँ भाव (साझेदारी व विवाह): साझेदारी में गंभीरता, देर से पर स्थिर संबंध; ज़िम्मेदार साथी।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 8वाँ भाव (परिवर्तन व गूढ़ता): धैर्य, शोध और दीर्घकालिक दृष्टि; परिवर्तनों के दौर में सहनशीलता की सीख।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 9वाँ भाव (भाग्य, धर्म, गुरु): नियम-पालन और परंपरा; देर से मिलने वाली पर स्थायी भाग्य-वृद्धि।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 10वाँ भाव (कर्म व प्रतिष्ठा): कर्मक्षेत्र में परिश्रम से स्थायी उन्नति (परंपरा में बलवान स्थिति)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 11वाँ भाव (लाभ व मित्र): दीर्घकालिक लाभ; सीमित पर भरोसेमंद मित्र-मंडली।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "saturn_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Saturn",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "शनि (अनुशासन/कर्म) और 12वाँ भाव (व्यय, एकांत, विदेश): एकांत, विरक्ति, सेवा या विदेश की ओर झुकाव; नींद और विश्राम पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 1वाँ भाव (स्वभाव व शरीर): अलग, रहस्यमय व्यक्तित्व; पहचान की तीव्र महत्वाकांक्षा और स्थिरता की खोज।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 2वाँ भाव (परिवार, वाणी, धन): वाणी और धन में असामान्य तरीक़े; पारिवारिक परंपराओं से अलग राह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 3वाँ भाव (साहस व प्रयास): साहसी; तकनीक या मीडिया-संवाद में असामान्य कौशल; प्रयासों में तीव्रता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 4वाँ भाव (घर, माता, सुख): घर और मन की बेचैनी; घर से दूर या असामान्य वातावरण; शांति पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 5वाँ भाव (बुद्धि, संतान, विद्या): असामान्य सोच, तकनीक या अनुसंधान में रुचि; संतान और शिक्षा के निर्णयों में स्पष्टता की सलाह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): प्रतिस्पर्धा में चतुर; बाधाओं पर विजय की प्रवृत्ति (परंपरा में अनुकूल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 7वाँ भाव (साझेदारी व विवाह): असामान्य या अलग-संस्कृति के साझेदार या संबंध; साझेदारी में स्पष्टता और भरोसे की ज़रूरत।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 8वाँ भाव (परिवर्तन व गूढ़ता): गूढ़ विषयों, शोध और अचानक बदलावों की ओर खिंचाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 9वाँ भाव (भाग्य, धर्म, गुरु): पारंपरिक धर्म से अलग सोच; विदेश-यात्रा और असामान्य गुरु या मार्गदर्शन।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 10वाँ भाव (कर्म व प्रतिष्ठा): महत्वाकांक्षी कर्मक्षेत्र; तकनीक, मीडिया या राजनीति में अवसर; पद-प्रतिष्ठा की तीव्र चाह।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 11वाँ भाव (लाभ व मित्र): बड़े लाभ और व्यापक सामाजिक दायरा (परंपरा में अनुकूल स्थिति)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "rahu_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Rahu",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "राहु (महत्वाकांक्षा/असामान्यता) और 12वाँ भाव (व्यय, एकांत, विदेश): विदेश, एकांत और रहस्यमय अनुभवों की ओर खिंचाव; नींद और खर्च पर ध्यान।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_1",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 1
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 1वाँ भाव (स्वभाव व शरीर): अंतर्मुखी, विरक्त और आत्म-अन्वेषी स्वभाव; पहचान को लेकर भीतर के प्रश्न।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_2",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 2
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 2वाँ भाव (परिवार, वाणी, धन): साधारण भोग से अलगाव; वाणी में संकोच; परिवार से दूरी या सादगी।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_3",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 3
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 3वाँ भाव (साहस व प्रयास): आत्म-प्रेरित प्रयास; साहस में सादगी; आध्यात्मिक अभ्यास की क्षमता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_4",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 4
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 4वाँ भाव (घर, माता, सुख): घर या जड़ों से अलगाव का भाव; भीतर की शांति की खोज।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_5",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 5
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 5वाँ भाव (बुद्धि, संतान, विद्या): अंतर्ज्ञान, मंत्र या ध्यान और शोध में रुचि; संतान संबंधी निर्णयों में सजगता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_6",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 6
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 6वाँ भाव (बाधा, सेवा, दिनचर्या): बाधाओं को शांति से सुलझाने की क्षमता; सेवा और उपचार-कार्यों में रुचि (परंपरा में अनुकूल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_7",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 7
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 7वाँ भाव (साझेदारी व विवाह): साझेदारी में अलगाव या गहरी आध्यात्मिक समझ की खोज; संवाद में खुलापन।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_8",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 8
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 8वाँ भाव (परिवर्तन व गूढ़ता): गूढ़ विद्या, ध्यान और परिवर्तन के प्रति स्वाभाविक सहजता।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_9",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 9
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 9वाँ भाव (भाग्य, धर्म, गुरु): आध्यात्मिक खोज; पारंपरिक ढाँचों पर प्रश्न; गुरु से आंतरिक जुड़ाव।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_10",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 10
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 10वाँ भाव (कर्म व प्रतिष्ठा): कर्म में सादगी या अलगाव; प्रसिद्धि की जगह सार्थकता की खोज।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_11",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 11
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 11वाँ भाव (लाभ व मित्र): लाभ में संतोष; सीमित पर सच्चे मित्र।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "ketu_in_12",
+   "category": "planet_in_house",
+   "when": {
+    "planet": "Ketu",
+    "house": 12
+   },
+   "text_en": null,
+   "text_hi": "केतु (विरक्ति/अंतर्ज्ञान) और 12वाँ भाव (व्यय, एकांत, विदेश): मोक्ष-भाव, ध्यान और एकांत की ओर स्वाभाविक झुकाव (परंपरा में अनुकूल)।",
+   "source": {
+    "text": "Karaka and bhava principles in the Parashari tradition; exact classical citation pending",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  }
+ ]
+}

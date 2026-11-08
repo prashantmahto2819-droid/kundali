@@ -19,4 +19,4 @@ Rules are **data**, not code, so a scholar can add and correct them without prog
 * Write the texts **in our own words**. Original Sanskrit verses are public domain; modern
   translations and commentaries usually are not, so never paste them.
 * Everything starts as `draft`. Only a scholar's sign-off moves it to `reviewed`.
-* The files in this folder are **samples** that demonstrate the format; the real rule library is built in Phase 2.
+* `planet_in_house.json` holds the first full set (9 planets x 12 houses, Hindi, draft). English text, sign/dignity/aspect rules and exact citations are still to come.

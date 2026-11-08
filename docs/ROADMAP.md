@@ -29,3 +29,4 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 
 - [x] Vastu v1 (room x direction rating, 16 rooms, Hindi). Pending: floor-plan/plot analysis, 16-zone model, scholar review.
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
+- [x] Rule library v1: 9 planets x 12 houses (Hindi, draft, tendency language). Pending: English text, sign/dignity/aspect rules, classical citations, scholar sign-off.

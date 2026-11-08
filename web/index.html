@@ -138,7 +138,7 @@
       <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
       <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
     </div>
-    <div class="card"><b>शास्त्रीय संकेत (नमूना नियम)</b><div id="readings"></div></div>
+    <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
     <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
   </div>
 </main>
@@ -316,7 +316,7 @@ function render(c) {
   $('readings').innerHTML = c.readings.length ? c.readings.map(r => `<details open><summary><b>${esc(planetMap()[r.planet].name_hi)}</b> — भाव ${r.house}</summary>
       <div>${esc(r.text_hi)}</div>
       <div class="muted" style="font-size:.8rem">क्यों: ${esc(r.because.planet)} → भाव ${r.because.house}, राशि ${esc(r.because.sign)}. स्रोत: ${esc(r.source?.text)} · स्थिति: ${esc(r.review_status)}</div></details>`).join('')
-    : '<span class="muted">इस कुंडली पर अभी कोई नमूना नियम लागू नहीं हुआ। (नियम-डेटा चरण 2 में बढ़ेगा।)</span>';
+    : '<span class="muted">कोई नियम लागू नहीं हुआ।</span>';
 
   const run = c.dasha_running, lbl = ['महादशा','अंतर्दशा','प्रत्यंतर'];
   const fmt = s => s.slice(0,10);
