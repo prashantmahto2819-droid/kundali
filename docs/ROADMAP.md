@@ -36,7 +36,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Yoga batch 2: Sunapha/Anapha/Durudhara/Kemadruma, Vesi/Vasi/Ubhayachari, Adhi, Amala, Viparita Raja (Harsha/Sarala/Vimala), Parivartana, Dhana (2/11 with 5/9), Raja (kendra–trikona), Lakshmi, Saraswati. 27 yogas total, all draft.
 
 ## Panchang
-- [x] Festival and vrat calendar (`festivals.py`, `/v1/festivals`): 32 festivals, 24+ Ekadashis, Purnima/Amavasya, adhika masa, per year and place. Pending: pradosha/sankashti chaturthi lists, regional variants (Tamil/Bengali/Gujarati calendars), moonrise by computation.
+- [x] Festival and vrat calendar (`festivals.py`, `/v1/festivals`): 32 festivals, 24+ Ekadashis, Purnima/Amavasya, adhika masa, per year and place. [x] Moonrise/moonset computed (`moon.py`). Pending: pradosha/sankashti chaturthi lists, regional variants (Tamil/Bengali/Gujarati calendars).
 
 ## Yogas (patterns)
 - [x] Yoga batch 3 (`yogas_nabhasa.py`): Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Shasha), all 32 Nabhasa pattern yogas (Ashraya 3, Dala 2, Akriti 20, Sankhya 7 with Akriti precedence), Guru-Chandala, Grahana (Sun/Moon), Angaraka, Vish, Shakata (Moon–Jupiter). 70 yogas total; web lists the formed ones first.

@@ -4,7 +4,7 @@ Method: new moons of the year are found once (amanta months; the month is named 
 start, adhika when no sankranti falls inside). For every day the tithi prevailing at local sunrise (udaya tithi) is
 taken; a festival falls on the first day of its month and paksha whose sunrise tithi matches. Three festivals use the
 tithi at another moment instead, as the tradition does: Janmashtami at midnight, Diwali at sunset (pradosha),
-Karva Chauth at moonrise (approximated by sunset + 1 hour, flagged). Makar Sankranti is the Sun's sidereal ingress
+Sharad Purnima at the computed moonrise. Makar Sankranti is the Sun's sidereal ingress
 into Makara. Regional conventions differ by a day in some years; the notes say which rule was applied. Draft.
 """
 from __future__ import annotations
@@ -44,8 +44,8 @@ FESTIVALS = [
     ("sharad_navratri", "शारदीय नवरात्रि आरंभ", "Sharad Navratri begins", 5, 1, "sunrise", "", ""),
     ("durga_ashtami", "दुर्गा अष्टमी", "Durga Ashtami", 5, 8, "sunrise", "", ""),
     ("vijayadashami", "विजयादशमी (दशहरा)", "Vijayadashami (Dussehra)", 5, 10, "sunrise", "", ""),
-    ("sharad_purnima", "शरद पूर्णिमा", "Sharad Purnima", 5, 15, "moonrise", "चंद्रोदय की पूर्णिमा (अनुमानित)।", "Purnima at moonrise (approximate)."),
-    ("karva_chauth", "करवा चौथ", "Karva Chauth", 5, 19, "moonrise", "अमांत आश्विन कृष्ण चतुर्थी (पूर्णिमांत कार्तिक); चंद्रोदय की तिथि (यहाँ सूर्यास्त + 1 घंटा से अनुमानित)।", "Amanta Ashwina Krishna 4 (Purnimanta Kartika); tithi at moonrise (approximated here by sunset + 1 h)."),
+    ("sharad_purnima", "शरद पूर्णिमा", "Sharad Purnima", 5, 15, "moonrise", "चंद्रोदय की पूर्णिमा।", "Purnima at moonrise."),
+    ("karva_chauth", "करवा चौथ", "Karva Chauth", 5, 19, "sunrise", "अमांत आश्विन कृष्ण चतुर्थी (पूर्णिमांत कार्तिक), उदया तिथि; व्रत चंद्रोदय पर खुलता है (चंद्रोदय समय पंचांग कार्ड में)।", "Amanta Ashwina Krishna 4 (Purnimanta Kartika), tithi at sunrise; the fast ends at moonrise (see the panchang card for the time)."),
     ("dhanteras", "धनतेरस", "Dhanteras", 5, 28, "sunset", "प्रदोष काल में त्रयोदशी।", "Trayodashi at pradosha."),
     ("narak_chaturdashi", "नरक चतुर्दशी (छोटी दिवाली)", "Narak Chaturdashi (Chhoti Diwali)", 5, 29, "sunrise", "", ""),
     ("diwali", "दीपावली (लक्ष्मी पूजन)", "Diwali (Lakshmi Puja)", 5, 30, "sunset", "अमांत आश्विन अमावस्या (पूर्णिमांत कार्तिक), प्रदोष/सूर्यास्त की तिथि।", "Amanta Ashwina Amavasya (Purnimanta Kartika), tithi at sunset (pradosha)."),
@@ -132,7 +132,10 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
         if moment == "sunset":
             return _tithi_at(_jd(day["set"]))
         if moment == "moonrise":
-            return _tithi_at(_jd(day["set"] + timedelta(hours=1)))
+            from .moon import moon_times
+            mr = moon_times(day["date"], lat, lon, tz).get("moonrise")
+            # the evening moonrise: if the day's moonrise is before sunset (waxing gibbous days) it is the right one; otherwise fall back to sunset + 50 min
+            return _tithi_at(_jd(mr if mr and mr > day["set"] - timedelta(hours=6) else day["set"] + timedelta(minutes=50)))
         if moment == "midday":
             return _tithi_at(_jd(day["rise"] + (day["set"] - day["rise"]) / 2))
         if moment == "midnight":
@@ -200,7 +203,7 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
             if s:
                 adh.append({"masa": MASA[m["masa"]], "masa_hi": MASA_HI[m["masa"]], "start": s, "end": e})
     return {"year": year, "tz": tz, "lat": lat, "lon": lon, "events": events, "adhika_masa": adh, "review_status": "draft",
-            "note_hi": "तिथियाँ इस ऐप के अपने पंचांग से (लाहिड़ी, अमांत मास, सूर्योदय की तिथि; जन्माष्टमी मध्यरात्रि, दीपावली/धनतेरस सूर्यास्त, करवा चौथ चंद्रोदय-अनुमान)। "
+            "note_hi": "तिथियाँ इस ऐप के अपने पंचांग से (लाहिड़ी, अमांत मास, सूर्योदय की तिथि; जन्माष्टमी मध्यरात्रि, दीपावली/धनतेरस सूर्यास्त, शरद पूर्णिमा चंद्रोदय)। "
                        "क्षेत्रीय परंपराओं में एक दिन का अंतर संभव है; अंतिम निर्णय स्थानीय पंचांग से कीजिए।",
-            "note_en": "Dates from this app's own panchang (Lahiri, amanta months, tithi at sunrise; Janmashtami at midnight, Diwali/Dhanteras at sunset, Karva Chauth by an approximate moonrise). "
+            "note_en": "Dates from this app's own panchang (Lahiri, amanta months, tithi at sunrise; Janmashtami at midnight, Diwali/Dhanteras at sunset, Sharad Purnima at moonrise). "
                        "Regional conventions can differ by a day; confirm with a local almanac."}

@@ -539,6 +539,7 @@ function renderMuhurta(d) {
   const nat = {good:'शुभ', neutral:'सम', inauspicious:'अशुभ'};
   el.innerHTML = `<table>
     <tr><th>सूर्योदय / सूर्यास्त</th><td>${esc(d.sunrise)} / ${esc(d.sunset)}</td></tr>
+    <tr><th>चंद्रोदय / चंद्रास्त</th><td>${esc(d.moonrise || '—')} / ${esc(d.moonset || '—')}</td></tr>
     <tr><th>वैदिक वार</th><td>${esc(d.vedic_vara.name_hi)}${d.vedic_vara.before_sunrise ? ' (सूर्योदय से पहले, इसलिए पिछला वार)' : ''}</td></tr>
     <tr><th>राहुकाल</th><td>${slot(d.rahu_kaal)}</td></tr>
     <tr><th>यमगंड</th><td>${slot(d.yamaganda)}</td></tr>
@@ -681,6 +682,7 @@ function renderPatri(c) {
     ['नक्षत्र-चरण', `${esc(b.nakshatra.name_hi)}-${b.nakshatra.pada} (स्वामी ${esc(b.nakshatra.lord_hi)})`],
     ['योग', esc(b.yoga.name_hi)], ['करण', esc(b.karana.name_hi)],
     ['सूर्योदय / सूर्यास्त', b.sunrise ? `${esc(b.sunrise)} (${esc(b.sunrise_centre || '')}) / ${esc(b.sunset)} (${esc(b.sunset_centre || '')})` : '—'],
+    ['चंद्रोदय / चंद्रास्त', b.moonrise || b.moonset ? `${esc(b.moonrise || '—')} / ${esc(b.moonset || '—')}` : '—'],
     ['इष्टकाल (घटी:पल)', b.ishta_kaal ? esc(b.ishta_kaal.text) : '—'],
     ['मास (अमांत / पूर्णिमांत)', `${esc(b.masa.name_hi)} / ${esc(b.masa.purnimanta_hi)}`], ['ऋतु', esc(b.ritu.name_hi)], ['अयन', esc(b.ayana.name_hi)],
     ['विक्रम संवत्', b.vikram_samvat], ['शक संवत्', b.shaka_samvat],

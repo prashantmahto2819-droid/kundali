@@ -207,6 +207,7 @@ put(_fc["note_hi"], _fc["note_en"])
 for _e in _fc["events"]:
     if _e["kind"] != "festival":
         put(_e["name_hi"], _e["name_en"])
+EXACT.setdefault("चंद्रोदय / चंद्रास्त", "Moonrise / moonset")
 for _hi, _en in (("त्योहार और व्रत कैलेंडर", "Festival and vrat calendar"),
                  ("इस ऐप के अपने पंचांग से: 32 प्रमुख त्योहार, 24 एकादशी (नाम सहित), पूर्णिमा-अमावस्या, अधिक मास। स्थान कुंडली वाला या ऊपर चुना शहर।", "From this app's own panchang: 32 major festivals, 24 Ekadashis (named), Purnima/Amavasya, adhika masa. Location: the chart's or the city chosen above."),
                  ("दिखाइए", "Show"), ("त्योहार", "Festivals"), ("एकादशी", "Ekadashi"), ("पूर्णिमा / अमावस्या", "Purnima / Amavasya"), ("सब", "All"), ("देखिए", "Show"),

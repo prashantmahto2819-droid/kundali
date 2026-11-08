@@ -63,12 +63,15 @@ def day_table(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
     mid = sr + day_len / 2
     abhijit_half = day_len / 30  # 8th of 15 muhurtas, centred on local noon
 
+    from .moon import moon_times
+    moon = moon_times(day, lat, lon, tz)
     return {
         "available": True,
         "vedic_vara": {"index": wd, "name": VARA[wd], "name_hi": VARA_HI[wd],
                        "before_sunrise": before_sunrise},
         "sunrise": _fmt(today["sunrise"]), "sunset": _fmt(today["sunset"]),
         "sunrise_centre": _fmt(centre["sunrise"]) if centre else None, "sunset_centre": _fmt(centre["sunset"]) if centre else None,
+        "moonrise": _fmt(moon["moonrise"]) if moon.get("moonrise") else None, "moonset": _fmt(moon["moonset"]) if moon.get("moonset") else None,
         "day_length_hours": round(day_len.total_seconds() / 3600, 2),
         "rahu_kaal": _slot(sr, eighth, RAHU[wd]),
         "yamaganda": _slot(sr, eighth, YAMA[wd]),

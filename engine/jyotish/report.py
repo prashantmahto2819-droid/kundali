@@ -139,6 +139,7 @@ def render(chart: dict, brand: dict | None = None) -> str:
                       ["नक्षत्र-चरण", f'{e(b["nakshatra"]["name_hi"])}-{b["nakshatra"]["pada"]} (स्वामी {e(b["nakshatra"]["lord_hi"])})'],
                       ["योग", e(b["yoga"]["name_hi"])], ["करण", e(b["karana"]["name_hi"])],
                       ["सूर्योदय / सूर्यास्त", f'{e(b["sunrise"] or "—")} ({e(b.get("sunrise_centre") or "")}) / {e(b["sunset"] or "—")} ({e(b.get("sunset_centre") or "")})'],
+                      ["चंद्रोदय / चंद्रास्त", f'{e(b.get("moonrise") or "—")} / {e(b.get("moonset") or "—")}'],
                       ["इष्टकाल (घटी:पल)", e(b["ishta_kaal"]["text"]) if b["ishta_kaal"] else "—"],
                       ["मास (अमांत / पूर्णिमांत)", f'{e(b["masa"]["name_hi"])} / {e(b["masa"].get("purnimanta_hi", ""))}'], ["ऋतु", e(b["ritu"]["name_hi"])], ["अयन", e(b["ayana"]["name_hi"])],
                       ["विक्रम संवत्", str(b["vikram_samvat"])], ["शक संवत्", str(b["shaka_samvat"])],
