@@ -13,7 +13,7 @@ from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 from zoneinfo import ZoneInfo
 
-from .constants import SIGNS, SIGNS_HI
+from .constants import NAKSHATRAS, PLANETS_HI, SIGNS, SIGNS_HI
 from .core import ayanamsa, nakshatra_of, sign_of
 from .ephemeris import AnalyticBackend, norm360
 from .festivals import calendar as festival_calendar, lunations
@@ -25,6 +25,14 @@ from .sun import sun_times
 from .timeutil import delta_t, julian_day, year_fraction
 
 _B = AnalyticBackend()
+# Sarvartha-siddhi yoga: nakshatra at sunrise on the weekday (almanac table); Amrita-siddhi: one star per weekday
+SARVARTHA = {0: {"Hasta", "Mula", "Uttara Ashadha", "Uttara Phalguni", "Uttara Bhadrapada", "Pushya", "Ashwini"},
+             1: {"Shravana", "Rohini", "Mrigashira", "Pushya", "Anuradha"}, 2: {"Ashwini", "Uttara Bhadrapada", "Krittika", "Ashlesha"},
+             3: {"Rohini", "Anuradha", "Hasta", "Krittika", "Mrigashira"}, 4: {"Revati", "Anuradha", "Ashwini", "Punarvasu", "Pushya"},
+             5: {"Revati", "Anuradha", "Ashwini", "Punarvasu", "Shravana"}, 6: {"Shravana", "Rohini", "Swati"}}
+AMRITA = {0: "Hasta", 1: "Mrigashira", 2: "Ashwini", 3: "Anuradha", 4: "Pushya", 5: "Revati", 6: "Rohini"}
+GAND_MOOL = {"Ashwini", "Ashlesha", "Magha", "Jyeshtha", "Mula", "Revati"}
+DISHA_SHOOL = {0: ("पश्चिम", "West"), 1: ("पूर्व", "East"), 2: ("उत्तर", "North"), 3: ("उत्तर", "North"), 4: ("दक्षिण", "South"), 5: ("पश्चिम", "West"), 6: ("पूर्व", "East")}
 
 
 def _jd(dt: datetime) -> float:
@@ -103,6 +111,23 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
         mt = moon_times(d, lat, lon, tz)
         dt_tab = day_table(rise + timedelta(hours=6), lat, lon, tz)
         sun_sign = sign_of(sun)
+        yoga_lon = lambda dt: (lambda sm: norm360(sm[0] + sm[1]))(_sid(_jd(dt)))
+        yoga_idx = int(norm360(sun + moon) // (360.0 / 27.0))
+        y_end = _crossing(rise, yoga_lon, ((yoga_idx + 1) * (360.0 / 27.0)) % 360.0)
+        # karana: half-tithi; the first karana of the day ends at the next multiple of 6 deg of elongation
+        k_end = _crossing(rise, elong, (int(norm360(moon - sun) // 6.0) + 1) * 6.0 % 360.0)
+        nak_name = pc["nakshatra"]["name"]; wd = pc["vara"]["index"]
+        special = []
+        if nak_name in SARVARTHA.get(wd, set()):
+            special.append({"key": "sarvartha_siddhi", "hi": "सर्वार्थ सिद्धि", "en": "Sarvartha Siddhi"})
+        if AMRITA.get(wd) == nak_name:
+            special.append({"key": "amrita_siddhi", "hi": "अमृत सिद्धि", "en": "Amrita Siddhi"})
+        if nak_name in GAND_MOOL:
+            special.append({"key": "gand_mool", "hi": "गंड मूल", "en": "Gand Mool"})
+        if moon >= 300.0:
+            special.append({"key": "panchak", "hi": "पंचक", "en": "Panchak"})
+        if pc["karana"]["name"] == "Vishti":
+            special.append({"key": "bhadra", "hi": "भद्रा", "en": "Bhadra"})
         # sankranti: the local date of the Sun's sign ingress (bisected between consecutive sunrises)
         sank = False
         for back in (0, 1):
@@ -118,6 +143,7 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
                 if hi.astimezone(zone).date() == d:
                     sank = True
         days.append({
+            "jd_rise": jr,
             "date": d.isoformat(), "day": dnum, "weekday": (d.weekday() + 1) % 7, "vara_hi": pc["vara"]["name_hi"], "vara": pc["vara"]["name"],
             "sunrise": rise.strftime("%H:%M"), "sunset": sset.strftime("%H:%M"),
             "moonrise": mt["moonrise"].strftime("%H:%M") if mt["moonrise"] else None, "moonset": mt["moonset"].strftime("%H:%M") if mt["moonset"] else None,
@@ -129,9 +155,39 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
             "masa_amanta": (("Adhika " if adhika else "") + MASA[masa_i]) if masa_i is not None else None, "masa_amanta_hi": (("अधिक " if adhika else "") + MASA_HI[masa_i]) if masa_i is not None else None,
             "masa_purnimanta": (("Adhika " if adhika else "") + MASA[purn_i]) if purn_i is not None else None, "masa_purnimanta_hi": (("अधिक " if adhika else "") + MASA_HI[purn_i]) if purn_i is not None else None,
             "vikram_samvat": vik, "sun_sign": SIGNS[sun_sign], "sun_sign_hi": SIGNS_HI[sun_sign], "sankranti": sank,
-            "rahu_kaal": dt_tab.get("rahu_kaal"), "abhijit": dt_tab.get("abhijit"),
+            "yoga_ends": y_end.astimezone(zone).strftime("%H:%M") if y_end else None, "yoga_ends_next_day": bool(y_end and y_end.astimezone(zone).date() > d),
+            "karana_ends": k_end.astimezone(zone).strftime("%H:%M") if k_end else None,
+            "moon_sign": SIGNS[sign_of(moon)], "moon_sign_hi": SIGNS_HI[sign_of(moon)], "disha_shool_hi": DISHA_SHOOL[wd][0], "disha_shool": DISHA_SHOOL[wd][1],
+            "special": special,
+            "rahu_kaal": dt_tab.get("rahu_kaal"), "yamaganda": dt_tab.get("yamaganda"), "gulika": dt_tab.get("gulika"), "abhijit": dt_tab.get("abhijit"),
+            "good_choghadiya": [{"name": c["name"], "start": c["start"], "end": c["end"]} for c in dt_tab.get("choghadiya_day", []) if c.get("nature") == "good"],
             "events": fest.get(d.isoformat(), []),
         })
+    # planet ingresses in the month (sign changes between consecutive sunrises, Sun..Saturn + nodes by sign at sunrise)
+    ingress = []
+    prev = None
+    for x in days:
+        pos = _B.positions(x["jd_rise"]); ayan = ayanamsa(x["jd_rise"])
+        cur = {k: sign_of(norm360(v - ayan)) for k, v in pos.items()}
+        if prev:
+            for k, sgn in cur.items():
+                if k != "Moon" and prev[k] != sgn:
+                    ingress.append({"planet": k, "planet_hi": PLANETS_HI.get(k, k), "date": x["date"], "sign": SIGNS[sgn], "sign_hi": SIGNS_HI[sgn], "from_sign_hi": SIGNS_HI[prev[k]]})
+        prev = cur
+    # auspicious dates for common activities (almanac-level muhurta finder, best 4 per activity within the month)
+    muhurta = []
+    try:
+        from .muhurta_find import ACTIVITIES, find
+        for act in ("business", "griha_pravesh", "vehicle", "education", "travel"):
+            res = find(act, lat, lon, tz, start_date=f"{year}-{mon:02d}-01", days=ndays)
+            good = [r for r in res["best"] if r["score"] >= 60][:4]
+            if good:
+                muhurta.append({"activity": act, "activity_hi": ACTIVITIES[act]["hi"], "activity_en": ACTIVITIES[act]["en"], "dates": [{"date": r["date"], "day": int(r["date"][8:]), "score": r["score"], "nakshatra_hi": r["nakshatra_hi"]} for r in good]})
+    except Exception:
+        muhurta = []
+    for x in days:
+        x.pop("jd_rise", None)
     return {"year": year, "month": mon, "tz": tz, "lat": lat, "lon": lon, "first_weekday": (date(year, mon, 1).weekday() + 1) % 7, "days": days,
+            "ingress": ingress, "muhurta": muhurta,
             "note_hi": "सूर्योदय-कालीन तिथि-नक्षत्र-योग-करण (लाहिड़ी); तिथि/नक्षत्र का समाप्ति-समय स्थानीय घड़ी में, '+' = अगले दिन। अमांत और पूर्णिमांत दोनों मास दिए हैं। समय ±कुछ मिनट।",
             "note_en": "Tithi, nakshatra, yoga and karana at sunrise (Lahiri); end times in local clock time, '+' = next day. Both amanta and purnimanta months are given. Times within a few minutes."}
