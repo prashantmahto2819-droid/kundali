@@ -15,6 +15,7 @@ from .panchang import panchang
 from .muhurta import day_table
 from .rules import match_rules
 from .timeutil import delta_t, julian_day, local_to_utc, year_fraction
+from .transit import gochara, positions_at
 from .vargas import all_vargas
 from zoneinfo import ZoneInfo
 from .yogas import detect_yogas
@@ -130,6 +131,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
         chart["panchang"]["vara"] = chart["day"]["vedic_vara"]
         chart["panchang"]["note"] = "Vara follows the sunrise-based Vedic day."
     chart["ashtakavarga"] = ashtakavarga({**{p["name"]: p["sign"] for p in planets}, "Lagna": lagna_sign}, lagna_sign)
+    chart["gochara"] = gochara(chart, positions_at(now, backend, ayanamsa_system), now)
     chart["yogas"] = detect_yogas(chart)
     chart["readings"] = match_rules(chart)
     return chart

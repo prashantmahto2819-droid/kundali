@@ -112,6 +112,11 @@
       <div id="avsav" style="overflow-x:auto"></div>
       <details style="margin-top:8px"><summary>ग्रह-वार भिन्नाष्टकवर्ग (BAV)</summary><div id="avbav" style="overflow-x:auto"></div></details>
     </div>
+    <div class="card"><b>गोचर (आज का आकाश)</b>
+      <div class="muted" style="font-size:.85rem" id="gowhy"></div>
+      <div id="gosati"></div>
+      <div id="gotable" style="overflow-x:auto"></div>
+    </div>
     <div class="grid">
       <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
       <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
@@ -278,6 +283,16 @@ function render(c) {
     <tr><th>SAV</th>${av.sav.by_house.map((v, h) => `<td><b>${v}</b><br><span class="chip ${av.sav.bands[h]==='strong'?'yes':'muted'}">${AVBAND[av.sav.bands[h]]}</span></td>`).join('')}<td><b>${av.sav.total}</b></td></tr></table>`;
   $('avbav').innerHTML = `<table><tr><th>ग्रह</th>${av.sav.by_house.map((_, h) => `<th>${h + 1}</th>`).join('')}<th>कुल</th></tr>` +
     Object.entries(av.bav).map(([pl, r]) => `<tr><th>${esc(planetMap()[pl].name_hi)}</th>${r.by_house.map(v => `<td>${v}</td>`).join('')}<td><b>${r.total}</b></td></tr>`).join('') + '</table>';
+
+  // Gochara (current transits)
+  const go = c.gochara, GOV = {supportive:'सहायक', mixed:'मिश्रित', challenging:'कठिन'}, SSP = {rising:'पहला चरण', peak:'मध्य चरण', setting:'अंतिम चरण'};
+  $('gowhy').textContent = go.why_hi + ' (गणना: ' + go.as_of.slice(0, 10) + ')';
+  $('gosati').innerHTML = go.sade_sati.active
+    ? `<p><span class="chip">साढ़ेसाती</span> शनि जन्म-चंद्र राशि से ${go.sade_sati.saturn_from_moon === 12 ? 'बारहवें' : go.sade_sati.saturn_from_moon === 1 ? 'पहले' : 'दूसरे'} भाव में है: ${SSP[go.sade_sati.phase]}। यह परंपरागत गणना है; असर चंद्र की स्थिति, दशा और शनि के बल पर निर्भर माना जाता है।</p>`
+    : (go.sade_sati.ashtama ? '<p><span class="chip">अष्टम शनि</span> शनि जन्म-चंद्र से आठवें भाव में है (परंपरा में सावधानी का समय माना जाता है)।</p>' : '<p class="muted">अभी साढ़ेसाती नहीं है।</p>');
+  $('gotable').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>चंद्र से भाव</th><th>लग्न से भाव</th><th>बिंदु</th><th>संकेत</th></tr>` +
+    go.planets.map(r => `<tr><td>${esc(r.name_hi)}${r.retrograde ? ' (व)' : ''}</td><td>${esc(r.sign_name_hi)} ${Math.floor(r.degree_in_sign)}°</td><td>${r.house_from_moon}</td><td>${r.house_from_lagna}</td>
+      <td>${r.bindus ?? '–'}</td><td>${r.verdict ? `<span class="chip ${r.verdict==='supportive'?'yes':'muted'}">${GOV[r.verdict]}</span>` : '<span class="muted">–</span>'}</td></tr>`).join('') + '</table>';
 
   $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
 
