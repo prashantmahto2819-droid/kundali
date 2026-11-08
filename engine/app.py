@@ -93,3 +93,8 @@ def tarot(req: TarotRequest):
         return handlers.tarot_from_payload(req.model_dump())
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/places")
+def places(q: str = "", limit: int = 8):
+    return handlers.places_from_query(q, limit)

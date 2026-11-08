@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import matching, numerology, tarot
+from . import matching, numerology, places, tarot
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -121,3 +121,7 @@ def tarot_from_payload(payload: dict) -> dict:
                           question=question or None)
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc
+
+
+def places_from_query(q: str, limit: int = 8) -> dict:
+    return {"results": places.search(q, limit)}

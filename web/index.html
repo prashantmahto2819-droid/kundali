@@ -47,7 +47,8 @@
       <div><label>नाम (वैकल्पिक)</label><input id="name" placeholder="नाम"></div>
       <div><label>जन्म तारीख</label><input id="date" type="date" required value="1990-05-17"></div>
       <div><label>जन्म समय</label><input id="time" type="time" step="60" required value="06:45"></div>
-      <div><label>शहर</label>
+      <div><label>शहर खोजिए</label><input id="citysearch" list="placelist" placeholder="जैसे: जबलपुर, Bombay" autocomplete="off"></div>
+      <div><label>या सूची से</label>
         <select id="city">
           <option value="23.1815,79.9864">जबलपुर</option>
           <option value="28.6139,77.2090">दिल्ली</option>
@@ -66,6 +67,7 @@
       <div><label>समय-क्षेत्र (IANA)</label><input id="tz" value="Asia/Kolkata"></div>
       <div><button type="submit">कुंडली बनाइए</button></div>
     </form>
+    <datalist id="placelist"></datalist>
     <div id="err"></div>
   </div>
   <div class="card" id="matchcard">
@@ -305,7 +307,8 @@ const MPEOPLE = [['b','वर (Groom)','1990-05-17','06:45','0'], ['g','वध�
     <div><label>नाम</label><input id="${k}_name"></div>
     <div><label>जन्म तारीख</label><input id="${k}_date" type="date" required value="${d}"></div>
     <div><label>जन्म समय</label><input id="${k}_time" type="time" required value="${t}"></div>
-    <div><label>शहर</label><select id="${k}_city">${opts}</select></div>
+    <div><label>शहर खोजिए</label><input id="${k}_search" list="placelist" placeholder="शहर का नाम" autocomplete="off"></div>
+    <div><label>या सूची से</label><select id="${k}_city">${opts}</select></div>
     <div><label>अक्षांश</label><input id="${k}_lat" type="number" step="0.0001"></div>
     <div><label>देशांतर</label><input id="${k}_lon" type="number" step="0.0001"></div>
     <div><label>समय-क्षेत्र</label><input id="${k}_tz" value="Asia/Kolkata"></div>`).join('') +
@@ -356,6 +359,23 @@ $('tf').addEventListener('submit', async e => {
       <div class="banner">${esc(t.disclaimer_hi)} अर्थ ड्राफ़्ट हैं और समीक्षा बाकी है।</div>`;
   } catch (err) { $('terr').textContent = 'त्रुटि: ' + err.message; }
 });
+
+// City search over data/places.json (offline list; manual lat/lon still works)
+(async function placeSearch() {
+  let places = [];
+  try { places = (await (await fetch('data/places.json')).json()).places; } catch (e) { return; }
+  const label = p => `${p.name} · ${p.hi}, ${p.state}`;
+  $('placelist').innerHTML = places.map(p => `<option value="${esc(label(p))}">`).join('');
+  const bind = (inp, la, lo, tz) => $(inp).addEventListener('change', () => {
+    const v = $(inp).value.trim().toLowerCase();
+    const p = places.find(x => label(x).toLowerCase() === v)
+           || places.find(x => [x.name, x.hi, ...x.aka].some(n => n.toLowerCase() === v));
+    if (!p) return;
+    $(la).value = p.lat; $(lo).value = p.lon; $(tz).value = p.tz;
+  });
+  bind('citysearch', 'lat', 'lon', 'tz');
+  ['b', 'g'].forEach(k => bind(k + '_search', k + '_lat', k + '_lon', k + '_tz'));
+})();
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
 if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); }

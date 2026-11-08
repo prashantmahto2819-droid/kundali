@@ -34,9 +34,17 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        path = self.path.split("?")[0]
+        path, _, query = self.path.partition("?")
         if path == "/health":
             return self._json(200, handlers.health())
+        if path == "/v1/places":
+            from urllib.parse import parse_qs
+            qs = parse_qs(query)
+            try:
+                limit = int(qs.get("limit", ["8"])[0])
+            except ValueError:
+                limit = 8
+            return self._json(200, handlers.places_from_query(qs.get("q", [""])[0], limit))
         rel = "web/index.html" if path == "/" else path.lstrip("/")
         if not (rel.startswith("web/") or rel.startswith("data/")):
             rel = "web/" + rel

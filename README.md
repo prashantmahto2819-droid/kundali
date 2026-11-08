@@ -38,6 +38,8 @@ The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Ya
 `POST /v1/match` with `{"boy": {...}, "girl": {...}}` (same birth fields as `/v1/chart`) returns the 36-point ashtakoota score with per-koota detail and confidence, plus a manglik comparison.
 
 `POST /v1/tarot` with `{"spread": "single|three|celtic", "question": "...", "seed": 7, "reversals": true}` draws from the 78-card deck (own wording, draft, Hindi + English). Omit `seed` for a random draw; the same seed gives the same draw.
+
+`GET /v1/places?q=bombay&limit=8` searches 151 curated cities (English, Hindi, old names) and returns lat/lon/tz. Coordinates are hand-entered and approximate (~1 km); small towns need manual lat/lon. The web form uses the same list (`data/places.json`).
 `GET /health` reports the active backend and whether it is production-ready.
 
 ## Known limitations (v0.1)
