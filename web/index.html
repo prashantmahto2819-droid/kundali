@@ -143,6 +143,10 @@
       <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
     </div>
     <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
+    <div class="card"><b>जीवन समय-रेखा (दशा के अनुसार)</b>
+      <div class="muted" style="font-size:.85rem" id="tlnote"></div>
+      <div id="tl"></div>
+    </div>
     <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
   </div>
 </main>
@@ -328,6 +332,17 @@ function render(c) {
   $('stwhy').textContent = stg.why_hi + ' ' + stg.missing_hi;
   $('sttable').innerHTML = `<table><tr><th>ग्रह</th><th>उच्च</th><th>दिक्</th><th>केंद्रादि</th><th>नैसर्गिक</th><th>कुल</th><th>क्रम</th></tr>` +
     stg.planets.map(r => `<tr><td>${esc(r.name_hi)}</td><td>${r.uccha}</td><td>${r.dig}</td><td>${r.kendradi}</td><td>${r.naisargika}</td><td><b>${r.total}</b></td><td>${r.rank}</td></tr>`).join('') + '</table>';
+
+  // Life timeline
+  const tl = c.timeline, PH = {past:'बीता', running:'चल रही', future:'आगे'};
+  $('tlnote').textContent = tl.note_hi;
+  $('tl').innerHTML = tl.periods.map(m => `<details ${m.phase==='running'?'open':''} style="margin:6px 0;${m.phase==='past'?'opacity:.75':''}">
+    <summary><b>${esc(m.lord_hi)} महादशा</b> · आयु ${m.age_start}–${m.age_end} वर्ष (${m.start.slice(0,4)}–${m.end.slice(0,4)})
+      <span class="chip ${m.phase==='running'?'yes':'muted'}">${PH[m.phase]}</span>
+      <span class="chip muted">${esc(m.profile.tag_hi)}</span></summary>
+    <div>${esc(m.text_hi)}</div>
+    <div class="muted" style="font-size:.85rem;margin-top:4px">अंतर्दशा: ${m.antardashas.map(a => `<span style="${a.phase==='running'?'font-weight:700;color:var(--accent)':''}">${esc(a.lord_hi)} (${a.start.slice(0,7)}) · ${esc(a.themes_hi.join('/'))}</span>`).join(' → ')}</div>
+  </details>`).join('');
 
   $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why_hi)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
 

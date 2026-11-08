@@ -108,6 +108,10 @@ def render(chart: dict) -> str:
                 e(VERDICT_HI.get(r.get("verdict"), "–"))] for r in go["planets"]]
     strength_rows = [[e(r["name_hi"]), str(r["uccha"]), str(r["dig"]), str(r["kendradi"]), str(r["naisargika"]),
                       f'<b>{r["total"]}</b>', str(r["rank"])] for r in chart["strength"]["planets"]]
+    timeline_rows = [[e(m["lord_hi"]) + (" ◀ अभी" if m["phase"] == "running" else ""),
+                      f'{m["age_start"]}–{m["age_end"]}', f'{m["start"][:4]}–{m["end"][:4]}', e(m["profile"]["tag_hi"]),
+                      e("; ".join(f'{t["house"]}वाँ: {", ".join(t["themes_hi"][:2])}' for t in m["profile"]["themes"]))]
+                     for m in chart["timeline"]["periods"]]
     ss = go["sade_sati"]
     sade = ("साढ़ेसाती चल रही है (" + {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] + " चरण)."
             if ss["active"] else ("अष्टम शनि चल रहा है." if ss["ashtama"] else "अभी साढ़ेसाती नहीं है."))
@@ -163,6 +167,10 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>विंशोत्तरी दशा</h2>
 <p>जन्म के समय {e(PLANETS_HI[chart["dasha"]["birth_nakshatra_lord"]])} की दशा शेष: {chart["dasha"]["balance_at_birth_years"]:.2f} वर्ष (वर्ष = {chart["dasha"]["year_days"]} दिन)।</p>
 {_table(["महादशा", "आरंभ", "समाप्ति"], maha_rows)}
+
+<h2>जीवन समय-रेखा</h2>
+<p class="small">{e(chart["timeline"]["note_hi"])}</p>
+{_table(["महादशा", "आयु", "वर्ष", "बल-संकेत", "सक्रिय क्षेत्र"], timeline_rows)}
 
 <h2>अष्टकवर्ग</h2>
 <p class="small">{e(av["why_hi"])}</p>
