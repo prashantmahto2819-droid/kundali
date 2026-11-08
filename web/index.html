@@ -34,6 +34,13 @@
   details { margin:4px 0; } summary { cursor:pointer; }
   #learn h3 { margin:.2rem 0; color:var(--accent); }
   #err { color:#c62828; margin-top:8px; }
+  .tabs { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid color-mix(in srgb,var(--line) 40%,transparent); }
+  .tabs, .subtabs { display:flex; gap:4px; overflow-x:auto; padding:6px 16px; max-width:1100px; margin:auto; scrollbar-width:thin; }
+  .subtabs { padding:8px 0 0; border-bottom:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
+  .tabs button, .subtabs button { width:auto; white-space:nowrap; background:transparent; color:var(--muted); border:0; border-bottom:3px solid transparent; border-radius:8px 8px 0 0; padding:8px 14px; font-weight:600; }
+  .subtabs button { padding:6px 12px; font-size:.9rem; }
+  .tabs button.on, .subtabs button.on { color:var(--accent); border-bottom-color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,transparent); }
+  .tab, .sub { display:none; } .tab.on, .sub.on { display:block; }
 </style>
 </head>
 <body>
@@ -42,15 +49,17 @@
   <h1>कुंडली <span class="chip">पहला संस्करण</span></h1>
   <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
 </header>
+<nav class="tabs" id="tabs">
+  <button type="button" class="on" data-tab="t-kundali">कुंडली</button>
+  <button type="button" data-tab="t-match">मिलान</button>
+  <button type="button" data-tab="t-tarot">टैरो</button>
+  <button type="button" data-tab="t-vastu">वास्तु</button>
+  <button type="button" data-tab="t-palm">हस्तरेखा</button>
+  <button type="button" data-tab="t-ask">पूछिए</button>
+  <button type="button" data-tab="t-mine" id="tab-mine" style="display:none">मेरी कुंडलियाँ</button>
+</nav>
 <main>
-  <div class="card" id="authcard" style="display:none">
-    <b>मेरी कुंडलियाँ</b>
-    <div id="signedout"><label>ईमेल से लॉगिन (लिंक ईमेल पर आएगा)</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lemail" type="email" placeholder="आपका ईमेल" style="flex:1;min-width:180px"><button type="button" id="lgo">लॉगिन लिंक भेजें</button></div>
-      <div class="muted" id="lmsg"></div></div>
-    <div id="signedin" style="display:none"><span class="muted" id="who"></span> <button type="button" id="lsave">इस कुंडली को सेव करें</button> <button type="button" id="lout">लॉग-आउट</button>
-      <div id="plist" style="margin-top:8px"></div><div id="lperr" style="color:#c62828"></div></div>
-  </div>
+  <section class="tab on" id="t-kundali">
   <div class="card">
     <form id="f">
       <div><label>नाम (वैकल्पिक)</label><input id="name" placeholder="नाम"></div>
@@ -79,55 +88,22 @@
     <datalist id="placelist"></datalist>
     <div id="err"></div>
   </div>
-  <div class="card" id="matchcard">
-    <b>कुंडली मिलान (अष्टकूट, 36 गुण)</b>
-    <div class="muted" style="font-size:.85rem">वर और वधू का जन्म विवरण भरिए। यह एक पारंपरिक पैमाना है, पूरी कुंडली का विश्लेषण नहीं।</div>
-    <form id="mf" style="margin-top:10px"></form>
-    <div id="merr" style="color:#c62828;margin-top:6px"></div>
-    <div id="mout"></div>
-  </div>
-  <div class="card" id="tarotcard">
-    <b>टैरो</b>
-    <div class="muted" style="font-size:.85rem">मन में अपना प्रश्न रखिए, स्प्रेड चुनिए और कार्ड खींचिए। यह आत्म-चिंतन के लिए है।</div>
-    <form id="tf" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
-      <div style="flex:2;min-width:180px"><label>प्रश्न (वैकल्पिक)</label><input id="tq" maxlength="300"></div>
-      <div><label>स्प्रेड</label><select id="ts"><option value="single">एक कार्ड</option><option value="three" selected>भूत · वर्तमान · भविष्य</option><option value="celtic">दस-कार्ड क्रॉस</option></select></div>
-      <div><button type="submit">कार्ड खींचिए</button></div>
-    </form>
-    <div id="terr" style="color:#c62828;margin-top:6px"></div>
-    <div id="tout"></div>
-  </div>
-  <div class="card" id="vastucard">
-    <b>वास्तु जाँच</b>
-    <div class="muted" style="font-size:.85rem">अपने घर के कमरे और उनकी दिशा चुनिए। यह परंपरागत मार्गदर्शन है।</div>
-    <div id="vrows" style="margin-top:8px"></div>
-    <div style="margin-top:8px"><button type="button" id="vadd">+ कमरा जोड़िए</button> <button type="button" id="vgo">जाँचिए</button></div>
-    <div id="verr" style="color:#c62828;margin-top:6px"></div>
-    <div id="vout"></div>
-  </div>
-  <div class="card" id="palmcard">
-    <b>हस्तरेखा (मार्गदर्शित)</b>
-    <div class="muted" style="font-size:.85rem">अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे "—" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।</div>
-    <div id="prows" style="margin-top:8px"></div>
-    <div style="margin-top:8px"><button type="button" id="pgo">पढ़िए</button></div>
-    <div id="perr" style="color:#c62828;margin-top:6px"></div>
-    <div id="pout"></div>
-  </div>
-  <div class="card" id="askcard">
-    <b>पूछिए (ज्योतिष सहायक)</b>
-    <div class="muted" style="font-size:.85rem">ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद "मेरा" वाले प्रश्न उसी कुंडली से जुड़ते हैं।</div>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-      <input id="askq" maxlength="500" placeholder="जैसे: शनि 10वें भाव में क्या फल देता है?" style="flex:1 1 280px">
-      <button type="button" id="askgo" style="width:auto">पूछिए</button>
-    </div>
-    <div id="askerr" style="color:#c62828;margin-top:6px"></div>
-    <div id="askout"></div>
-  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="banner" id="warns" style="background:#fdecea;border-color:#e0a09a" hidden></div>
     <div class="card" id="summary"></div>
-    <div><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button> <span class="muted" id="reperr"></span></div>
+    <div style="margin:8px 0"><button type="button" id="repbtn" style="width:auto">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button> <span class="muted" id="reperr"></span></div>
+    <nav class="subtabs" id="subtabs">
+      <button type="button" class="on" data-sub="s-summary">सारांश</button>
+      <button type="button" data-sub="s-planets">ग्रह व बल</button>
+      <button type="button" data-sub="s-panchang">पंचांग व मुहूर्त</button>
+      <button type="button" data-sub="s-yoga">योग व संकेत</button>
+      <button type="button" data-sub="s-dasha">दशा व समय-रेखा</button>
+      <button type="button" data-sub="s-gochara">अष्टकवर्ग व गोचर</button>
+      <button type="button" data-sub="s-varsha">वर्षफल</button>
+      <button type="button" data-sub="s-numer">अंक</button>
+    </nav>
+    <section class="sub on" id="s-summary">
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
@@ -139,11 +115,32 @@
         <svg id="d9" viewBox="-4 -4 408 408" width="100%"></svg></div>
     </div>
     <div class="card" id="learn"><h3>सीखिए</h3><div class="muted">किसी खाने या ग्रह पर क्लिक कीजिए।</div></div>
+    </section>
+    <section class="sub" id="s-planets">
     <div class="card"><b>ग्रह स्थिति</b><div id="ptable"></div></div>
+    <div class="card"><b>ग्रह-बल (आंशिक षड्बल)</b>
+      <div class="muted" style="font-size:.85rem" id="stwhy"></div>
+      <div id="sttable" style="overflow-x:auto"></div>
+    </div>
+    </section>
+    <section class="sub" id="s-panchang">
     <div class="grid">
       <div class="card"><b>पंचांग</b><div id="panchang"></div></div>
-      <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
+      <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
     </div>
+    </section>
+    <section class="sub" id="s-yoga">
+    <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
+    <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
+    </section>
+    <section class="sub" id="s-dasha">
+    <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
+    <div class="card"><b>जीवन समय-रेखा (दशा के अनुसार)</b>
+      <div class="muted" style="font-size:.85rem" id="tlnote"></div>
+      <div id="tl"></div>
+    </div>
+    </section>
+    <section class="sub" id="s-gochara">
     <div class="card"><b>अष्टकवर्ग</b>
       <div class="muted" style="font-size:.85rem" id="avwhy"></div>
       <div id="avsav" style="overflow-x:auto"></div>
@@ -154,26 +151,84 @@
       <div id="gosati"></div>
       <div id="gotable" style="overflow-x:auto"></div>
     </div>
-    <div class="card"><b>ग्रह-बल (आंशिक षड्बल)</b>
-      <div class="muted" style="font-size:.85rem" id="stwhy"></div>
-      <div id="sttable" style="overflow-x:auto"></div>
-    </div>
-    <div class="grid">
-      <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
-      <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
-    </div>
-    <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
+    </section>
+    <section class="sub" id="s-varsha">
     <div class="card"><b>वर्षफल (सौर-वापसी कुंडली)</b>
       <div class="muted" style="font-size:.85rem">जिस क्षण सूर्य जन्म के अंश पर लौटता है, उस क्षण की कुंडली। वर्ष चुनिए:</div>
       <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button></div>
       <div id="verr2" style="color:#c62828;margin-top:6px"></div><div id="vout2"></div>
     </div>
-    <div class="card"><b>जीवन समय-रेखा (दशा के अनुसार)</b>
-      <div class="muted" style="font-size:.85rem" id="tlnote"></div>
-      <div id="tl"></div>
-    </div>
-    <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
+    </section>
+    <section class="sub" id="s-numer">
+    <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
+    </section>
   </div>
+  </section>
+  <section class="tab" id="t-match">
+  <div class="card" id="matchcard">
+    <b>कुंडली मिलान (अष्टकूट, 36 गुण)</b>
+    <div class="muted" style="font-size:.85rem">वर और वधू का जन्म विवरण भरिए। यह एक पारंपरिक पैमाना है, पूरी कुंडली का विश्लेषण नहीं।</div>
+    <form id="mf" style="margin-top:10px"></form>
+    <div id="merr" style="color:#c62828;margin-top:6px"></div>
+    <div id="mout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-tarot">
+  <div class="card" id="tarotcard">
+    <b>टैरो</b>
+    <div class="muted" style="font-size:.85rem">मन में अपना प्रश्न रखिए, स्प्रेड चुनिए और कार्ड खींचिए। यह आत्म-चिंतन के लिए है।</div>
+    <form id="tf" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <div style="flex:2;min-width:180px"><label>प्रश्न (वैकल्पिक)</label><input id="tq" maxlength="300"></div>
+      <div><label>स्प्रेड</label><select id="ts"><option value="single">एक कार्ड</option><option value="three" selected>भूत · वर्तमान · भविष्य</option><option value="celtic">दस-कार्ड क्रॉस</option></select></div>
+      <div><button type="submit">कार्ड खींचिए</button></div>
+    </form>
+    <div id="terr" style="color:#c62828;margin-top:6px"></div>
+    <div id="tout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-vastu">
+  <div class="card" id="vastucard">
+    <b>वास्तु जाँच</b>
+    <div class="muted" style="font-size:.85rem">अपने घर के कमरे और उनकी दिशा चुनिए। यह परंपरागत मार्गदर्शन है।</div>
+    <div id="vrows" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button type="button" id="vadd">+ कमरा जोड़िए</button> <button type="button" id="vgo">जाँचिए</button></div>
+    <div id="verr" style="color:#c62828;margin-top:6px"></div>
+    <div id="vout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-palm">
+  <div class="card" id="palmcard">
+    <b>हस्तरेखा (मार्गदर्शित)</b>
+    <div class="muted" style="font-size:.85rem">अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे "—" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।</div>
+    <div id="prows" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button type="button" id="pgo">पढ़िए</button></div>
+    <div id="perr" style="color:#c62828;margin-top:6px"></div>
+    <div id="pout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-ask">
+  <div class="card" id="askcard">
+    <b>पूछिए (ज्योतिष सहायक)</b>
+    <div class="muted" style="font-size:.85rem">ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद "मेरा" वाले प्रश्न उसी कुंडली से जुड़ते हैं।</div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <input id="askq" maxlength="500" placeholder="जैसे: शनि 10वें भाव में क्या फल देता है?" style="flex:1 1 280px">
+      <button type="button" id="askgo" style="width:auto">पूछिए</button>
+    </div>
+    <div id="askerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="askout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-mine">
+  <div class="card" id="authcard">
+    <b>मेरी कुंडलियाँ</b>
+    <div id="signedout"><label>ईमेल से लॉगिन (लिंक ईमेल पर आएगा)</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lemail" type="email" placeholder="आपका ईमेल" style="flex:1;min-width:180px"><button type="button" id="lgo">लॉगिन लिंक भेजें</button></div>
+      <div class="muted" id="lmsg"></div></div>
+    <div id="signedin" style="display:none"><span class="muted" id="who"></span> <button type="button" id="lsave">इस कुंडली को सेव करें</button> <button type="button" id="lout">लॉग-आउट</button>
+      <div id="plist" style="margin-top:8px"></div><div id="lperr" style="color:#c62828"></div></div>
+  </div>
+
+  </section>
 </main>
 <script src="config.js"></script>
 <script>
@@ -181,6 +236,29 @@ const API = new URLSearchParams(location.search).get('api') || '';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let chart = null, KB = {planets:null, houses:null, nakshatras:null, signs:null};
+window.authToken = null;                       // set by the login module when signed in
+const apiFetch = (path, opts = {}) => {        // every API call goes through here so a login token is attached
+  const headers = Object.assign({}, opts.headers || {});
+  if (window.authToken && !headers.Authorization) headers.Authorization = 'Bearer ' + window.authToken;
+  return fetch(API + path, Object.assign({}, opts, {headers}));
+};
+// ---- Tabs (top sections) and sub-tabs (chart results)
+(function tabsUI() {
+  const wire = (nav, attr, cls, key) => {
+    const btns = [...nav.querySelectorAll('button')];
+    const show = id => {
+      btns.forEach(b => b.classList.toggle('on', b.dataset[attr] === id));
+      [...document.querySelectorAll('.' + cls)].forEach(sec => sec.classList.toggle('on', sec.id === id));
+      try { localStorage.setItem(key, id); } catch (e) {}
+    };
+    btns.forEach(b => b.addEventListener('click', () => show(b.dataset[attr])));
+    let saved = null; try { saved = localStorage.getItem(key); } catch (e) {}
+    if (saved && btns.some(b => b.dataset[attr] === saved && b.style.display !== 'none')) show(saved);
+    return show;
+  };
+  window.showTab = wire($('tabs'), 'tab', 'tab', 'kundali_tab');
+  window.showSub = wire($('subtabs'), 'sub', 'sub', 'kundali_sub');
+})();
 
 $('city').addEventListener('change', e => {
   if (!e.target.value) return;
@@ -256,7 +334,7 @@ async function renderNumerology(body) {
   const el = $('numer');
   try {
     if (!NUMKB) { const r = await fetch(API + '/data/knowledge/numbers.json'); if (r.ok) NUMKB = await r.json(); }
-    const r = await fetch(API + '/v1/numerology', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date:body.date, name:body.name})});
+    const r = await apiFetch('/v1/numerology', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date:body.date, name:body.name})});
     const n = await r.json(); if (!r.ok) throw new Error(n.detail);
     const kb = x => NUMKB?.numbers?.[x];
     const line = (lbl, x, planet) => `<tr><th>${lbl}</th><td><b>${x}</b> (${esc(HI[planet] || planet || '')})</td><td class="muted">${esc(kb(x)?.traits_hi || '')}</td></tr>`;
@@ -311,7 +389,7 @@ function showHouse(h, kind) {
 
 function render(c) {
   chart = c;
-  $('out').hidden = false;
+  $('out').hidden = false; if (window.showTab) window.showTab('t-kundali');
   $('note').textContent = `गणना इंजन: ${c.backend}. ${c.backend_note}`;
   $('warns').hidden = !c.input_warnings.length; $('warns').innerHTML = c.input_warnings.map(w => '⚠ ' + esc(w.text_hi)).join('<br>');
   const m = c.planets.find(p => p.name === 'Moon');
@@ -399,7 +477,7 @@ $('f').addEventListener('submit', async e => {
       if (p.ok) KB.planets = await p.json(); if (h.ok) KB.houses = await h.json();
       if (n.ok) KB.nakshatras = await n.json(); if (sg.ok) KB.signs = await sg.json();
     }
-    const r = await fetch(API + '/v1/chart', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+    const r = await apiFetch('/v1/chart', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
     const data = await r.json();
     if (!r.ok) throw new Error(data.detail || 'त्रुटि');
     window.lastBody = body;
@@ -435,7 +513,7 @@ const CONF = {firm:'पक्का नियम', draft:'ड्राफ़्�
 $('mf').addEventListener('submit', async e => {
   e.preventDefault(); $('merr').textContent = ''; $('mout').innerHTML = '';
   try {
-    const r = await fetch(API + '/v1/match', {method:'POST', headers:{'Content-Type':'application/json'},
+    const r = await apiFetch('/v1/match', {method:'POST', headers:{'Content-Type':'application/json'},
                           body:JSON.stringify({boy:personBody('b'), girl:personBody('g')})});
     const m = await r.json(); if (!r.ok) throw new Error(m.detail || 'त्रुटि');
     const rows = m.kootas.map(k => `<tr><td>${esc(k.name_hi)} <span class="muted">(${esc(k.name)})</span></td>
@@ -455,7 +533,7 @@ $('mf').addEventListener('submit', async e => {
 $('tf').addEventListener('submit', async e => {
   e.preventDefault(); $('terr').textContent = ''; $('tout').innerHTML = '';
   try {
-    const r = await fetch(API + '/v1/tarot', {method:'POST', headers:{'Content-Type':'application/json'},
+    const r = await apiFetch('/v1/tarot', {method:'POST', headers:{'Content-Type':'application/json'},
                           body:JSON.stringify({spread:$('ts').value, question:$('tq').value.trim() || null})});
     const t = await r.json(); if (!r.ok) throw new Error(t.detail || 'त्रुटि');
     const cards = t.cards.map(c => `<div class="card" style="margin:0;flex:1 1 200px">
@@ -491,7 +569,7 @@ $('repbtn').addEventListener('click', async () => {
   $('reperr').textContent = '';
   const w = window.open('', '_blank');
   try {
-    const r = await fetch(API + '/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, lang: window.getLang ? window.getLang() : 'hi'})});
+    const r = await apiFetch('/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, lang: window.getLang ? window.getLang() : 'hi'})});
     if (!r.ok) throw new Error((await r.json()).detail || 'त्रुटि');
     const html = await r.text();
     w.document.open(); w.document.write(html); w.document.close();
@@ -500,7 +578,7 @@ $('repbtn').addEventListener('click', async () => {
 
 // Vastu check
 (async function vastuUI() {
-  let cat; try { cat = await (await fetch(API + '/v1/vastu/catalog')).json(); } catch (e) { $('vastucard').style.display = 'none'; return; }
+  let cat; try { cat = await (await apiFetch('/v1/vastu/catalog')).json(); } catch (e) { $('vastucard').style.display = 'none'; return; }
   const roomOpts = Object.entries(cat.rooms).map(([k, r]) => `<option value="${k}">${esc(r.hi)}</option>`).join('');
   const dirOpts = Object.entries(cat.directions).map(([k, d]) => `<option value="${k}">${esc(d.hi)}</option>`).join('');
   const add = (room, dir) => {
@@ -516,7 +594,7 @@ $('repbtn').addEventListener('click', async () => {
     $('verr').textContent = ''; $('vout').innerHTML = '';
     const items = [...document.querySelectorAll('.vrow')].map(r => ({room:r.querySelector('.vroom').value, direction:r.querySelector('.vdir').value}));
     try {
-      const r = await fetch(API + '/v1/vastu', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({items})});
+      const r = await apiFetch('/v1/vastu', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({items})});
       const v = await r.json(); if (!r.ok) throw new Error(v.detail || 'त्रुटि');
       $('vout').innerHTML = `<table style="margin-top:8px"><tr><th>कमरा</th><th>दिशा</th><th>स्थिति</th><th>कारण / सुझाव</th></tr>` +
         v.items.map(i => `<tr><td>${esc(i.room_hi)}</td><td>${esc(i.direction_hi)}</td><td><span class="chip ${RC[i.rating]}">${esc(i.rating_hi)}</span></td>
@@ -528,7 +606,7 @@ $('repbtn').addEventListener('click', async () => {
 
 // Palm (guided checklist)
 (async function palmUI() {
-  let cat; try { cat = await (await fetch(API + '/v1/palm/catalog')).json(); } catch (e) { $('palmcard').style.display = 'none'; return; }
+  let cat; try { cat = await (await apiFetch('/v1/palm/catalog')).json(); } catch (e) { $('palmcard').style.display = 'none'; return; }
   $('prows').innerHTML = cat.features.map(f => `<div style="margin-bottom:8px"><label>${esc(f.group)} — ${esc(f.hi)}</label>
     <div class="muted" style="font-size:.8rem">${esc(f.where_hi)}</div>
     <select data-pf="${esc(f.key)}"><option value="">—</option>${f.options.map(o => `<option value="${esc(o.key)}">${esc(o.hi)}</option>`).join('')}</select></div>`).join('');
@@ -537,7 +615,7 @@ $('repbtn').addEventListener('click', async () => {
     const choices = {}; document.querySelectorAll('[data-pf]').forEach(sel => { if (sel.value) choices[sel.dataset.pf] = sel.value; });
     if (!Object.keys(choices).length) { $('perr').textContent = 'कम से कम एक विकल्प चुनिए।'; return; }
     try {
-      const r = await fetch(API + '/v1/palm', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({choices})});
+      const r = await apiFetch('/v1/palm', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({choices})});
       const d = await r.json(); if (!r.ok) throw new Error(Array.isArray(d.detail) ? 'कम से कम एक विकल्प चुनिए' : (d.detail || 'त्रुटि'));
       $('pout').innerHTML = Object.entries(d.groups).map(([g, ts]) => `<h4 style="margin:12px 0 4px">${esc(g)}</h4>` +
         ts.map(t => `<p style="margin:4px 0"><b>${esc(t.feature_hi)}: ${esc(t.choice_hi)}</b><br><span class="muted">${esc(t.meaning_hi)}</span></p>`).join('')).join('') +
@@ -549,7 +627,7 @@ $('repbtn').addEventListener('click', async () => {
 $('vgo2').addEventListener('click', async () => {
   $('verr2').textContent = ''; $('vout2').innerHTML = '';
   try {
-    const r = await fetch(API + '/v1/varshaphal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, year:+$('vyear').value})});
+    const r = await apiFetch('/v1/varshaphal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, year:+$('vyear').value})});
     const v = await r.json(); if (!r.ok) throw new Error(Array.isArray(v.detail) ? 'वर्ष जाँचिए' : (v.detail || 'त्रुटि'));
     const hi = {}; chart.planets.forEach(p => hi[p.name] = p.name_hi);
     $('vout2').innerHTML = `<p><b>${v.year}</b> (आयु ${v.age}): सूर्य-वापसी <b>${esc(v.return_local)}</b> (${esc(v.tz)}) · वर्ष-लग्न <b>${esc(v.lagna.sign_name_hi)}</b> ${esc(v.lagna.dms)}</p>
@@ -568,16 +646,16 @@ $('vgo2').addEventListener('click', async () => {
       sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
   } catch (e) { return; }
   const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY);
-  $('authcard').style.display = '';
+  $('tab-mine').style.display = '';
   let token = null;
   const call = async (method, path, body) => {
-    const r = await fetch(API + path, {method, headers:{'Content-Type':'application/json', Authorization:'Bearer ' + token}, body: body ? JSON.stringify(body) : undefined});
+    const r = await apiFetch(path, {method, headers:{'Content-Type':'application/json', Authorization:'Bearer ' + token}, body: body ? JSON.stringify(body) : undefined});
     const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि'); return d;
   };
   async function refresh() {
     $('lperr').textContent = '';
     const {data} = await sb.auth.getSession();
-    token = data.session ? data.session.access_token : null;
+    token = data.session ? data.session.access_token : null; window.authToken = token;
     $('signedout').style.display = token ? 'none' : ''; $('signedin').style.display = token ? '' : 'none';
     if (!token) return;
     $('who').textContent = data.session.user.email;
@@ -622,7 +700,7 @@ $('vgo2').addEventListener('click', async () => {
       const lang = window.getLang ? window.getLang() : 'hi';
       const payload = {question: q, lang};
       if (window.lastBody) payload.chart = window.lastBody;
-      const r = await fetch(API + '/v1/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+      const r = await apiFetch('/v1/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
       const d = await r.json();
       if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const srcs = (d.sources || []).map(s => `<li><code>${esc(s.id)}</code> ${esc(s.text)}</li>`).join('');

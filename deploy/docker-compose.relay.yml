@@ -12,6 +12,11 @@ services:
     environment:
       KUNDALI_SERVE_WEB: "1"
       CORS_ORIGINS: ${CORS_ORIGINS:-}
+      KUNDALI_AUTH: ${KUNDALI_AUTH:-optional}     # anonymous web use allowed; API keys / logins are metered
+      KUNDALI_DB: /srv/data/access.sqlite
+      SUPABASE_URL: ${SUPABASE_URL:-}
+    volumes:
+      - kundali-data:/srv/data
     mem_limit: 768m
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health')"]
@@ -19,6 +24,9 @@ services:
       timeout: 5s
       retries: 3
     networks: [caddy]
+
+volumes:
+  kundali-data:
 
 networks:
   caddy:

@@ -157,6 +157,10 @@ UI = {
  "पश्चिम": "West", "वायव्य (उत्तर-पश्चिम)": "Vayavya (north-west)", "केंद्र (ब्रह्मस्थान)": "Centre (Brahmasthan)",
  "+ कमरा जोड़िए": "+ Add room", "जाँचिए": "Check", "कमरा": "Room", "दिशा": "Direction", "स्थिति": "Status",
  "कारण / सुझाव": "Reason / suggestion", "उत्तम": "excellent",
+ # tabs
+ "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
+ "पंचांग व मुहूर्त": "Panchang & muhurta", "योग व संकेत": "Yogas & indications", "दशा व समय-रेखा": "Dasha & timeline",
+ "अष्टकवर्ग व गोचर": "Ashtakavarga & transits", "वर्षफल": "Varshaphal", "अंक": "Numbers",
  # ask
  "पूछिए (ज्योतिष सहायक)": "Ask (astrology assistant)", "पूछिए": "Ask", "खोज रहा हूँ…": "Searching…", "स्रोत": "Sources",
  "ग्रह, भाव, राशि, नक्षत्र, दशा, योग, वास्तु या टैरो के बारे में पूछिए। उत्तर केवल इस ऐप की अपनी सामग्री से आते हैं। कुंडली बनाने के बाद \"मेरा\" वाले प्रश्न उसी कुंडली से जुड़ते हैं।":
