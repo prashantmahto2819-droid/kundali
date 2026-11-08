@@ -241,6 +241,23 @@ VPLAN_PATTERNS = [("अंक {1} / {2} · उत्तर-कोण {3}°", "Sc
                   ("फ़ोन का शीर्ष {1}° की ओर था → उत्तर-कोण {2}°।", "The phone's top pointed to {1}° → north angle {2}°."),
                   ("DXF की {1} रेखा-आकृतियाँ (LINE/POLYLINE/CIRCLE/ARC) चित्र में बदली गईं; टेक्स्ट, हैच और ब्लॉक नहीं दिखते। DWG हो तो AutoCAD/LibreCAD से DXF में सेव कीजिए।",
                    "{1} DXF entities (LINE/POLYLINE/CIRCLE/ARC) rendered; text, hatches and blocks are not shown. For a DWG, save it as DXF from AutoCAD/LibreCAD.")]
+# pattern yogas (Mahapurusha, Nabhasa, conjunction)
+from jyotish import yogas_nabhasa as _yn
+for _pl, (_id, _nm, _hi, _thi, _ten) in _yn.MAHAPURUSHA.items():
+    put(f"{_hi} महापुरुष योग", f"{_nm} Mahapurusha Yoga"); put(_thi, _ten)
+for _id, (_nm, _hi, _g, _thi, _ten) in _yn.NABHASA_TEXT.items():
+    put(f"{_hi} (नाभस) योग", f"{_nm} (Nabhasa) Yoga"); put(_thi, _ten)
+for _id, (_nm, _hi, _thi, _ten) in _yn.CONJ_TEXT.items():
+    put(f"{_hi} योग", f"{_nm} Yoga"); put(_thi, _ten)
+put("नहीं बना (ग्रह एक राशि में नहीं)।", "Not formed (the planets are not in one sign).")
+put("कोई विशेष योग नहीं बना।", "No special yoga is formed.")
+YOGA_PATTERNS = [("सातों ग्रहों के भाव: {1}", "houses occupied by the seven planets: {1}"), ("राशि-स्वभाव: {1} (0 चर, 1 स्थिर, 2 द्विस्वभाव)", "sign qualities occupied: {1} (0 movable, 1 fixed, 2 dual)"), ("सात ग्रह {1} राशि(यों) में", "seven planets occupy {1} sign(s)"),
+                 ("सात ग्रह {1} राशि(यों) में; आकृति योग को प्राथमिकता", "seven planets occupy {1} sign(s); an Akriti yoga takes precedence"),
+                 ("{1} स्वराशि या उच्च में, लग्न से केंद्र में (यहाँ भाव {2}, {3})।", "{1} in its own or exaltation sign in a kendra from the Lagna (here house {2}, {3} sign)."),
+                 ("चंद्र गुरु से {1}वें भाव में।", "Moon is in house {1} from Jupiter."), ("नहीं बने योग ({1})", "Yogas not formed ({1})"),
+                 ("{1} योग जाँचे गए (शास्त्रीय, पंच-महापुरुष, 32 नाभस आकृति-योग, युति-योग); {2} बने हैं।", "{1} yogas checked (classical, Pancha Mahapurusha, 32 Nabhasa pattern yogas, conjunction yogas); {2} are formed.")]
+for _hi, _en in (("स्वराशि", "own"), ("उच्च", "exalted"), ("सामान्य राशि", "ordinary")):
+    EXACT.setdefault(_hi, _en)
 # palm tracing
 from jyotish import palm_trace as _ptr
 _pk = _json.loads((ROOT / "data" / "knowledge" / "palm.json").read_text(encoding="utf-8"))
@@ -272,7 +289,7 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

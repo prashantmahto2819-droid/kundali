@@ -118,7 +118,7 @@ def render(chart: dict, brand: dict | None = None) -> str:
     ss = go["sade_sati"]
     sade = ("साढ़ेसाती चल रही है (" + {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] + " चरण)."
             if ss["active"] else ("अष्टम शनि चल रहा है." if ss["ashtama"] else "अभी साढ़ेसाती नहीं है."))
-    yoga_rows = [[e(y["name_hi"]), "बना है" if y["present"] else "नहीं", e(y["why_hi"])] for y in chart["yogas"]]
+    yoga_rows = [[e(y["name_hi"]), "बना है", e(y["why_hi"])] for y in chart["yogas"] if y["present"]] or [["—", "—", f"{len(chart['yogas'])} योग जाँचे गए; कोई विशेष योग नहीं बना।"]]
     rl = chart["relations"]
     rel_items = [f'<li><b>{e(x["planet_hi"])}</b> ({e(x["sign_hi"])}): {e(x["text_hi"])}'
                  + ("".join(f'<br><span class="small">• {e(c["text_hi"])}</span>' for c in x["conditions"])) + "</li>"

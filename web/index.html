@@ -826,7 +826,10 @@ function render(c) {
     <div class="muted" style="font-size:.85rem;margin-top:4px">अंतर्दशा: ${m.antardashas.map(a => `<span style="${a.phase==='running'?'font-weight:700;color:var(--accent)':''}">${esc(a.lord_hi)} (${a.start.slice(0,7)}) · ${esc(a.themes_hi.join('/'))}</span>`).join(' → ')}</div>
   </details>`).join('');
 
-  $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why_hi)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
+  const yrow = y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why_hi)}${y.context_hi ? ` <span>${esc(y.context_hi)}</span>` : ''} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`;
+  const yp = c.yogas.filter(y => y.present), ya = c.yogas.filter(y => !y.present);
+  $('yogas').innerHTML = `<p class="muted" style="font-size:.85rem">${c.yogas.length} योग जाँचे गए (शास्त्रीय, पंच-महापुरुष, 32 नाभस आकृति-योग, युति-योग); ${yp.length} बने हैं।</p>` + (yp.map(yrow).join('') || '<div class="muted">कोई विशेष योग नहीं बना।</div>') +
+    `<details style="margin-top:8px"><summary class="muted">नहीं बने योग (${ya.length})</summary>${ya.map(yrow).join('')}</details>`;
 
   $('readings').innerHTML = c.readings.length ? c.readings.map(r => `<details open><summary><b>${esc(planetMap()[r.planet].name_hi)}</b> — भाव ${r.house}</summary>
       <div>${esc(r.text_hi)}</div>

@@ -157,4 +157,8 @@ def detect_yogas(chart: dict) -> list[dict]:
     add("saraswati", "Saraswati Yoga", "सरस्वती योग", sw,
         "Jupiter, Venus and Mercury each in a kendra, trikona or the 2nd, with Jupiter in own/exalted sign (friendly sign not checked here).",
         "गुरु, शुक्र और बुध तीनों केंद्र, त्रिकोण या दूसरे भाव में, और गुरु स्वराशि/उच्च में (मित्र राशि यहाँ नहीं जाँची गई)।")
+    for y in out:
+        y.setdefault("group", "classical")
+    from . import yogas_nabhasa
+    out.extend(yogas_nabhasa.detect(chart))
     return out

@@ -35,6 +35,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 ## Yogas
 - [x] Yoga batch 2: Sunapha/Anapha/Durudhara/Kemadruma, Vesi/Vasi/Ubhayachari, Adhi, Amala, Viparita Raja (Harsha/Sarala/Vimala), Parivartana, Dhana (2/11 with 5/9), Raja (kendra–trikona), Lakshmi, Saraswati. 27 yogas total, all draft.
 
+## Yogas (patterns)
+- [x] Yoga batch 3 (`yogas_nabhasa.py`): Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Shasha), all 32 Nabhasa pattern yogas (Ashraya 3, Dala 2, Akriti 20, Sankhya 7 with Akriti precedence), Guru-Chandala, Grahana (Sun/Moon), Angaraka, Vish, Shakata (Moon–Jupiter). 70 yogas total; web lists the formed ones first.
+
 ## Dasha
 - [x] Running chain resolved to pratyantar (3rd level); pratyantars of the running antardasha listed on web and in the report.
 
