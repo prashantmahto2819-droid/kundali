@@ -36,7 +36,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 
 ## Next
 1. Phase 1 (in progress): [x] sunrise/sunset, sunrise-based vara, Rahu Kaal, Choghadiya, Abhijit; [x] D2/D3/D4/D7/D10/D12; [x] numerology; [x] D16/D20/D24/D27/D30/D40/D45/D60 vargas; [x] bhava-chalit (Sripati cusps, MC, planets that move house); [ ] geocoding + timezone lookup, rectification warnings.
-2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v1: Vashya/Yoni/Gana to verify; parihara pending), [x] numerology, [x] tarot (v2: all 78 cards hand-written, upright/reversed, Hindi+English; reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).
+2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v2: Bhakoot/Nadi parihara conditions + total with parihara; Vashya/Yoni/Gana tables to verify), [x] numerology, [x] tarot (v2: all 78 cards hand-written, upright/reversed, Hindi+English; reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).
 3. Phase 3: [x] RAG chat v1 (`/v1/ask`: BM25 retrieval + guardrails + optional LLM + web Ask card; LLM path untested; FastAPI route verified on the Relay server), [ ] course content, [x] numerology passages in retrieval, [ ] retrieval quality evaluation set.
 4. Phase 4: palmistry (needs a labelled palm dataset) and vastu overlay.
 5. Phase 5: Lal Kitab, KP, Jaimini, astrologer tools, mobile app.

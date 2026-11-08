@@ -95,3 +95,20 @@ def test_handler_roundtrip_and_validation():
         handlers.match_from_payload({"boy": person})
     with pytest.raises(handlers.BadRequest, match="girl"):
         handlers.match_from_payload({"boy": person, "girl": {**person, "tz": "Nowhere/Land"}})
+
+
+def test_parihara_of_bhakoot_and_nadi():
+    from jyotish import matching as m
+    r = m.ashtakoota(5.0, 215.0)                      # Mesha / Vrishchika Moons: 6-8 Bhakoot, both ruled by Mars
+    assert [d["name"] for d in r["doshas"]] == ["Bhakoot"] and r["doshas"][0]["cancelled"]
+    assert r["parihara"][0]["dosha"] == "Bhakoot" and "Mars" in r["parihara"][0]["why"]
+    assert r["total_with_parihara"] == r["total"] + 7
+    r = m.ashtakoota(1.0, 5.0)                        # Ashwini pada 1 and pada 2: same nadi, cancelled by different padas
+    assert any(d["name"] == "Nadi" and d["cancelled"] for d in r["doshas"])
+    assert "different padas" in r["parihara"][0]["why"] and r["total_with_parihara"] == r["total"] + 8
+    r = m.ashtakoota(5.0, 100.0)
+    assert r["doshas"] == [] and r["parihara"] == [] and r["total_with_parihara"] == r["total"]
+    # Nadi dosha without any parihara stays uncancelled
+    r = m.ashtakoota(1.0, 81.0)                       # Ashwini and Punarvasu (index 6): both Adi nadi, different signs/lords
+    nadi = next(k for k in r["kootas"] if k["name"] == "Nadi")
+    assert nadi["score"] == 0 and not nadi.get("dosha_cancelled")

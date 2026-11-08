@@ -194,7 +194,10 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "भाव-मध्य (12)": "House middles (12)", "सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "दोष:": "Dosha:", "(परिहार मिला)": "(cancelled)", "परिहार:": "Parihara:",
+ "भकूट या नाड़ी दोष नहीं।": "No Bhakoot or Nadi dosha.", "भकूट दोष": "Bhakoot dosha", "नाड़ी दोष": "Nadi dosha",
+ "एक ही राशि, अलग नक्षत्र": "same Moon sign, different nakshatras", "एक ही नक्षत्र, अलग चरण": "same nakshatra, different padas",
+ "एक ही नक्षत्र, अलग राशि": "same nakshatra in different signs", "दोनों का जन्म-नक्षत्र एक ही है": "same birth nakshatra", "भाव-मध्य (12)": "House middles (12)", "सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
  "चेष्टा": "Cheshta", "रूप": "Rupas", "स्थान": "Sthana", "काल": "Kala", "दृग्": "Drik",
  # tabs
  "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
@@ -323,8 +326,8 @@ REPORT.update({
    "Enter the birth details. The calculation is astronomical; the interpretation is guidance based on traditional texts, not a final decision.",
  "वर और वधू का जन्म विवरण भरिए। यह एक पारंपरिक पैमाना है, पूरी कुंडली का विश्लेषण नहीं।":
    "Fill in the birth details of the groom and bride. This is a traditional yardstick, not an analysis of the full chart.",
- "यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, और परिहार अपने आप लागू नहीं होते। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।":
-   "This score is a traditional yardstick. It does not look at the dashas, 7th house or planetary strength of the two charts, and cancellations (parihara) are not applied automatically. Kootas marked ‘draft’ are pending scholar review.",
+ "यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, भकूट-नाड़ी परिहार की प्रचलित शर्तें जाँची जाती हैं (ड्राफ़्ट)। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।":
+   "This score is a traditional yardstick. It does not look at the dashas, 7th house or planetary strength of the two charts; common Bhakoot/Nadi parihara conditions are checked (draft). Kootas marked ‘draft’ are pending scholar review.",
  "मन में अपना प्रश्न रखिए, स्प्रेड चुनिए और कार्ड खींचिए। यह आत्म-चिंतन के लिए है।":
    "Hold your question in mind, choose a spread and draw cards. This is for self-reflection.",
  "अपने घर के कमरे और उनकी दिशा चुनिए। यह परंपरागत मार्गदर्शन है।": "Choose the rooms of your home and their directions. This is traditional guidance.",
@@ -378,6 +381,8 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
+EXTRA_PATTERNS += [("परिहार सहित योग: {1} / 36", "Total with parihara: {1} / 36"), ("{1} दोष (परिहार मिला)", "{1} dosha (cancelled)"), ("{1} दोष", "{1} dosha"),
+                   ("दोनों राशियों का स्वामी {1} है", "both Moon-sign lords are {1}"), ("राशि-स्वामी {1} और {2} परस्पर मित्र हैं", "Moon-sign lords {1} and {2} are mutual friends")]
 EXTRA_PATTERNS += [("{1}: राशि-भाव {2} → चलित भाव {3}", "{1}: rasi house {2} → chalit house {3}"), ("दशम भाव-मध्य (MC): {1} {2}", "Tenth house middle (MC): {1} {2}"), ("दशम भाव-मध्य (MC):", "Tenth house middle (MC):")]
 EXTRA_PATTERNS += [("स्रोत ({1})", "Sources ({1})"), ("{1}-{2} (स्वामी {3})", "{1}-{2} (lord {3})")]
 EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की प्रधानता ({2} कार्ड): {3} पर ज़ोर।", "Dominance of {1} ({2} cards): emphasis on {3}.")]

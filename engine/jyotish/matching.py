@@ -168,7 +168,35 @@ def ashtakoota(boy_moon: float, girl_moon: float) -> dict:
     kootas.append(_koota("Nadi", "नाड़ी", 0 if bnadi == gnadi else 8, 8,
                          f"groom {bnadi}, bride {gnadi}" + ("; same nadi" if bnadi == gnadi else ""), "firm"))
 
+    # ---- Parihara (cancellation) of Bhakoot and Nadi dosha: commonly cited conditions, marked draft
+    friends = _relation(bl, gl) == "friend" and _relation(gl, bl) == "friend"
+    same_nak, same_sign = bn["index"] == gn["index"], bs == gs
+    parihara = []
+    if bad:                                     # Bhakoot dosha present
+        if bl == gl:
+            parihara.append({"dosha": "Bhakoot", "why": f"both Moon-sign lords are {bl}", "why_hi": f"दोनों राशियों का स्वामी {bl} है"})
+        elif friends:
+            parihara.append({"dosha": "Bhakoot", "why": f"Moon-sign lords {bl} and {gl} are mutual friends", "why_hi": f"राशि-स्वामी {bl} और {gl} परस्पर मित्र हैं"})
+        elif same_nak:
+            parihara.append({"dosha": "Bhakoot", "why": "same birth nakshatra", "why_hi": "दोनों का जन्म-नक्षत्र एक ही है"})
+    if bnadi == gnadi:                          # Nadi dosha present
+        if same_sign and not same_nak:
+            parihara.append({"dosha": "Nadi", "why": "same Moon sign, different nakshatras", "why_hi": "एक ही राशि, अलग नक्षत्र"})
+        elif same_nak and bn["pada"] != gn["pada"]:
+            parihara.append({"dosha": "Nadi", "why": "same nakshatra, different padas", "why_hi": "एक ही नक्षत्र, अलग चरण"})
+        elif same_nak and not same_sign:
+            parihara.append({"dosha": "Nadi", "why": "same nakshatra in different signs", "why_hi": "एक ही नक्षत्र, अलग राशि"})
+        elif bl == gl:
+            parihara.append({"dosha": "Nadi", "why": f"both Moon-sign lords are {bl}", "why_hi": f"दोनों राशियों का स्वामी {bl} है"})
+    cancelled = {x["dosha"] for x in parihara}
+    for k in kootas:
+        if k["name"] in cancelled and k["score"] == 0:
+            k["dosha_cancelled"] = True
+    doshas = [{"name": k["name"], "name_hi": k["name_hi"], "cancelled": k["name"] in cancelled}
+              for k in kootas if k["name"] in ("Bhakoot", "Nadi") and k["score"] == 0]
+
     total = sum(k["score"] for k in kootas)
+    total_with_parihara = total + sum(k["max"] for k in kootas if k.get("dosha_cancelled"))
     if total < 18:
         band_en, band_hi = "below the traditional minimum of 18", "पारंपरिक न्यूनतम 18 से कम"
     elif total < 25:
@@ -179,6 +207,9 @@ def ashtakoota(boy_moon: float, girl_moon: float) -> dict:
         band_en, band_hi = "excellent (33+)", "उत्तम (33+)"
     return {
         "total": total, "max": 36, "band_en": band_en, "band_hi": band_hi, "kootas": kootas,
+        "doshas": doshas, "parihara": parihara, "total_with_parihara": total_with_parihara,
+        "parihara_note_hi": "भकूट और नाड़ी दोष के परिहार (निवारण) की प्रचलित शर्तें जाँची गई हैं; परिहार मिलने पर वह गुण 'परिहार सहित योग' में जोड़ा गया है। यह ड्राफ़्ट है, विद्वान-समीक्षा के अधीन।",
+        "parihara_note_en": "Common parihara (cancellation) conditions for Bhakoot and Nadi dosha are checked; a cancelled dosha's points are added in 'total with parihara'. Draft, pending scholar review.",
         "groom": {"moon_sign": SIGNS[bs], "nakshatra": bn["name"], "nakshatra_hi": bn["name_hi"], "pada": bn["pada"]},
         "bride": {"moon_sign": SIGNS[gs], "nakshatra": gn["name"], "nakshatra_hi": gn["name_hi"], "pada": gn["pada"]},
         "caution": ("The score is one traditional lens. It ignores the rest of both charts (dashas, 7th house, "
