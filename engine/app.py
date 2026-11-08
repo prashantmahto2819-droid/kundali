@@ -134,6 +134,21 @@ def vastu_catalog():
     return handlers.vastu_catalog()
 
 
+class VarshaphalRequest(ChartRequest):
+    year: int
+    return_lat: float | None = None
+    return_lon: float | None = None
+    return_tz: str | None = None
+
+
+@app.post("/v1/varshaphal")
+def varshaphal(req: VarshaphalRequest):
+    try:
+        return handlers.varshaphal_from_payload(req.model_dump(exclude_none=True))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 class PalmRequest(BaseModel):
     choices: dict[str, str]
 

@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import matching, numerology, palm, places, tarot, vastu
+from . import matching, numerology, palm, places, tarot, vastu, varshaphal
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -153,5 +153,31 @@ def vastu_catalog() -> dict:
 def palm_from_payload(payload: dict) -> dict:
     try:
         return palm.read(payload.get("choices"))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def varshaphal_from_payload(payload: dict) -> dict:
+    """Solar-return chart. Body = /v1/chart fields plus `year`; optional return_lat, return_lon, return_tz."""
+    natal = chart_from_payload({k: v for k, v in payload.items() if k not in ("year", "return_lat", "return_lon", "return_tz")})
+    try:
+        year = int(payload["year"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise BadRequest("year (e.g. 2027) is required") from exc
+    if not 1900 <= year <= 2100:
+        raise BadRequest("year must be between 1900 and 2100")
+    try:
+        lat = float(payload["return_lat"]) if payload.get("return_lat") is not None else None
+        lon = float(payload["return_lon"]) if payload.get("return_lon") is not None else None
+    except (TypeError, ValueError) as exc:
+        raise BadRequest("return_lat and return_lon must be numbers") from exc
+    tz = payload.get("return_tz")
+    if tz:
+        try:
+            ZoneInfo(tz)
+        except (ZoneInfoNotFoundError, ValueError) as exc:
+            raise BadRequest(f"Unknown time zone '{tz}'") from exc
+    try:
+        return varshaphal.varshaphal(natal, year, lat, lon, tz, backend())
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc

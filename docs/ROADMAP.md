@@ -34,3 +34,4 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Partial planetary strength v1 (uccha, dig, kendradi, naisargika; NOT full Shadbala). Pending: kala, cheshta, drik, saptavargaja, ojayugma, true bhava cusps.
 - [x] Learning layer: 27 nakshatras + 12 rashis (lord, deity, symbol, traits) in the click-to-learn panel; Hindi planet explanations. Pending: house x sign lessons, glossary, quizzes.
 - [x] Life timeline v1: every Vimshottari period read via the dasha lord (placement, lordship, dignity, ashtakavarga) with a transparent strength tag; past/running/future; themes only, no event predictions. Pending: transit overlay, yoga/aspect effects, scholar review.
+- [x] Varshaphal v1: solar-return chart (solved numerically, error under 1 arc-second against the same backend) + muntha. Pending: varshesha, sahams, muddha dasha, Tajika aspects.

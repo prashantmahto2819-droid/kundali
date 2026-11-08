@@ -67,7 +67,8 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/match": handlers.match_from_payload,
                   "/v1/tarot": handlers.tarot_from_payload,
                   "/v1/vastu": handlers.vastu_from_payload,
-                  "/v1/palm": handlers.palm_from_payload}
+                  "/v1/palm": handlers.palm_from_payload,
+                  "/v1/varshaphal": handlers.varshaphal_from_payload}
         if self.path == "/v1/report":
             try:
                 length = int(self.headers.get("Content-Length", 0))

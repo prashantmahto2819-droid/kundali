@@ -143,6 +143,11 @@
       <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
     </div>
     <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
+    <div class="card"><b>वर्षफल (सौर-वापसी कुंडली)</b>
+      <div class="muted" style="font-size:.85rem">जिस क्षण सूर्य जन्म के अंश पर लौटता है, उस क्षण की कुंडली। वर्ष चुनिए:</div>
+      <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button></div>
+      <div id="verr2" style="color:#c62828;margin-top:6px"></div><div id="vout2"></div>
+    </div>
     <div class="card"><b>जीवन समय-रेखा (दशा के अनुसार)</b>
       <div class="muted" style="font-size:.85rem" id="tlnote"></div>
       <div id="tl"></div>
@@ -333,6 +338,8 @@ function render(c) {
   $('sttable').innerHTML = `<table><tr><th>ग्रह</th><th>उच्च</th><th>दिक्</th><th>केंद्रादि</th><th>नैसर्गिक</th><th>कुल</th><th>क्रम</th></tr>` +
     stg.planets.map(r => `<tr><td>${esc(r.name_hi)}</td><td>${r.uccha}</td><td>${r.dig}</td><td>${r.kendradi}</td><td>${r.naisargika}</td><td><b>${r.total}</b></td><td>${r.rank}</td></tr>`).join('') + '</table>';
 
+  $('vyear').value = $('vyear').value || (new Date().getFullYear());
+
   // Life timeline
   const tl = c.timeline, PH = {past:'बीता', running:'चल रही', future:'आगे'};
   $('tlnote').textContent = tl.note_hi;
@@ -516,6 +523,19 @@ $('repbtn').addEventListener('click', async () => {
     } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
   };
 })();
+
+$('vgo2').addEventListener('click', async () => {
+  $('verr2').textContent = ''; $('vout2').innerHTML = '';
+  try {
+    const r = await fetch(API + '/v1/varshaphal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, year:+$('vyear').value})});
+    const v = await r.json(); if (!r.ok) throw new Error(Array.isArray(v.detail) ? 'वर्ष जाँचिए' : (v.detail || 'त्रुटि'));
+    const hi = {}; chart.planets.forEach(p => hi[p.name] = p.name_hi);
+    $('vout2').innerHTML = `<p><b>${v.year}</b> (आयु ${v.age}): सूर्य-वापसी <b>${esc(v.return_local)}</b> (${esc(v.tz)}) · वर्ष-लग्न <b>${esc(v.lagna.sign_name_hi)}</b> ${esc(v.lagna.dms)}</p>
+      <p>मुन्था: <b>${esc(v.muntha.sign_hi)}</b> राशि, वर्ष-कुंडली के भाव <b>${v.muntha.house}</b> में। <span class="muted">${esc(v.muntha.rule_hi)}</span></p>
+      <table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव</th></tr>${v.planets.map(p => `<tr><td>${esc(p.name_hi)}${p.retrograde?' (व)':''}</td><td>${esc(p.sign_name_hi)}</td><td>${esc(p.dms)}</td><td>${p.house}</td></tr>`).join('')}</table>
+      <div class="banner">${esc(v.note_hi)}</div>`;
+  } catch (err) { $('verr2').textContent = 'त्रुटि: ' + err.message; }
+});
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
 if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); setTimeout(() => $('vgo').click(), 400); }
