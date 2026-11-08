@@ -116,6 +116,16 @@ def render(chart: dict) -> str:
     sade = ("साढ़ेसाती चल रही है (" + {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] + " चरण)."
             if ss["active"] else ("अष्टम शनि चल रहा है." if ss["ashtama"] else "अभी साढ़ेसाती नहीं है."))
     yoga_rows = [[e(y["name_hi"]), "बना है" if y["present"] else "नहीं", e(y["why_hi"])] for y in chart["yogas"]]
+    rl = chart["relations"]
+    rel_items = [f'<li><b>{e(x["planet_hi"])}</b> ({e(x["sign_hi"])}): {e(x["text_hi"])}'
+                 + ("".join(f'<br><span class="small">• {e(c["text_hi"])}</span>' for c in x["conditions"])) + "</li>"
+                 for x in rl["neecha_bhanga"]]
+    rel_items += [f'<li>{e(" + ".join(x["planets_hi"]))} युति ({e(x["sign_hi"])}, {x["house"]}वाँ भाव), अंतर {x["orb"]}°'
+                  + (" — बहुत पास" if x["close"] else "") + "</li>" for x in rl["conjunctions"]]
+    rel_items += [f'<li>{e(x["text_hi"])}</li>' for x in rl["combustion"]]
+    rel_html = "<ul>" + "".join(rel_items) + "</ul>" if rel_items else "<p>कोई नीच ग्रह, निकट युति या अस्त ग्रह नहीं मिला।</p>"
+    asp_rows = [[e(r["from_hi"]), f'{r["from_house"]}', f'{r["aspect"]}वीं', f'{r["to_house"]}',
+                 e(", ".join(r["on_hi"]) or "–")] for r in rl["aspects"]["planets"]]
     day = chart.get("day", {})
     day_html = ""
     if day.get("available"):
@@ -186,6 +196,12 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>गोचर ({e(go["as_of"][:10])})</h2>
 <p class="small">{e(go["why_hi"])}</p>
 {_table(["ग्रह", "राशि", "चंद्र से भाव", "लग्न से भाव", "बिंदु", "संकेत"], go_rows)}
+
+<h2>ग्रह-संबंध: नीच-भंग, युति, अस्त, दृष्टि</h2>
+<p class="small">{e(rl["neecha_bhanga"][0]["why_hi"]) if rl["neecha_bhanga"] else ""}</p>
+{rel_html}
+<p class="small">{e(rl["aspects"]["why_hi"])}</p>
+{_table(["ग्रह", "स्थित भाव", "दृष्टि", "देखा गया भाव", "उस भाव में ग्रह"], asp_rows)}
 
 <h2>योग और दोष</h2>
 {_table(["योग", "स्थिति", "कारण"], yoga_rows)}
