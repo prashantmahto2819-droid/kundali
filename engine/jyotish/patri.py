@@ -11,6 +11,8 @@ Samvat, masa and ritu are computed from the Sun's sidereal sign at the start of 
 from __future__ import annotations
 
 from . import matching as M
+from .core import ayanamsa, norm360
+from .ephemeris import get_backend
 from .constants import NAKSHATRAS, NAKSHATRAS_HI, PLANETS_HI, SIGNS, SIGNS_HI, SIGN_LORDS
 
 NAK_LORDS = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"] * 3
@@ -39,8 +41,8 @@ RITU = {"Chaitra": "Vasanta", "Vaishakha": "Vasanta", "Jyeshtha": "Grishma", "As
         "Shravana": "Varsha", "Bhadrapada": "Varsha", "Ashwina": "Sharad", "Kartika": "Sharad",
         "Margashirsha": "Hemanta", "Pausha": "Hemanta", "Magha": "Shishira", "Phalguna": "Shishira"}
 RITU_HI = {"Vasanta": "वसंत", "Grishma": "ग्रीष्म", "Varsha": "वर्षा", "Sharad": "शरद", "Hemanta": "हेमंत", "Shishira": "शिशिर"}
-NOTE_HI = "मास, ऋतु और संवत् अमांत गणना से अनुमानित हैं (अधिक मास नहीं देखा गया)। सूर्योदय बिना ऊँचाई-सुधार के है।"
-NOTE_EN = "Masa, ritu and samvat are approximate (amanta reckoning, no adhika masa). Sunrise has no altitude correction."
+NOTE_HI = "मास अमांत गणना से, अधिक मास सहित; ऋतु और संवत् उसी से (अनुमानित)। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।"
+NOTE_EN = "Masa by amanta reckoning incl. adhika masa; ritu and samvat follow it (approximate). Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one."
 WESTERN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio",
            "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
 HI = {"Brahmin": "ब्राह्मण", "Kshatriya": "क्षत्रिय", "Vaishya": "वैश्य", "Shudra": "शूद्र",
@@ -49,6 +51,73 @@ HI = {"Brahmin": "ब्राह्मण", "Kshatriya": "क्षत्रि
       "Rat": "मूषक", "Cow": "गौ", "Buffalo": "महिष", "Tiger": "व्याघ्र", "Deer": "मृग", "Monkey": "वानर",
       "Mongoose": "नकुल", "Lion": "सिंह", "Deva": "देव", "Manushya": "मनुष्य", "Rakshasa": "राक्षस",
       "Adi": "आद्य", "Madhya": "मध्य", "Antya": "अंत्य", "Uttarayana": "उत्तरायण", "Dakshinayana": "दक्षिणायन"}
+
+
+def _elong(backend, jd_tt: float) -> float:
+    pos = backend.positions(jd_tt)
+    return norm360(pos["Moon"] - pos["Sun"])
+
+
+def _amavasya_before(backend, jd_tt: float) -> float:
+    """JD (TT) of the last new moon at or before jd_tt, by bisection on Moon-Sun elongation."""
+    e = _elong(backend, jd_tt)
+    lo = jd_tt - e / 12.19 - 1.5             # mean elongation rate ~12.19 deg/day
+    hi = lo + 3.0
+    while hi - lo > 1e-4:
+        mid = (lo + hi) / 2
+        em = _elong(backend, mid)
+        if em < 180:                            # already past the new moon (elongation small)
+            hi = mid
+        else:
+            lo = mid
+    return (lo + hi) / 2
+
+
+def lunar_month(backend, jd_tt: float, ayan: float) -> dict:
+    """Amanta month containing jd_tt: name from the Sun's sidereal sign at its start; adhika when no sankranti falls inside."""
+    t0 = _amavasya_before(backend, jd_tt)
+    t1 = _amavasya_before(backend, t0 + 31.0)
+    s0 = int(norm360(backend.positions(t0)["Sun"] - ayan) // 30)
+    s1 = int(norm360(backend.positions(t1)["Sun"] - ayan) // 30)
+    adhika = s0 == s1
+    return {"index": s0, "name": MASA[s0], "name_hi": MASA_HI[s0], "adhika": adhika, "start_jd_tt": t0, "end_jd_tt": t1}
+
+
+# Ghata chakra (Muhurta Chintamani): inauspicious month/tithi/vara/nakshatra/yoga/karana/prahar/Moon-sign
+# for each janma rashi. Draft table; the Dhanu row was checked against a printed patri.
+GHATA = {
+    "Mesha":      {"masa": "Kartika",     "tithi": "1 6 11", "vara": "Ravivara",    "nakshatra": "Magha",            "yoga": "Vishkambha", "karana": "Bava",     "prahar": 1, "chandra": "Mesha",      "stri_chandra": "Vrishchika"},
+    "Vrishabha":  {"masa": "Margashirsha","tithi": "5 10 15", "vara": "Shanivara",   "nakshatra": "Hasta",            "yoga": "Shiva",      "karana": "Bava",     "prahar": 4, "chandra": "Kanya",      "stri_chandra": "Dhanu"},
+    "Mithuna":    {"masa": "Ashadha",     "tithi": "2 7 12", "vara": "Somavara",    "nakshatra": "Swati",            "yoga": "Vyaghata",   "karana": "Kaulava",  "prahar": 2, "chandra": "Kumbha",     "stri_chandra": "Mithuna"},
+    "Karka":      {"masa": "Pausha",      "tithi": "2 7 12", "vara": "Budhavara",   "nakshatra": "Anuradha",         "yoga": "Vriddhi",    "karana": "Taitila",  "prahar": 3, "chandra": "Simha",      "stri_chandra": "Vrishchika"},
+    "Simha":      {"masa": "Jyeshtha",    "tithi": "3 8 13", "vara": "Shanivara",   "nakshatra": "Mula",             "yoga": "Vajra",      "karana": "Garija",   "prahar": 1, "chandra": "Makara",     "stri_chandra": "Tula"},
+    "Kanya":      {"masa": "Bhadrapada",  "tithi": "5 10 15", "vara": "Shanivara",   "nakshatra": "Shravana",         "yoga": "Ganda",      "karana": "Bava",     "prahar": 2, "chandra": "Mithuna",    "stri_chandra": "Mesha"},
+    "Tula":       {"masa": "Magha",       "tithi": "4 9 14", "vara": "Guruvara",    "nakshatra": "Shatabhisha",      "yoga": "Vyatipata",  "karana": "Vishti",   "prahar": 3, "chandra": "Karka",      "stri_chandra": "Mesha"},
+    "Vrishchika": {"masa": "Chaitra",     "tithi": "1 6 11", "vara": "Shukravara",  "nakshatra": "Revati",           "yoga": "Parigha",    "karana": "Bava",     "prahar": 4, "chandra": "Vrishabha",  "stri_chandra": "Kumbha"},
+    "Dhanu":      {"masa": "Shravana",    "tithi": "3 8 13", "vara": "Shukravara",  "nakshatra": "Bharani",          "yoga": "Vyaghata",   "karana": "Taitila",  "prahar": 1, "chandra": "Karka",      "stri_chandra": "Makara"},
+    "Makara":     {"masa": "Vaishakha",   "tithi": "4 9 14", "vara": "Mangalavara", "nakshatra": "Rohini",           "yoga": "Sukarma",    "karana": "Kaulava",  "prahar": 2, "chandra": "Mesha",      "stri_chandra": "Simha"},
+    "Kumbha":     {"masa": "Chaitra",     "tithi": "3 8 13", "vara": "Guruvara",    "nakshatra": "Ardra",            "yoga": "Atiganda",   "karana": "Bava",     "prahar": 3, "chandra": "Dhanu",      "stri_chandra": "Mesha"},
+    "Meena":      {"masa": "Ashwina",     "tithi": "5 10 15", "vara": "Shukravara",  "nakshatra": "Ashlesha",         "yoga": "Shoola",     "karana": "Garija",   "prahar": 4, "chandra": "Kumbha",     "stri_chandra": "Dhanu"},
+}
+GHATA_HI = {"Vishkambha": "विष्कम्भ", "Shiva": "शिव", "Vyaghata": "व्याघात", "Vriddhi": "वृद्धि", "Vajra": "वज्र", "Ganda": "गण्ड",
+            "Vyatipata": "व्यतीपात", "Parigha": "परिघ", "Sukarma": "सुकर्मा", "Atiganda": "अतिगण्ड", "Shoola": "शूल",
+            "Bava": "बव", "Kaulava": "कौलव", "Taitila": "तैतिल", "Garija": "गरज", "Vishti": "विष्टि",
+            "Ravivara": "रविवार", "Somavara": "सोमवार", "Mangalavara": "मंगलवार", "Budhavara": "बुधवार",
+            "Guruvara": "गुरुवार", "Shukravara": "शुक्रवार", "Shanivara": "शनिवार"}
+
+
+def ghata_chakra(moon_sign_name: str) -> dict:
+    g = GHATA[moon_sign_name]
+    mi, ci, si = MASA.index(g["masa"]), SIGNS.index(g["chandra"]), SIGNS.index(g["stri_chandra"])
+    ni = NAKSHATRAS.index(g["nakshatra"])
+    return {"rashi": moon_sign_name, "rashi_hi": SIGNS_HI[SIGNS.index(moon_sign_name)],
+            "masa": g["masa"], "masa_hi": MASA_HI[mi], "tithi": g["tithi"],
+            "vara": g["vara"], "vara_hi": GHATA_HI[g["vara"]],
+            "nakshatra": g["nakshatra"], "nakshatra_hi": NAKSHATRAS_HI[ni],
+            "yoga": g["yoga"], "yoga_hi": GHATA_HI[g["yoga"]], "karana": g["karana"], "karana_hi": GHATA_HI[g["karana"]],
+            "prahar": g["prahar"], "chandra": g["chandra"], "chandra_hi": SIGNS_HI[ci], "chandra_house_from_moon": (ci - SIGNS.index(moon_sign_name)) % 12 + 1,
+            "stri_chandra": g["stri_chandra"], "stri_chandra_hi": SIGNS_HI[si], "stri_chandra_house_from_moon": (si - SIGNS.index(moon_sign_name)) % 12 + 1,
+            "review_status": "draft"}
 
 
 def _hhmm_to_min(t: str) -> float:
@@ -65,12 +134,16 @@ def details(chart: dict) -> dict:
     msign = int(moon["sign"])
     tlon = (sun["longitude"] + chart["ayanamsa_value"]) % 360          # tropical Sun → western sun sign
 
-    # lunar month: Sun's sidereal sign at the start of the current lunar month (amanta, approx.)
     t = pc["tithi"]
-    tithi_index = t["number"] - 1                                      # number already runs 1..30
-    days_since_amavasya = (tithi_index + t.get("fraction_elapsed", 0.5)) * (29.53 / 30)
-    sun_at_amavasya = (sun["longitude"] - days_since_amavasya * 360 / 365.25) % 360
-    masa_i = int(sun_at_amavasya // 30)
+    # lunar month from the actual lunations (new moons found in the ephemeris), amanta reckoning
+    try:
+        jd_tt = chart["jd_ut"] + 69.0 / 86400.0
+        lm = lunar_month(get_backend(), jd_tt, chart["ayanamsa_value"])
+        masa_i, adhika = lm["index"], lm["adhika"]
+    except Exception:                                               # backend unavailable: tithi-based estimate
+        days_since_amavasya = ((t["number"] - 1) + t.get("fraction_elapsed", 0.5)) * (29.53 / 30)
+        masa_i = int(((sun["longitude"] - days_since_amavasya * 360 / 365.25) % 360) // 30)
+        adhika = False
     masa = MASA[masa_i]
     year = int(inp["date"][:4])
     # Chaitra Shukla 1 starts the Vikram/Shaka year; months Chaitra..Phalguna in calendar order
@@ -81,9 +154,10 @@ def details(chart: dict) -> dict:
     shaka = year - 79 if before_new_year else year - 78
 
     ishta = None
-    if day.get("sunrise"):
+    rise_for_ishta = day.get("sunrise_centre") or day.get("sunrise")   # Indian programs use the disc-centre sunrise
+    if rise_for_ishta:
         birth_min = _hhmm_to_min(inp["time"])
-        delta = birth_min - _hhmm_to_min(day["sunrise"])
+        delta = birth_min - _hhmm_to_min(rise_for_ishta)
         if delta < 0:
             delta += 24 * 60
         ghati = delta / 24.0
@@ -98,8 +172,9 @@ def details(chart: dict) -> dict:
         "yoga": {"name": pc["yoga"]["name"], "name_hi": pc["yoga"]["name_hi"]},
         "karana": {"name": pc["karana"]["name"], "name_hi": pc["karana"]["name_hi"]},
         "sunrise": day.get("sunrise"), "sunset": day.get("sunset"),
+        "sunrise_centre": day.get("sunrise_centre"), "sunset_centre": day.get("sunset_centre"),
         "ishta_kaal": ishta,
-        "masa": {"name": masa, "name_hi": MASA_HI[masa_i], "approx": True},
+        "masa": {"name": ("Adhika " if adhika else "") + masa, "name_hi": ("अधिक " if adhika else "") + MASA_HI[masa_i], "adhika": adhika},
         "ritu": {"name": RITU[masa], "name_hi": RITU_HI[RITU[masa]]},
         "ayana": {"name": ayana, "name_hi": HI[ayana]},
         "vikram_samvat": vikram, "shaka_samvat": shaka, "samvat_approx": True,
@@ -125,4 +200,4 @@ def details(chart: dict) -> dict:
         "lagna": {"name": lg["sign_name"], "name_hi": lg["sign_name_hi"], "lord": lg["lord"], "lord_hi": PLANETS_HI[lg["lord"]]},
         "nakshatra_lord": {"name": NAK_LORDS[nak_i], "name_hi": PLANETS_HI[NAK_LORDS[nak_i]]},
     }
-    return {"birth": birth, "avakahada": avakahada, "note_hi": NOTE_HI, "note_en": NOTE_EN}
+    return {"birth": birth, "avakahada": avakahada, "ghata": ghata_chakra(SIGNS[msign]), "note_hi": NOTE_HI, "note_en": NOTE_EN}

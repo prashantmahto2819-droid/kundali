@@ -406,7 +406,7 @@ function renderPatri(c) {
     ['वार', esc(b.vara.name_hi)], ['तिथि', `${esc(b.tithi.paksha_hi)} ${esc(b.tithi.name_hi)}`],
     ['नक्षत्र-चरण', `${esc(b.nakshatra.name_hi)}-${b.nakshatra.pada} (स्वामी ${esc(b.nakshatra.lord_hi)})`],
     ['योग', esc(b.yoga.name_hi)], ['करण', esc(b.karana.name_hi)],
-    ['सूर्योदय / सूर्यास्त', b.sunrise ? `${esc(b.sunrise)} / ${esc(b.sunset)}` : '—'],
+    ['सूर्योदय / सूर्यास्त', b.sunrise ? `${esc(b.sunrise)} (${esc(b.sunrise_centre || '')}) / ${esc(b.sunset)} (${esc(b.sunset_centre || '')})` : '—'],
     ['इष्टकाल (घटी:पल)', b.ishta_kaal ? esc(b.ishta_kaal.text) : '—'],
     ['मास (अमांत)', esc(b.masa.name_hi) + ' <span class="muted">≈</span>'], ['ऋतु', esc(b.ritu.name_hi)], ['अयन', esc(b.ayana.name_hi)],
     ['विक्रम संवत्', b.vikram_samvat + ' <span class="muted">≈</span>'], ['शक संवत्', b.shaka_samvat + ' <span class="muted">≈</span>'],
@@ -418,6 +418,11 @@ function renderPatri(c) {
     ['योनि', esc(a.yoni.name_hi)], ['गण', esc(a.gana.name_hi)], ['नाड़ी', esc(a.nadi.name_hi)], ['तत्व', esc(a.tattva.name_hi)],
     ['नाम अक्षर', `<b>${esc(a.name_syllable.pada)}</b> <span class="muted">(${esc(a.name_syllable.all)})</span>`],
   ]);
+  const g = P.ghata;
+  if (g) $('patri2').innerHTML += `<details style="margin-top:8px"><summary>घात चक्र (ड्राफ़्ट)</summary>` + kv([
+    ['मास', esc(g.masa_hi)], ['तिथि', esc(g.tithi)], ['वार', esc(g.vara_hi)], ['नक्षत्र', esc(g.nakshatra_hi)], ['योग', esc(g.yoga_hi)],
+    ['करण', esc(g.karana_hi)], ['प्रहर', g.prahar], ['चंद्र', esc(g.chandra_hi)], ['स्त्री चंद्र', esc(g.stri_chandra_hi)],
+  ]) + `<div class="muted" style="font-size:.8rem">घात चक्र में ये मास, तिथि, वार आदि जातक के लिए परंपरा में सावधानी के समय माने गए हैं। सारणी विद्वान-समीक्षा के अधीन है।</div></details>`;
 }
 function render(c) {
   chart = c;

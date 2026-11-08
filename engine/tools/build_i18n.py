@@ -83,6 +83,9 @@ for _i, _hi in enumerate(_patri.SYLLABLES):
     for _a, _b in zip(_hi.split(), _patri.SYLLABLES_EN[_i].split()):
         put(_a, _b)
 put(_patri.NOTE_HI, _patri.NOTE_EN)
+for _en, _hi in _patri.GHATA_HI.items():
+    put(_hi, _en)
+put("अधिक", "Adhika")
 from jyotish import ask as _ask  # noqa: E402
 put(_ask.SAFE["hi"], _ask.SAFE["en"])
 put(_ask.DISCLAIMER["hi"], _ask.DISCLAIMER["en"])
@@ -157,6 +160,11 @@ UI = {
  "नाम": "Name", "अक्षांश": "Latitude", "देशांतर": "Longitude", "समय-क्षेत्र": "Time zone", "मिलान देखिए": "Show matching",
  "— अच्छा (25-32)": "— good (25-32)", "कूट": "Koota", "अंक": "Points", "कारण": "Reason", "भरोसा": "Confidence",
  "पक्का नियम": "firm rule", "वर्ण": "Varna", "वश्य": "Vashya", "तारा": "Tara", "योनि": "Yoni", "ग्रह मैत्री": "Graha Maitri",
+ "घात चक्र (ड्राफ़्ट)": "Ghata chakra (draft)", "घात चक्र": "Ghata chakra", "प्रहर": "Prahar", "चंद्र": "Moon", "स्त्री चंद्र": "Moon (female)",
+ "घात मास": "Ghata masa", "घात तिथि": "Ghata tithi", "घात वार": "Ghata vara", "घात नक्षत्र": "Ghata nakshatra", "घात योग": "Ghata yoga",
+ "घात करण": "Ghata karana", "घात प्रहर": "Ghata prahar", "घात चंद्र": "Ghata Moon sign", "स्त्री घात चंद्र": "Ghata Moon sign (female)",
+ "घात चक्र में ये मास, तिथि, वार आदि जातक के लिए परंपरा में सावधानी के समय माने गए हैं। सारणी विद्वान-समीक्षा के अधीन है।":
+ "In the ghata chakra these months, tithis, weekdays etc. are traditionally held to be times of caution for the native. The table awaits scholar review.",
  "गण": "Gana", "भकूट": "Bhakoot", "नाड़ी": "Nadi", "मंगल दोष तुलना:": "Mangal Dosha comparison:",
  "दोनों की स्थिति समान है (दोनों मांगलिक या दोनों नहीं)।": "Both are in the same situation (both manglik or neither).",
  "मांगलिक नहीं": "not manglik", "मांगलिक": "manglik", "वर:": "Groom:", "वधू:": "Bride:",

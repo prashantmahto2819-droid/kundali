@@ -42,6 +42,7 @@ def day_table(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
     before sunrise the previous weekday still runs."""
     day = local_dt.date()
     today = sun_times(day, lat, lon, tz)
+    centre = sun_times(day, lat, lon, tz, convention="centre")
     if today is None:
         return {"available": False, "reason": "Sun does not rise or set on this date at this latitude."}
     tomorrow = sun_times(day + timedelta(days=1), lat, lon, tz)
@@ -67,6 +68,7 @@ def day_table(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
         "vedic_vara": {"index": wd, "name": VARA[wd], "name_hi": VARA_HI[wd],
                        "before_sunrise": before_sunrise},
         "sunrise": _fmt(today["sunrise"]), "sunset": _fmt(today["sunset"]),
+        "sunrise_centre": _fmt(centre["sunrise"]) if centre else None, "sunset_centre": _fmt(centre["sunset"]) if centre else None,
         "day_length_hours": round(day_len.total_seconds() / 3600, 2),
         "rahu_kaal": _slot(sr, eighth, RAHU[wd]),
         "yamaganda": _slot(sr, eighth, YAMA[wd]),

@@ -37,3 +37,26 @@ def test_chart_and_report_carry_patri():
 def test_syllable_tables_are_complete():
     assert len(patri.SYLLABLES) == len(patri.SYLLABLES_EN) == 27
     assert all(len(s.split()) == 4 for s in patri.SYLLABLES + patri.SYLLABLES_EN)
+
+
+def test_adhika_masa_from_real_lunations():
+    def masa(date):
+        return patri.details(compute_chart(date, "10:00", "Asia/Kolkata", 28.6, 77.2))["birth"]["masa"]
+    assert masa("2023-07-25")["name"] == "Adhika Shravana" and masa("2023-07-25")["adhika"]
+    assert masa("2023-08-20")["name"] == "Shravana" and not masa("2023-08-20")["adhika"]
+    assert masa("2020-10-01")["name"] == "Adhika Ashwina"
+    assert masa("2018-06-01")["name"] == "Adhika Jyeshtha"
+    assert masa("2018-06-20")["name"] == "Jyeshtha"
+
+
+def test_ghata_chakra_dhanu_row_matches_printout():
+    g = KORBA["patri"]["ghata"]
+    assert (g["masa"], g["tithi"], g["vara"], g["nakshatra"], g["karana"], g["prahar"]) == ("Shravana", "3 8 13", "Shukravara", "Bharani", "Taitila", 1)
+    assert (g["chandra"], g["stri_chandra"]) == ("Karka", "Makara")       # printout gives sign numbers 4 and 10
+    assert all(r in patri.GHATA for r in patri.SIGNS) and g["review_status"] == "draft"
+
+
+def test_sunrise_conventions():
+    b = KORBA["patri"]["birth"]
+    assert b["sunrise"] == "06:07" and b["sunrise_centre"] == "06:11"     # centre/no-refraction is ~4 min later
+    assert b["ishta_kaal"]["text"] == "20:22"                              # printout 20:25 (its sunrise 06:10:43)

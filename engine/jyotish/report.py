@@ -135,7 +135,7 @@ def render(chart: dict) -> str:
         birth_rows = [["वार", e(b["vara"]["name_hi"])], ["तिथि", f'{e(b["tithi"]["paksha_hi"])} {e(b["tithi"]["name_hi"])}'],
                       ["नक्षत्र-चरण", f'{e(b["nakshatra"]["name_hi"])}-{b["nakshatra"]["pada"]} (स्वामी {e(b["nakshatra"]["lord_hi"])})'],
                       ["योग", e(b["yoga"]["name_hi"])], ["करण", e(b["karana"]["name_hi"])],
-                      ["सूर्योदय / सूर्यास्त", f'{e(b["sunrise"] or "—")} / {e(b["sunset"] or "—")}'],
+                      ["सूर्योदय / सूर्यास्त", f'{e(b["sunrise"] or "—")} ({e(b.get("sunrise_centre") or "")}) / {e(b["sunset"] or "—")} ({e(b.get("sunset_centre") or "")})'],
                       ["इष्टकाल (घटी:पल)", e(b["ishta_kaal"]["text"]) if b["ishta_kaal"] else "—"],
                       ["मास (अमांत) ≈", e(b["masa"]["name_hi"])], ["ऋतु", e(b["ritu"]["name_hi"])], ["अयन", e(b["ayana"]["name_hi"])],
                       ["विक्रम संवत् ≈", str(b["vikram_samvat"])], ["शक संवत् ≈", str(b["shaka_samvat"])],
@@ -146,6 +146,11 @@ def render(chart: dict) -> str:
                     ["वश्य", e(a["vashya"]["name_hi"])], ["योनि", e(a["yoni"]["name_hi"])], ["गण", e(a["gana"]["name_hi"])],
                     ["नाड़ी", e(a["nadi"]["name_hi"])], ["तत्व", e(a["tattva"]["name_hi"])],
                     ["नाम अक्षर", f'<b>{e(a["name_syllable"]["pada"])}</b> ({e(a["name_syllable"]["all"])})']]
+        g = P.get("ghata")
+        if g:
+            ava_rows += [["<b>घात चक्र</b> (ड्राफ़्ट)", ""], ["घात मास", e(g["masa_hi"])], ["घात तिथि", e(g["tithi"])], ["घात वार", e(g["vara_hi"])],
+                         ["घात नक्षत्र", e(g["nakshatra_hi"])], ["घात योग", e(g["yoga_hi"])], ["घात करण", e(g["karana_hi"])],
+                         ["घात प्रहर", str(g["prahar"])], ["घात चंद्र", e(g["chandra_hi"])], ["स्त्री घात चंद्र", e(g["stri_chandra_hi"])]]
         patri_html = (f'<h2>जन्म विवरण</h2><div class="two">{_table(["", ""], birth_rows)}{_table(["", ""], ava_rows)}</div>'
                       f'<p class="small">{e(P["note_hi"])}</p>')
     day = chart.get("day", {})
