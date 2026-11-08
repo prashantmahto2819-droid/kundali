@@ -20,7 +20,7 @@ from .patri import details as patri_details
 from .relations import relations
 from .strength import strength
 from .timeline import dasha_timeline
-from .transit import gochara, positions_at, transit_calendar
+from .transit import gochara, life_transits, positions_at, transit_calendar
 from .sensitivity import sensitivity as birth_sensitivity
 from .kp import kp as kp_layer
 from .jaimini import jaimini as jaimini_layer
@@ -172,6 +172,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["strength"] = strength(chart)
     chart["gochara"] = gochara(chart, positions_at(now, backend, ayanamsa_system), now)
     chart["transit_calendar"] = transit_calendar(chart, now, backend, ayanamsa_system)
+    chart["life_transits"] = life_transits(chart)
     chart["sensitivity"] = birth_sensitivity(date, time, tz, lat, lon)
     chart["kp"] = kp_layer(chart)
     from .kp import ruling_planets

@@ -142,3 +142,80 @@ def transit_calendar(chart: dict, start: datetime, backend, system: str = "lahir
     return {"from": first.strftime("%Y-%m-%d"), "months": rows, "ingress": ingress,
             "note_hi": "हर महीने की पहली तारीख़ (UTC) की ग्रह-राशियाँ, और धीमे ग्रहों (गुरु, शनि, राहु-केतु, मंगल) के राशि-प्रवेश की तारीख़ें (±1 दिन)। चंद्र से भाव गोचर-फल के लिए, लग्न से भाव कुंडली के लिए।",
             "note_en": "Planet signs on the 1st of each month (UTC) and sign-ingress dates of the slow planets (Jupiter, Saturn, Rahu-Ketu, Mars), accurate to about a day. House from the Moon is for transit results, from the Lagna for the chart."}
+
+
+# ---- Lifetime Saturn / Jupiter transit periods (Sade Sati, Ashtama/Dhaiya, Jupiter by house) ----------------
+@lru_cache(maxsize=16)
+def _sign_periods(planet: str, start_year: int, end_year: int, system: str = "lahiri") -> tuple:
+    """(sign, start_date, end_date) runs of a slow planet from a 2-day scan on the analytic backend."""
+    from datetime import timedelta
+    from .ephemeris import AnalyticBackend
+    fast = AnalyticBackend()
+    day = datetime(start_year, 1, 1, tzinfo=timezone.utc)
+    end = datetime(end_year, 12, 31, tzinfo=timezone.utc)
+
+    def sg(dt):
+        jd_ut = julian_day(dt); jd_tt = jd_ut + delta_t(year_fraction(dt)) / 86400.0
+        return sign_of(norm360(fast.positions(jd_tt)[planet] - ayanamsa(jd_tt, system)))
+    runs, cur, cur_start = [], sg(day), day
+    step = timedelta(days=4)
+    while day < end:
+        day += step
+        s = sg(day)
+        if s != cur:
+            # refine the boundary to the day
+            lo = day - step
+            for k in range(1, 4):
+                if sg(lo + timedelta(days=k)) != cur:
+                    day = lo + timedelta(days=k); break
+            runs.append((cur, cur_start.strftime("%Y-%m-%d"), day.strftime("%Y-%m-%d")))
+            cur, cur_start = s, day
+    runs.append((cur, cur_start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")))
+    # merge retrograde dips: A, short B (< 240 days), A again -> one A run
+    merged = list(runs)
+    i = 0
+    while i + 2 < len(merged):
+        a, b, c = merged[i], merged[i + 1], merged[i + 2]
+        if a[0] == c[0] and (datetime.strptime(b[2], "%Y-%m-%d") - datetime.strptime(b[1], "%Y-%m-%d")).days < 240:
+            merged[i:i + 3] = [(a[0], a[1], c[2])]
+        else:
+            i += 1
+    return tuple(merged)
+
+
+def life_transits(chart: dict, years_after: int = 90) -> dict:
+    """Sade Sati / Ashtama / Dhaiya windows and Jupiter's house-from-Moon periods over the native's life (+-2 days)."""
+    moon_sign = next(p["sign"] for p in chart["planets"] if p["name"] == "Moon")
+    by = int(chart["input"]["date"][:4])
+    birth = chart["input"]["date"]
+    last = f"{min(2100, by + years_after)}-12-31"
+    sat = [r for r in _sign_periods("Saturn", 1900, 2100) if r[2] >= birth and r[1] <= last]    # one cached scan for everyone
+    jup = [r for r in _sign_periods("Jupiter", 1900, 2100) if r[2] >= birth and r[1] <= last]
+    PH = {11: ("rising", "पहला चरण (चंद्र से 12वाँ)"), 0: ("peak", "मध्य चरण (चंद्र राशि पर)"), 1: ("setting", "अंतिम चरण (चंद्र से दूसरा)")}
+    sade, ashtama, dhaiya = [], [], []
+    for s, a, b in sat:
+        d = (s - moon_sign) % 12
+        row = {"sign": s, "sign_name": SIGNS[s], "sign_name_hi": SIGNS_HI[s], "start": max(a, birth), "end": b, "house_from_moon": d + 1}
+        if d in PH:
+            sade.append({**row, "phase": PH[d][0], "phase_hi": PH[d][1]})
+        elif d == 7:
+            ashtama.append(row)
+        elif d == 3:
+            dhaiya.append({**row, "kind": "kantaka (4th)", "kind_hi": "कंटक शनि (चंद्र से चौथा)"})
+    # group consecutive Sade Sati phases into one 7.5-year window
+    windows, cur = [], None
+    for p in sade:
+        if cur and (datetime.strptime(p["start"], "%Y-%m-%d") - datetime.strptime(cur["end"], "%Y-%m-%d")).days <= 400:
+            cur["end"] = p["end"]; cur["phases"].append(p)
+        else:
+            cur = {"start": p["start"], "end": p["end"], "phases": [p]}; windows.append(cur)
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    for w in windows:
+        w["status"] = "running" if w["start"] <= today < w["end"] else ("past" if w["end"] <= today else "future")
+    jup_rows = [{"sign": s, "sign_name_hi": SIGNS_HI[s], "start": max(a, birth), "end": b, "house_from_moon": (s - moon_sign) % 12 + 1,
+                 "favourable": (s - moon_sign) % 12 + 1 in FAVOURABLE_FROM_MOON["Jupiter"]} for s, a, b in jup]
+    return {"sade_sati_windows": windows, "ashtama_shani": ashtama, "kantaka_shani": dhaiya, "jupiter_periods": jup_rows,
+            "note_hi": "साढ़ेसाती = शनि चंद्र राशि से 12वें, उसी और दूसरे भाव में (लगभग साढ़े सात वर्ष); अष्टम शनि = 8वें में; कंटक = 4थे में। "
+                       "गुरु के भाव-वार काल भी दिए हैं (शुभ: 2, 5, 7, 9, 11)। तारीख़ें ±2 दिन; वक्री आवाजाही से छोटे टुकड़े बन सकते हैं।",
+            "note_en": "Sade Sati = Saturn in the 12th, 1st and 2nd from the Moon sign (about 7.5 years); Ashtama = 8th; Kantaka = 4th. "
+                       "Jupiter's periods by house from the Moon are listed too (favourable: 2, 5, 7, 9, 11). Dates +-2 days; retrograde loops may split a period."}

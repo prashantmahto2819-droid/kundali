@@ -167,6 +167,7 @@
     </div>
     </section>
     <section class="sub" id="s-gochara">
+    <div class="card"><b>जीवन भर के शनि-गुरु गोचर</b><div class="muted" style="font-size:.85rem" id="ltwhy"></div><div id="ltsade"></div><details><summary>गुरु के भाव-वार काल</summary><div id="ltjup" style="overflow-x:auto"></div></details></div>
     <div class="card"><b>आगामी 12 महीनों का गोचर</b><div class="muted" style="font-size:.85rem" id="tcwhy"></div><div id="tcingress"></div><details><summary>मास-वार ग्रह-राशियाँ</summary><div id="tctable" style="overflow-x:auto"></div></details></div>
     <div class="card"><b>अष्टकवर्ग</b>
       <div class="muted" style="font-size:.85rem" id="avwhy"></div>
@@ -579,6 +580,15 @@ function render(c) {
       `<details><summary>8-कारक (राहु सहित)</summary><div class="muted">${J.chara_karakas.scheme8.map(k => `${esc(k.karaka_hi)}: ${esc(k.planet_hi)}`).join(' · ')}</div></details>`;
     $('jmpadas').innerHTML = `<table><tr><th>पद</th><th>भाव</th><th>पद की राशि</th><th>लग्न से भाव</th></tr>` +
       J.arudha_padas.map(p => `<tr><td>${esc(p.name_hi)}</td><td>${p.house}</td><td><b>${esc(p.pada_sign_name_hi)}</b>${p.exception_applied ? ' <span class="chip">अपवाद</span>' : ''}</td><td>${p.pada_house}</td></tr>`).join('') + '</table>';
+  }
+  if (c.life_transits) {
+    const L = c.life_transits; $('ltwhy').textContent = L.note_hi;
+    const ST = {past: 'बीत चुकी', running: 'चल रही', future: 'आगामी'};
+    const sade = L.sade_sati_windows.map(w => `<li><b>${esc(w.start)} → ${esc(w.end)}</b> <span class="chip ${w.status === 'running' ? 'yes' : ''}">${ST[w.status]}</span><br><span class="muted">${w.phases.map(p => `${esc(p.phase_hi)}: ${esc(p.start)}–${esc(p.end)}`).join(' · ')}</span></li>`).join('');
+    const ash = L.ashtama_shani.map(a => `${esc(a.start)}–${esc(a.end)}`).join(', ');
+    const kan = L.kantaka_shani.map(a => `${esc(a.start)}–${esc(a.end)}`).join(', ');
+    $('ltsade').innerHTML = `<p><b>साढ़ेसाती</b></p><ul>${sade || '<li class="muted">इस अवधि में नहीं</li>'}</ul><p><b>अष्टम शनि:</b> ${ash || '—'}<br><b>कंटक शनि (चौथा):</b> ${kan || '—'}</p>`;
+    $('ltjup').innerHTML = `<table><tr><th>राशि</th><th>चंद्र से भाव</th><th>आरंभ</th><th>समाप्ति</th><th></th></tr>` + L.jupiter_periods.map(j => `<tr><td>${esc(j.sign_name_hi)}</td><td>${j.house_from_moon}</td><td>${esc(j.start)}</td><td>${esc(j.end)}</td><td class="${j.favourable ? 'yes' : 'muted'}">${j.favourable ? 'शुभ' : '–'}</td></tr>`).join('') + '</table>';
   }
   if (c.transit_calendar) {
     const T = c.transit_calendar; $('tcwhy').textContent = T.note_hi;

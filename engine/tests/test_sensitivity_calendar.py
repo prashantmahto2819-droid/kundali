@@ -32,3 +32,15 @@ def test_calendar_ingress_known_event():
     assert rahu["to_sign"] == "Makara" and rahu["date"].startswith("2026-12")
     jup = [g for g in tc["ingress"] if g["planet"] == "Jupiter"]
     assert any(g["to_sign"] == "Karka" and g["date"].startswith("2027-01") for g in jup)
+
+
+def test_life_transits_sade_sati_matches_known_dates():
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)          # Moon in Makara
+    L = c["life_transits"]
+    w = next(x for x in L["sade_sati_windows"] if x["start"].startswith("2017"))
+    assert w["start"][:7] == "2017-10" and w["end"][:7] == "2025-03"                # Saturn Dhanu Oct 2017 -> leaves Kumbha Mar 2025
+    assert [p["phase"] for p in w["phases"]] == ["rising", "peak", "setting"] and w["status"] == "past"
+    assert any(a["start"].startswith("2007") for a in L["ashtama_shani"])            # Saturn in Simha (8th from Makara) 2007-09
+    assert all(1 <= j["house_from_moon"] <= 12 for j in L["jupiter_periods"]) and len(L["jupiter_periods"]) < 120
+    from jyotish import report
+    assert "साढ़ेसाती" in report.render(c)

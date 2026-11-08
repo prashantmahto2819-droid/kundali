@@ -89,6 +89,7 @@ put(_ch["note_hi"], _ch["note_en"])
 _full = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
 put(_full["sensitivity"]["note_hi"], _full["sensitivity"]["note_en"])
 put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
+put(_full["life_transits"]["note_hi"], _full["life_transits"]["note_en"])
 put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
 put(_full["jaimini"]["chara_dasha"]["note_hi"], _full["jaimini"]["chara_dasha"]["note_en"])
 put(_full["kp"]["ruling_planets"]["note_hi"], _full["kp"]["ruling_planets"]["note_en"])
@@ -219,7 +220,9 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "गोचर-फल (ड्राफ़्ट)": "Transit results (draft)", "प्रश्न": "Prashna", "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)", "विषय": "Topic", "KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "जीवन भर के शनि-गुरु गोचर": "Saturn and Jupiter transits over life", "जीवन भर के शनि गोचर": "Saturn transits over life", "गुरु के भाव-वार काल": "Jupiter periods by house",
+ "साढ़ेसाती": "Sade Sati", "बीत चुकी": "past", "चल रही": "running", "आगामी": "upcoming", "इस अवधि में नहीं": "none in this span", "अष्टम शनि:": "Ashtama Shani:", "कंटक शनि (चौथा):": "Kantaka Shani (4th):",
+ "अष्टम शनि": "Ashtama Shani", "चरण": "Phases", "शुभ": "favourable", "पहला चरण (चंद्र से 12वाँ)": "first phase (12th from Moon)", "मध्य चरण (चंद्र राशि पर)": "middle phase (on the Moon sign)", "अंतिम चरण (चंद्र से दूसरा)": "last phase (2nd from Moon)", "गोचर-फल (ड्राफ़्ट)": "Transit results (draft)", "प्रश्न": "Prashna", "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)", "विषय": "Topic", "KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
  "समय (ख़ाली = अभी)": "Time (blank = now)", "प्रश्न पूछिए": "Ask the question", "गणना…": "Computing…", "रूलिंग प्लैनेट्स:": "Ruling planets:", "भाव-स्पष्ट और ग्रह": "Cusps and planets",
  "अनुकूल": "favourable", "प्रतिकूल": "unfavourable", "मिश्रित (देरी या शर्तों के साथ)": "mixed (with delay or conditions)", "अस्पष्ट": "unclear",
  "प्रश्न का विषय चुनिए। कुंडली इसी क्षण (या दिए समय) और स्थान की बनती है; चाहें तो 1 से 249 के बीच कोई अंक मन से कहिए (KP पद्धति)। स्वास्थ्य, क़ानून और आयु के प्रश्न यहाँ नहीं लिए जाते।":
@@ -429,7 +432,8 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("प्रश्न लग्न: {1} {2}° · समय: {3}", "Prashna Lagna: {1} {2}° · time: {3}"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("अष्टम शनि: {1}", "Ashtama Shani: {1}"),
+                   ("{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}", "{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}"), ("{1}: {2}–{3} · {4}: {5}–{6}", "{1}: {2}–{3} · {4}: {5}–{6}"), ("{1}: {2}–{3}", "{1}: {2}–{3}"), ("प्रश्न लग्न: {1} {2}° · समय: {3}", "Prashna Lagna: {1} {2}° · time: {3}"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"),
                    ("{1} का भाव {2}; उसके भाव-स्पष्ट का उप-स्वामी {3} है।", "House {2} rules {1}; the sub-lord of its cusp is {3}."),
                    ("{1} भाव {2} का कारक है: अनुकूल भाव {3}, प्रतिकूल भाव {4}।", "{1} signifies houses {2}: favouring {3}, denying {4}."),
                    ("चंद्र (प्रश्नकर्ता का मन) {1} में, उप-स्वामी {2}: प्रश्न विषय से जुड़ा है।", "The Moon (the querent's mind) in {1}, sub-lord {2}: connected to the matter."),

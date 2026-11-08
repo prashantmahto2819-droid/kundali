@@ -340,7 +340,7 @@
 "अभिजित": "Abhijit",
 "चौघड़िया (दिन)": "Choghadiya (day)",
 "चौघड़िया (रात)": "Choghadiya (night)",
-"शुभ": "good",
+"शुभ": "favourable",
 "अशुभ": "inauspicious",
 "सम": "neutral",
 "अंक ज्योतिष": "Numerology",
@@ -470,6 +470,19 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"जीवन भर के शनि-गुरु गोचर": "Saturn and Jupiter transits over life",
+"जीवन भर के शनि गोचर": "Saturn transits over life",
+"गुरु के भाव-वार काल": "Jupiter periods by house",
+"बीत चुकी": "past",
+"आगामी": "upcoming",
+"इस अवधि में नहीं": "none in this span",
+"अष्टम शनि:": "Ashtama Shani:",
+"कंटक शनि (चौथा):": "Kantaka Shani (4th):",
+"अष्टम शनि": "Ashtama Shani",
+"चरण": "Phases",
+"पहला चरण (चंद्र से 12वाँ)": "first phase (12th from Moon)",
+"मध्य चरण (चंद्र राशि पर)": "middle phase (on the Moon sign)",
+"अंतिम चरण (चंद्र से दूसरा)": "last phase (2nd from Moon)",
 "गोचर-फल (ड्राफ़्ट)": "Transit results (draft)",
 "प्रश्न": "Prashna",
 "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)",
@@ -1854,6 +1867,7 @@
 "भाव-चलित (श्रीपति): लग्न और दशम (MC) के बीच के चतुर्थांशों को तीन भागों में बाँटकर भाव-मध्य निकाले गए हैं। जो ग्रह राशि-भाव से अलग भाव में दिखें, वे भाव-संधि के पास हैं; फलादेश में दोनों देखे जाते हैं।": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both.",
 "जन्म-समय की संवेदनशीलता: बताया गया है कि घड़ी में कितने मिनट की चूक से लग्न, नवांश लग्न, चंद्र राशि या नक्षत्र बदल जाता है। खाली का मतलब है 3 घंटे के भीतर नहीं बदलता।": "Birth-time sensitivity: how many minutes of clock error would change the Lagna, navamsa Lagna, Moon sign or nakshatra. Blank means no change within 3 hours.",
 "कृष्णमूर्ति पद्धति: KP अयनांश (लाहिरी से लगभग 5-6 कला कम), प्लेसिडस भाव, हर ग्रह और भाव-स्पष्ट के नक्षत्र-स्वामी, उप-स्वामी और उप-उप-स्वामी। कारक-सारणी चार स्तरों में है। यह ड्राफ़्ट है; KP विशेषज्ञ की समीक्षा चाहिए।": "Krishnamurti Paddhati: KP ayanamsa (about 5-6 arc-min less than Lahiri), Placidus houses, star/sub/sub-sub lord of every planet and cusp, four-level significators. Draft; needs review by a KP practitioner.",
+"साढ़ेसाती = शनि चंद्र राशि से 12वें, उसी और दूसरे भाव में (लगभग साढ़े सात वर्ष); अष्टम शनि = 8वें में; कंटक = 4थे में। गुरु के भाव-वार काल भी दिए हैं (शुभ: 2, 5, 7, 9, 11)। तारीख़ें ±2 दिन; वक्री आवाजाही से छोटे टुकड़े बन सकते हैं।": "Sade Sati = Saturn in the 12th, 1st and 2nd from the Moon sign (about 7.5 years); Ashtama = 8th; Kantaka = 4th. Jupiter's periods by house from the Moon are listed too (favourable: 2, 5, 7, 9, 11). Dates +-2 days; retrograde loops may split a period.",
 "जैमिनी व्यवस्था v1: चर कारक (7-कारक मुख्य, 8-कारक राहु सहित भी दिए), आरूढ़ पद (एक ही भाव या सप्तम में पड़ने पर दशम लिया), कारकांश। ड्राफ़्ट; जैमिनी के जानकार की समीक्षा चाहिए।": "Jaimini v1: chara karakas (7-karaka main, 8-karaka with Rahu also given), arudha padas (10th taken when the pada falls in the same house or its 7th), karakamsa. Draft; needs review by a Jaimini practitioner.",
 "चर दशा (के. एन. राव की प्रचलित विधि, v1): विषम-पाद लग्न से सीधा क्रम, सम-पाद से उल्टा; वर्ष = राशि से उसके स्वामी तक की गिनती (स्वराशि में 12), उच्च +1, नीच −1। वृश्चिक/कुंभ के दो स्वामियों का नियम सरल किया गया है (मंगल/शनि)। अंतर्दशाएँ अगली राशि से बराबर भागों में।": "Chara dasha (K. N. Rao's common method, v1): direct order from odd-footed Lagnas, reverse from even-footed; years = count from sign to its lord (12 in own sign), +1 exalted, -1 debilitated. The dual-lord rule for Vrishchika/Kumbha is simplified (Mars/Saturn). Antardashas in equal parts from the next sign.",
 "रूलिंग प्लैनेट्स प्रश्न के समय और स्थान के हैं (वार-स्वामी, चंद्र और लग्न के राशि/नक्षत्र/उप-स्वामी)। वार सूर्योदय से माना गया है (लगभग)।": "Ruling planets are for the time and place of the query (day lord; sign/star/sub lords of the Moon and the Lagna). Weekday taken from sunrise (approx.).",
@@ -2261,6 +2275,22 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"अष्टम शनि: {1}",
+"Ashtama Shani: {1}"
+],
+[
+"{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}",
+"{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}"
+],
+[
+"{1}: {2}–{3} · {4}: {5}–{6}",
+"{1}: {2}–{3} · {4}: {5}–{6}"
+],
+[
+"{1}: {2}–{3}",
+"{1}: {2}–{3}"
 ],
 [
 "प्रश्न लग्न: {1} {2}° · समय: {3}",

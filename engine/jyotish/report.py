@@ -176,6 +176,13 @@ def render(chart: dict, brand: dict | None = None) -> str:
                        + _table(["राशि", "वर्ष", "आरंभ", "समाप्ति"], rows) + f'<p class="small">{e(cd["note_hi"])}</p>')
         jm_html = (f'<h2>जैमिनी: चर कारक और आरूढ़ पद</h2>{_table(["कारक", "ग्रह", "अंश", "विषय"], kr)}'
                    f'<p>कारकांश: <b>{e(J["karakamsa"]["sign_name_hi"])}</b></p>{_table(["पद", "भाव", "पद की राशि", "लग्न से भाव"], pd)}<p class="small">{e(J["note_hi"])}</p>{cd_html}')
+    LT = chart.get("life_transits")
+    lt_html = ""
+    if LT:
+        ST = {"past": "बीत चुकी", "running": "चल रही", "future": "आगामी"}
+        rows = [[f'{e(w["start"])} → {e(w["end"])}', ST[w["status"]], e(" · ".join(f'{p["phase_hi"]}: {p["start"]}–{p["end"]}' for p in w["phases"]))] for w in LT["sade_sati_windows"]]
+        ash = ", ".join(f'{a["start"]}–{a["end"]}' for a in LT["ashtama_shani"]) or "—"
+        lt_html = (f'<h2>जीवन भर के शनि गोचर</h2>{_table(["साढ़ेसाती", "स्थिति", "चरण"], rows)}<p>अष्टम शनि: {e(ash)}</p><p class="small">{e(LT["note_hi"])}</p>')
     S, T = chart.get("sensitivity"), chart.get("transit_calendar")
     sens_html = tc_html = ""
     if S:
@@ -253,6 +260,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 </table>{day_html}
 
 {tc_html}
+{lt_html}
 {kp_html}
 {jm_html}
 <h2>विंशोत्तरी दशा</h2>
