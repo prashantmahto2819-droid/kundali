@@ -839,6 +839,17 @@ function render(c) {
     <div class="muted" style="font-size:.85rem;margin-top:4px">अंतर्दशा: ${m.antardashas.map(a => `<span style="${a.phase==='running'?'font-weight:700;color:var(--accent)':''}">${esc(a.lord_hi)} (${a.start.slice(0,7)}) · ${esc(a.themes_hi.join('/'))}</span>`).join(' → ')}</div>
   </details>`).join('');
 
+  // year overlay: dasha x Saturn/Jupiter double transit
+  const ov = tl.overlay;
+  if (ov && $('tl')) {
+    const thisYear = new Date().getFullYear();
+    const ovRows = ov.rows.map(r => `<tr${r.year === thisYear ? ' style="font-weight:700"' : ''}${r.year < thisYear ? ' class="muted"' : ''}><td>${r.year}</td><td>${r.age}</td><td>${esc(r.mahadasha_hi || '—')} / ${esc(r.antardasha_hi || '—')}</td><td>${r.saturn_house}</td><td>${r.jupiter_house}</td><td>${r.sade_sati ? '<span class="chip muted">साढ़ेसाती</span>' : r.ashtama_shani ? '<span class="chip muted">अष्टम शनि</span>' : ''}</td><td>${r.key_houses.map((h, i) => `<span class="chip ${r.dasha_supports.includes(h) ? 'yes' : ''}">${h} <span>${esc(r.key_hi[i])}</span></span>`).join(' ') || '—'}</td></tr>`).join('');
+    const box = document.createElement('div'); box.innerHTML = `<details style="margin-top:10px"><summary><b>वर्ष-वार दोहरा गोचर (शनि + गुरु) और दशा</b></summary>
+      <div class="muted" style="font-size:.85rem">${esc(ov.note_hi)} <span class="chip yes">हरा</span> = वही भाव चल रही महादशा के स्वामी से भी जुड़ा।</div>
+      <div style="overflow:auto"><table><tr><th>वर्ष</th><th>आयु</th><th>महादशा / अंतर्दशा</th><th>शनि भाव</th><th>गुरु भाव</th><th>शनि-चरण</th><th>दोहरा गोचर (मुख्य भाव)</th></tr>${ovRows}</table></div></details>`;
+    $('tl').parentNode.appendChild(box);
+  }
+
   const yrow = y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why_hi)}${y.context_hi ? ` <span>${esc(y.context_hi)}</span>` : ''} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`;
   const yp = c.yogas.filter(y => y.present), ya = c.yogas.filter(y => !y.present);
   $('yogas').innerHTML = `<p class="muted" style="font-size:.85rem">${c.yogas.length} योग जाँचे गए (शास्त्रीय, पंच-महापुरुष, 32 नाभस आकृति-योग, युति-योग); ${yp.length} बने हैं।</p>` + (yp.map(yrow).join('') || '<div class="muted">कोई विशेष योग नहीं बना।</div>') +

@@ -39,6 +39,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Yoga batch 3 (`yogas_nabhasa.py`): Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Shasha), all 32 Nabhasa pattern yogas (Ashraya 3, Dala 2, Akriti 20, Sankhya 7 with Akriti precedence), Guru-Chandala, Grahana (Sun/Moon), Angaraka, Vish, Shakata (Moon–Jupiter). 70 yogas total; web lists the formed ones first.
 
 ## Dasha
+- [x] Year overlay (`timeline.year_overlay`): per year of life the running MD/AD, Saturn/Jupiter houses, Sade Sati/Ashtama flags, double-transit houses (Saturn 3/7/10 + Jupiter 5/7/9 + occupation) and whether the running dasha lord links to them; table under the life timeline.
 - [x] Running chain resolved to pratyantar (3rd level); pratyantars of the running antardasha listed on web and in the report.
 
 ## Patri header

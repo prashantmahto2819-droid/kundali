@@ -195,6 +195,18 @@ for _hi, _en in (("पंचाधिकारियों में से, ल
                  ("मुन्था = जन्म-लग्न राशि + पूरे हुए वर्ष (हर वर्ष एक राशि आगे)।", "Muntha = birth-Lagna sign + completed years (one sign forward each year)."),
                  ("मुन्था:", "Muntha:"), ("राशि, वर्ष-कुंडली के भाव", "sign, in house"), ("में।", "of the annual chart."), ("वर्षफल देखिए", "Show varshaphal"), ("वर्ष (वर्षफल)", "Year (varshaphal)")):
     put(_hi, _en)
+# year overlay
+from jyotish import timeline as _tl
+for _h, (_hi, _en) in _tl.KEY_HOUSES.items():
+    put(_hi, _en)
+_ov_note = _tl.year_overlay.__doc__ and None
+for _hi, _en in (("वर्ष-वार दोहरा गोचर (शनि + गुरु) और दशा", "Year by year: double transit (Saturn + Jupiter) and dasha"), ("हरा", "Green"), ("= वही भाव चल रही महादशा के स्वामी से भी जुड़ा।", "= that house is also linked to the running mahadasha lord."),
+                 ("वर्ष", "Year"), ("आयु", "Age"), ("महादशा / अंतर्दशा", "Mahadasha / antardasha"), ("शनि भाव", "Saturn house"), ("गुरु भाव", "Jupiter house"), ("शनि-चरण", "Saturn phase"), ("दोहरा गोचर (मुख्य भाव)", "Double transit (key houses)"),
+                 ("साढ़ेसाती", "Sade Sati"), ("अष्टम शनि", "Ashtama Shani")):
+    EXACT.setdefault(_hi, _en)
+put("हर वर्ष (1 जुलाई को) चल रही महादशा-अंतर्दशा, शनि-गुरु की राशि, साढ़ेसाती, और वे भाव जिन्हें शनि (3,7,10 दृष्टि + स्थिति) और गुरु (5,7,9 + स्थिति) दोनों प्रभावित करते हैं — 'दोहरा गोचर'। जब वही भाव चल रही महादशा के स्वामी से भी जुड़ा हो, तो परंपरा उस वर्ष को उस भाव के विषय में सक्रिय मानती है। यह समय-संकेत है, घटना की भविष्यवाणी नहीं।",
+    "For every year (at 1 July): the running mahadasha/antardasha, Saturn's and Jupiter's signs, Sade Sati, and the houses both Saturn (aspects 3,7,10 + occupation) and Jupiter (5,7,9 + occupation) influence — the 'double transit'. When that house is also linked to the running mahadasha lord, tradition treats the year as active for that house's matters. A timing hint, not an event prediction.")
+OVERLAY_PATTERNS = []
 # tajika yogas
 for _id, (_hi, _thi, _ten) in _tj.YOGA_HI.items():
     put(_hi, _id.capitalize() if _id not in ("ikkavala", "induvara", "kamboola") else {"ikkavala": "Ikkavala", "induvara": "Induvara", "kamboola": "Kambula"}[_id]); put(_thi, _ten)
@@ -303,7 +315,7 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

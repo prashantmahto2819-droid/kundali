@@ -19,6 +19,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 6 | Ashtakavarga reductions, gochara verdicts | `engine/jyotish/ashtakavarga.py`, `transit.py` | — | shodhana method, Sade Sati phases |
 | 7 | Matching: vashya matrix, parihara | `engine/jyotish/matching.py` | — | vashya and yoni matrices are from memory; add nadi/bhakoot cancellations |
 | 8 | Timeline themes per dasha lord | `engine/jyotish/timeline.py` | — | which houses/themes a dasha activates |
+| 8a | Double-transit rule (Saturn + Jupiter by sign aspects from the Lagna, mid-year sample) and key-house list | `engine/jyotish/timeline.py` (`year_overlay`) | — | draft; K.N. Rao's method uses the Lagna and Moon both |
 | 9 | Varshaphal (Tajika): panchavargiya weights, hadda (Egyptian terms) table, trirashi lords, varshesha rule, 12 saham formulas and night reversal, mudda dasha year length, deeptamsha orbs | `engine/jyotish/tajika.py` | 12 sahams | draft; compare one year with a Tajika program |
 | 10a | Lal Kitab varshphal table (120 years x 12, transcribed from the Astrostudents chart): resolve the two printed duplicates (years 76 and 96) against the book | `data/lalkitab_varshphal.json` | 2 rows | 46th-year row verified |
 | 10 | Lal Kitab planet/house texts and upay | `data/lalkitab.json` | 9×12 | marked draft; pakka-ghar logic |

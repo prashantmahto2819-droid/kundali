@@ -19,7 +19,7 @@ from .lalkitab import lalkitab
 from .patri import details as patri_details
 from .relations import relations
 from .strength import strength
-from .timeline import dasha_timeline
+from .timeline import dasha_timeline, year_overlay
 from .transit import gochara, life_transits, positions_at, transit_calendar
 from .sensitivity import sensitivity as birth_sensitivity
 from .kp import kp as kp_layer
@@ -189,6 +189,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["jaimini"] = jaimini_layer(chart)
     chart["input_warnings"] = chart["input_warnings"] + chart["sensitivity"]["warnings"]
     chart["timeline"] = dasha_timeline(chart, now)
+    chart["timeline"]["overlay"] = year_overlay(chart)
     chart["relations"] = relations(chart)
     chart["lalkitab"] = lalkitab(chart)
     chart["patri"] = patri_details(chart)
