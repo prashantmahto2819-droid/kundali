@@ -25,6 +25,7 @@
   input,select,button { width:100%; padding:9px 10px; font:inherit; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--ink); }
   button { background:var(--accent); color:#fff; border:0; cursor:pointer; font-weight:600; }
   .banner { border-left:4px solid var(--warn); padding:8px 12px; background:color-mix(in srgb,var(--warn) 10%,transparent); border-radius:6px; font-size:.88rem; }
+  .banner.danger { --warn:#c62828; color:var(--ink); }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
   svg text { font-family:inherit; }
   svg .house { fill:transparent; stroke:var(--line); stroke-width:1.6; cursor:pointer; }
@@ -32,6 +33,7 @@
   svg .signno { fill:var(--muted); font-size:12px; text-anchor:middle; pointer-events:none; }
   svg .pl { fill:var(--ink); font-size:15px; font-weight:600; text-anchor:middle; cursor:pointer; }
   svg .pl:hover { fill:var(--accent); }
+  svg .deg { fill:var(--muted); font-size:8.5px; text-anchor:middle; pointer-events:none; }
   table { width:100%; border-collapse:collapse; font-size:.9rem; }
   th,td { text-align:left; padding:5px 6px; border-bottom:1px solid color-mix(in srgb,var(--line) 25%,transparent); }
   th { color:var(--muted); font-weight:600; }
@@ -127,9 +129,10 @@
   </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
-    <div class="banner" id="warns" style="background:#fdecea;border-color:#e0a09a" hidden></div>
+    <div class="banner danger" id="warns" hidden></div>
     <div class="tiles" id="tiles"></div>
     <div class="card" id="summary"></div>
+    <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaylist"></div></div>
     <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
@@ -414,7 +417,8 @@ function drawChart(svg, cells, kind) {
     c.planets.forEach((p, i) => {
       const col = i % 3, row = Math.floor(i / 3), n = Math.min(3, c.planets.length - row*3);
       const x = cx + (col - (n-1)/2) * 24, y = cy + 6 + row * 18;
-      out += `<text class="pl" x="${x}" y="${y}" data-planet="${esc(p.name)}">${esc(p.short)}${p.retro?'<tspan font-size="9" dy="-6">v</tspan>':''}</text>`;
+      out += `<text class="pl" x="${x}" y="${y}" data-planet="${esc(p.name)}"><title>${esc(p.title || p.name)}</title>${esc(p.short)}${p.retro?'<tspan font-size="9" dy="-6">v</tspan>':''}</text>`;
+      if (p.deg != null) out += `<text class="deg" x="${x}" y="${y + 10}">${p.deg}°</text>`;
     });
   }
   svg.innerHTML = out;
@@ -561,6 +565,21 @@ function renderTiles(c) {
     tile('आज का गोचर', `${sup} <span class="muted" style="font-weight:400">शुभ</span> · ${ch} <span class="muted" style="font-weight:400">सावधानी</span>`, esc((c.gochara?.as_of || '').slice(0, 10))) +
     tile('जन्म-समय', margin == null ? 'स्थिर' : (margin > 15 ? 'स्थिर' : margin > 5 ? 'सावधान' : 'संवेदनशील'), margin == null ? 'लग्न 3 घंटे तक नहीं बदलता' : `लग्न ${margin} मिनट में बदलता`);
 }
+function renderToday(c) {
+  const items = [];
+  const run = (c.timeline?.periods || []).find(p => p.phase === 'running');
+  const ad = (c.dasha_running || []).find(d => d.level === 2), md = (c.dasha_running || []).find(d => d.level === 1);
+  if (run) items.push(`<b>दशा:</b> ${esc(pH(c, run.lord))} महादशा${ad ? `, ${esc(pH(c, ad.lord))} अंतर्दशा (${esc(ad.end.slice(0, 10))} तक)` : ''} — ${esc(run.profile.tag_hi)}; सक्रिय क्षेत्र: ${run.profile.themes.slice(0, 2).map(t => esc(t.themes_hi[0])).join(', ')}।`);
+  const go = c.gochara?.planets || [];
+  const sat = go.find(r => r.name === 'Saturn'), jup = go.find(r => r.name === 'Jupiter');
+  if (sat?.text_hi) items.push(esc(sat.text_hi));
+  if (jup?.text_hi) items.push(esc(jup.text_hi));
+  const ss = c.gochara?.sade_sati;
+  if (ss?.active) items.push(`<b>साढ़ेसाती</b> चल रही है (${esc({rising: 'पहला', peak: 'मध्य', setting: 'अंतिम'}[ss.phase])} चरण); धैर्य और अनुशासन का समय माना जाता है।`);
+  const ing = (c.transit_calendar?.ingress || [])[0];
+  if (ing) items.push(`<b>आगे:</b> ${esc(ing.date)} को ${esc(ing.planet_hi)} ${esc(ing.to_sign_hi)} में (चंद्र से ${ing.house_from_moon}वाँ)।`);
+  $('todaylist').innerHTML = items.length ? '<ul style="margin:4px 0 0;padding-left:18px">' + items.map(x => `<li>${x}</li>`).join('') + '</ul><div class="muted" style="font-size:.8rem">दशा और गोचर को साथ पढ़ने का संक्षेप; पूरा विवरण संबंधित टैब में।</div>' : '<span class="muted">—</span>';
+}
 function renderPatri(c) {
   const P = c.patri; if (!P) return;
   const b = P.birth, a = P.avakahada;
@@ -595,7 +614,7 @@ function render(c) {
   const m = c.planets.find(p => p.name === 'Moon');
   $('summary').innerHTML = `<span>लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)</span>`;
-  renderTiles(c);
+  renderTiles(c); renderToday(c);
   const fc = $('formcard'); fc.classList.add('compact');
   $('formsum').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> · ${esc(c.input.date)} ${esc(c.input.time)} · ${esc($('citysearch').value || $('city').options[$('city').selectedIndex]?.text || '')} <span class="muted">(${c.input.lat}, ${c.input.lon})</span>`;
   renderPatri(c);
@@ -675,7 +694,7 @@ function render(c) {
       `<details><summary>भाव-मध्य (12)</summary><table><tr><th>भाव</th><th>राशि</th><th>अंश</th></tr>${ch.cusps.map(x => `<tr><td>${x.house}</td><td>${esc(x.sign_name_hi)}</td><td>${esc(x.dms)}</td></tr>`).join('')}</table></details>`;
   }
   const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
-  const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde}))}));
+  const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms} ${pm[n].nakshatra_hi} ${pm[n].pada}`}))}));
   drawChart($('d1'), d1, 'd1'); renderVarga($('vsel').value);
   renderMuhurta(c.day);
 

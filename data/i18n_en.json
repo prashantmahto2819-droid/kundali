@@ -470,6 +470,16 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"आज क्या ख़ास है": "What matters today",
+"दशा:": "Dasha:",
+"शनि:": "Saturn:",
+"गुरु:": "Jupiter:",
+"आगे:": "Ahead:",
+"सक्रिय क्षेत्र:": "active areas:",
+"दशा और गोचर को साथ पढ़ने का संक्षेप; पूरा विवरण संबंधित टैब में।": "A short reading of dasha and transits together; full detail in the related tabs.",
+"चल रही है (पहला चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (first phase); traditionally a time for patience and discipline.",
+"चल रही है (मध्य चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (middle phase); traditionally a time for patience and discipline.",
+"चल रही है (अंतिम चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (last phase); traditionally a time for patience and discipline.",
 "विवरण बदलें": "Edit details",
 "इस कुंडली के बारे में पूछिए": "Ask about this chart",
 "सेव करें": "Save",
@@ -2299,6 +2309,18 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"{1} महादशा, {2} अंतर्दशा ({3} तक) — {4}; सक्रिय क्षेत्र: {5}।",
+"{1} mahadasha, {2} antardasha (until {3}) — {4}; active areas: {5}."
+],
+[
+"{1} महादशा — {2}; सक्रिय क्षेत्र: {3}।",
+"{1} mahadasha — {2}; active areas: {3}."
+],
+[
+"{1} को {2} {3} में (चंद्र से {4}वाँ)।",
+"{2} enters {3} on {1} ({4}th from the Moon)."
 ],
 [
 "{1} तक",
