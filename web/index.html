@@ -73,13 +73,23 @@
     <div class="card" id="summary"></div>
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
-      <div class="card"><b>नवांश (D9)</b><svg id="d9" viewBox="-4 -4 408 408" width="100%"></svg></div>
+      <div class="card"><b>वर्ग कुंडली</b>
+        <select id="vsel" style="width:auto;margin-left:8px">
+          <option value="D9">D9 नवांश</option><option value="D2">D2 होरा</option><option value="D3">D3 द्रेष्काण</option>
+          <option value="D4">D4 चतुर्थांश</option><option value="D7">D7 सप्तमांश</option><option value="D10">D10 दशमांश</option><option value="D12">D12 द्वादशांश</option>
+        </select>
+        <div class="muted" id="vmean" style="font-size:.85rem"></div>
+        <svg id="d9" viewBox="-4 -4 408 408" width="100%"></svg></div>
     </div>
     <div class="card" id="learn"><h3>सीखिए</h3><div class="muted">किसी खाने या ग्रह पर क्लिक कीजिए।</div></div>
     <div class="card"><b>ग्रह स्थिति</b><div id="ptable"></div></div>
     <div class="grid">
       <div class="card"><b>पंचांग</b><div id="panchang"></div></div>
       <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
+      <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
     </div>
     <div class="card"><b>शास्त्रीय संकेत (नमूना नियम)</b><div id="readings"></div></div>
     <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
@@ -133,6 +143,54 @@ function drawChart(svg, cells, kind) {
   };
 }
 
+const SIGNS_HI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+function renderVarga(key) {
+  if (!chart) return;
+  const v = chart.vargas[key], pm = planetMap();
+  $('vmean').textContent = v.name_hi + ': ' + v.meaning_hi;
+  const cells = v.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:false}))}));
+  drawChart($('d9'), cells, key);
+}
+$('vsel').addEventListener('change', e => renderVarga(e.target.value));
+
+function renderMuhurta(d) {
+  const el = $('muhurta');
+  if (!d || !d.available) { el.innerHTML = '<span class="muted">' + esc(d?.reason || 'उपलब्ध नहीं') + '</span>'; return; }
+  const slot = s => `${esc(s.start)} – ${esc(s.end)}`;
+  const nat = {good:'शुभ', neutral:'सम', inauspicious:'अशुभ'};
+  el.innerHTML = `<table>
+    <tr><th>सूर्योदय / सूर्यास्त</th><td>${esc(d.sunrise)} / ${esc(d.sunset)}</td></tr>
+    <tr><th>वैदिक वार</th><td>${esc(d.vedic_vara.name_hi)}${d.vedic_vara.before_sunrise ? ' (सूर्योदय से पहले, इसलिए पिछला वार)' : ''}</td></tr>
+    <tr><th>राहुकाल</th><td>${slot(d.rahu_kaal)}</td></tr>
+    <tr><th>यमगंड</th><td>${slot(d.yamaganda)}</td></tr>
+    <tr><th>गुलिक</th><td>${slot(d.gulika)}</td></tr>
+    <tr><th>अभिजित</th><td>${slot(d.abhijit)}</td></tr></table>
+    <details><summary>चौघड़िया (दिन)</summary><table>${d.choghadiya_day.map(c => `<tr><td>${esc(c.name)}</td><td>${slot(c)}</td><td>${nat[c.nature]}</td></tr>`).join('')}</table></details>
+    <details><summary>चौघड़िया (रात)</summary><table>${d.choghadiya_night.map(c => `<tr><td>${esc(c.name)}</td><td>${slot(c)}</td><td>${nat[c.nature]}</td></tr>`).join('')}</table></details>
+    <div class="muted" style="font-size:.8rem">${esc(d.note)}</div>`;
+}
+
+let NUMKB = null;
+async function renderNumerology(body) {
+  const el = $('numer');
+  try {
+    if (!NUMKB) { const r = await fetch(API + '/data/knowledge/numbers.json'); if (r.ok) NUMKB = await r.json(); }
+    const r = await fetch(API + '/v1/numerology', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date:body.date, name:body.name})});
+    const n = await r.json(); if (!r.ok) throw new Error(n.detail);
+    const kb = x => NUMKB?.numbers?.[x];
+    const line = (lbl, x, planet) => `<tr><th>${lbl}</th><td><b>${x}</b> (${esc(HI[planet] || planet || '')})</td><td class="muted">${esc(kb(x)?.traits_hi || '')}</td></tr>`;
+    let rows = line('मूलांक', n.moolank.number, n.moolank.planet) + line('भाग्यांक', n.bhagyank.number, n.bhagyank.planet) +
+               line('व्यक्तिगत वर्ष ' + n.personal_year.year, n.personal_year.number, n.personal_year.planet);
+    if (n.namank) rows += `<tr><th>नामांक (चाल्डियन)</th><td><b>${n.namank.chaldean.number}</b> (योग ${n.namank.chaldean.compound})</td><td class="muted"></td></tr>
+                           <tr><th>नामांक (पाइथागोरियन)</th><td><b>${n.namank.pythagorean.number}</b> (योग ${n.namank.pythagorean.compound})</td><td class="muted"></td></tr>`;
+    const grid = n.lo_shu.grid.map(r => `<tr>${r.map(c => `<td style="text-align:center;border:1px solid var(--line);height:38px;width:38px">${esc(c)}</td>`).join('')}</tr>`).join('');
+    el.innerHTML = `<table>${rows}</table>
+      <p><b>लो-शू ग्रिड</b></p><table style="width:auto;border-collapse:collapse">${grid}</table>
+      <div class="muted" style="font-size:.85rem">अनुपस्थित अंक: ${n.lo_shu.missing.join(', ') || 'कोई नहीं'}${n.lo_shu.repeated.length ? ' · दोहराए अंक: ' + n.lo_shu.repeated.join(', ') : ''}</div>
+      <div class="muted" style="font-size:.8rem">व्याख्या ड्राफ़्ट है; अंग्रेज़ी (लैटिन) नाम के अक्षरों से गणना।</div>`;
+  } catch (err) { el.innerHTML = '<span class="muted">अंक ज्योतिष उपलब्ध नहीं: ' + esc(err.message) + '</span>'; }
+}
+
 function planetMap() { return Object.fromEntries(chart.planets.map(p => [p.name, p])); }
 
 function showPlanet(name) {
@@ -147,6 +205,13 @@ function showPlanet(name) {
 }
 function showHouse(h, kind) {
   const k = KB.houses?.houses?.[h]; if (!k) return;
+  if (kind !== 'd1') {
+    const v = chart.vargas[kind], vh = v.houses[h-1];
+    $('learn').innerHTML = `<h3>${esc(v.name_hi)} (${kind}) — भाव ${h}: ${esc(k.name_hi)}</h3>
+      <p>इस वर्ग में राशि: <b>${esc(SIGNS_HI[vh.sign])}</b>. ग्रह: ${vh.planets.length ? vh.planets.map(n => planetMap()[n].name_hi).join(', ') : 'कोई नहीं'}.</p>
+      <p><b>इस वर्ग का विषय:</b> ${esc(v.meaning_hi)}. <b>भाव के विषय:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>`;
+    return;
+  }
   const hs = chart.houses[h-1];
   $('learn').innerHTML = `<h3>भाव ${h} — ${esc(k.name_hi)}</h3>
     <p>${kind==='d9' ? 'नवांश में ' : ''}इस भाव में राशि: <b>${esc(hs.sign_name_hi)}</b>, स्वामी: <b>${esc(chart.planets.find(p=>p.name===hs.lord)?.name_hi || hs.lord)}</b> (भाव ${hs.lord_house} में)</p>
@@ -164,8 +229,8 @@ function render(c) {
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
   const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
   const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde}))}));
-  const d9 = c.navamsa.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:false}))}));
-  drawChart($('d1'), d1, 'd1'); drawChart($('d9'), d9, 'd9');
+  drawChart($('d1'), d1, 'd1'); renderVarga($('vsel').value);
+  renderMuhurta(c.day);
 
   $('ptable').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव</th><th>नक्षत्र (पाद)</th><th>स्थिति</th></tr>` +
     c.planets.map(p => `<tr><td><a href="#" data-p="${esc(p.name)}">${esc(p.name_hi)}</a></td><td>${esc(p.sign_name_hi)}</td><td>${esc(p.dms)}</td><td>${p.house}</td><td>${esc(p.nakshatra_hi)} (${p.pada})</td><td>${p.retrograde?'वक्री ':''}${esc(DIGNITY_HI[p.dignity]||'')}</td></tr>`).join('') + `</table>`;
@@ -209,6 +274,7 @@ $('f').addEventListener('submit', async e => {
     const data = await r.json();
     if (!r.ok) throw new Error(data.detail || 'त्रुटि');
     render(data);
+    renderNumerology(body);
   } catch (err) { $('err').textContent = 'त्रुटि: ' + err.message; }
 });
 // ?auto=1 runs the form once on load (handy for demos and screenshots)

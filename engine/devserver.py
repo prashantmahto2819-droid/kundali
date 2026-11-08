@@ -49,12 +49,14 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, target.read_bytes(), ctype)
 
     def do_POST(self):
-        if self.path != "/v1/chart":
+        routes = {"/v1/chart": handlers.chart_from_payload,
+                  "/v1/numerology": handlers.numerology_from_payload}
+        if self.path not in routes:
             return self._json(404, {"error": "not found"})
         try:
             length = int(self.headers.get("Content-Length", 0))
             payload = json.loads(self.rfile.read(length) or b"{}")
-            return self._json(200, handlers.chart_from_payload(payload))
+            return self._json(200, routes[self.path](payload))
         except handlers.BadRequest as exc:
             return self._json(422, {"detail": str(exc)})
         except json.JSONDecodeError:

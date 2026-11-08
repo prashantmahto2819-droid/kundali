@@ -2,7 +2,7 @@
 
 A commercial-grade Vedic astrology platform: birth chart (kundali), dasha, panchang, numerology, tarot, palmistry and vastu, with a learning layer that explains the *what, why and how* of every result.
 
-Status: **Phase 0**: calculation engine v0.1 + dev web page. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Status: **Phase 0/1**: calculation engine v0.2 (chart, dasha, panchang, sunrise-based muhurta, vargas D2-D12, numerology) + dev web page. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Principles
 - **Calculation is astronomy; interpretation is tradition.** Every interpretation carries a source and a review status; the UI says "according to the śāstra", never "will happen".
@@ -33,11 +33,14 @@ For production use the JPL backend: `pip install -r requirements.txt` (it downlo
 `POST /v1/chart` with `{"date":"1990-05-17","time":"06:45","tz":"Asia/Kolkata","lat":23.1815,"lon":79.9864}`
 returns lagna, planets (sign, degree, house, nakshatra, pada, retrograde, dignity), houses, navamsa, panchang,
 Vimshottari dasha (to antardasha) with the running period, yogas with their *why*, and matched rules with their sources.
+`POST /v1/numerology` with `{"date":"1990-05-17","name":"Prashant Mahto"}` returns moolank, bhagyank, namank (Chaldean and Pythagorean), Lo Shu grid and personal year.
+The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Yamaganda, Gulika, Abhijit, Choghadiya) and `vargas` (D1, D2, D3, D4, D7, D9, D10, D12).
 `GET /health` reports the active backend and whether it is production-ready.
 
 ## Known limitations (v0.1)
 - Lahiri ayanamsa only; the constant is a development value to be verified against a reference.
-- Whole-sign houses only; mean node for Rahu/Ketu; vara is the civil weekday (sunrise-based vara comes later).
+- Whole-sign houses only; mean node for Rahu/Ketu. Sunrise/sunset use the NOAA equations (about +-1 minute, no altitude correction).
+- Vargas implemented: D1, D2, D3, D4, D7, D9, D10, D12 (Parashari rules); D16-D60 later. Numerology takes Latin-script names only.
 - Rule library is a tiny **sample**; all rules are `draft` until a scholar reviews them.
 - The JPL backend code path is written but was not run in the build environment (no network); run `engine/tools/compare_backends.py` on a connected machine.
 

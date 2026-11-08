@@ -11,8 +11,11 @@ from .core import (ascendant_tropical, ayanamsa, dignity, navamsa_sign, nakshatr
 from .dasha import current_periods, vimshottari
 from .ephemeris import get_backend, mean_node, norm360
 from .panchang import panchang
+from .muhurta import day_table
 from .rules import match_rules
 from .timeutil import delta_t, julian_day, local_to_utc, year_fraction
+from .vargas import all_vargas
+from zoneinfo import ZoneInfo
 from .yogas import detect_yogas
 
 
@@ -119,6 +122,12 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
         "panchang": panchang(sid["Sun"], sid["Moon"], local_date),
         "dasha": dasha, "dasha_running": running, "as_of": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
+    chart["vargas"] = all_vargas(asc, planets)
+    local_dt = birth_utc.astimezone(ZoneInfo(tz))
+    chart["day"] = day_table(local_dt, lat, lon, tz)
+    if chart["day"].get("available"):  # the Vedic day starts at sunrise
+        chart["panchang"]["vara"] = chart["day"]["vedic_vara"]
+        chart["panchang"]["note"] = "Vara follows the sunrise-based Vedic day."
     chart["yogas"] = detect_yogas(chart)
     chart["readings"] = match_rules(chart)
     return chart

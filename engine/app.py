@@ -42,3 +42,17 @@ def chart(req: ChartRequest):
         return handlers.chart_from_payload(req.model_dump())
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+class NumerologyRequest(BaseModel):
+    date: str = Field(examples=["1990-05-17"])
+    name: str | None = None
+    as_of: str | None = None
+
+
+@app.post("/v1/numerology")
+def numerology(req: NumerologyRequest):
+    try:
+        return handlers.numerology_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))

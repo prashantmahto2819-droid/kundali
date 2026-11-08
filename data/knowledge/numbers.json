@@ -1,0 +1,33 @@
+{
+  "_comment": "Traditional associations of the digits 1-9 (Indian ank-jyotish planet mapping), summarised in our own words. Review status: draft.",
+  "review_status": "draft",
+  "numbers": {
+    "1": {"planet": "Sun", "planet_hi": "सूर्य",
+      "traits_en": "Independent, ambitious, leader-like; can be self-centred or stubborn.",
+      "traits_hi": "स्वतंत्र, महत्वाकांक्षी, नेतृत्व की प्रवृत्ति; कभी अहं या ज़िद की ओर झुकाव।"},
+    "2": {"planet": "Moon", "planet_hi": "चंद्र",
+      "traits_en": "Sensitive, cooperative, imaginative; mood swings and over-dependence are the watch-points.",
+      "traits_hi": "संवेदनशील, सहयोगी, कल्पनाशील; मन का उतार-चढ़ाव और दूसरों पर निर्भरता ध्यान देने की बातें।"},
+    "3": {"planet": "Jupiter", "planet_hi": "गुरु",
+      "traits_en": "Optimistic, learned, expressive and teaching-minded; may scatter energy or preach.",
+      "traits_hi": "आशावादी, ज्ञान-प्रिय, अभिव्यक्ति और शिक्षण की ओर रुझान; ऊर्जा बिखरने या उपदेश देने का झुकाव।"},
+    "4": {"planet": "Rahu", "planet_hi": "राहु",
+      "traits_en": "Unconventional, hard-working, practical thinker; prone to restlessness and sudden turns.",
+      "traits_hi": "अपरंपरागत, परिश्रमी, व्यावहारिक सोच; बेचैनी और अचानक बदलाव की प्रवृत्ति।"},
+    "5": {"planet": "Mercury", "planet_hi": "बुध",
+      "traits_en": "Quick-witted, adaptable, good with words and trade; can be nervous or inconsistent.",
+      "traits_hi": "तेज़ बुद्धि, अनुकूलनशील, वाणी और व्यापार में कुशल; घबराहट या अस्थिरता संभव।"},
+    "6": {"planet": "Venus", "planet_hi": "शुक्र",
+      "traits_en": "Affectionate, artistic, comfort-loving and family-oriented; may drift into indulgence.",
+      "traits_hi": "स्नेही, कलाप्रेमी, सुख-सुविधा और परिवार को महत्व देने वाले; भोग-विलास की ओर झुकाव संभव।"},
+    "7": {"planet": "Ketu", "planet_hi": "केतु",
+      "traits_en": "Reflective, spiritual, research-minded and private; may withdraw or seem detached.",
+      "traits_hi": "चिंतनशील, आध्यात्मिक, शोध-प्रिय और एकांतप्रिय; अलगाव या उदासीनता का भाव संभव।"},
+    "8": {"planet": "Saturn", "planet_hi": "शनि",
+      "traits_en": "Disciplined, patient, serious; results come late but last; can be rigid or burdened.",
+      "traits_hi": "अनुशासित, धैर्यवान, गंभीर; फल देर से पर टिकाऊ; कठोरता या बोझ का भाव संभव।"},
+    "9": {"planet": "Mars", "planet_hi": "मंगल",
+      "traits_en": "Energetic, courageous, generous and action-driven; temper and impulsiveness need care.",
+      "traits_hi": "ऊर्जावान, साहसी, उदार और कर्मठ; क्रोध और जल्दबाज़ी पर संयम ज़रूरी।"}
+  }
+}

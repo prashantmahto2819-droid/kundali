@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
+from . import numerology
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -63,3 +64,21 @@ def chart_from_payload(payload: dict) -> dict:
                              dasha_level=int(payload.get("dasha_level", 2)))
     except ValueError as exc:  # e.g. impossible date like 1990-02-31
         raise BadRequest(str(exc)) from exc
+
+
+def numerology_from_payload(payload: dict) -> dict:
+    try:
+        y, m, d = (int(x) for x in str(payload["date"]).split("-"))
+        birth = datetime(y, m, d).date()
+    except (KeyError, ValueError, TypeError) as exc:
+        raise BadRequest("date (YYYY-MM-DD) is required and must be a real date") from exc
+    as_of = None
+    if payload.get("as_of"):
+        try:
+            as_of = datetime.fromisoformat(str(payload["as_of"]).replace("Z", "+00:00")).date()
+        except ValueError as exc:
+            raise BadRequest("as_of must be an ISO-8601 date") from exc
+    name = payload.get("name")
+    if name is not None and (not isinstance(name, str) or len(name) > 120):
+        raise BadRequest("name must be text up to 120 characters")
+    return numerology.analyse(birth, name, as_of)
