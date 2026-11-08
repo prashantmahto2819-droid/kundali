@@ -1,71 +1,467 @@
 {
-  "_note": "Traditional vastu conventions summarised in original wording. Schools differ; ratings are common-denominator guidance, not rules of nature. Review status: draft.",
-  "review_status": "draft",
-  "directions": {
-    "N":  {"hi":"उत्तर","deg":[337.5,22.5],"element_hi":"जल","lord_hi":"कुबेर (धन)","planet":"Mercury","theme_hi":"धन-प्रवाह, अवसर, बातचीत"},
-    "NE": {"hi":"ईशान (उत्तर-पूर्व)","deg":[22.5,67.5],"element_hi":"जल","lord_hi":"ईश (शिव)","planet":"Jupiter","theme_hi":"पवित्रता, ज्ञान, स्पष्टता"},
-    "E":  {"hi":"पूर्व","deg":[67.5,112.5],"element_hi":"वायु / सूर्य-प्रकाश","lord_hi":"इंद्र","planet":"Sun","theme_hi":"स्वास्थ्य, ऊर्जा, नई शुरुआत"},
-    "SE": {"hi":"आग्नेय (दक्षिण-पूर्व)","deg":[112.5,157.5],"element_hi":"अग्नि","lord_hi":"अग्नि","planet":"Venus","theme_hi":"ऊष्मा, पाचन, ऊर्जा"},
-    "S":  {"hi":"दक्षिण","deg":[157.5,202.5],"element_hi":"पृथ्वी / अग्नि","lord_hi":"यम","planet":"Mars","theme_hi":"स्थिरता, विश्राम, अनुशासन"},
-    "SW": {"hi":"नैऋत्य (दक्षिण-पश्चिम)","deg":[202.5,247.5],"element_hi":"पृथ्वी","lord_hi":"निऋति","planet":"Rahu","theme_hi":"भारीपन, स्थिरता, गृहस्वामी का स्थान"},
-    "W":  {"hi":"पश्चिम","deg":[247.5,292.5],"element_hi":"जल / वायु","lord_hi":"वरुण","planet":"Saturn","theme_hi":"लाभ, अध्ययन, भोजन"},
-    "NW": {"hi":"वायव्य (उत्तर-पश्चिम)","deg":[292.5,337.5],"element_hi":"वायु","lord_hi":"वायु","planet":"Moon","theme_hi":"गति, अतिथि, परिवर्तन"},
-    "C":  {"hi":"केंद्र (ब्रह्मस्थान)","deg":null,"element_hi":"आकाश","lord_hi":"ब्रह्मा","planet":null,"theme_hi":"खुलापन, प्रकाश, हवा"}
+ "_note": "Traditional vastu conventions summarised in original wording. Schools differ; ratings are common-denominator guidance, not rules of nature. Review status: draft.",
+ "review_status": "draft",
+ "directions": {
+  "N": {
+   "hi": "उत्तर",
+   "deg": [
+    337.5,
+    22.5
+   ],
+   "element_hi": "जल",
+   "lord_hi": "कुबेर (धन)",
+   "planet": "Mercury",
+   "theme_hi": "धन-प्रवाह, अवसर, बातचीत",
+   "en": "North",
+   "element": "water",
+   "lord": "Kubera (wealth)",
+   "theme": "flow of wealth, opportunity, conversation"
   },
-  "rooms": {
-    "pooja":    {"hi":"पूजा घर","ideal":["NE"],"ok":["E","N"],"avoid":["S","SW","SE"],
-                 "why_hi":"ईशान को सबसे शांत और शुद्ध स्थान माना गया है, इसलिए साधना और पूजा वहाँ रखी जाती है।",
-                 "fix_hi":"संभव न हो तो पूजा के समय मुख पूर्व या उत्तर की ओर रखिए और स्थान को साफ़, हल्का व शांत रखिए।"},
-    "kitchen":  {"hi":"रसोई","ideal":["SE"],"ok":["NW"],"avoid":["NE","SW","C"],
-                 "why_hi":"रसोई अग्नि का काम है, इसलिए अग्नि-कोण (आग्नेय) सबसे अनुकूल माना जाता है; ईशान के जल-तत्व से टकराव माना जाता है।",
-                 "fix_hi":"चूल्हा पूर्व की ओर मुख करके रखिए, और पानी (सिंक/घड़ा) चूल्हे से कुछ दूरी पर रखिए।"},
-    "master_bedroom": {"hi":"मुख्य शयनकक्ष","ideal":["SW"],"ok":["S","W"],"avoid":["NE","SE"],
-                 "why_hi":"नैऋत्य को स्थिरता और गृहस्वामी का स्थान माना गया है, जहाँ भारी और ठहरी ऊर्जा सुकून देती है।",
-                 "fix_hi":"सिर दक्षिण या पश्चिम की ओर रखकर सोइए और कमरे में भारी फ़र्नीचर दक्षिण-पश्चिम की ओर रखिए।"},
-    "children_bedroom": {"hi":"बच्चों का कमरा","ideal":["W","NW"],"ok":["N","E"],"avoid":["SE"],
-                 "why_hi":"पश्चिम और वायव्य की गतिशीलता बच्चों की सक्रियता से मेल खाती है।",
-                 "fix_hi":"कमरे में प्रकाश और हवा का आना सुनिश्चित कीजिए और पढ़ाई की मेज़ पूर्व या उत्तर की ओर रखिए।"},
-    "guest_bedroom": {"hi":"अतिथि कक्ष","ideal":["NW"],"ok":["W","N"],"avoid":["NE"],
-                 "why_hi":"वायव्य गति और आने-जाने का क्षेत्र है, जो अतिथियों के लिए उपयुक्त माना जाता है।",
-                 "fix_hi":"कमरे को हल्के रंगों में और हवादार रखिए।"},
-    "living":   {"hi":"बैठक / ड्रॉइंग रूम","ideal":["N","E","NW"],"ok":["NE","W"],"avoid":["SW"],
-                 "why_hi":"उत्तर और पूर्व खुलेपन और संवाद का क्षेत्र हैं, इसलिए मेल-जोल की जगह वहाँ अच्छी मानी जाती है।",
-                 "fix_hi":"भारी सामान दक्षिण-पश्चिम की ओर और खुली जगह उत्तर-पूर्व की ओर रखिए।"},
-    "dining":   {"hi":"भोजन कक्ष","ideal":["W"],"ok":["E","N"],"avoid":["SW"],
-                 "why_hi":"पश्चिम को भोजन और संतुष्टि से जोड़ा जाता है।",
-                 "fix_hi":"भोजन करते समय मुख पूर्व या उत्तर की ओर रखने की परंपरा है।"},
-    "study":    {"hi":"अध्ययन कक्ष","ideal":["W","NE"],"ok":["N","E"],"avoid":["SE"],
-                 "why_hi":"ईशान ज्ञान का और पश्चिम एकाग्रता का क्षेत्र माना जाता है।",
-                 "fix_hi":"पढ़ते समय मुख पूर्व या उत्तर की ओर रखिए और मेज़ पर पर्याप्त रोशनी रखिए।"},
-    "toilet":   {"hi":"शौचालय","ideal":["NW","W"],"ok":["S"],"avoid":["NE","SW","C","E"],
-                 "why_hi":"यह अपशिष्ट निकासी का स्थान है, इसलिए पवित्र ईशान और स्थिर केंद्र/नैऋत्य से दूर रखा जाता है।",
-                 "fix_hi":"दरवाज़ा बंद रखिए, खिड़की या एग्ज़ॉस्ट से हवा का निकास रखिए और सफ़ाई का विशेष ध्यान दीजिए।"},
-    "bathroom": {"hi":"स्नानघर","ideal":["E","N"],"ok":["W","NW"],"avoid":["SW","C"],
-                 "why_hi":"स्नान का संबंध जल और प्रात:कालीन सूर्य-प्रकाश से जोड़ा गया है, इसलिए पूर्व/उत्तर अनुकूल माने जाते हैं।",
-                 "fix_hi":"कमरे को सूखा और हवादार रखिए और रिसाव तुरंत ठीक करवाइए।"},
-    "store":    {"hi":"भंडार कक्ष","ideal":["SW","NW","W"],"ok":["S"],"avoid":["NE"],
-                 "why_hi":"भारी और जमा सामान के लिए स्थिर दिशाएँ उपयुक्त मानी जाती हैं।",
-                 "fix_hi":"ईशान को खाली और हल्का रखिए और भारी सामान दक्षिण-पश्चिम की ओर रखिए।"},
-    "staircase":{"hi":"सीढ़ियाँ","ideal":["S","W","SW"],"ok":["NW","SE"],"avoid":["NE","C"],
-                 "why_hi":"भारी निर्माण को स्थिर दिशाओं में रखना और ईशान व केंद्र को खुला छोड़ना परंपरा है।",
-                 "fix_hi":"सीढ़ियों के नीचे का स्थान साफ़ रखिए और ईशान/केंद्र में भारी चीज़ें रखने से बचिए।"},
-    "borewell": {"hi":"बोरवेल / भूमिगत टंकी","ideal":["NE"],"ok":["N","E"],"avoid":["S","SW","SE"],
-                 "why_hi":"जल-स्रोत को जल-तत्व वाली दिशा (ईशान) में रखना परंपरा है।",
-                 "fix_hi":"पानी का स्रोत साफ़ और ढका रखिए।"},
-    "overhead_tank": {"hi":"छत की पानी टंकी","ideal":["W","SW"],"ok":["NW","S"],"avoid":["NE","SE","C"],
-                 "why_hi":"भारी टंकी को स्थिर पश्चिम/नैऋत्य की ओर और ईशान को हल्का रखने की परंपरा है।",
-                 "fix_hi":"टंकी की नियमित सफ़ाई कीजिए और रिसाव ठीक रखिए।"},
-    "garage":   {"hi":"गैराज","ideal":["NW","SE"],"ok":["W","S"],"avoid":["NE"],
-                 "why_hi":"वाहन गति से जुड़े हैं, इसलिए वायव्य और आग्नेय उपयुक्त माने जाते हैं।",
-                 "fix_hi":"ईशान को खुला रखिए और वाहन वहाँ खड़ा न कीजिए।"},
-    "entrance": {"hi":"मुख्य द्वार","ideal":["N","NE","E"],"ok":["W","NW"],"avoid":["SW","S","SE"],
-                 "why_hi":"उत्तर, पूर्व और ईशान से प्रकाश और खुली हवा आती है, इसलिए प्रवेश के लिए श्रेष्ठ माने जाते हैं।",
-                 "fix_hi":"द्वार को साफ़, रोशन और बाधा-रहित रखिए; नाम-पट्टी और प्रकाश का प्रबंध कीजिए।"}
+  "NE": {
+   "hi": "ईशान (उत्तर-पूर्व)",
+   "deg": [
+    22.5,
+    67.5
+   ],
+   "element_hi": "जल",
+   "lord_hi": "ईश (शिव)",
+   "planet": "Jupiter",
+   "theme_hi": "पवित्रता, ज्ञान, स्पष्टता",
+   "en": "Ishaan (north-east)",
+   "element": "water",
+   "lord": "Isha (Shiva)",
+   "theme": "purity, knowledge, clarity"
   },
-  "general_hi": [
-    "ब्रह्मस्थान (घर का केंद्र) को यथासंभव खुला, हवादार और हल्का रखिए।",
-    "उत्तर-पूर्व (ईशान) में भारी सामान, कचरा या शौचालय से बचिए।",
-    "दिशा नापते समय फ़ोन के कंपास का चुंबकीय अंतर (declination) ध्यान में रखिए; सटीक नक्शे के लिए सर्वेयर की माप लीजिए।",
-    "यह परंपरागत मार्गदर्शन है। संरचनात्मक बदलाव (तोड़-फोड़) अपनी सुरक्षा और क़ानूनी अनुमति देखकर ही कीजिए, ख़ासकर डर में आकर नहीं।"
-  ]
+  "E": {
+   "hi": "पूर्व",
+   "deg": [
+    67.5,
+    112.5
+   ],
+   "element_hi": "वायु / सूर्य-प्रकाश",
+   "lord_hi": "इंद्र",
+   "planet": "Sun",
+   "theme_hi": "स्वास्थ्य, ऊर्जा, नई शुरुआत",
+   "en": "East",
+   "element": "air / sunlight",
+   "lord": "Indra",
+   "theme": "health, energy, new beginnings"
+  },
+  "SE": {
+   "hi": "आग्नेय (दक्षिण-पूर्व)",
+   "deg": [
+    112.5,
+    157.5
+   ],
+   "element_hi": "अग्नि",
+   "lord_hi": "अग्नि",
+   "planet": "Venus",
+   "theme_hi": "ऊष्मा, पाचन, ऊर्जा",
+   "en": "Agneya (south-east)",
+   "element": "fire",
+   "lord": "Agni",
+   "theme": "warmth, digestion, energy"
+  },
+  "S": {
+   "hi": "दक्षिण",
+   "deg": [
+    157.5,
+    202.5
+   ],
+   "element_hi": "पृथ्वी / अग्नि",
+   "lord_hi": "यम",
+   "planet": "Mars",
+   "theme_hi": "स्थिरता, विश्राम, अनुशासन",
+   "en": "South",
+   "element": "earth / fire",
+   "lord": "Yama",
+   "theme": "stability, rest, discipline"
+  },
+  "SW": {
+   "hi": "नैऋत्य (दक्षिण-पश्चिम)",
+   "deg": [
+    202.5,
+    247.5
+   ],
+   "element_hi": "पृथ्वी",
+   "lord_hi": "निऋति",
+   "planet": "Rahu",
+   "theme_hi": "भारीपन, स्थिरता, गृहस्वामी का स्थान",
+   "en": "Nairutya (south-west)",
+   "element": "earth",
+   "lord": "Nirriti",
+   "theme": "heaviness, stability, the place of the head of the household"
+  },
+  "W": {
+   "hi": "पश्चिम",
+   "deg": [
+    247.5,
+    292.5
+   ],
+   "element_hi": "जल / वायु",
+   "lord_hi": "वरुण",
+   "planet": "Saturn",
+   "theme_hi": "लाभ, अध्ययन, भोजन",
+   "en": "West",
+   "element": "water / air",
+   "lord": "Varuna",
+   "theme": "gain, study, food"
+  },
+  "NW": {
+   "hi": "वायव्य (उत्तर-पश्चिम)",
+   "deg": [
+    292.5,
+    337.5
+   ],
+   "element_hi": "वायु",
+   "lord_hi": "वायु",
+   "planet": "Moon",
+   "theme_hi": "गति, अतिथि, परिवर्तन",
+   "en": "Vayavya (north-west)",
+   "element": "air",
+   "lord": "Vayu",
+   "theme": "movement, guests, change"
+  },
+  "C": {
+   "hi": "केंद्र (ब्रह्मस्थान)",
+   "deg": null,
+   "element_hi": "आकाश",
+   "lord_hi": "ब्रह्मा",
+   "planet": null,
+   "theme_hi": "खुलापन, प्रकाश, हवा",
+   "en": "Centre (Brahmasthan)",
+   "element": "space",
+   "lord": "Brahma",
+   "theme": "openness, light, air"
+  }
+ },
+ "rooms": {
+  "pooja": {
+   "hi": "पूजा घर",
+   "ideal": [
+    "NE"
+   ],
+   "ok": [
+    "E",
+    "N"
+   ],
+   "avoid": [
+    "S",
+    "SW",
+    "SE"
+   ],
+   "why_hi": "ईशान को सबसे शांत और शुद्ध स्थान माना गया है, इसलिए साधना और पूजा वहाँ रखी जाती है।",
+   "fix_hi": "संभव न हो तो पूजा के समय मुख पूर्व या उत्तर की ओर रखिए और स्थान को साफ़, हल्का व शांत रखिए।",
+   "en": "Puja room",
+   "why": "The north-east (Ishaan) is regarded as the calmest and purest place, so worship and meditation are placed there.",
+   "fix": "If that is not possible, face east or north during worship and keep the space clean, light and quiet."
+  },
+  "kitchen": {
+   "hi": "रसोई",
+   "ideal": [
+    "SE"
+   ],
+   "ok": [
+    "NW"
+   ],
+   "avoid": [
+    "NE",
+    "SW",
+    "C"
+   ],
+   "why_hi": "रसोई अग्नि का काम है, इसलिए अग्नि-कोण (आग्नेय) सबसे अनुकूल माना जाता है; ईशान के जल-तत्व से टकराव माना जाता है।",
+   "fix_hi": "चूल्हा पूर्व की ओर मुख करके रखिए, और पानी (सिंक/घड़ा) चूल्हे से कुछ दूरी पर रखिए।",
+   "en": "Kitchen",
+   "why": "The kitchen works with fire, so the south-east (Agneya, the fire corner) is considered most suitable; a clash with the water element of the north-east is believed.",
+   "fix": "Keep the stove facing east, and keep water (sink/pot) at some distance from the stove."
+  },
+  "master_bedroom": {
+   "hi": "मुख्य शयनकक्ष",
+   "ideal": [
+    "SW"
+   ],
+   "ok": [
+    "S",
+    "W"
+   ],
+   "avoid": [
+    "NE",
+    "SE"
+   ],
+   "why_hi": "नैऋत्य को स्थिरता और गृहस्वामी का स्थान माना गया है, जहाँ भारी और ठहरी ऊर्जा सुकून देती है।",
+   "fix_hi": "सिर दक्षिण या पश्चिम की ओर रखकर सोइए और कमरे में भारी फ़र्नीचर दक्षिण-पश्चिम की ओर रखिए।",
+   "en": "Master bedroom",
+   "why": "The south-west is regarded as the place of stability and the head of the household, where heavy, still energy feels settling.",
+   "fix": "Sleep with the head to the south or west and place heavy furniture toward the south-west of the room."
+  },
+  "children_bedroom": {
+   "hi": "बच्चों का कमरा",
+   "ideal": [
+    "W",
+    "NW"
+   ],
+   "ok": [
+    "N",
+    "E"
+   ],
+   "avoid": [
+    "SE"
+   ],
+   "why_hi": "पश्चिम और वायव्य की गतिशीलता बच्चों की सक्रियता से मेल खाती है।",
+   "fix_hi": "कमरे में प्रकाश और हवा का आना सुनिश्चित कीजिए और पढ़ाई की मेज़ पूर्व या उत्तर की ओर रखिए।",
+   "en": "Children's room",
+   "why": "The movement of the west and north-west matches children's activity.",
+   "fix": "Ensure light and air reach the room and place the study table facing east or north."
+  },
+  "guest_bedroom": {
+   "hi": "अतिथि कक्ष",
+   "ideal": [
+    "NW"
+   ],
+   "ok": [
+    "W",
+    "N"
+   ],
+   "avoid": [
+    "NE"
+   ],
+   "why_hi": "वायव्य गति और आने-जाने का क्षेत्र है, जो अतिथियों के लिए उपयुक्त माना जाता है।",
+   "fix_hi": "कमरे को हल्के रंगों में और हवादार रखिए।",
+   "en": "Guest room",
+   "why": "The north-west is the area of movement and coming and going, which is considered suitable for guests.",
+   "fix": "Keep the room in light colours and well ventilated."
+  },
+  "living": {
+   "hi": "बैठक / ड्रॉइंग रूम",
+   "ideal": [
+    "N",
+    "E",
+    "NW"
+   ],
+   "ok": [
+    "NE",
+    "W"
+   ],
+   "avoid": [
+    "SW"
+   ],
+   "why_hi": "उत्तर और पूर्व खुलेपन और संवाद का क्षेत्र हैं, इसलिए मेल-जोल की जगह वहाँ अच्छी मानी जाती है।",
+   "fix_hi": "भारी सामान दक्षिण-पश्चिम की ओर और खुली जगह उत्तर-पूर्व की ओर रखिए।",
+   "en": "Living / drawing room",
+   "why": "The north and east are areas of openness and conversation, so a place for socialising is considered good there.",
+   "fix": "Keep heavy items toward the south-west and open space toward the north-east."
+  },
+  "dining": {
+   "hi": "भोजन कक्ष",
+   "ideal": [
+    "W"
+   ],
+   "ok": [
+    "E",
+    "N"
+   ],
+   "avoid": [
+    "SW"
+   ],
+   "why_hi": "पश्चिम को भोजन और संतुष्टि से जोड़ा जाता है।",
+   "fix_hi": "भोजन करते समय मुख पूर्व या उत्तर की ओर रखने की परंपरा है।",
+   "en": "Dining room",
+   "why": "The west is associated with food and satisfaction.",
+   "fix": "The tradition is to face east or north while eating."
+  },
+  "study": {
+   "hi": "अध्ययन कक्ष",
+   "ideal": [
+    "W",
+    "NE"
+   ],
+   "ok": [
+    "N",
+    "E"
+   ],
+   "avoid": [
+    "SE"
+   ],
+   "why_hi": "ईशान ज्ञान का और पश्चिम एकाग्रता का क्षेत्र माना जाता है।",
+   "fix_hi": "पढ़ते समय मुख पूर्व या उत्तर की ओर रखिए और मेज़ पर पर्याप्त रोशनी रखिए।",
+   "en": "Study room",
+   "why": "The north-east is regarded as the area of knowledge and the west of concentration.",
+   "fix": "Face east or north while studying and keep enough light on the desk."
+  },
+  "toilet": {
+   "hi": "शौचालय",
+   "ideal": [
+    "NW",
+    "W"
+   ],
+   "ok": [
+    "S"
+   ],
+   "avoid": [
+    "NE",
+    "SW",
+    "C",
+    "E"
+   ],
+   "why_hi": "यह अपशिष्ट निकासी का स्थान है, इसलिए पवित्र ईशान और स्थिर केंद्र/नैऋत्य से दूर रखा जाता है।",
+   "fix_hi": "दरवाज़ा बंद रखिए, खिड़की या एग्ज़ॉस्ट से हवा का निकास रखिए और सफ़ाई का विशेष ध्यान दीजिए।",
+   "en": "Toilet",
+   "why": "This is a place for waste disposal, so it is kept away from the sacred north-east and the stable centre/south-west.",
+   "fix": "Keep the door closed, provide air exit through a window or exhaust, and take special care of cleanliness."
+  },
+  "bathroom": {
+   "hi": "स्नानघर",
+   "ideal": [
+    "E",
+    "N"
+   ],
+   "ok": [
+    "W",
+    "NW"
+   ],
+   "avoid": [
+    "SW",
+    "C"
+   ],
+   "why_hi": "स्नान का संबंध जल और प्रात:कालीन सूर्य-प्रकाश से जोड़ा गया है, इसलिए पूर्व/उत्तर अनुकूल माने जाते हैं।",
+   "fix_hi": "कमरे को सूखा और हवादार रखिए और रिसाव तुरंत ठीक करवाइए।",
+   "en": "Bathroom",
+   "why": "Bathing is linked with water and morning sunlight, so the east/north are considered favourable.",
+   "fix": "Keep the room dry and ventilated and get leaks repaired promptly."
+  },
+  "store": {
+   "hi": "भंडार कक्ष",
+   "ideal": [
+    "SW",
+    "NW",
+    "W"
+   ],
+   "ok": [
+    "S"
+   ],
+   "avoid": [
+    "NE"
+   ],
+   "why_hi": "भारी और जमा सामान के लिए स्थिर दिशाएँ उपयुक्त मानी जाती हैं।",
+   "fix_hi": "ईशान को खाली और हल्का रखिए और भारी सामान दक्षिण-पश्चिम की ओर रखिए।",
+   "en": "Store room",
+   "why": "Stable directions are considered suitable for heavy and stored goods.",
+   "fix": "Keep the north-east empty and light and heavy goods toward the south-west."
+  },
+  "staircase": {
+   "hi": "सीढ़ियाँ",
+   "ideal": [
+    "S",
+    "W",
+    "SW"
+   ],
+   "ok": [
+    "NW",
+    "SE"
+   ],
+   "avoid": [
+    "NE",
+    "C"
+   ],
+   "why_hi": "भारी निर्माण को स्थिर दिशाओं में रखना और ईशान व केंद्र को खुला छोड़ना परंपरा है।",
+   "fix_hi": "सीढ़ियों के नीचे का स्थान साफ़ रखिए और ईशान/केंद्र में भारी चीज़ें रखने से बचिए।",
+   "en": "Staircase",
+   "why": "The tradition is to place heavy construction in stable directions and leave the north-east and centre open.",
+   "fix": "Keep the space under the stairs clean and avoid placing heavy things in the north-east/centre."
+  },
+  "borewell": {
+   "hi": "बोरवेल / भूमिगत टंकी",
+   "ideal": [
+    "NE"
+   ],
+   "ok": [
+    "N",
+    "E"
+   ],
+   "avoid": [
+    "S",
+    "SW",
+    "SE"
+   ],
+   "why_hi": "जल-स्रोत को जल-तत्व वाली दिशा (ईशान) में रखना परंपरा है।",
+   "fix_hi": "पानी का स्रोत साफ़ और ढका रखिए।",
+   "en": "Borewell / underground tank",
+   "why": "The tradition is to place a water source in the direction of the water element (north-east).",
+   "fix": "Keep the water source clean and covered."
+  },
+  "overhead_tank": {
+   "hi": "छत की पानी टंकी",
+   "ideal": [
+    "W",
+    "SW"
+   ],
+   "ok": [
+    "NW",
+    "S"
+   ],
+   "avoid": [
+    "NE",
+    "SE",
+    "C"
+   ],
+   "why_hi": "भारी टंकी को स्थिर पश्चिम/नैऋत्य की ओर और ईशान को हल्का रखने की परंपरा है।",
+   "fix_hi": "टंकी की नियमित सफ़ाई कीजिए और रिसाव ठीक रखिए।",
+   "en": "Overhead water tank",
+   "why": "The tradition is to place a heavy tank toward the stable west/south-west and keep the north-east light.",
+   "fix": "Clean the tank regularly and keep it free of leaks."
+  },
+  "garage": {
+   "hi": "गैराज",
+   "ideal": [
+    "NW",
+    "SE"
+   ],
+   "ok": [
+    "W",
+    "S"
+   ],
+   "avoid": [
+    "NE"
+   ],
+   "why_hi": "वाहन गति से जुड़े हैं, इसलिए वायव्य और आग्नेय उपयुक्त माने जाते हैं।",
+   "fix_hi": "ईशान को खुला रखिए और वाहन वहाँ खड़ा न कीजिए।",
+   "en": "Garage",
+   "why": "Vehicles are linked with movement, so the north-west and south-east are considered suitable.",
+   "fix": "Keep the north-east open and do not park a vehicle there."
+  },
+  "entrance": {
+   "hi": "मुख्य द्वार",
+   "ideal": [
+    "N",
+    "NE",
+    "E"
+   ],
+   "ok": [
+    "W",
+    "NW"
+   ],
+   "avoid": [
+    "SW",
+    "S",
+    "SE"
+   ],
+   "why_hi": "उत्तर, पूर्व और ईशान से प्रकाश और खुली हवा आती है, इसलिए प्रवेश के लिए श्रेष्ठ माने जाते हैं।",
+   "fix_hi": "द्वार को साफ़, रोशन और बाधा-रहित रखिए; नाम-पट्टी और प्रकाश का प्रबंध कीजिए।",
+   "en": "Main entrance",
+   "why": "Light and fresh air arrive from the north, east and north-east, so they are considered best for entry.",
+   "fix": "Keep the entrance clean, lit and free of obstruction; provide a nameplate and lighting."
+  }
+ },
+ "general_hi": [
+  "ब्रह्मस्थान (घर का केंद्र) को यथासंभव खुला, हवादार और हल्का रखिए।",
+  "उत्तर-पूर्व (ईशान) में भारी सामान, कचरा या शौचालय से बचिए।",
+  "दिशा नापते समय फ़ोन के कंपास का चुंबकीय अंतर (declination) ध्यान में रखिए; सटीक नक्शे के लिए सर्वेयर की माप लीजिए।",
+  "यह परंपरागत मार्गदर्शन है। संरचनात्मक बदलाव (तोड़-फोड़) अपनी सुरक्षा और क़ानूनी अनुमति देखकर ही कीजिए, ख़ासकर डर में आकर नहीं।"
+ ],
+ "general": [
+  "Keep the Brahmasthan (centre of the house) as open, airy and light as possible.",
+  "Avoid heavy goods, rubbish or a toilet in the north-east (Ishaan).",
+  "When measuring directions, allow for the magnetic declination of a phone compass; for an accurate plan, use a surveyor's measurement.",
+  "This is traditional guidance. Make structural changes (demolition) only after checking safety and legal permission, and never out of fear."
+ ]
 }

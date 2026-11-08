@@ -10,21 +10,31 @@
    "options": {
     "earth": {
      "hi": "पृथ्वी (चौकोर हथेली, छोटी उँगलियाँ)",
-     "meaning_hi": "व्यावहारिक, भरोसेमंद, ठोस काम और स्थिरता पसंद करने वाला स्वभाव।"
+     "meaning_hi": "व्यावहारिक, भरोसेमंद, ठोस काम और स्थिरता पसंद करने वाला स्वभाव।",
+     "en": "Earth (square palm, short fingers)",
+     "meaning": "A practical, reliable nature that likes solid work and stability."
     },
     "air": {
      "hi": "वायु (चौकोर हथेली, लंबी उँगलियाँ)",
-     "meaning_hi": "जिज्ञासु, बातूनी और विचार-प्रधान; संवाद व विश्लेषण में रुचि।"
+     "meaning_hi": "जिज्ञासु, बातूनी और विचार-प्रधान; संवाद व विश्लेषण में रुचि।",
+     "en": "Air (square palm, long fingers)",
+     "meaning": "Curious, talkative and idea-driven; interest in communication and analysis."
     },
     "water": {
      "hi": "जल (लंबी हथेली, लंबी उँगलियाँ)",
-     "meaning_hi": "संवेदनशील, भावुक और अंतर्ज्ञानी; कला और सहानुभूति की ओर झुकाव।"
+     "meaning_hi": "संवेदनशील, भावुक और अंतर्ज्ञानी; कला और सहानुभूति की ओर झुकाव।",
+     "en": "Water (long palm, long fingers)",
+     "meaning": "Sensitive, emotional and intuitive; a lean toward art and empathy."
     },
     "fire": {
      "hi": "अग्नि (लंबी हथेली, छोटी उँगलियाँ)",
-     "meaning_hi": "ऊर्जावान, उत्साही और सहज-स्फूर्त; नेतृत्व और पहल की प्रवृत्ति।"
+     "meaning_hi": "ऊर्जावान, उत्साही और सहज-स्फूर्त; नेतृत्व और पहल की प्रवृत्ति।",
+     "en": "Fire (long palm, short fingers)",
+     "meaning": "Energetic, enthusiastic and spontaneous; a tendency toward leadership and initiative."
     }
-   }
+   },
+   "en": "Hand shape",
+   "where": "Look at the length and width of the palm and the length of the fingers (palm = from the wrist line to the base of the fingers)."
   },
   {
    "key": "life_length",
@@ -34,17 +44,25 @@
    "options": {
     "long": {
      "hi": "लंबी",
-     "meaning_hi": "स्थिर सहनशक्ति और लगातार ऊर्जा का संकेत; यह आयु की भविष्यवाणी नहीं है।"
+     "meaning_hi": "स्थिर सहनशक्ति और लगातार ऊर्जा का संकेत; यह आयु की भविष्यवाणी नहीं है।",
+     "en": "long",
+     "meaning": "A sign of steady endurance and sustained energy; this is not a prediction of lifespan."
     },
     "medium": {
      "hi": "मध्यम",
-     "meaning_hi": "संतुलित ऊर्जा; ज़रूरत के हिसाब से गति बदलने वाला स्वभाव।"
+     "meaning_hi": "संतुलित ऊर्जा; ज़रूरत के हिसाब से गति बदलने वाला स्वभाव।",
+     "en": "medium",
+     "meaning": "Balanced energy; a nature that changes pace as needed."
     },
     "short": {
      "hi": "छोटी",
-     "meaning_hi": "ऊर्जा झटकों में लगती है, यानी तीव्र काम और फिर विश्राम; इसका आयु से कोई संबंध नहीं माना जाता।"
+     "meaning_hi": "ऊर्जा झटकों में लगती है, यानी तीव्र काम और फिर विश्राम; इसका आयु से कोई संबंध नहीं माना जाता।",
+     "en": "short",
+     "meaning": "Energy comes in bursts, that is, intense work followed by rest; it is not considered related to lifespan."
     }
-   }
+   },
+   "en": "Length of the life line",
+   "where": "The curved line that wraps around the base of the thumb (starting between the index finger and the thumb)."
   },
   {
    "key": "life_depth",
@@ -54,13 +72,19 @@
    "options": {
     "deep": {
      "hi": "गहरी और साफ़",
-     "meaning_hi": "स्पष्ट जीवन-शक्ति और स्थिर दिनचर्या का संकेत।"
+     "meaning_hi": "स्पष्ट जीवन-शक्ति और स्थिर दिनचर्या का संकेत।",
+     "en": "deep and clear",
+     "meaning": "A sign of clear vitality and a steady routine."
     },
     "faint": {
      "hi": "हल्की या टूटी-सी",
-     "meaning_hi": "ऊर्जा का उतार-चढ़ाव; आराम, नींद और दिनचर्या पर ध्यान देने की याद।"
+     "meaning_hi": "ऊर्जा का उतार-चढ़ाव; आराम, नींद और दिनचर्या पर ध्यान देने की याद।",
+     "en": "faint or broken-looking",
+     "meaning": "Ups and downs of energy; a reminder to attend to rest, sleep and routine."
     }
-   }
+   },
+   "en": "Depth of the life line",
+   "where": "How clear and deep the line looks."
   },
   {
    "key": "life_curve",
@@ -70,13 +94,19 @@
    "options": {
     "wide": {
      "hi": "चौड़ा घुमाव",
-     "meaning_hi": "गर्मजोशी, साहस और नई चीज़ें आज़माने की इच्छा।"
+     "meaning_hi": "गर्मजोशी, साहस और नई चीज़ें आज़माने की इच्छा।",
+     "en": "wide curve",
+     "meaning": "Warmth, courage and a wish to try new things."
     },
     "narrow": {
      "hi": "अंगूठे के पास सिमटी",
-     "meaning_hi": "सावधान, संयमी और अपने दायरे में सुरक्षित रहने वाला स्वभाव।"
+     "meaning_hi": "सावधान, संयमी और अपने दायरे में सुरक्षित रहने वाला स्वभाव।",
+     "en": "hugging the thumb",
+     "meaning": "A careful, restrained nature that stays safe within its own circle."
     }
-   }
+   },
+   "en": "Curve of the life line",
+   "where": "Whether the line spreads toward the middle of the palm or stays close to the thumb."
   },
   {
    "key": "head_length",
@@ -86,13 +116,19 @@
    "options": {
     "long": {
      "hi": "लंबी",
-     "meaning_hi": "विस्तार से सोचने, योजना बनाने और बारीकी देखने की प्रवृत्ति।"
+     "meaning_hi": "विस्तार से सोचने, योजना बनाने और बारीकी देखने की प्रवृत्ति।",
+     "en": "long",
+     "meaning": "A tendency to think in detail, plan and notice fine points."
     },
     "short": {
      "hi": "छोटी",
-     "meaning_hi": "सीधे और व्यावहारिक ढंग से सोचने, जल्दी निर्णय लेने की प्रवृत्ति।"
+     "meaning_hi": "सीधे और व्यावहारिक ढंग से सोचने, जल्दी निर्णय लेने की प्रवृत्ति।",
+     "en": "short",
+     "meaning": "A tendency to think directly and practically and to decide quickly."
     }
-   }
+   },
+   "en": "Length of the head line",
+   "where": "The line that runs across the palm from between the thumb and index finger."
   },
   {
    "key": "head_slope",
@@ -102,13 +138,19 @@
    "options": {
     "straight": {
      "hi": "सीधी",
-     "meaning_hi": "तर्क-प्रधान, यथार्थवादी और तथ्य देखने वाला सोच।"
+     "meaning_hi": "तर्क-प्रधान, यथार्थवादी और तथ्य देखने वाला सोच।",
+     "en": "straight",
+     "meaning": "Logic-driven, realistic and fact-minded thinking."
     },
     "sloping": {
      "hi": "नीचे की ओर झुकी",
-     "meaning_hi": "कल्पनाशील, रचनात्मक और भीतर की आवाज़ सुनने वाला सोच।"
+     "meaning_hi": "कल्पनाशील, रचनात्मक और भीतर की आवाज़ सुनने वाला सोच।",
+     "en": "sloping downward",
+     "meaning": "Imaginative, creative thinking that listens to the inner voice."
     }
-   }
+   },
+   "en": "Slope of the head line",
+   "where": "Whether the line is straight or slopes toward the lower (Moon) part of the palm."
   },
   {
    "key": "heart_end",
@@ -118,17 +160,25 @@
    "options": {
     "index": {
      "hi": "तर्जनी के नीचे",
-     "meaning_hi": "रिश्तों में ऊँचे आदर्श और स्पष्ट अपेक्षाएँ।"
+     "meaning_hi": "रिश्तों में ऊँचे आदर्श और स्पष्ट अपेक्षाएँ।",
+     "en": "under the index finger",
+     "meaning": "High ideals and clear expectations in relationships."
     },
     "between": {
      "hi": "तर्जनी-मध्यमा के बीच",
-     "meaning_hi": "भावनाओं और व्यावहारिकता का संतुलन।"
+     "meaning_hi": "भावनाओं और व्यावहारिकता का संतुलन।",
+     "en": "between index and middle finger",
+     "meaning": "A balance of feeling and practicality."
     },
     "middle": {
      "hi": "मध्यमा के नीचे",
-     "meaning_hi": "स्वतंत्रता और आत्म-निर्भरता को अहमियत देने वाला भावनात्मक ढंग।"
+     "meaning_hi": "स्वतंत्रता और आत्म-निर्भरता को अहमियत देने वाला भावनात्मक ढंग।",
+     "en": "under the middle finger",
+     "meaning": "An emotional style that values independence and self-reliance."
     }
-   }
+   },
+   "en": "End of the heart line",
+   "where": "The upper line under the fingers; see under which finger it ends."
   },
   {
    "key": "heart_shape",
@@ -138,13 +188,19 @@
    "options": {
     "curved": {
      "hi": "घुमावदार",
-     "meaning_hi": "भावनाएँ खुलकर व्यक्त करने की प्रवृत्ति।"
+     "meaning_hi": "भावनाएँ खुलकर व्यक्त करने की प्रवृत्ति।",
+     "en": "curved",
+     "meaning": "A tendency to express feelings openly."
     },
     "straight": {
      "hi": "सीधी",
-     "meaning_hi": "भावनाएँ सोच-समझकर और संयम से व्यक्त करने की प्रवृत्ति।"
+     "meaning_hi": "भावनाएँ सोच-समझकर और संयम से व्यक्त करने की प्रवृत्ति।",
+     "en": "straight",
+     "meaning": "A tendency to express feelings thoughtfully and with restraint."
     }
-   }
+   },
+   "en": "Shape of the heart line",
+   "where": "Whether the line is curved or straight."
   },
   {
    "key": "fate",
@@ -154,17 +210,25 @@
    "options": {
     "clear": {
      "hi": "साफ़",
-     "meaning_hi": "काम और जीवन-दिशा की स्पष्ट समझ।"
+     "meaning_hi": "काम और जीवन-दिशा की स्पष्ट समझ।",
+     "en": "clear",
+     "meaning": "A clear sense of work and direction in life."
     },
     "faint": {
      "hi": "हल्की",
-     "meaning_hi": "रास्ता बदलावों और अनुभवों से बनता है, और लचीलापन काम आता है।"
+     "meaning_hi": "रास्ता बदलावों और अनुभवों से बनता है, और लचीलापन काम आता है।",
+     "en": "faint",
+     "meaning": "The path is built through changes and experiences, and flexibility helps."
     },
     "absent": {
      "hi": "नहीं दिखती",
-     "meaning_hi": "तय ढर्रे की जगह अपनी राह खुद बनाने की आज़ादी; इसे कमी नहीं माना जाता।"
+     "meaning_hi": "तय ढर्रे की जगह अपनी राह खुद बनाने की आज़ादी; इसे कमी नहीं माना जाता।",
+     "en": "not visible",
+     "meaning": "The freedom to make one's own path instead of a fixed pattern; this is not considered a lack."
     }
-   }
+   },
+   "en": "Fate line",
+   "where": "The vertical line running from near the wrist toward the middle finger."
   },
   {
    "key": "sun_line",
@@ -174,13 +238,19 @@
    "options": {
     "present": {
      "hi": "दिखती है",
-     "meaning_hi": "रचनात्मक संतोष और पहचान की चाह।"
+     "meaning_hi": "रचनात्मक संतोष और पहचान की चाह।",
+     "en": "visible",
+     "meaning": "Creative satisfaction and a wish for recognition."
     },
     "absent": {
      "hi": "नहीं दिखती",
-     "meaning_hi": "कोई निष्कर्ष नहीं; बहुत लोगों में यह रेखा नहीं होती।"
+     "meaning_hi": "कोई निष्कर्ष नहीं; बहुत लोगों में यह रेखा नहीं होती।",
+     "en": "not visible",
+     "meaning": "No conclusion; many people do not have this line."
     }
-   }
+   },
+   "en": "Sun line",
+   "where": "The vertical line running toward the ring finger."
   },
   {
    "key": "mount_jupiter",
@@ -190,13 +260,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "महत्वाकांक्षा, नेतृत्व और आत्मविश्वास।"
+     "meaning_hi": "महत्वाकांक्षा, नेतृत्व और आत्मविश्वास।",
+     "en": "raised",
+     "meaning": "Ambition, leadership and confidence."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "विनम्र और कम दिखावे वाला स्वभाव।"
+     "meaning_hi": "विनम्र और कम दिखावे वाला स्वभाव।",
+     "en": "flat",
+     "meaning": "A modest nature with little show."
     }
-   }
+   },
+   "en": "Mount of Jupiter",
+   "where": "The raised area under the index finger."
   },
   {
    "key": "mount_saturn",
@@ -206,13 +282,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "गंभीरता, अनुशासन और ज़िम्मेदारी की भावना।"
+     "meaning_hi": "गंभीरता, अनुशासन और ज़िम्मेदारी की भावना।",
+     "en": "raised",
+     "meaning": "Seriousness, discipline and a sense of responsibility."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "हल्का-फुल्का और लचीला नज़रिया।"
+     "meaning_hi": "हल्का-फुल्का और लचीला नज़रिया।",
+     "en": "flat",
+     "meaning": "A light-hearted and flexible outlook."
     }
-   }
+   },
+   "en": "Mount of Saturn",
+   "where": "The raised area under the middle finger."
   },
   {
    "key": "mount_sun",
@@ -222,13 +304,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "रचनात्मकता, खुशमिज़ाजी और सराहना की चाह।"
+     "meaning_hi": "रचनात्मकता, खुशमिज़ाजी और सराहना की चाह।",
+     "en": "raised",
+     "meaning": "Creativity, cheerfulness and a wish for appreciation."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "सादगी और भीड़ से दूर रहने की प्रवृत्ति।"
+     "meaning_hi": "सादगी और भीड़ से दूर रहने की प्रवृत्ति।",
+     "en": "flat",
+     "meaning": "Simplicity and a tendency to stay away from crowds."
     }
-   }
+   },
+   "en": "Mount of the Sun",
+   "where": "The raised area under the ring finger."
   },
   {
    "key": "mount_mercury",
@@ -238,13 +326,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "संवाद-कौशल, हाज़िरजवाबी और व्यापारिक समझ।"
+     "meaning_hi": "संवाद-कौशल, हाज़िरजवाबी और व्यापारिक समझ।",
+     "en": "raised",
+     "meaning": "Communication skill, quick wit and business sense."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "कम बोलने और सोचकर बोलने की प्रवृत्ति।"
+     "meaning_hi": "कम बोलने और सोचकर बोलने की प्रवृत्ति।",
+     "en": "flat",
+     "meaning": "A tendency to speak little and speak after thinking."
     }
-   }
+   },
+   "en": "Mount of Mercury",
+   "where": "The raised area under the little finger."
   },
   {
    "key": "mount_venus",
@@ -254,13 +348,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "स्नेह, उत्साह और जीवन के आनंद से जुड़ाव।"
+     "meaning_hi": "स्नेह, उत्साह और जीवन के आनंद से जुड़ाव।",
+     "en": "raised",
+     "meaning": "Affection, enthusiasm and a bond with the joys of life."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "संयमित और शांत भावनात्मक ढंग।"
+     "meaning_hi": "संयमित और शांत भावनात्मक ढंग।",
+     "en": "flat",
+     "meaning": "A restrained and calm emotional style."
     }
-   }
+   },
+   "en": "Mount of Venus",
+   "where": "The fleshy part at the base of the thumb."
   },
   {
    "key": "mount_moon",
@@ -270,13 +370,19 @@
    "options": {
     "prominent": {
      "hi": "उभरा हुआ",
-     "meaning_hi": "कल्पना, अंतर्ज्ञान और रचनात्मक सपने।"
+     "meaning_hi": "कल्पना, अंतर्ज्ञान और रचनात्मक सपने।",
+     "en": "raised",
+     "meaning": "Imagination, intuition and creative dreams."
     },
     "flat": {
      "hi": "सपाट",
-     "meaning_hi": "यथार्थ से जुड़ा, तथ्य-आधारित सोच।"
+     "meaning_hi": "यथार्थ से जुड़ा, तथ्य-आधारित सोच।",
+     "en": "flat",
+     "meaning": "Thinking that is tied to reality and based on facts."
     }
-   }
+   },
+   "en": "Mount of the Moon",
+   "where": "The part opposite the thumb, above the wrist."
   }
  ],
  "general_hi": [
@@ -284,5 +390,11 @@
   "रेखाएँ उम्र और आदतों के साथ बदलती हैं, इसलिए यह स्थायी फ़ैसला नहीं है।",
   "हाथ को अच्छी रोशनी में, उँगलियाँ हल्की खुली रखकर देखिए।"
  ],
- "disclaimer_hi": "हस्तरेखा परंपरागत कला है; इसका वैज्ञानिक आधार सिद्ध नहीं है। इसे आत्म-चिंतन और मनोरंजन की तरह लें। स्वास्थ्य, आयु, धन या क़ानूनी फ़ैसले इससे न करें।"
+ "disclaimer_hi": "हस्तरेखा परंपरागत कला है; इसका वैज्ञानिक आधार सिद्ध नहीं है। इसे आत्म-चिंतन और मनोरंजन की तरह लें। स्वास्थ्य, आयु, धन या क़ानूनी फ़ैसले इससे न करें।",
+ "general": [
+  "Look at both hands: in tradition the dominant (writing) hand shows the present and the other shows leanings.",
+  "Lines change with age and habits, so this is not a permanent verdict.",
+  "Look at the hand in good light with the fingers slightly apart."
+ ],
+ "disclaimer": "Palmistry is a traditional art; its scientific basis is not proven. Take it as self-reflection and entertainment. Do not make health, lifespan, money or legal decisions from it."
 }

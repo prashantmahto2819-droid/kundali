@@ -301,6 +301,7 @@ EXTRA_PATTERNS += [
  ("वधू: लग्न से भाव {1} · चंद्र से भाव {2} → {3}", "Bride: house {1} from Lagna · house {2} from Moon → {3}"),
  ("{1} के क्षेत्र में: {2}।", "In matters of {1}: {2}."),
  ("{1}: {2}", "{1}: {2}"),
+ ("{1} — {2}", "{1} — {2}"),
 ]
 for _hi, _en in {"समग्र जीवन और शरीर": "overall life and body", "धन और संपत्ति": "wealth and assets", "भाई-बहन और साहस": "siblings and courage",
                  "भाग्य और अचल संपत्ति": "fortune and fixed property", "संतान": "children", "विवाह और धर्म, ग्रह का भीतरी बल": "marriage and dharma, the inner strength of a planet",
@@ -315,6 +316,13 @@ REPORT.update({
    "This is traditional Vastu guidance, not scientific or legal advice. Traditions differ. The meanings are drafts.",
 })
 EXTRA_PATTERNS += [("{1} महादशा", "{1} Mahadasha"), ("{1} ({2} पाद {3}) · चंद्र राशि:", "{1} ({2} pada {3}) · Moon sign:")]
+REPORT.update({
+ "स्थानबल: उच्च बिंदु से निकटता, सात वर्गों में मित्र/स्वराशि स्थिति, विषम-सम राशि, केंद्रादि और द्रेष्काण। दिग्बल: बलवान दिशा (सूर्य-मंगल दशम, गुरु-बुध लग्न, चंद्र-शुक्र चतुर्थ, शनि सप्तम) के पास। कालबल: दिन-रात की स्थिति, पक्ष, त्रिभाग, वार, होरा और अयन। नैसर्गिक बल: हर ग्रह का स्थिर बल। दृग्बल: शुभ ग्रहों की दृष्टि जोड़कर और पाप ग्रहों की दृष्टि घटाकर, चौथाई। चेष्टाबल: सूर्य के लिए अयनबल और चंद्र के लिए पक्षबल।":
+   "Sthana bala: closeness to the exaltation point, friendly/own-sign position in seven divisional charts, odd-even sign, kendradi and drekkana. Dig bala: closeness to the strong direction (Sun-Mars 10th, Jupiter-Mercury Lagna, Moon-Venus 4th, Saturn 7th). Kala bala: day/night position, paksha, tribhaga, weekday, hora and ayana. Naisargika bala: the fixed strength of each planet. Drik bala: benefic aspects added and malefic aspects subtracted, one quarter. Cheshta bala: ayana bala for the Sun and paksha bala for the Moon.",
+ "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
+   "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
+})
+EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की प्रधानता ({2} कार्ड): {3} पर ज़ोर।", "Dominance of {1} ({2} cards): emphasis on {3}.")]
 REPORT.update({"स्वराशि/उच्च में": "in own/exalted sign", "उच्च राशि में": "in exalted sign", "नीच राशि में": "in debilitated sign",
                "सामान्य स्थिति": "ordinary condition", "ड्राफ़्ट": "draft"})
 

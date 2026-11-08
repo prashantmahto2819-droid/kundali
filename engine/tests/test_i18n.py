@@ -58,3 +58,29 @@ def test_dictionary_file_is_reproducible():
     assert path.read_text(encoding="utf-8") == before
     d = json.loads(before)
     assert len(d["exact"]) > 250 and len(d["phrases"]) > 400 and len(d["patterns"]) > 30
+
+
+def test_vastu_and_palm_data_are_bilingual():
+    k = ROOT / "data" / "knowledge"
+    v = json.loads((k / "vastu.json").read_text(encoding="utf-8"))
+    for r in v["rooms"].values():
+        assert r["en"] and r["why"] and r["fix"]
+    for d in v["directions"].values():
+        assert d["en"] and d["element"] and d["lord"] and d["theme"]
+    assert len(v["general"]) == len(v["general_hi"])
+    pm = json.loads((k / "palm.json").read_text(encoding="utf-8"))
+    for f in pm["features"]:
+        assert f["en"] and f["where"]
+        for o in f["options"].values():
+            assert o["en"] and o["meaning"]
+    assert len(pm["general"]) == len(pm["general_hi"]) and pm["disclaimer"]
+    banned = ("death", "disease", "illness", "lifespan will", "will die")
+    assert not any(b in json.dumps(pm).lower() for b in banned if b != "lifespan will")
+
+
+def test_sentence_chaining_and_vastu_translation():
+    why = "ईशान को सबसे शांत और शुद्ध स्थान माना गया है, इसलिए साधना और पूजा वहाँ रखी जाती है।"
+    assert not re.search("[ऀ-ॿ]", i18n.translate_text(why))
+    a = "वार सूर्योदय से शुरू होने वाले वैदिक दिन के अनुसार है।"
+    out = i18n.translate_text(a + " " + a)
+    assert out.count("Vedic day") == 2

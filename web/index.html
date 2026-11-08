@@ -49,7 +49,7 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lemail" type="email" placeholder="आपका ईमेल" style="flex:1;min-width:180px"><button type="button" id="lgo">लॉगिन लिंक भेजें</button></div>
       <div class="muted" id="lmsg"></div></div>
     <div id="signedin" style="display:none"><span class="muted" id="who"></span> <button type="button" id="lsave">इस कुंडली को सेव करें</button> <button type="button" id="lout">लॉग-आउट</button>
-      <div id="plist" style="margin-top:8px"></div><div id="perr" style="color:#c62828"></div></div>
+      <div id="plist" style="margin-top:8px"></div><div id="lperr" style="color:#c62828"></div></div>
   </div>
   <div class="card">
     <form id="f">
@@ -565,7 +565,7 @@ $('vgo2').addEventListener('click', async () => {
     const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि'); return d;
   };
   async function refresh() {
-    $('perr').textContent = '';
+    $('lperr').textContent = '';
     const {data} = await sb.auth.getSession();
     token = data.session ? data.session.access_token : null;
     $('signedout').style.display = token ? 'none' : ''; $('signedin').style.display = token ? '' : 'none';
@@ -575,7 +575,7 @@ $('vgo2').addEventListener('click', async () => {
       const {people} = await call('GET', '/v1/people');
       $('plist').innerHTML = people.length ? people.map(p => `<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><b>${esc(p.name)}</b><span class="muted">${esc(p.birth.date)} ${esc(p.birth.time)} ${esc(p.place || '')}</span><button type="button" data-open="${esc(p.id)}">खोलें</button><button type="button" data-del="${esc(p.id)}">हटाएँ</button></div>`).join('') : '<span class="muted">अभी कोई कुंडली सेव नहीं है।</span>';
       window._people = Object.fromEntries(people.map(p => [p.id, p]));
-    } catch (e) { $('perr').textContent = 'त्रुटि: ' + e.message; }
+    } catch (e) { $('lperr').textContent = 'त्रुटि: ' + e.message; }
   }
   sb.auth.onAuthStateChange(refresh);
   $('lgo').onclick = async () => {
@@ -588,14 +588,14 @@ $('vgo2').addEventListener('click', async () => {
     try {
       await call('POST', '/v1/people', {name: $('name').value.trim() || 'बिना नाम', date: $('date').value, time: $('time').value, tz: $('tz').value, lat: +$('lat').value, lon: +$('lon').value, place: $('citysearch').value});
       refresh();
-    } catch (e) { $('perr').textContent = 'त्रुटि: ' + e.message; }
+    } catch (e) { $('lperr').textContent = 'त्रुटि: ' + e.message; }
   };
   $('plist').onclick = async e => {
     const open = e.target.dataset.open, del = e.target.dataset.del;
     try {
       if (open) { const p = window._people[open]; $('name').value = p.name; $('date').value = p.birth.date; $('time').value = p.birth.time; $('tz').value = p.birth.tz; $('lat').value = p.birth.lat; $('lon').value = p.birth.lon; $('f').requestSubmit(); }
       if (del) { await call('DELETE', '/v1/people/' + del); refresh(); }
-    } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
+    } catch (err) { $('lperr').textContent = 'त्रुटि: ' + err.message; }
   };
   refresh();
 })();
@@ -628,6 +628,9 @@ $('vgo2').addEventListener('click', async () => {
     }
     const out = core.replace(rxPhrases, m => D.phrases[m]).replace(new RegExp('(\\d+)(?:वाँ|वें|वीं)(?![' + DEV + '])', 'g'), (_, n) => ord(+n));
     if (!hasDev(out)) return out;
+    for (const key of Object.keys(D.exact).filter(k => k.length >= 30 && core.startsWith(k + ' ')).sort((a, b) => b.length - a.length)) {
+      const rest = tr(core.slice(key.length + 1)); if (rest !== null) return D.exact[key] + ' ' + rest;
+    }
     for (const sep of ['; ', ', ', ' / ']) if (core.includes(sep)) {
       const parts = core.split(sep).map(tr); if (!parts.includes(null)) return parts.join(sep);
     }

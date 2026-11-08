@@ -54,6 +54,10 @@ def _try(core: str) -> str | None:
     out = _ORD.sub(_ordinal, rx.sub(lambda mm: phrases[mm.group(1)], core))
     if not re.search(f"[{_DEV}]", out):
         return out
+    for key in sorted((k for k in exact if len(k) >= 30 and core.startswith(k + " ")), key=len, reverse=True):
+        rest = _try(core[len(key) + 1:])           # two long sentences joined by the page
+        if rest is not None:
+            return exact[key] + " " + rest
     for sep in ("; ", ", ", " / "):
         if sep in core:
             parts = [_try(x) for x in core.split(sep)]
