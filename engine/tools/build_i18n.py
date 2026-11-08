@@ -216,6 +216,24 @@ for _hi, _en in (("त्योहार और व्रत कैलेंड�
 for _i, (_hi, _en) in enumerate((("जनवरी", "January"), ("फ़रवरी", "February"), ("मार्च", "March"), ("अप्रैल", "April"), ("मई", "May"), ("जून", "June"), ("जुलाई", "July"), ("अगस्त", "August"), ("सितंबर", "September"), ("अक्टूबर", "October"), ("नवंबर", "November"), ("दिसंबर", "December"))):
     EXACT.setdefault(_hi, _en); EXACT.setdefault(_hi[:3], _en[:3])
 FEST_PATTERNS = [("अधिक मास: {1} — इस मास में त्योहार नहीं गिने गए।", "Adhika masa: {1} — festivals are not counted in this month.")]
+# calendar studio (static card labels)
+UI_CAL = {"कैलेंडर": "Calendar", "कैलेंडर डिज़ाइन स्टूडियो — पंचांग सहित छपने योग्य कैलेंडर": "Calendar design studio — printable calendar with panchang",
+          "महीना या पूरा वर्ष चुनिए, ऊपर-नीचे विज्ञापन पट्टी (चित्र या पाठ), लोगो, रंग-योजना, आकार और दिखाने वाली जानकारी तय कीजिए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं (डिज़ाइन इसी डिवाइस पर सहेजा जाता है)।":
+          "Pick a month or the whole year, set the top and bottom advertisement bands (image or text), logo, colour theme, size and what to show; live preview on the right, then \"Print / PDF\". Images stay in your browser (the design is saved on this device).",
+          "1. माह, स्थान, भाषा": "1. Month, place, language", "माह": "Month", "पूरा वर्ष (12 पृष्ठ)": "Whole year (12 pages)", "शहर (ख़ाली = कुंडली वाला)": "City (empty = the chart's)", "भाषा": "Language",
+          "2. रूप — रंग, आकार, अक्षर": "2. Look — colours, size, type", "रंग-योजना": "Colour theme", "केसरिया": "Saffron", "नील": "Indigo", "हरा": "Forest", "मैरून": "Maroon", "श्वेत-श्याम": "Monochrome",
+          "आकार": "Size", "A4 खड़ा": "A4 portrait", "A4 आड़ा": "A4 landscape", "A3 खड़ा": "A3 portrait", "A3 आड़ा": "A3 landscape", "अक्षर आकार": "Font size", "लोगो (PNG/JPG)": "Logo (PNG/JPG)", "लोगो हटाइए": "Remove logo",
+          "3. ऊपर की विज्ञापन पट्टी": "3. Top advertisement band", "4. नीचे की विज्ञापन पट्टी": "4. Bottom advertisement band", "पट्टी दिखाइए": "Show band", "चित्र (बैनर)": "Image (banner)", "चित्र हटाइए": "Remove image",
+          "चित्र भराव": "Image fit", "पूरा दिखे": "Fit inside", "पट्टी भर दे": "Fill band", "चित्र न हो तो नीचे का पाठ दिखेगा:": "Without an image the text below is shown:", "शीर्षक": "Title", "पंक्ति": "Line", "संपर्क": "Contact",
+          "व्यवसाय / विज्ञापनदाता का नाम": "Business / advertiser name", "क्या बेचते/करते हैं": "What you sell / do", "पता · फ़ोन": "Address · phone", "ऊँचाई (मिमी)": "Height (mm)", "पृष्ठभूमि": "Background", "अक्षर रंग": "Text colour",
+          "चित्र लगा है।": "Image set.", "कोई चित्र नहीं।": "No image.", "5. व्यवसाय / फ़ुटर": "5. Business / footer", "नाम": "Name", "पता / फ़ोन": "Address / phone", "टैगलाइन": "Tagline", "स्थान का नाम (कैलेंडर पर)": "Place name (on the calendar)",
+          "6. क्या-क्या दिखे": "6. What to show", "समाप्ति समय": "End times", "पूर्णिमा/अमावस्या": "Purnima/Amavasya", "चंद्रोदय": "Moonrise", "राहु काल": "Rahu kaal", "योग-करण": "Yoga-karana", "पर्व-सूची (दाएँ)": "Festival list (right)",
+          "7. अपनी तिथियाँ और छुट्टियाँ": "7. Your own dates and holidays", "किसी दिन पर अपना नोट (जैसे \"दुकान बंद\", \"वार्षिकोत्सव\") या छुट्टी (लाल अंक)।": "A note on any day (e.g. \"shop closed\", \"anniversary\") or a holiday (red date).",
+          "तारीख़": "Date", "नोट": "Note", "पाठ (ख़ाली = सिर्फ़ छुट्टी)": "Text (empty = holiday only)", "जोड़िए": "Add", "झलक ताज़ा कीजिए": "Refresh preview", "प्रिंट / PDF": "Print / PDF", "डिज़ाइन सहेजिए": "Save design", "रीसेट": "Reset",
+          "प्रिंट संवाद में \"Save as PDF\" चुनिए, कागज़ वही आकार, मार्जिन \"None/Default\", \"Background graphics\" चालू।": "In the print dialog choose \"Save as PDF\", the same paper size, margins \"None/Default\", \"Background graphics\" on.",
+          "डिज़ाइन इस डिवाइस पर सहेजा गया।": "Design saved on this device.", "शहर": "City", "हिंदी": "Hindi", "विज्ञापन के लिए स्थान": "Space for an advertisement", "(छुट्टी)": "(holiday)"}
+for _hi, _en in UI_CAL.items():
+    EXACT.setdefault(_hi, _en)
 # year overlay
 from jyotish import timeline as _tl
 for _h, (_hi, _en) in _tl.KEY_HOUSES.items():

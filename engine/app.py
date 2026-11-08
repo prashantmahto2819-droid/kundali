@@ -162,6 +162,7 @@ def places(q: str = "", limit: int = 8):
 @app.post("/v1/vastu/plan/report", response_class=HTMLResponse)
 @app.post("/v1/palm/report", response_class=HTMLResponse)
 @app.post("/v1/palm/trace/report", response_class=HTMLResponse)
+@app.post("/v1/panchang/calendar/report", response_class=HTMLResponse)
 async def small_reports(request: Request):
     """Printable pages for numerology, tarot, vastu and palm (same payload as the JSON route, + lang)."""
     try:
@@ -300,6 +301,14 @@ def vastu(req: VastuRequest):
 @app.get("/v1/vastu/catalog")
 def vastu_catalog():
     return handlers.vastu_catalog()
+
+
+@app.get("/v1/panchang/month")
+def panchang_month(year: int | None = None, month: int | None = None, lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata"):
+    try:
+        return handlers.panchang_month_from_query({"year": year, "month": month, "lat": lat, "lon": lon, "tz": tz})
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
 
 @app.get("/v1/festivals")

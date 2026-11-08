@@ -70,6 +70,8 @@
   #note { font-size:.78rem; color:var(--muted); background:transparent; border:0; padding:2px 0; }
   footer { max-width:1100px; margin:24px auto 0; padding:16px; color:var(--muted); font-size:.8rem; border-top:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
   @media (max-width:600px) { .tile .v { font-size:1.02rem; } h1 { font-size:1.3rem; } }
+@media (max-width:900px){ #calgrid{grid-template-columns:1fr !important} #cframe{height:60vh !important} }
+.ck{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:normal} .ck input{width:auto;margin:0}
 </style>
 </head>
 <body>
@@ -88,6 +90,7 @@
   <button type="button" data-tab="t-muhurta"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> मुहूर्त</button>
   <button type="button" data-tab="t-prashna"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7M12 17h.01"/></svg> प्रश्न</button>
   <button type="button" data-tab="t-ask"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z"/></svg> पूछिए</button>
+  <button type="button" data-tab="t-cal"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg> कैलेंडर</button>
   <button type="button" data-tab="t-learn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> सीखिए</button>
   <button type="button" data-tab="t-mine" id="tab-mine" style="display:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg> मेरी कुंडलियाँ</button>
 </nav>
@@ -395,6 +398,65 @@
     <div id="asksugg" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
     <div id="askout"></div>
     <details id="askhist" style="margin-top:10px;display:none"><summary class="muted">पिछले प्रश्न</summary><div id="askhistlist"></div></details>
+  </div>
+  </section>
+  <section class="tab" id="t-cal">
+  <div class="card" id="calcard">
+    <b>कैलेंडर डिज़ाइन स्टूडियो — पंचांग सहित छपने योग्य कैलेंडर</b>
+    <div class="muted" style="font-size:.85rem">महीना या पूरा वर्ष चुनिए, ऊपर-नीचे विज्ञापन पट्टी (चित्र या पाठ), लोगो, रंग-योजना, आकार और दिखाने वाली जानकारी तय कीजिए; दाईं ओर लाइव झलक, फिर "प्रिंट / PDF"। चित्र आपके ब्राउज़र में ही रहते हैं (डिज़ाइन इसी डिवाइस पर सहेजा जाता है)।</div>
+    <div style="display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:14px;margin-top:10px" id="calgrid">
+      <div id="calctrl" style="display:flex;flex-direction:column;gap:8px">
+        <details open><summary><b>1. माह, स्थान, भाषा</b></summary>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:6px">
+            <div><label>वर्ष</label><input id="cyear" type="number" min="1950" max="2099" style="max-width:100px"></div>
+            <div><label>माह</label><select id="cmonth" style="width:auto"><option value="all">पूरा वर्ष (12 पृष्ठ)</option></select></div>
+            <div><label>शहर</label><input id="ccity" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)" autocomplete="off" style="max-width:180px"></div>
+            <div><label>भाषा</label><select id="clang" style="width:auto"><option value="hi">हिंदी</option><option value="en">English</option></select></div>
+          </div></details>
+        <details open><summary><b>2. रूप — रंग, आकार, अक्षर</b></summary>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:6px">
+            <div><label>रंग-योजना</label><select id="ctheme" style="width:auto"><option value="saffron">केसरिया</option><option value="indigo">नील</option><option value="forest">हरा</option><option value="maroon">मैरून</option><option value="mono">श्वेत-श्याम</option></select></div>
+            <div><label>आकार</label><select id="csize" style="width:auto"><option value="A4">A4 खड़ा</option><option value="A4-landscape">A4 आड़ा</option><option value="A3">A3 खड़ा</option><option value="A3-landscape">A3 आड़ा</option><option value="Letter">Letter</option></select></div>
+            <div><label>अक्षर आकार</label><input id="cfont" type="range" min="0.8" max="1.3" step="0.05" value="1" style="width:120px"></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:6px">
+            <div><label>लोगो (PNG/JPG)</label><input type="file" id="clogo" accept="image/*"></div><button type="button" class="ghost" id="clogoclear" style="width:auto">लोगो हटाइए</button>
+          </div></details>
+        <details open><summary><b>3. ऊपर की विज्ञापन पट्टी</b></summary><div id="cadtop"></div></details>
+        <details><summary><b>4. नीचे की विज्ञापन पट्टी</b></summary><div id="cadbot"></div></details>
+        <details><summary><b>5. व्यवसाय / फ़ुटर</b></summary>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            <div><label>नाम</label><input id="cbizname" placeholder="जैसे: श्री ज्योतिष केंद्र"></div>
+            <div><label>पता / फ़ोन</label><input id="cbizline" placeholder="शहर · फ़ोन"></div>
+            <div><label>टैगलाइन</label><input id="cbiztag" placeholder="शुभकामनाओं सहित"></div>
+            <div><label>स्थान का नाम (कैलेंडर पर)</label><input id="cplace" placeholder="कोरबा"></div>
+          </div></details>
+        <details><summary><b>6. क्या-क्या दिखे</b></summary>
+          <div style="display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:6px" id="cshow">
+            <label class="ck"><input type="checkbox" data-show="nakshatra" checked> नक्षत्र</label>
+            <label class="ck"><input type="checkbox" data-show="end_times" checked> समाप्ति समय</label>
+            <label class="ck"><input type="checkbox" data-show="ekadashi" checked> एकादशी</label>
+            <label class="ck"><input type="checkbox" data-show="purnima_amavasya"> पूर्णिमा/अमावस्या</label>
+            <label class="ck"><input type="checkbox" data-show="moonrise"> चंद्रोदय</label>
+            <label class="ck"><input type="checkbox" data-show="rahu_kaal"> राहु काल</label>
+            <label class="ck"><input type="checkbox" data-show="yoga_karana"> योग-करण</label>
+            <label class="ck"><input type="checkbox" data-show="festival_list" checked> पर्व-सूची (दाएँ)</label>
+          </div></details>
+        <details><summary><b>7. अपनी तिथियाँ और छुट्टियाँ</b></summary>
+          <div class="muted" style="font-size:.8rem;margin-top:4px">किसी दिन पर अपना नोट (जैसे "दुकान बंद", "वार्षिकोत्सव") या छुट्टी (लाल अंक)।</div>
+          <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;margin-top:6px"><div><label>तारीख़</label><input id="cndate" type="date" style="max-width:160px"></div><div><label>नोट</label><input id="cntext" placeholder="पाठ (ख़ाली = सिर्फ़ छुट्टी)" style="max-width:200px"></div><button type="button" class="ghost" id="cnadd" style="width:auto">जोड़िए</button></div>
+          <div id="cnlist" style="margin-top:6px"></div></details>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <button type="button" id="cpreview" style="width:auto">झलक ताज़ा कीजिए</button>
+          <button type="button" id="cprint" style="width:auto">प्रिंट / PDF</button>
+          <button type="button" class="ghost" id="csave" style="width:auto">डिज़ाइन सहेजिए</button>
+          <button type="button" class="ghost" id="creset" style="width:auto">रीसेट</button>
+        </div>
+        <div id="cerr" style="color:#c62828"></div>
+        <div class="muted" style="font-size:.8rem">प्रिंट संवाद में "Save as PDF" चुनिए, कागज़ वही आकार, मार्जिन "None/Default", "Background graphics" चालू।</div>
+      </div>
+      <div style="position:sticky;top:8px;align-self:start"><iframe id="cframe" title="कैलेंडर झलक" style="width:100%;height:78vh;border:1px solid var(--line);border-radius:8px;background:#888"></iframe></div>
+    </div>
   </div>
   </section>
   <section class="tab" id="t-learn">
@@ -1228,6 +1290,71 @@ $('repbtn').addEventListener('click', async () => {
   };
 })();
 
+// Calendar design studio
+(function calendarStudio() {
+  const MON = ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+  const now = new Date(); $('cyear').value = now.getFullYear();
+  MON.forEach((m, i) => { const o = document.createElement('option'); o.value = i + 1; o.textContent = m; $('cmonth').appendChild(o); }); $('cmonth').value = now.getMonth() + 1;
+  const KEY = 'kundali.calendar.design.v1';
+  const def = {ad_top: {enabled: true, title: '', text: '', contact: '', height_mm: 35, bg: '', fg: '', image: null, fit: 'contain'}, ad_bottom: {enabled: true, title: 'विज्ञापन के लिए स्थान', text: '', contact: '', height_mm: 25, bg: '', fg: '', image: null, fit: 'contain'}, logo: null, notes: [], holidays: []};
+  let D = JSON.parse(JSON.stringify(def));
+  try { const saved = localStorage.getItem(KEY); if (saved) { const o = JSON.parse(saved); D = {...D, ...o.design}; Object.entries(o.fields || {}).forEach(([id, v]) => { if ($(id)) $(id).value = v; }); Object.entries(o.show || {}).forEach(([k, v]) => { const el = document.querySelector(`[data-show="${k}"]`); if (el) el.checked = v; }); } } catch (e) {}
+  function adEditor(host, key, label) {
+    const a = D[key];
+    host.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+      <label class="ck"><input type="checkbox" data-ad="${key}" data-f="enabled" ${a.enabled ? 'checked' : ''}> पट्टी दिखाइए</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end"><div><label>चित्र (बैनर)</label><input type="file" accept="image/*" data-adimg="${key}"></div><button type="button" class="ghost" data-adclear="${key}" style="width:auto">चित्र हटाइए</button>
+        <div><label>चित्र भराव</label><select data-ad="${key}" data-f="fit" style="width:auto"><option value="contain" ${a.fit !== 'cover' ? 'selected' : ''}>पूरा दिखे</option><option value="cover" ${a.fit === 'cover' ? 'selected' : ''}>पट्टी भर दे</option></select></div></div>
+      <div class="muted" style="font-size:.8rem">चित्र न हो तो नीचे का पाठ दिखेगा:</div>
+      <div><label>शीर्षक</label><input data-ad="${key}" data-f="title" value="${esc(a.title || '')}" placeholder="व्यवसाय / विज्ञापनदाता का नाम"></div>
+      <div><label>पंक्ति</label><input data-ad="${key}" data-f="text" value="${esc(a.text || '')}" placeholder="क्या बेचते/करते हैं"></div>
+      <div><label>संपर्क</label><input data-ad="${key}" data-f="contact" value="${esc(a.contact || '')}" placeholder="पता · फ़ोन"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end"><div><label>ऊँचाई (मिमी)</label><input type="number" min="20" max="120" data-ad="${key}" data-f="height_mm" value="${a.height_mm || 35}" style="max-width:100px"></div>
+        <div><label>पृष्ठभूमि</label><input type="color" data-ad="${key}" data-f="bg" value="${/^#[0-9a-fA-F]{6}$/.test(a.bg || '') ? a.bg : '#f2d9b8'}" style="width:60px;padding:2px"></div>
+        <div><label>अक्षर रंग</label><input type="color" data-ad="${key}" data-f="fg" value="${/^#[0-9a-fA-F]{6}$/.test(a.fg || '') ? a.fg : '#2b1d12'}" style="width:60px;padding:2px"></div></div>
+      <div class="muted" style="font-size:.8rem" data-adinfo="${key}">${a.image ? 'चित्र लगा है।' : 'कोई चित्र नहीं।'}</div></div>`;
+    host.querySelectorAll('[data-ad]').forEach(el => el.addEventListener('input', () => { const f = el.dataset.f; D[key][f] = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? +el.value : el.value); }));
+    host.querySelector(`[data-adimg="${key}"]`).onchange = ev => readImage(ev.target.files[0], 1600, url => { D[key].image = url; host.querySelector(`[data-adinfo="${key}"]`).textContent = 'चित्र लगा है।'; preview(); });
+    host.querySelector(`[data-adclear="${key}"]`).onclick = () => { D[key].image = null; host.querySelector(`[data-adinfo="${key}"]`).textContent = 'कोई चित्र नहीं।'; preview(); };
+  }
+  function readImage(file, maxW, cb) {
+    if (!file) return; const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => { const k = Math.min(1, maxW / img.naturalWidth); const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); cb(c.toDataURL(file.type === 'image/png' ? 'image/png' : 'image/jpeg', 0.88)); URL.revokeObjectURL(url); };
+    img.src = url;
+  }
+  adEditor($('cadtop'), 'ad_top'); adEditor($('cadbot'), 'ad_bottom');
+  $('clogo').onchange = ev => readImage(ev.target.files[0], 600, url => { D.logo = url; preview(); });
+  $('clogoclear').onclick = () => { D.logo = null; preview(); };
+  function renderNotes() { $('cnlist').innerHTML = [...D.notes.map(n => ({d: n.date, t: n.text})), ...D.holidays.map(h => ({d: h.date, t: null}))].sort((a, b) => a.d.localeCompare(b.d)).map(x => `<span class="chip" style="margin:2px">${x.d}${x.t ? ': ' + esc(x.t) : ' (छुट्टी)'} <a href="#" data-del="${x.d}|${x.t === null ? 'h' : 'n'}" style="text-decoration:none">✕</a></span>`).join('') || '<span class="muted">कोई नहीं</span>';
+    $('cnlist').querySelectorAll('[data-del]').forEach(a => a.onclick = ev => { ev.preventDefault(); const [d, k] = a.dataset.del.split('|'); if (k === 'h') D.holidays = D.holidays.filter(h => h.date !== d); else D.notes = D.notes.filter(n => n.date !== d); renderNotes(); }); }
+  $('cnadd').onclick = () => { const d = $('cndate').value, t = $('cntext').value.trim(); if (!d) return; if (t) { D.notes = D.notes.filter(n => n.date !== d); D.notes.push({date: d, text: t}); } else if (!D.holidays.some(h => h.date === d)) D.holidays.push({date: d}); $('cntext').value = ''; renderNotes(); };
+  renderNotes();
+  const fields = ['cyear', 'cmonth', 'ccity', 'clang', 'ctheme', 'csize', 'cfont', 'cbizname', 'cbizline', 'cbiztag', 'cplace'];
+  async function body() {
+    let lat = +$('lat').value || 28.61, lon = +$('lon').value || 77.2, tz = ($('tz').value || '').trim() || 'Asia/Kolkata';
+    const q = $('ccity').value.trim();
+    if (q) { try { const r = await apiFetch('/v1/places?q=' + encodeURIComponent(q) + '&limit=1'); const d = await r.json(); if (d.results && d.results[0]) { lat = d.results[0].lat; lon = d.results[0].lon; tz = d.results[0].tz || tz; } } catch (e) {} }
+    const show = {}; document.querySelectorAll('[data-show]').forEach(c => show[c.dataset.show] = c.checked);
+    const design = {...D, theme: $('ctheme').value, size: $('csize').value, font_scale: +$('cfont').value, show, place: $('cplace').value, business: {name: $('cbizname').value, line: $('cbizline').value, tagline: $('cbiztag').value}};
+    return {year: +$('cyear').value, month: $('cmonth').value, lat, lon, tz, lang: $('clang').value, design};
+  }
+  let busy = false, again = false;
+  async function fetchHtml(previewOnly) {
+    const b = await body(); if (previewOnly && b.month === 'all') b.month = String(now.getMonth() + 1);   // preview one page; print does all twelve
+    const r = await apiFetch('/v1/panchang/calendar/report', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(b)});
+    if (!r.ok) { let m = 'त्रुटि'; try { m = (await r.json()).detail || m; } catch (e) {} throw new Error(m); }
+    return await r.text();
+  }
+  async function preview() { if (busy) { again = true; return; } busy = true; $('cerr').textContent = ''; try { $('cframe').srcdoc = await fetchHtml(true); } catch (err) { $('cerr').textContent = 'त्रुटि: ' + err.message; } finally { busy = false; if (again) { again = false; preview(); } } }
+  $('cpreview').onclick = preview;
+  fields.forEach(id => $(id).addEventListener('change', preview));
+  document.querySelectorAll('[data-show]').forEach(c => c.addEventListener('change', preview));
+  $('cprint').onclick = async () => { $('cerr').textContent = ''; try { const html = await fetchHtml(false); const w = window.open('', '_blank'); if (!w) throw new Error('पॉप-अप रोका गया; ब्राउज़र में अनुमति दीजिए।'); w.document.open(); w.document.write(html); w.document.close(); setTimeout(() => w.print(), 700); } catch (err) { $('cerr').textContent = 'त्रुटि: ' + err.message; } };
+  $('csave').onclick = () => { try { const f = {}; fields.forEach(id => f[id] = $(id).value); const show = {}; document.querySelectorAll('[data-show]').forEach(c => show[c.dataset.show] = c.checked); localStorage.setItem(KEY, JSON.stringify({design: D, fields: f, show})); $('cerr').style.color = 'var(--ok)'; $('cerr').textContent = 'डिज़ाइन इस डिवाइस पर सहेजा गया।'; setTimeout(() => { $('cerr').textContent = ''; $('cerr').style.color = '#c62828'; }, 2500); } catch (e) { $('cerr').textContent = 'सहेज नहीं सका (ब्राउज़र स्टोरेज बंद?)।'; } };
+  $('creset').onclick = () => { try { localStorage.removeItem(KEY); } catch (e) {} D = JSON.parse(JSON.stringify(def)); adEditor($('cadtop'), 'ad_top'); adEditor($('cadbot'), 'ad_bottom'); renderNotes(); preview(); };
+  document.querySelector('button[data-tab="t-cal"]').addEventListener('click', () => { if (!$('cframe').srcdoc) preview(); }, {once: false});
+})();
+
 // Learn tab: lessons from the knowledge files, glossary, generated quizzes (rendered directly in the chosen language)
 (async function learnTabUI() {
   const ENL = () => (window.getLang ? window.getLang() : 'hi') === 'en';
@@ -1659,7 +1786,7 @@ async function openReport(path, body) {
     const out = hasDev(core) ? tr(core) : null;
     return out === null ? text : text.replace(text.trim(), out);
   }
-  let busy = false;
+  let busy = false, again = false;
   function apply(root) {
     if (!D) return;
     busy = true;

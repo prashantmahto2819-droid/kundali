@@ -349,7 +349,7 @@ def palm_report_from_payload(payload: dict) -> str:
 REPORT_ROUTES = {"/v1/report": None, "/v1/match/report": "match_report_from_payload", "/v1/muhurta/report": "muhurta_report_from_payload",
                  "/v1/prashna/report": "prashna_report_from_payload", "/v1/numerology/report": "numerology_report_from_payload",
                  "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/vastu/plan/report": "vastu_plan_report_from_payload", "/v1/palm/report": "palm_report_from_payload",
-                 "/v1/palm/trace/report": "palm_trace_report_from_payload"}
+                 "/v1/palm/trace/report": "palm_trace_report_from_payload", "/v1/panchang/calendar/report": "calendar_report_from_payload"}
 
 
 # ---- JSON safety net ------------------------------------------------------------------
@@ -510,3 +510,57 @@ def festivals_from_query(q: dict) -> dict:
     if not 1950 <= year <= 2099 or not (-66 <= lat <= 66) or not (-180 <= lon <= 180):
         raise BadRequest("year must be 1950-2099 and lat within -66..66")
     return festivals.calendar(year, lat, lon, tz)
+
+
+def panchang_month_from_query(q: dict) -> dict:
+    """GET /v1/panchang/month?year=2026&month=11&lat=..&lon=..&tz=Asia/Kolkata"""
+    from . import panchang_month
+    try:
+        year = int(q.get("year") or datetime.now(timezone.utc).year); mon = int(q.get("month") or datetime.now(timezone.utc).month)
+        lat = float(q.get("lat") or 28.61); lon = float(q.get("lon") or 77.2)
+    except (TypeError, ValueError):
+        raise BadRequest("year, month, lat and lon must be numbers")
+    tz = q.get("tz") or "Asia/Kolkata"
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        raise BadRequest(f"Unknown time zone '{tz}'") from exc
+    if not 1950 <= year <= 2099 or not 1 <= mon <= 12 or not (-66 <= lat <= 66) or not (-180 <= lon <= 180):
+        raise BadRequest("year 1950-2099, month 1-12, lat within -66..66")
+    return panchang_month.month(year, mon, lat, lon, tz)
+
+
+def calendar_report_from_payload(payload: dict) -> str:
+    """POST /v1/panchang/calendar/report  {year, month?: 1-12 (omit or 'all' for twelve pages), lat, lon, tz, lang?, design: {...}}"""
+    from . import calendar_design
+    try:
+        year = int(payload.get("year") or datetime.now(timezone.utc).year)
+        lat = float(payload.get("lat") or 28.61); lon = float(payload.get("lon") or 77.2)
+    except (TypeError, ValueError):
+        raise BadRequest("year, lat and lon must be numbers")
+    tz = payload.get("tz") or "Asia/Kolkata"
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        raise BadRequest(f"Unknown time zone '{tz}'") from exc
+    if not 1950 <= year <= 2099 or not (-66 <= lat <= 66):
+        raise BadRequest("year 1950-2099, lat within -66..66")
+    mon = payload.get("month")
+    if mon in (None, "", "all", 0):
+        months = list(range(1, 13))
+    else:
+        try:
+            mon = int(mon)
+        except (TypeError, ValueError):
+            raise BadRequest("month must be 1-12 or 'all'")
+        if not 1 <= mon <= 12:
+            raise BadRequest("month must be 1-12 or 'all'")
+        months = [mon]
+    design = payload.get("design") or {}
+    if not isinstance(design, dict):
+        raise BadRequest("design must be an object")
+    for k in ("notes", "holidays"):
+        if design.get(k) and (not isinstance(design[k], list) or len(design[k]) > 400):
+            raise BadRequest(f"design.{k} must be a list of up to 400 entries")
+    lang = "en" if str(payload.get("lang", "hi")).lower() == "en" else "hi"
+    return calendar_design.render_calendar(year, months, lat, lon, tz, design, lang)

@@ -114,6 +114,9 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 ## Moonrise / moonset
 `engine/jyotish/moon.py`: Moon latitude (30 Meeus terms), parallax, standard altitude 0.7275π − 34′, 10-minute scan + bisection; Delhi values match published almanac times within a minute (Karva Chauth 2025 moonrise 20:13). Shown in the panchang card, the birth-day table and printed reports; used by the festival calendar for Sharad Purnima.
 
+## Calendar design studio
+New top tab **कैलेंडर**: `GET /v1/panchang/month?year&month&lat&lon&tz` gives every day's sunrise panchang with tithi/nakshatra end times, amanta + purnimanta month, Vikram samvat, moonrise/moonset, Rahu kaal, sankranti flag and the day's festivals; `POST /v1/panchang/calendar/report` renders print-ready pages (one month or all twelve) from a design: top and bottom advertisement bands (image as data URL or text, height, colours), logo, five colour themes, A4/A3/Letter portrait or landscape, font scale, what to show (nakshatra, end times, Ekadashi, Purnima/Amavasya, moonrise, Rahu kaal, yoga-karana, festival list), business footer, own notes and holidays per date. The web studio shows a fitted live preview in an iframe, saves the design on the device (localStorage) and prints via the browser (Save as PDF). Images never leave the browser except inside the render request. `engine/jyotish/panchang_month.py`, `engine/jyotish/calendar_design.py`.
+
 ## Festival calendar
 `GET /v1/festivals?year=2026&lat=..&lon=..&tz=Asia/Kolkata` — 32 festivals (Makar Sankranti by solar ingress; the rest by amanta month + tithi at sunrise, or at midnight / sunset / approximate moonrise / midday where the tradition does so), all Ekadashis with names, Purnima and Amavasya days (kshaya tithis handled), and adhika-masa spans. Card in the muhurta tab, grouped by month. Draft: regional conventions can differ by a day (`engine/jyotish/festivals.py`).
 

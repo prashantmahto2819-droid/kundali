@@ -88,6 +88,13 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, handlers.vastu_catalog())
         if path == "/v1/vastu/plan/catalog":
             return self._json(200, handlers.vastu_plan_catalog())
+        if path == "/v1/panchang/month":
+            from urllib.parse import parse_qs
+            q = {k: v[0] for k, v in parse_qs(query).items()}
+            try:
+                return self._json(200, handlers.panchang_month_from_query(q))
+            except handlers.BadRequest as exc:
+                return self._json(400, {"detail": str(exc)})
         if path == "/v1/festivals":
             from urllib.parse import parse_qs
             q = {k: v[0] for k, v in parse_qs(query).items()}
