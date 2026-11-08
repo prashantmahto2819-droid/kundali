@@ -171,14 +171,20 @@ def auth_mode() -> str:
 
 def resolve(headers, store, verifier=None):
     """-> (org | None, error | None). API key or Supabase Bearer token."""
-    from . import auth_supabase
     key = headers.get(HEADER) or headers.get("X-API-Key")
     if key:
         org = store.authenticate(key)
         return (org, None) if org else (None, "invalid or revoked API key")
-    token = auth_supabase.bearer(headers)
+    auth = headers.get("Authorization") or headers.get("authorization") or ""
+    token = auth[7:].strip() if auth.lower().startswith("bearer ") else None
     if token:
-        who = (verifier or auth_supabase.verify)(token)
+        if verifier is None:
+            try:
+                from . import auth_supabase                      # needs PyJWT; imported only when a login token arrives
+            except ImportError:
+                return None, "login tokens are not supported on this server (PyJWT missing)"
+            verifier = auth_supabase.verify
+        who = verifier(token)
         return (store.org_for_user(who["user_id"], who["email"]), None) if who else (None, "invalid or expired login token")
     return None, None
 

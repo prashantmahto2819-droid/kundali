@@ -3,5 +3,7 @@ uvicorn[standard]>=0.29
 pydantic>=2.6
 # Production ephemeris backend (NASA JPL data, no AGPL):
 skyfield>=1.48
+# Login tokens (Supabase JWT):
+PyJWT[crypto]>=2.8
 # Tests
 pytest>=8

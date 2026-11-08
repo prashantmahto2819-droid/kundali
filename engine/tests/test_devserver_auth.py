@@ -71,3 +71,22 @@ def test_people_over_http(server, monkeypatch):
     req = urllib.request.Request(f"{url}/v1/people/{pid}", method="DELETE", headers={"X-API-Key": key})
     with urllib.request.urlopen(req) as r:
         assert r.status == 200
+
+
+def test_resolve_without_pyjwt_does_not_crash(monkeypatch, tmp_path):
+    """Regression: on the Relay server PyJWT was missing and every request 500'd in optional mode."""
+    import builtins
+    import sys
+    from jyotish import access
+    real_import = builtins.__import__
+
+    def fake_import(name, *a, **k):
+        if name == "jwt" or name.endswith("auth_supabase"):
+            raise ImportError("no jwt")
+        return real_import(name, *a, **k)
+    sys.modules.pop("jyotish.auth_supabase", None)
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    store = access.Store(str(tmp_path / "a.db"))
+    assert access.resolve({}, store) == (None, None)                       # anonymous: no import needed at all
+    org, err = access.resolve({"Authorization": "Bearer abc"}, store)
+    assert org is None and "PyJWT" in err
