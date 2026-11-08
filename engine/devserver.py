@@ -82,6 +82,8 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/v1/palm/catalog":
             from jyotish import palm
             return self._json(200, palm.catalog())
+        if path == "/v1/palm/trace/catalog":
+            return self._json(200, handlers.palm_trace_catalog())
         if path == "/v1/vastu/catalog":
             return self._json(200, handlers.vastu_catalog())
         if path == "/v1/vastu/plan/catalog":
@@ -118,6 +120,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/vastu/plan": handlers.vastu_plan_upload_from_payload,
                   "/v1/vastu/zones": handlers.vastu_plan_from_payload,
                   "/v1/palm": handlers.palm_from_payload,
+                  "/v1/palm/trace": handlers.palm_trace_from_payload,
                   "/v1/muhurta": handlers.muhurta_from_payload,
                   "/v1/prashna": handlers.prashna_from_payload,
                   "/v1/rectify": handlers.rectify_from_payload,

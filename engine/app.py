@@ -161,6 +161,7 @@ def places(q: str = "", limit: int = 8):
 @app.post("/v1/vastu/report", response_class=HTMLResponse)
 @app.post("/v1/vastu/plan/report", response_class=HTMLResponse)
 @app.post("/v1/palm/report", response_class=HTMLResponse)
+@app.post("/v1/palm/trace/report", response_class=HTMLResponse)
 async def small_reports(request: Request):
     """Printable pages for numerology, tarot, vastu and palm (same payload as the JSON route, + lang)."""
     try:
@@ -373,6 +374,34 @@ def palm_reading(req: PalmRequest):
 def palm_catalog():
     from jyotish import palm as _palm
     return _palm.catalog()
+
+
+@app.get("/v1/palm/trace/catalog")
+def palm_trace_catalog():
+    return handlers.palm_trace_catalog()
+
+
+class PalmMark(BaseModel):
+    line: str
+    type: str
+    x: float | None = None
+    y: float | None = None
+
+
+class PalmTraceRequest(BaseModel):
+    landmarks: dict[str, list[float]]
+    lines: dict[str, list[list[float]]] = Field(default_factory=dict)
+    marks: list[PalmMark] = Field(default_factory=list, max_length=30)
+    extras: dict[str, int] = Field(default_factory=dict)
+    choices: dict[str, str] = Field(default_factory=dict)
+
+
+@app.post("/v1/palm/trace")
+def palm_trace(req: PalmTraceRequest):
+    try:
+        return handlers.palm_trace_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
 
 # Serve the web page and the knowledge data from the same container (one deployable unit).

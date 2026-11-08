@@ -62,6 +62,8 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | # | What | File |
 |---|------|------|
 | 1 | 16 features, their options and meanings | `data/knowledge/palm.json` |
+| 2 | Marks on lines (10) and counted lines (4) texts | `data/knowledge/palm.json` (`marks`, `extras`; built by `engine/tools/palm_marks_data.py`) |
+| 3 | Tracing thresholds (life reach 0.85/0.6, sweep 0.33, head span 0.75, drop 0.18, heart curvature 0.1, fate 0.45 of palm length) | `engine/jyotish/palm_trace.py` (`measure`) |
 
 ## G. Safety wording (any reviewer)
 - Guardrail topics for the ask route: `engine/jyotish/ask.py` (`BLOCKED`) — death, medical, money, legal.

@@ -507,6 +507,23 @@ def render_vastu_plan(v: dict) -> str:
     return _page("वास्तु (नक्शे से)", "वास्तु — नक्शे से 16-ज़ोन विश्लेषण", body)
 
 
+def render_palm_trace(t: dict) -> str:
+    parts = []
+    M = t["measurements"]
+    mrows = [[e(k), str(v)] for k, v in M.items()]
+    parts.append("<h2>माप (हथेली के अनुपात में)</h2>" + _table(["माप", "मान"], mrows))
+    if t["reading"].get("groups"):
+        for group, items in t["reading"]["groups"].items():
+            rows = [[e(i["feature_hi"]), e(i["choice_hi"]) + (" (ट्रेसिंग से)" if i["feature"] in t["implied_choices"] else ""), e(i["meaning_hi"])] for i in items]
+            parts.append(f"<h2>{e(group)}</h2>" + _table(["लक्षण", "निष्कर्ष", "अर्थ (ड्राफ़्ट)"], rows))
+    if t["marks"]:
+        parts.append("<h2>रेखाओं पर चिह्न</h2>" + _table(["रेखा", "चिह्न", "अर्थ (ड्राफ़्ट)"], [[e(m["line_hi"]), e(m["type_hi"]), e(m["text_hi"])] for m in t["marks"]]))
+    if t["extras"]:
+        parts.append("<h2>अन्य रेखाएँ</h2>" + _table(["रेखा", "गिनती", "अर्थ (ड्राफ़्ट)"], [[e(x["hi"]), str(x["count"]), e(x["text_hi"])] for x in t["extras"]]))
+    body = "".join(parts) + "".join(f'<p class="small">{e(n["hi"])}</p>' for n in t["notes"]) + f'<div class="banner">{e(t["trace_note_hi"])} {e(t["disclaimer_hi"])}</div>'
+    return _page("हस्तरेखा (फ़ोटो ट्रेसिंग)", "हस्तरेखा — फ़ोटो पर ट्रेस की गई रेखाओं से", body)
+
+
 def render_palm(p: dict) -> str:
     parts = []
     for group, items in p["groups"].items():

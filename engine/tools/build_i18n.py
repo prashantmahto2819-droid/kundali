@@ -241,7 +241,38 @@ VPLAN_PATTERNS = [("अंक {1} / {2} · उत्तर-कोण {3}°", "Sc
                   ("फ़ोन का शीर्ष {1}° की ओर था → उत्तर-कोण {2}°।", "The phone's top pointed to {1}° → north angle {2}°."),
                   ("DXF की {1} रेखा-आकृतियाँ (LINE/POLYLINE/CIRCLE/ARC) चित्र में बदली गईं; टेक्स्ट, हैच और ब्लॉक नहीं दिखते। DWG हो तो AutoCAD/LibreCAD से DXF में सेव कीजिए।",
                    "{1} DXF entities (LINE/POLYLINE/CIRCLE/ARC) rendered; text, hatches and blocks are not shown. For a DWG, save it as DXF from AutoCAD/LibreCAD.")]
-TAJIKA_PATTERNS = VPLAN_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+# palm tracing
+from jyotish import palm_trace as _ptr
+_pk = _json.loads((ROOT / "data" / "knowledge" / "palm.json").read_text(encoding="utf-8"))
+for k in _ptr.LANDMARKS:
+    put(_ptr.LANDMARK_HI[k], _ptr.LANDMARK_EN[k])
+for m in _pk["marks"].values():
+    put(m["hi"], m["en"])
+    for ln in _pk["lines"].values():
+        put(m["hi_t"].replace("{line}", ln["hi"]), m["en_t"].replace("{line}", ln["en"]))
+for x in _pk["extras"].values():
+    put(x["hi"], x["en"])
+    for b in x["bands"]:
+        put(b["hi"], b["en"])
+put(_pk["trace_note_hi"], _pk["trace_note"])
+UI_PTRACE = {"हस्तरेखा — फ़ोटो पर रेखाएँ ट्रेस कीजिए": "Palmistry — trace the lines on a photo",
+             "हथेली की साफ़ फ़ोटो चुनिए (उँगलियाँ ऊपर)। फ़ोटो आपके फ़ोन में ही रहती है, सर्वर को सिर्फ़ बिंदु जाते हैं। पहले 6 निशान (कलाई, चार उँगलियों के आधार, अंगूठे का जोड़), फिर हर रेखा पर 3–8 बिंदु क्लिक कीजिए।":
+             "Choose a clear photo of the palm (fingers up). The photo stays on your phone; only points go to the server. First the 6 landmarks (wrist, four finger bases, thumb joint), then click 3–8 points along each line.",
+             "1. हथेली की फ़ोटो": "1. Palm photo", "2. निशान लगाइए": "2. Set landmarks", "3. रेखा": "3. Line", "रेखा ट्रेस कीजिए": "Trace line", "4. चिह्न": "4. Mark", "चिह्न रखिए": "Place mark", "5. पढ़िए": "5. Read",
+             "गिनती": "count", "ट्रेसिंग से": "from tracing", "रेखाओं पर चिह्न": "Marks on the lines", "अन्य रेखाएँ": "Other lines", "माप (हथेली के अनुपात में)": "Measurements (ratios of the palm)", "माप": "Measure", "मान": "Value",
+             "निष्कर्ष": "Finding", "(ट्रेसिंग से)": "(from tracing)", "हस्तरेखा (फ़ोटो ट्रेसिंग)": "Palmistry (photo tracing)", "हस्तरेखा — फ़ोटो पर ट्रेस की गई रेखाओं से": "Palmistry — from lines traced on a photo",
+             "पहले छहों निशान लगाइए।": "Set all six landmarks first.", "पहले कोई रेखा ट्रेस कीजिए, फिर उस पर चिह्न रखिए।": "Trace a line first, then place the mark on it.",
+             "निशान पूरे। अब रेखा चुनकर \"रेखा ट्रेस कीजिए\" दबाइए।": "Landmarks done. Now choose a line and press \"Trace line\".", "कोई नहीं": "none", "चिह्न": "Mark", "रेखा": "Line"}
+for hi, en in UI_PTRACE.items():
+    EXACT.setdefault(hi, en)
+PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Lines traced: {1}"), ("निशान {1}/6: {2} पर क्लिक कीजिए।", "Landmark {1}/6: click on the {2}."),
+                   ("हथेली लंबाई/चौड़ाई = {1} (लंबी हथेली); हाथ का तत्व उँगलियों की लंबाई से भी तय होता है, इसलिए वह आप चुनिए।", "Palm length/width = {1} (long palm); the hand's element also depends on finger length, so choose it yourself."),
+                   ("हथेली लंबाई/चौड़ाई = {1} (चौकोर हथेली); हाथ का तत्व उँगलियों की लंबाई से भी तय होता है, इसलिए वह आप चुनिए।", "Palm length/width = {1} (square palm); the hand's element also depends on finger length, so choose it yourself."),
+                   ("{1}: शुरू से अंत तक 3–8 बिंदु क्लिक कीजिए (शुरू: {2})।", "{1}: click 3–8 points from start to end (start: {2})."), ("चिह्न \"{1}\": रेखा पर उस जगह क्लिक कीजिए।", "Mark \"{1}\": click that spot on the line."),
+                   ("{1} — {2}", "{1} — {2}")]
+for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
+    put(_hi, _en)
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

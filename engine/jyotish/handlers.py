@@ -348,7 +348,8 @@ def palm_report_from_payload(payload: dict) -> str:
 
 REPORT_ROUTES = {"/v1/report": None, "/v1/match/report": "match_report_from_payload", "/v1/muhurta/report": "muhurta_report_from_payload",
                  "/v1/prashna/report": "prashna_report_from_payload", "/v1/numerology/report": "numerology_report_from_payload",
-                 "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/vastu/plan/report": "vastu_plan_report_from_payload", "/v1/palm/report": "palm_report_from_payload"}
+                 "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/vastu/plan/report": "vastu_plan_report_from_payload", "/v1/palm/report": "palm_report_from_payload",
+                 "/v1/palm/trace/report": "palm_trace_report_from_payload"}
 
 
 # ---- JSON safety net ------------------------------------------------------------------
@@ -463,3 +464,31 @@ def vastu_plan_catalog() -> dict:
 def vastu_plan_report_from_payload(payload: dict) -> str:
     from . import report
     return _localize(report.render_vastu_plan(vastu_plan_from_payload(payload)), payload)
+
+
+def palm_trace_from_payload(payload: dict) -> dict:
+    """POST /v1/palm/trace  {landmarks: {wrist,index,middle,ring,little,thumb: [x,y]}, lines: {life,head,heart,fate?,sun?: [[x,y]...]},
+    marks?: [{line, type, x?, y?}], extras?: {union_lines, bracelets, travel_lines, girdle_of_venus: n}, choices?: {feature: option}}"""
+    from . import palm_trace
+    marks = payload.get("marks") or []
+    if not isinstance(marks, list) or len(marks) > 30:
+        raise BadRequest("marks must be a list of up to 30 entries")
+    try:
+        return palm_trace.trace(payload)
+    except (ValueError, TypeError, KeyError, IndexError) as exc:
+        raise BadRequest(str(exc) or "invalid tracing data") from exc
+
+
+def palm_trace_catalog() -> dict:
+    from . import palm, palm_trace
+    k = palm.knowledge()
+    return {"landmarks": [{"key": x, "hi": palm_trace.LANDMARK_HI[x], "en": palm_trace.LANDMARK_EN[x]} for x in palm_trace.LANDMARKS],
+            "lines": k["lines"], "marks": {m: {"hi": v["hi"], "en": v["en"]} for m, v in k["marks"].items()},
+            "extras": {e: {"hi": v["hi"], "en": v["en"]} for e, v in k["extras"].items()},
+            "manual_features": [f["key"] for f in k["features"] if f["key"] in ("hand_shape", "life_depth") or f["key"].startswith("mount_")],
+            "trace_note_hi": k["trace_note_hi"], "trace_note": k["trace_note"]}
+
+
+def palm_trace_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_palm_trace(palm_trace_from_payload(payload)), payload)

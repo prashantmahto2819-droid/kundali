@@ -319,6 +319,27 @@
     <div id="perr" style="color:#c62828;margin-top:6px"></div>
     <div id="pout"></div>
   </div>
+  <div class="card" id="palmtracecard">
+    <b>हस्तरेखा — फ़ोटो पर रेखाएँ ट्रेस कीजिए</b>
+    <div class="muted" style="font-size:.85rem">हथेली की साफ़ फ़ोटो चुनिए (उँगलियाँ ऊपर)। फ़ोटो आपके फ़ोन में ही रहती है, सर्वर को सिर्फ़ बिंदु जाते हैं। पहले 6 निशान (कलाई, चार उँगलियों के आधार, अंगूठे का जोड़), फिर हर रेखा पर 3–8 बिंदु क्लिक कीजिए।</div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <div><label>1. हथेली की फ़ोटो</label><input type="file" id="ptfile" accept="image/*" capture="environment"></div>
+      <button type="button" id="ptlm" style="width:auto">2. निशान लगाइए</button>
+      <div><label>3. रेखा</label><select id="ptline" style="width:auto"><option value="life">जीवन रेखा</option><option value="head">मस्तिष्क रेखा</option><option value="heart">हृदय रेखा</option><option value="fate">भाग्य रेखा</option><option value="sun">सूर्य रेखा</option></select></div>
+      <button type="button" id="pttrace" style="width:auto">रेखा ट्रेस कीजिए</button>
+      <div><label>4. चिह्न</label><select id="ptmark" style="width:auto"></select></div>
+      <button type="button" class="ghost" id="ptmarkplace" style="width:auto">चिह्न रखिए</button>
+      <button type="button" class="ghost" id="ptundo" style="width:auto">पीछे</button>
+      <button type="button" class="ghost" id="ptclear" style="width:auto">साफ़</button>
+    </div>
+    <div class="muted" style="font-size:.8rem;margin-top:6px" id="ptmode"></div>
+    <canvas id="ptcanvas" style="max-width:100%;border:1px solid var(--line);border-radius:8px;margin-top:6px;display:none;touch-action:none"></canvas>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px" id="ptextras"></div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px" id="ptmanual"></div>
+    <div style="margin-top:8px"><button type="button" id="ptgo" style="width:auto">5. पढ़िए</button></div>
+    <div id="pterr" style="color:#c62828;margin-top:6px"></div>
+    <div id="ptout"></div>
+  </div>
   </section>
   <section class="tab" id="t-muhurta">
   <div class="card" id="muhurtacard">
@@ -1164,6 +1185,67 @@ $('repbtn').addEventListener('click', async () => {
         ts.map(t => `<p style="margin:4px 0"><b>${esc(t.feature_hi)}: ${esc(t.choice_hi)}</b><br><span class="muted">${esc(t.meaning_hi)}</span></p>`).join('')).join('') +
         `<ul class="muted">${d.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(d.disclaimer_hi)}</div>`;
     } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
+  };
+})();
+
+// Palm photo tracing (photo stays in the browser; only points are sent)
+(async function palmTraceUI() {
+  let cat, pcat; try { cat = await (await apiFetch('/v1/palm/trace/catalog')).json(); pcat = await (await apiFetch('/v1/palm/catalog')).json(); } catch (e) { $('palmtracecard').style.display = 'none'; return; }
+  $('ptmark').innerHTML = Object.entries(cat.marks).map(([k, m]) => `<option value="${k}">${esc(m.hi)}</option>`).join('');
+  $('ptextras').innerHTML = Object.entries(cat.extras).map(([k, x]) => `<div><label>${esc(x.hi)}</label><input type="number" min="0" max="9" data-ptx="${k}" placeholder="गिनती" style="max-width:150px"></div>`).join('');
+  $('ptmanual').innerHTML = pcat.features.filter(f => cat.manual_features.includes(f.key)).map(f => `<div><label>${esc(f.hi)}</label><select data-ptc="${esc(f.key)}" style="width:auto"><option value="">—</option>${f.options.map(o => `<option value="${esc(o.key)}">${esc(o.hi)}</option>`).join('')}</select></div>`).join('');
+  const cv = $('ptcanvas'), ctx = cv.getContext('2d');
+  const st = {img: null, W: 0, H: 0, scale: 1, mode: null, lmIndex: 0, landmarks: {}, lines: {}, marks: [], result: null};
+  const LINE_COLOR = {life: '#c62828', head: '#1565c0', heart: '#ad1457', fate: '#2e7d32', sun: '#ef6c00'};
+  const LINE_HI = {life: 'जीवन रेखा', head: 'मस्तिष्क रेखा', heart: 'हृदय रेखा', fate: 'भाग्य रेखा', sun: 'सूर्य रेखा'};
+  const fit = () => { const maxW = Math.min(700, cv.parentNode.clientWidth - 2); st.scale = Math.min(1, maxW / st.W); cv.width = Math.round(st.W * st.scale); cv.height = Math.round(st.H * st.scale); };
+  const toImg = e => { const r = cv.getBoundingClientRect(); const sx = cv.width / r.width; return [(e.clientX - r.left) * sx / st.scale, (e.clientY - r.top) * sx / st.scale]; };
+  const mode = (m, text) => { st.mode = m; $('ptmode').textContent = text || ''; };
+  function draw() {
+    if (!st.img) return; const k = st.scale; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(st.img, 0, 0, cv.width, cv.height);
+    ctx.font = 'bold 12px sans-serif'; ctx.textBaseline = 'middle';
+    for (const [key, p] of Object.entries(st.landmarks)) { ctx.fillStyle = '#ffd600'; ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0] * k, p[1] * k, 6, 0, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#000'; ctx.textAlign = 'left'; ctx.fillText(cat.landmarks.find(l => l.key === key).hi, p[0] * k + 9, p[1] * k); }
+    for (const [key, pts] of Object.entries(st.lines)) { if (!pts.length) continue; ctx.strokeStyle = LINE_COLOR[key]; ctx.lineWidth = 3; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x * k, y * k) : ctx.moveTo(x * k, y * k)); ctx.stroke(); ctx.fillStyle = LINE_COLOR[key]; pts.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x * k, y * k, 3.5, 0, 7); ctx.fill(); }); const e0 = pts[0]; ctx.fillText(LINE_HI[key], e0[0] * k + 8, e0[1] * k - 10); }
+    st.marks.forEach(m => { ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m.x * k, m.y * k, 9, 0, 7); ctx.stroke(); ctx.fillStyle = '#000'; ctx.fillText(cat.marks[m.type].hi, m.x * k + 12, m.y * k); });
+  }
+  const nextLandmark = () => { if (st.lmIndex >= cat.landmarks.length) { mode('trace', `निशान पूरे। अब रेखा चुनकर "रेखा ट्रेस कीजिए" दबाइए।`); return; } mode('lm', `निशान ${st.lmIndex + 1}/6: ${cat.landmarks[st.lmIndex].hi} पर क्लिक कीजिए।`); };
+  $('ptfile').onchange = () => { const f = $('ptfile').files[0]; if (!f) return; const url = URL.createObjectURL(f); const img = new Image(); img.onload = () => { st.img = img; st.W = img.naturalWidth; st.H = img.naturalHeight; st.landmarks = {}; st.lines = {}; st.marks = []; st.lmIndex = 0; st.result = null; fit(); cv.style.display = 'block'; draw(); nextLandmark(); URL.revokeObjectURL(url); }; img.src = url; };
+  $('ptlm').onclick = () => { st.lmIndex = 0; st.landmarks = {}; draw(); nextLandmark(); };
+  $('pttrace').onclick = () => { const L = $('ptline').value; st.lines[L] = []; mode('trace', `${LINE_HI[L]}: शुरू से अंत तक 3–8 बिंदु क्लिक कीजिए (शुरू: ${L === 'heart' ? 'कनिष्ठा के नीचे' : L === 'life' ? 'तर्जनी-अंगूठे के बीच' : L === 'head' ? 'तर्जनी-अंगूठे के बीच' : 'कलाई की ओर'})।`); draw(); };
+  $('ptmarkplace').onclick = () => mode('mark', `चिह्न "${cat.marks[$('ptmark').value].hi}": रेखा पर उस जगह क्लिक कीजिए।`);
+  $('ptundo').onclick = () => { if (st.mode === 'lm' && st.lmIndex > 0) { st.lmIndex--; delete st.landmarks[cat.landmarks[st.lmIndex].key]; nextLandmark(); } else if (st.mode === 'trace') { const L = $('ptline').value; if (st.lines[L]) st.lines[L].pop(); } else if (st.mode === 'mark') st.marks.pop(); st.result = null; draw(); };
+  $('ptclear').onclick = () => { st.landmarks = {}; st.lines = {}; st.marks = []; st.lmIndex = 0; st.result = null; $('ptout').innerHTML = ''; draw(); if (st.img) nextLandmark(); };
+  cv.addEventListener('click', e => {
+    if (!st.img || !st.mode) return; const [x, y] = toImg(e);
+    if (st.mode === 'lm') { st.landmarks[cat.landmarks[st.lmIndex].key] = [x, y]; st.lmIndex++; nextLandmark(); }
+    else if (st.mode === 'trace') { const L = $('ptline').value; (st.lines[L] = st.lines[L] || []).push([x, y]); }
+    else if (st.mode === 'mark') {
+      // attach the mark to the nearest traced line
+      let best = null, bd = 1e18; for (const [key, pts] of Object.entries(st.lines)) for (const p of pts) { const d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; best = key; } }
+      if (!best) { $('pterr').textContent = 'पहले कोई रेखा ट्रेस कीजिए, फिर उस पर चिह्न रखिए।'; return; }
+      st.marks.push({line: best, type: $('ptmark').value, x, y});
+    }
+    st.result = null; draw();
+  });
+  window.addEventListener('resize', () => { if (st.img) { fit(); draw(); } });
+  $('ptgo').onclick = async () => {
+    $('pterr').textContent = '';
+    if (Object.keys(st.landmarks).length < 6) { $('pterr').textContent = 'पहले छहों निशान लगाइए।'; return; }
+    const extras = {}; document.querySelectorAll('[data-ptx]').forEach(i => { if (i.value !== '') extras[i.dataset.ptx] = +i.value; });
+    const choices = {}; document.querySelectorAll('[data-ptc]').forEach(sel => { if (sel.value) choices[sel.dataset.ptc] = sel.value; });
+    const lines = {}; for (const [k, v] of Object.entries(st.lines)) lines[k] = v.map(p => [Math.round(p[0]), Math.round(p[1])]);
+    const body = {landmarks: Object.fromEntries(Object.entries(st.landmarks).map(([k, p]) => [k, [Math.round(p[0]), Math.round(p[1])]])), lines, marks: st.marks.map(m => ({line: m.line, type: m.type, x: Math.round(m.x), y: Math.round(m.y)})), extras, choices};
+    try {
+      const r = await apiFetch('/v1/palm/trace', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const d = await r.json(); if (!r.ok) throw new Error(typeof d.detail === 'string' ? d.detail : 'त्रुटि'); st.result = d; window._lastPalmTrace = body;
+      const groups = Object.entries(d.reading.groups || {}).map(([g, ts]) => `<h4 style="margin:12px 0 4px">${esc(g)}</h4>` + ts.map(t => `<p style="margin:4px 0"><b>${esc(t.feature_hi)}: ${esc(t.choice_hi)}</b>${d.implied_choices[t.feature] ? ' <span class="chip">ट्रेसिंग से</span>' : ''}<br><span class="muted">${esc(t.meaning_hi)}</span></p>`).join('')).join('');
+      const marks = d.marks.length ? `<h4 style="margin:12px 0 4px">रेखाओं पर चिह्न</h4>` + d.marks.map(m => `<p style="margin:4px 0"><b>${esc(m.line_hi)} — ${esc(m.type_hi)}</b><br><span class="muted">${esc(m.text_hi)}</span></p>`).join('') : '';
+      const extrasHtml = d.extras.length ? `<h4 style="margin:12px 0 4px">अन्य रेखाएँ</h4>` + d.extras.map(x => `<p style="margin:4px 0"><b>${esc(x.hi)}: ${x.count}</b><br><span class="muted">${esc(x.text_hi)}</span></p>`).join('') : '';
+      const meas = `<details><summary>माप (हथेली के अनुपात में)</summary><table>${Object.entries(d.measurements).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v}</td></tr>`).join('')}</table></details>`;
+      $('ptout').innerHTML = `<div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/palm/trace/report', window._lastPalmTrace).catch(e => { document.getElementById('pterr').textContent = 'त्रुटि: ' + e.message; })">PDF (प्रिंट)</button></div>
+        <p class="muted">ट्रेस की गई रेखाएँ: ${d.lines_traced.map(l => esc(LINE_HI[l])).join(', ') || 'कोई नहीं'}</p>${groups}${marks}${extrasHtml}${d.notes.map(n => `<p class="muted" style="font-size:.85rem">${esc(n.hi)}</p>`).join('')}${meas}
+        <div class="banner">${esc(d.trace_note_hi)} ${esc(d.disclaimer_hi)}</div>`;
+    } catch (err) { $('pterr').textContent = 'त्रुटि: ' + err.message; }
   };
 })();
 
