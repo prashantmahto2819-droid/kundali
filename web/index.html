@@ -96,6 +96,14 @@
     <div id="verr" style="color:#c62828;margin-top:6px"></div>
     <div id="vout"></div>
   </div>
+  <div class="card" id="palmcard">
+    <b>हस्तरेखा (मार्गदर्शित)</b>
+    <div class="muted" style="font-size:.85rem">अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे "—" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।</div>
+    <div id="prows" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button type="button" id="pgo">पढ़िए</button></div>
+    <div id="perr" style="color:#c62828;margin-top:6px"></div>
+    <div id="pout"></div>
+  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="card" id="summary"></div>
@@ -452,6 +460,26 @@ $('repbtn').addEventListener('click', async () => {
           <td class="muted">${esc(i.why_hi)}${i.rating==='avoid' ? `<br><b>सुझाव:</b> ${esc(i.fix_hi)}` : ''}${i.rating!=='ideal' ? `<br>उत्तम दिशा: ${esc(i.ideal_hi.join(', '))}` : ''}</td></tr>`).join('') +
         `</table><ul class="muted">${v.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(v.disclaimer_hi)} अर्थ ड्राफ़्ट हैं।</div>`;
     } catch (err) { $('verr').textContent = 'त्रुटि: ' + err.message; }
+  };
+})();
+
+// Palm (guided checklist)
+(async function palmUI() {
+  let cat; try { cat = await (await fetch(API + '/v1/palm/catalog')).json(); } catch (e) { $('palmcard').style.display = 'none'; return; }
+  $('prows').innerHTML = cat.features.map(f => `<div style="margin-bottom:8px"><label>${esc(f.group)} — ${esc(f.hi)}</label>
+    <div class="muted" style="font-size:.8rem">${esc(f.where_hi)}</div>
+    <select data-pf="${esc(f.key)}"><option value="">—</option>${f.options.map(o => `<option value="${esc(o.key)}">${esc(o.hi)}</option>`).join('')}</select></div>`).join('');
+  $('pgo').onclick = async () => {
+    $('perr').textContent = ''; $('pout').innerHTML = '';
+    const choices = {}; document.querySelectorAll('[data-pf]').forEach(sel => { if (sel.value) choices[sel.dataset.pf] = sel.value; });
+    if (!Object.keys(choices).length) { $('perr').textContent = 'कम से कम एक विकल्प चुनिए।'; return; }
+    try {
+      const r = await fetch(API + '/v1/palm', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({choices})});
+      const d = await r.json(); if (!r.ok) throw new Error(Array.isArray(d.detail) ? 'कम से कम एक विकल्प चुनिए' : (d.detail || 'त्रुटि'));
+      $('pout').innerHTML = Object.entries(d.groups).map(([g, ts]) => `<h4 style="margin:12px 0 4px">${esc(g)}</h4>` +
+        ts.map(t => `<p style="margin:4px 0"><b>${esc(t.feature_hi)}: ${esc(t.choice_hi)}</b><br><span class="muted">${esc(t.meaning_hi)}</span></p>`).join('')).join('') +
+        `<ul class="muted">${d.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(d.disclaimer_hi)}</div>`;
+    } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
   };
 })();
 

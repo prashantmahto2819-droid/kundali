@@ -130,3 +130,21 @@ def vastu(req: VastuRequest):
 @app.get("/v1/vastu/catalog")
 def vastu_catalog():
     return handlers.vastu_catalog()
+
+
+class PalmRequest(BaseModel):
+    choices: dict[str, str]
+
+
+@app.post("/v1/palm")
+def palm_reading(req: PalmRequest):
+    try:
+        return handlers.palm_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/palm/catalog")
+def palm_catalog():
+    from jyotish import palm as _palm
+    return _palm.catalog()

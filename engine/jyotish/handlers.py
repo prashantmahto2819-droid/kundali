@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import matching, numerology, places, tarot, vastu
+from . import matching, numerology, palm, places, tarot, vastu
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -148,3 +148,10 @@ def vastu_catalog() -> dict:
     return {"rooms": {key: {"hi": r["hi"], "ideal": r["ideal"]} for key, r in k["rooms"].items()},
             "directions": {key: {"hi": d["hi"], "element_hi": d["element_hi"], "lord_hi": d["lord_hi"],
                                  "theme_hi": d["theme_hi"]} for key, d in k["directions"].items()}}
+
+
+def palm_from_payload(payload: dict) -> dict:
+    try:
+        return palm.read(payload.get("choices"))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc

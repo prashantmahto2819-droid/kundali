@@ -37,6 +37,9 @@ class Handler(BaseHTTPRequestHandler):
         path, _, query = self.path.partition("?")
         if path == "/health":
             return self._json(200, handlers.health())
+        if path == "/v1/palm/catalog":
+            from jyotish import palm
+            return self._json(200, palm.catalog())
         if path == "/v1/vastu/catalog":
             return self._json(200, handlers.vastu_catalog())
         if path == "/v1/places":
@@ -63,7 +66,8 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/numerology": handlers.numerology_from_payload,
                   "/v1/match": handlers.match_from_payload,
                   "/v1/tarot": handlers.tarot_from_payload,
-                  "/v1/vastu": handlers.vastu_from_payload}
+                  "/v1/vastu": handlers.vastu_from_payload,
+                  "/v1/palm": handlers.palm_from_payload}
         if self.path == "/v1/report":
             try:
                 length = int(self.headers.get("Content-Length", 0))

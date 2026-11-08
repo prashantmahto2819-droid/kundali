@@ -28,3 +28,4 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 5. Phase 5: Lal Kitab, KP, Jaimini, astrologer tools, mobile app.
 
 - [x] Vastu v1 (room x direction rating, 16 rooms, Hindi). Pending: floor-plan/plot analysis, 16-zone model, scholar review.
+- [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
