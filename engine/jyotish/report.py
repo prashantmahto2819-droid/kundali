@@ -153,6 +153,15 @@ def render(chart: dict) -> str:
                          ["घात प्रहर", str(g["prahar"])], ["घात चंद्र", e(g["chandra_hi"])], ["स्त्री घात चंद्र", e(g["stri_chandra_hi"])]]
         patri_html = (f'<h2>जन्म विवरण</h2><div class="two">{_table(["", ""], birth_rows)}{_table(["", ""], ava_rows)}</div>'
                       f'<p class="small">{e(P["note_hi"])}</p>')
+    K = chart.get("kp")
+    kp_html = ""
+    if K:
+        H = lambda n: PLANETS_HI.get(n, n)
+        dm = lambda d: f"{int(d)}°{int(round((d % 1) * 60)):02d}′"
+        kc = [[str(x["house"]), e(x["sign_name_hi"]), dm(x["degree_in_sign"]), e(H(x["sign_lord"])), e(H(x["star_lord"])), f'<b>{e(H(x["sub_lord"]))}</b>', e(H(x["sub_sub_lord"]))] for x in K["cusps"]]
+        kpl = [[e(v["name_hi"]) + (" (व)" if v["retrograde"] else ""), e(v["sign_name_hi"]), dm(v["degree_in_sign"]), str(v["house"]), e(H(v["star_lord"])), f'<b>{e(H(v["sub_lord"]))}</b>', e(H(v["sub_sub_lord"]))] for v in K["planets"].values()]
+        kp_html = (f'<h2>कृष्णमूर्ति पद्धति (KP)</h2>{_table(["भाव-स्पष्ट", "राशि", "अंश", "राशि-स्वामी", "नक्षत्र-स्वामी", "उप-स्वामी", "उप-उप"], kc)}'
+                   f'{_table(["ग्रह", "राशि", "अंश", "भाव (KP)", "नक्षत्र-स्वामी", "उप-स्वामी", "उप-उप"], kpl)}<p class="small">{e(K["note_hi"])}</p>')
     S, T = chart.get("sensitivity"), chart.get("transit_calendar")
     sens_html = tc_html = ""
     if S:
@@ -224,6 +233,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 </table>{day_html}
 
 {tc_html}
+{kp_html}
 <h2>विंशोत्तरी दशा</h2>
 <p>जन्म के समय {e(PLANETS_HI[chart["dasha"]["birth_nakshatra_lord"]])} की दशा शेष: {chart["dasha"]["balance_at_birth_years"]:.2f} वर्ष (वर्ष = {chart["dasha"]["year_days"]} दिन)।</p>
 {_table(["महादशा", "आरंभ", "समाप्ति"], maha_rows)}

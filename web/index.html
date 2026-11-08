@@ -109,6 +109,7 @@
       <button type="button" data-sub="s-gochara">अष्टकवर्ग व गोचर</button>
       <button type="button" data-sub="s-varsha">वर्षफल</button>
       <button type="button" data-sub="s-numer">अंक</button>
+      <button type="button" data-sub="s-kp">KP</button>
     </nav>
     <section class="sub on" id="s-summary">
     <div class="grid">
@@ -174,6 +175,11 @@
       <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button></div>
       <div id="verr2" style="color:#c62828;margin-top:6px"></div><div id="vout2"></div>
     </div>
+    </section>
+    <section class="sub" id="s-kp">
+    <div class="card"><b>कृष्णमूर्ति पद्धति (KP)</b><div class="muted" style="font-size:.85rem" id="kpwhy"></div>
+      <div id="kpcusps" style="overflow-x:auto"></div><div id="kpplanets" style="overflow-x:auto;margin-top:8px"></div>
+      <details><summary>भाव-कारक (चार स्तर)</summary><div id="kpsig" style="overflow-x:auto"></div></details></div>
     </section>
     <section class="sub" id="s-numer">
     <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
@@ -477,6 +483,18 @@ function render(c) {
     const f = v => v == null ? '—' : v + ' मिनट';
     $('sens').innerHTML = `<table><tr><th></th><th>पहले</th><th>बाद</th><th>स्थिति</th></tr>` + Object.values(S.items).map(v =>
       `<tr><td>${esc(v.label_hi)}</td><td>${f(v.minutes_earlier)}</td><td>${f(v.minutes_later)}</td><td class="${v.stable_within_15_min ? 'yes' : ''}">${v.stable_within_15_min ? 'स्थिर (15 मिनट तक)' : v.stable_within_5_min ? 'सावधान (5-15 मिनट)' : 'संवेदनशील (5 मिनट से कम)'}</td></tr>`).join('') + '</table>';
+  }
+  if (c.kp) {
+    const K = c.kp, H = n => c.planets.find(x => x.name === n)?.name_hi || n;
+    $('kpwhy').textContent = K.note_hi + ` (KP अयनांश ${K.ayanamsa.toFixed(4)}°)`;
+    const dm = d => `${Math.floor(d)}°${String(Math.round((d % 1) * 60)).padStart(2, '0')}′`;
+    $('kpcusps').innerHTML = `<table><tr><th>भाव-स्पष्ट</th><th>राशि</th><th>अंश</th><th>राशि-स्वामी</th><th>नक्षत्र-स्वामी</th><th>उप-स्वामी</th><th>उप-उप</th></tr>` +
+      K.cusps.map(x => `<tr><td>${x.house}</td><td>${esc(x.sign_name_hi)}</td><td>${dm(x.degree_in_sign)}</td><td>${esc(H(x.sign_lord))}</td><td>${esc(H(x.star_lord))}</td><td><b>${esc(H(x.sub_lord))}</b></td><td>${esc(H(x.sub_sub_lord))}</td></tr>`).join('') + '</table>';
+    $('kpplanets').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव (KP)</th><th>नक्षत्र-स्वामी</th><th>उप-स्वामी</th><th>उप-उप</th></tr>` +
+      Object.entries(K.planets).map(([n, v]) => `<tr><td>${esc(v.name_hi)}${v.retrograde ? ' <sup>व</sup>' : ''}</td><td>${esc(v.sign_name_hi)}</td><td>${dm(v.degree_in_sign)}</td><td>${v.house}</td><td>${esc(H(v.star_lord))}</td><td><b>${esc(H(v.sub_lord))}</b></td><td>${esc(H(v.sub_sub_lord))}</td></tr>`).join('') + '</table>';
+    const L = a => a.length ? a.map(H).map(esc).join(', ') : '—';
+    $('kpsig').innerHTML = `<table><tr><th>भाव</th><th>क: भावस्थ ग्रहों के नक्षत्र में</th><th>ख: भावस्थ</th><th>ग: भावेश के नक्षत्र में</th><th>घ: भावेश</th></tr>` +
+      Object.entries(K.significators).map(([h, s]) => `<tr><td>${h}</td><td>${L(s.a_in_star_of_occupants)}</td><td>${L(s.b_occupants)}</td><td>${L(s.c_in_star_of_owners)}</td><td>${L(s.d_owners)}</td></tr>`).join('') + '</table>';
   }
   if (c.transit_calendar) {
     const T = c.transit_calendar; $('tcwhy').textContent = T.note_hi;

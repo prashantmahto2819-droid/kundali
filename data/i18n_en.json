@@ -468,6 +468,18 @@
 "तत्व": "Element (tattva)",
 "नाम अक्षर": "Name syllable",
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
+"कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
+"भाव-स्पष्ट": "Cusp",
+"राशि-स्वामी": "Sign lord",
+"नक्षत्र-स्वामी": "Star lord",
+"उप-स्वामी": "Sub lord",
+"उप-उप": "Sub-sub",
+"भाव (KP)": "House (KP)",
+"भाव-कारक (चार स्तर)": "House significators (four levels)",
+"क: भावस्थ ग्रहों के नक्षत्र में": "A: in stars of occupants",
+"ख: भावस्थ": "B: occupants",
+"ग: भावेश के नक्षत्र में": "C: in stars of owners",
+"घ: भावेश": "D: owners",
 "जन्म-समय की संवेदनशीलता": "Birth-time sensitivity",
 "पहले": "earlier",
 "बाद": "later",
@@ -1661,6 +1673,7 @@
 "मास असली अमावस्याओं से, अधिक मास सहित (अमांत और पूर्णिमांत दोनों नाम); संवत् चैत्र शुक्ल से। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।": "Masa from the actual new moons incl. adhika masa (amanta and purnimanta names); samvat from Chaitra Shukla. Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one.",
 "भाव-चलित (श्रीपति): लग्न और दशम (MC) के बीच के चतुर्थांशों को तीन भागों में बाँटकर भाव-मध्य निकाले गए हैं। जो ग्रह राशि-भाव से अलग भाव में दिखें, वे भाव-संधि के पास हैं; फलादेश में दोनों देखे जाते हैं।": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both.",
 "जन्म-समय की संवेदनशीलता: बताया गया है कि घड़ी में कितने मिनट की चूक से लग्न, नवांश लग्न, चंद्र राशि या नक्षत्र बदल जाता है। खाली का मतलब है 3 घंटे के भीतर नहीं बदलता।": "Birth-time sensitivity: how many minutes of clock error would change the Lagna, navamsa Lagna, Moon sign or nakshatra. Blank means no change within 3 hours.",
+"कृष्णमूर्ति पद्धति: KP अयनांश (लाहिरी से लगभग 5-6 कला कम), प्लेसिडस भाव, हर ग्रह और भाव-स्पष्ट के नक्षत्र-स्वामी, उप-स्वामी और उप-उप-स्वामी। कारक-सारणी चार स्तरों में है। यह ड्राफ़्ट है; KP विशेषज्ञ की समीक्षा चाहिए।": "Krishnamurti Paddhati: KP ayanamsa (about 5-6 arc-min less than Lahiri), Placidus houses, star/sub/sub-sub lord of every planet and cusp, four-level significators. Draft; needs review by a KP practitioner.",
 "हर महीने की पहली तारीख़ (UTC) की ग्रह-राशियाँ, और धीमे ग्रहों (गुरु, शनि, राहु-केतु, मंगल) के राशि-प्रवेश की तारीख़ें (±1 दिन)। चंद्र से भाव गोचर-फल के लिए, लग्न से भाव कुंडली के लिए।": "Planet signs on the 1st of each month (UTC) and sign-ingress dates of the slow planets (Jupiter, Saturn, Rahu-Ketu, Mars), accurate to about a day. House from the Moon is for transit results, from the Lagna for the chart.",
 "विष्कम्भ": "Vishkambha",
 "शिव": "Shiva",
@@ -2017,6 +2030,10 @@
 [
 "{1} ({2} पाद {3}) · चंद्र राशि:",
 "{1} ({2} pada {3}) · Moon sign:"
+],
+[
+"{1} (KP अयनांश {2}°)",
+"{1} (KP ayanamsa {2}°)"
 ],
 [
 "{1} मिनट",
