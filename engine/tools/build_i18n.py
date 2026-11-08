@@ -90,6 +90,8 @@ _full = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
 put(_full["sensitivity"]["note_hi"], _full["sensitivity"]["note_en"])
 put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
 put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
+put(_full["jaimini"]["chara_dasha"]["note_hi"], _full["jaimini"]["chara_dasha"]["note_en"])
+put(_full["kp"]["ruling_planets"]["note_hi"], _full["kp"]["ruling_planets"]["note_en"])
 from jyotish import jaimini as _jm  # noqa: E402
 for _k, _hi in _jm.KARAKA_HI.items():
     put(_hi, _k)
@@ -206,7 +208,8 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "ज्योतिषी प्रोफ़ाइल (रिपोर्ट पर आपका नाम)": "Astrologer profile (your name on reports)", "यह जानकारी आपकी हर PDF रिपोर्ट के ऊपर छपेगी।": "This is printed at the top of every PDF report you make.",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "चर दशा": "Chara dasha", "सभी दशाएँ": "All dashas", "वार-स्वामी": "Day lord", "लग्न राशि/नक्षत्र/उप": "Lagna sign/star/sub",
+ "चंद्र राशि/नक्षत्र/उप": "Moon sign/star/sub", "रूलिंग प्लैनेट्स (अभी)": "Ruling planets (now)", "जन्म से 120 वर्ष के बाहर।": "Outside 120 years from birth.", "अभी:": "Now:", "ज्योतिषी प्रोफ़ाइल (रिपोर्ट पर आपका नाम)": "Astrologer profile (your name on reports)", "यह जानकारी आपकी हर PDF रिपोर्ट के ऊपर छपेगी।": "This is printed at the top of every PDF report you make.",
  "नाम / संस्था": "Name / organisation", "फ़ोन": "Phone", "वेबसाइट": "Website", "पता": "Address", "एक पंक्ति (जैसे: \"परामर्श के लिए संपर्क करें\")": "One line (e.g. \"Contact for consultation\")",
  "प्रोफ़ाइल सेव करें": "Save profile", "सेव हो गया।": "Saved.", "नोट": "Note", "नोट सेव करें": "Save note", "ऐप इंस्टॉल करें": "Install app",
  "ऑफ़लाइन: कुंडली बनाने के लिए इंटरनेट चाहिए; सीखने की सामग्री खुली रहेगी।": "Offline: making a chart needs the internet; the learning material stays available.", "व": "R", "जैमिनी: चर कारक": "Jaimini: chara karakas", "आरूढ़ पद": "Arudha padas",
@@ -405,7 +408,8 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} (अपवाद)", "{1} (exception)"), ("{1} कारकांश: {2}।", "{1} Karakamsa: {2}."), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("अभी: {1} महादशा ({2} → {3}), अंतर्दशा {4} ({5} → {6})", "Now: {1} mahadasha ({2} → {3}), antardasha {4} ({5} → {6})"),
+                   ("अभी: {1} ({2} → {3})", "Now: {1} ({2} → {3})"), ("महादशा ({1} → {2}), अंतर्दशा", "mahadasha ({1} → {2}), antardasha"), ("महादशा ({1} → {2})", "mahadasha ({1} → {2})"), ("अभी: {1} महादशा ({2} → {3})", "Now: {1} mahadasha ({2} → {3})"), ("{1} (अपवाद)", "{1} (exception)"), ("{1} कारकांश: {2}।", "{1} Karakamsa: {2}."), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
                    ("⚠ {1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
                     "⚠ The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."), ("{1}: {2} {3} → {4} (चंद्र से {5}, लग्न से {6})", "{1}: {2} {3} → {4} (from Moon {5}, from Lagna {6})"),
                    ("{1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",

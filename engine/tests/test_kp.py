@@ -40,3 +40,13 @@ def test_kp_layer_in_chart():
     assert K["significators"][7]["d_owners"] == ["Mars"]
     from jyotish import report
     assert "कृष्णमूर्ति" in report.render(C)
+
+
+def test_ruling_planets():
+    from datetime import datetime, timezone
+    from jyotish.ephemeris import AnalyticBackend
+    rp = kp.ruling_planets(datetime(2026, 11, 8, 12, 0, tzinfo=timezone.utc), 23.18, 79.99, AnalyticBackend(), "Asia/Kolkata")
+    assert rp["day_lord"] == "Sun"                                          # Sunday 8 Nov 2026, 17:30 IST
+    for k in ("lagna_sign_lord", "lagna_star_lord", "lagna_sub_lord", "moon_sign_lord", "moon_star_lord", "moon_sub_lord"):
+        assert rp[k] in ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu")
+    assert rp["ranked"][0] in rp.values() and "ruling_planets" in C["kp"]

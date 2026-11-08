@@ -126,3 +126,35 @@ def kp(chart: dict) -> dict:
                        "कारक-सारणी चार स्तरों में है। यह ड्राफ़्ट है; KP विशेषज्ञ की समीक्षा चाहिए।",
             "note_en": "Krishnamurti Paddhati: KP ayanamsa (about 5-6 arc-min less than Lahiri), Placidus houses, star/sub/sub-sub lord of every planet and cusp, "
                        "four-level significators. Draft; needs review by a KP practitioner."}
+
+
+# ---- Ruling planets (at the moment and place of the query) -------------------------------------------
+def ruling_planets(when_utc, lat: float, lon_east: float, backend, tz: str = "UTC") -> dict:
+    """KP ruling planets: lords of the weekday, the Moon's sign/star/sub and the Lagna's sign/star/sub at `when_utc`."""
+    from zoneinfo import ZoneInfo
+    from .ephemeris import mean_node
+    from .timeutil import delta_t, julian_day, year_fraction
+    from .strength import VARA_LORDS
+    jd_ut = julian_day(when_utc)
+    jd_tt = jd_ut + delta_t(year_fraction(when_utc)) / 86400.0
+    ayan = kp_ayanamsa(jd_tt)
+    asc = norm360(ascendant_tropical(jd_ut, jd_tt, lat, lon_east) - ayan)
+    moon = norm360(backend.positions(jd_tt)["Moon"] - ayan)
+    local = when_utc.astimezone(ZoneInfo(tz))
+    # Vedic weekday starts at sunrise; before ~06:00 local take the previous day (approximation without sunrise)
+    wd = (local.weekday() + 1) % 7 if local.hour >= 6 else local.weekday() % 7       # Python Monday=0 -> Sunday=0 index
+    day_lord = VARA_LORDS[wd]
+    a, m = _lords(asc), _lords(moon)
+    rp = {"day_lord": day_lord, "lagna_sign_lord": a["sign_lord"], "lagna_star_lord": a["star_lord"], "lagna_sub_lord": a["sub_lord"],
+          "moon_sign_lord": m["sign_lord"], "moon_star_lord": m["star_lord"], "moon_sub_lord": m["sub_lord"]}
+    counts = {}
+    for v in rp.values():
+        counts[v] = counts.get(v, 0) + 1
+    rahu_sign, ketu_sign = int(norm360(mean_node(jd_tt) - ayan) // 30), int(norm360(mean_node(jd_tt) + 180 - ayan) // 30)
+    agents = [n for n, s in (("Rahu", rahu_sign), ("Ketu", ketu_sign)) if SIGN_LORDS[s] in counts]     # node in a RP's sign acts for it
+    return {"at": when_utc.strftime("%Y-%m-%dT%H:%M:%SZ"), "tz": tz, **rp,
+            "ranked": sorted(counts, key=lambda n: -counts[n]), "agents": agents,
+            "lagna": {"sign_name": SIGNS[a["sign"]], "sign_name_hi": SIGNS_HI[a["sign"]], "degree_in_sign": round(a["degree_in_sign"], 2)},
+            "moon": {"sign_name": SIGNS[m["sign"]], "sign_name_hi": SIGNS_HI[m["sign"]], "degree_in_sign": round(m["degree_in_sign"], 2)},
+            "note_hi": "रूलिंग प्लैनेट्स प्रश्न के समय और स्थान के हैं (वार-स्वामी, चंद्र और लग्न के राशि/नक्षत्र/उप-स्वामी)। वार सूर्योदय से माना गया है (लगभग)।",
+            "note_en": "Ruling planets are for the time and place of the query (day lord; sign/star/sub lords of the Moon and the Lagna). Weekday taken from sunrise (approx.)."}

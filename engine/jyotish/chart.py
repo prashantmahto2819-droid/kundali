@@ -174,6 +174,8 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["transit_calendar"] = transit_calendar(chart, now, backend, ayanamsa_system)
     chart["sensitivity"] = birth_sensitivity(date, time, tz, lat, lon)
     chart["kp"] = kp_layer(chart)
+    from .kp import ruling_planets
+    chart["kp"]["ruling_planets"] = ruling_planets(now, lat, lon, backend, tz)
     chart["jaimini"] = jaimini_layer(chart)
     chart["input_warnings"] = chart["input_warnings"] + chart["sensitivity"]["warnings"]
     chart["timeline"] = dasha_timeline(chart, now)

@@ -187,11 +187,13 @@
     <section class="sub" id="s-kp">
     <div class="card"><b>कृष्णमूर्ति पद्धति (KP)</b><div class="muted" style="font-size:.85rem" id="kpwhy"></div>
       <div id="kpcusps" style="overflow-x:auto"></div><div id="kpplanets" style="overflow-x:auto;margin-top:8px"></div>
-      <details><summary>भाव-कारक (चार स्तर)</summary><div id="kpsig" style="overflow-x:auto"></div></details></div>
+      <details><summary>भाव-कारक (चार स्तर)</summary><div id="kpsig" style="overflow-x:auto"></div></details>
+      <div style="margin-top:8px"><b>रूलिंग प्लैनेट्स (अभी)</b><div id="kprp"></div></div></div>
     </section>
     <section class="sub" id="s-jaimini">
     <div class="card"><b>जैमिनी: चर कारक</b><div class="muted" style="font-size:.85rem" id="jmwhy"></div><div id="jmkarakas" style="overflow-x:auto"></div></div>
     <div class="card"><b>आरूढ़ पद</b><div id="jmpadas" style="overflow-x:auto"></div></div>
+    <div class="card"><b>चर दशा</b><div class="muted" style="font-size:.85rem" id="cdwhy"></div><div id="cdrun"></div><details><summary>सभी दशाएँ</summary><div id="cdtable" style="overflow-x:auto"></div></details></div>
     </section>
     <section class="sub" id="s-numer">
     <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
@@ -526,6 +528,17 @@ function render(c) {
     const L = a => a.length ? a.map(H).map(esc).join(', ') : '—';
     $('kpsig').innerHTML = `<table><tr><th>भाव</th><th>क: भावस्थ ग्रहों के नक्षत्र में</th><th>ख: भावस्थ</th><th>ग: भावेश के नक्षत्र में</th><th>घ: भावेश</th></tr>` +
       Object.entries(K.significators).map(([h, s]) => `<tr><td>${h}</td><td>${L(s.a_in_star_of_occupants)}</td><td>${L(s.b_occupants)}</td><td>${L(s.c_in_star_of_owners)}</td><td>${L(s.d_owners)}</td></tr>`).join('') + '</table>';
+  }
+  if (c.kp && c.kp.ruling_planets) {
+    const R = c.kp.ruling_planets, H = n => c.planets.find(x => x.name === n)?.name_hi || n;
+    $('kprp').innerHTML = `<table><tr><th>वार-स्वामी</th><th>लग्न राशि/नक्षत्र/उप</th><th>चंद्र राशि/नक्षत्र/उप</th><th>क्रम</th></tr><tr><td>${esc(H(R.day_lord))}</td>
+      <td>${esc(H(R.lagna_sign_lord))} / ${esc(H(R.lagna_star_lord))} / <b>${esc(H(R.lagna_sub_lord))}</b></td><td>${esc(H(R.moon_sign_lord))} / ${esc(H(R.moon_star_lord))} / <b>${esc(H(R.moon_sub_lord))}</b></td>
+      <td>${R.ranked.map(H).map(esc).join(', ')}${R.agents.length ? ' (+ ' + R.agents.map(H).map(esc).join(', ') + ')' : ''}</td></tr></table><div class="muted" style="font-size:.8rem">${esc(R.note_hi)}</div>`;
+  }
+  if (c.jaimini && c.jaimini.chara_dasha) {
+    const D = c.jaimini.chara_dasha; $('cdwhy').textContent = D.note_hi;
+    $('cdrun').innerHTML = D.running ? `<p>अभी: <b>${esc(D.running.sign_name_hi)}</b> महादशा (${esc(D.running.start)} → ${esc(D.running.end)})${D.running.antardasha ? `, अंतर्दशा <b>${esc(D.running.antardasha.sign_name_hi)}</b> (${esc(D.running.antardasha.start)} → ${esc(D.running.antardasha.end)})` : ''}</p>` : '<p class="muted">जन्म से 120 वर्ष के बाहर।</p>';
+    $('cdtable').innerHTML = `<table><tr><th>राशि</th><th>वर्ष</th><th>आरंभ</th><th>समाप्ति</th></tr>` + D.periods.map(p => `<tr><td>${esc(p.sign_name_hi)}</td><td>${p.years}</td><td>${esc(p.start)}</td><td>${esc(p.end)}</td></tr>`).join('') + '</table>';
   }
   if (c.jaimini) {
     const J = c.jaimini; $('jmwhy').textContent = J.note_hi + ` कारकांश: ${J.karakamsa.sign_name_hi}।`;

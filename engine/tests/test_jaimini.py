@@ -31,3 +31,16 @@ def test_jaimini_in_chart_and_report():
     assert J["arudha_lagna"]["house"] == 1 and J["upapada"]["house"] == 12 and J["karakamsa"]["sign_name"] in jaimini.SIGNS
     from jyotish import report
     assert "जैमिनी" in report.render(C)
+
+
+def test_chara_dasha_rules():
+    cd = C["jaimini"]["chara_dasha"]
+    assert cd["direction"] == "direct"                                   # Lagna Vrishabha is odd-footed
+    years = {p["sign_name"]: p["years"] for p in cd["periods"]}
+    assert years["Vrishabha"] == 11                                        # Venus in Meena: 10 forward + 1 exalted
+    assert years["Mithuna"] == 10 and years["Karka"] == 6 and years["Makara"] == 12 and years["Kumbha"] == 1
+    assert [p["sign"] for p in cd["periods"]] == [(1 + i) % 12 for i in range(12)]
+    assert all(len(p["antardashas"]) == 12 and p["antardashas"][0]["sign"] == (p["sign"] + 1) % 12 for p in cd["periods"])
+    assert cd["periods"][0]["start"] == "1990-05-17" and cd["running"] and cd["running"]["antardasha"]
+    k = compute_chart("1991-11-10", "14:20", "Asia/Kolkata", 22.3667, 82.7667)["jaimini"]["chara_dasha"]
+    assert k["direction"] == "reverse"                                   # Lagna Kumbha is even-footed

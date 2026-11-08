@@ -167,8 +167,15 @@ def render(chart: dict, brand: dict | None = None) -> str:
     if J:
         kr = [[e(k["karaka_hi"]), f'<b>{e(k["planet_hi"])}</b>', f'{k["degree_in_sign"]}°', e(k["signifies_hi"])] for k in J["chara_karakas"]["scheme7"]]
         pd = [[e(p["name_hi"]), str(p["house"]), e(p["pada_sign_name_hi"]) + (" (अपवाद)" if p["exception_applied"] else ""), str(p["pada_house"])] for p in J["arudha_padas"]]
+        cd = J.get("chara_dasha")
+        cd_html = ""
+        if cd:
+            rows = [[e(p["sign_name_hi"]), str(p["years"]), e(p["start"]), e(p["end"])] for p in cd["periods"]]
+            run = cd.get("running")
+            cd_html = (f'<h3>चर दशा</h3>' + (f'<p>अभी: <b>{e(run["sign_name_hi"])}</b> ({e(run["start"])} → {e(run["end"])})</p>' if run else "")
+                       + _table(["राशि", "वर्ष", "आरंभ", "समाप्ति"], rows) + f'<p class="small">{e(cd["note_hi"])}</p>')
         jm_html = (f'<h2>जैमिनी: चर कारक और आरूढ़ पद</h2>{_table(["कारक", "ग्रह", "अंश", "विषय"], kr)}'
-                   f'<p>कारकांश: <b>{e(J["karakamsa"]["sign_name_hi"])}</b></p>{_table(["पद", "भाव", "पद की राशि", "लग्न से भाव"], pd)}<p class="small">{e(J["note_hi"])}</p>')
+                   f'<p>कारकांश: <b>{e(J["karakamsa"]["sign_name_hi"])}</b></p>{_table(["पद", "भाव", "पद की राशि", "लग्न से भाव"], pd)}<p class="small">{e(J["note_hi"])}</p>{cd_html}')
     S, T = chart.get("sensitivity"), chart.get("transit_calendar")
     sens_html = tc_html = ""
     if S:

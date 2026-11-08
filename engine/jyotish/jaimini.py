@@ -65,7 +65,8 @@ def jaimini(chart: dict) -> dict:
     akp = next(p for p in planets if p["name"] == ak)
     karakamsa = akp["navamsa_sign"]
     padas = arudha_padas(chart["lagna"]["sign"], planets)
-    return {"chara_karakas": ck, "atmakaraka": ak, "atmakaraka_hi": PLANETS_HI[ak],
+    cd = chara_dasha(chart, chart["birth_utc"])
+    return {"chara_karakas": ck, "chara_dasha": cd, "atmakaraka": ak, "atmakaraka_hi": PLANETS_HI[ak],
             "karakamsa": {"sign": karakamsa, "sign_name": SIGNS[karakamsa], "sign_name_hi": SIGNS_HI[karakamsa]},
             "arudha_padas": padas,
             "arudha_lagna": next(x for x in padas if x["house"] == 1), "upapada": next(x for x in padas if x["house"] == 12),
@@ -74,3 +75,58 @@ def jaimini(chart: dict) -> dict:
                        "ड्राफ़्ट; जैमिनी के जानकार की समीक्षा चाहिए।",
             "note_en": "Jaimini v1: chara karakas (7-karaka main, 8-karaka with Rahu also given), arudha padas (10th taken when the pada falls in "
                        "the same house or its 7th), karakamsa. Draft; needs review by a Jaimini practitioner."}
+
+
+# ---- Chara dasha (K. N. Rao's commonly used scheme), v1 -----------------------------------------------
+ODD_FOOTED = {0, 1, 2, 6, 7, 8}          # Mesha, Vrishabha, Mithuna, Tula, Vrishchika, Dhanu: direct order
+EXALT = {"Sun": 0, "Moon": 1, "Mars": 9, "Mercury": 5, "Jupiter": 3, "Venus": 11, "Saturn": 6}
+DEBIL = {k: (v + 6) % 12 for k, v in EXALT.items()}
+
+
+def _dasha_years(sign: int, planets_by_name: dict) -> int:
+    lord = SIGN_LORDS[sign]                                   # Vrishchika -> Mars, Kumbha -> Saturn (dual lordship simplified)
+    ls = planets_by_name[lord]["sign"]
+    if ls == sign:
+        years = 12
+    elif sign in ODD_FOOTED:
+        years = (ls - sign) % 12                             # count forward, minus 1 -> (ls - sign) already excludes the start
+    else:
+        years = (sign - ls) % 12                             # count backward
+    if ls == EXALT[lord]:
+        years += 1
+    elif ls == DEBIL[lord]:
+        years -= 1
+    return max(1, min(12, years))
+
+
+def chara_dasha(chart: dict, birth_iso: str, year_days: float = 365.25) -> dict:
+    from datetime import datetime, timedelta, timezone
+    by = {p["name"]: p for p in chart["planets"]}
+    lagna = chart["lagna"]["sign"]
+    step = 1 if lagna in ODD_FOOTED else -1
+    start = datetime.strptime(birth_iso[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+    periods, t = [], start
+    for i in range(12):
+        sign = (lagna + step * i) % 12
+        yrs = _dasha_years(sign, by)
+        end = t + timedelta(days=yrs * year_days)
+        antars, ta = [], t
+        for j in range(12):
+            asg = (sign + step * (j + 1)) % 12               # antardashas run from the next sign in the same direction
+            ae = ta + timedelta(days=yrs * year_days / 12.0)
+            antars.append({"sign": asg, "sign_name": SIGNS[asg], "sign_name_hi": SIGNS_HI[asg], "start": ta.strftime("%Y-%m-%d"), "end": ae.strftime("%Y-%m-%d")})
+            ta = ae
+        periods.append({"sign": sign, "sign_name": SIGNS[sign], "sign_name_hi": SIGNS_HI[sign], "years": yrs,
+                        "start": t.strftime("%Y-%m-%d"), "end": end.strftime("%Y-%m-%d"), "antardashas": antars})
+        t = end
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    running = next((p for p in periods if p["start"] <= now < p["end"]), None)
+    run_antar = next((a for a in running["antardashas"] if a["start"] <= now < a["end"]), None) if running else None
+    return {"direction": "direct" if step == 1 else "reverse", "periods": periods,
+            "running": {"sign_name": running["sign_name"], "sign_name_hi": running["sign_name_hi"], "start": running["start"], "end": running["end"],
+                        "antardasha": run_antar} if running else None,
+            "review_status": "draft",
+            "note_hi": "चर दशा (के. एन. राव की प्रचलित विधि, v1): विषम-पाद लग्न से सीधा क्रम, सम-पाद से उल्टा; वर्ष = राशि से उसके स्वामी तक की गिनती (स्वराशि में 12), उच्च +1, नीच −1। "
+                       "वृश्चिक/कुंभ के दो स्वामियों का नियम सरल किया गया है (मंगल/शनि)। अंतर्दशाएँ अगली राशि से बराबर भागों में।",
+            "note_en": "Chara dasha (K. N. Rao's common method, v1): direct order from odd-footed Lagnas, reverse from even-footed; years = count from sign to its lord (12 in own sign), +1 exalted, -1 debilitated. "
+                       "The dual-lord rule for Vrishchika/Kumbha is simplified (Mars/Saturn). Antardashas in equal parts from the next sign."}
