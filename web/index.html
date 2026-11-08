@@ -1369,6 +1369,7 @@ function renderTajika(t) {
     <details><summary>पंचाधिकारी</summary><table><tr><th>पद</th><th>ग्रह</th><th>बल</th><th>लग्न को देखता है</th></tr>${pa}</table></details>
     <details><summary>सहम (12)</summary><table><tr><th>सहम</th><th>स्थिति</th><th>सूत्र</th></tr>${sh}</table></details>
     <details><summary>मुद्दा दशा</summary>${md}</details>
+    ${t.yogas ? `<details><summary>ताजिक योग (लग्नेश ${esc(t.yogas.lagna_lord_hi)} बनाम भावेश)</summary>${t.yogas.general.map(g => `<p><b>${esc(g.name_hi)}</b>: ${esc(g.text_hi)}</p>`).join('')}<table><tr><th>भाव</th><th>भावेश</th><th>योग</th><th>अर्थ</th></tr>${t.yogas.by_house.map(r => `<tr><td>${r.house}</td><td>${esc(r.house_lord_hi)}</td><td>${r.yogas_hi.length ? esc(r.yogas_hi.join(', ')) + (r.via_hi ? ` <span class="muted">(${esc(r.via_hi)} द्वारा)</span>` : '') : '—'}</td><td class="muted">${esc(r.text_hi)}</td></tr>`).join('')}</table><div class="muted" style="font-size:.8rem">${esc(t.yogas.note_hi)}</div></details>` : ''}
     <details><summary>ताजिक दृष्टियाँ (इत्थशाल / ईसराफ)</summary><table><tr><th>ग्रह</th><th>दृष्टि</th><th>अंतर</th><th>अवस्था</th></tr>${asp}</table></details>
     <div class="muted" style="font-size:.8rem">${esc(t.note_hi)}</div>`;
 }

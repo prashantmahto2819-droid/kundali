@@ -58,3 +58,26 @@ def test_varshaphal_carries_tajika():
     for a in t["aspects"]:
         assert a["orb"] <= a["max_orb"] and a["phase"] in ("ithasala", "ishrafa")
     assert t["review_status"] == "draft"
+
+
+def test_tajika_yogas_definitions():
+    lons = {"Sun": 10.0, "Moon": 100.0, "Mars": 200.0, "Mercury": 20.0, "Jupiter": 300.0, "Venus": 40.0, "Saturn": 250.0}
+    speeds = {"Sun": 1.0, "Moon": 13.0, "Mars": 0.6, "Mercury": 1.5, "Jupiter": 0.1, "Venus": 1.2, "Saturn": 0.05}
+    bala = {k: {"total": 50} for k in tajika.SEVEN}
+    # all in kendras → Ikkavala; all in apoklimas → Induvara
+    y = tajika.tajika_yogas(lons, speeds, 5.0, bala, {k: 1 for k in tajika.SEVEN}, set(), set())
+    assert [g["id"] for g in y["general"]] == ["ikkavala"] and y["lagna_lord"] == "Mars"
+    y2 = tajika.tajika_yogas(lons, speeds, 5.0, bala, {k: 3 for k in tajika.SEVEN}, set(), set())
+    assert [g["id"] for g in y2["general"]] == ["induvara"]
+    # Lagna Aries: lord Mars at 200; house 2 lord Venus at 40 → separation 160 → no aspect within orb
+    row2 = next(r for r in y["by_house"] if r["house"] == 2)
+    assert row2["yogas"] == [] or "durapha" not in row2["yogas"]          # both 'strong' so no durapha
+    # applying ithasala: Mars 200 (0.6/day) and Jupiter 300 (slow) → 100 apart; sextile/trine? trine 120 orb 8.5: no. Build a clean case:
+    lons2 = {**lons, "Jupiter": 205.0}                                     # Mars 200 → Jupiter 205, Mars faster → conjunction applying
+    y3 = tajika.tajika_yogas(lons2, speeds, 5.0, bala, {k: 1 for k in tajika.SEVEN}, set(), set())
+    r9 = next(r for r in y3["by_house"] if r["house"] == 9)                 # Sagittarius lord Jupiter
+    assert "ithasala" in r9["yogas"] and "kuttha" in r9["yogas"]
+    y4 = tajika.tajika_yogas(lons2, speeds, 5.0, bala, {k: 1 for k in tajika.SEVEN}, set(), {"Jupiter"})
+    assert "radda" in next(r for r in y4["by_house"] if r["house"] == 9)["yogas"]
+    v = _v()
+    assert "yogas" in v["tajika"] and len(v["tajika"]["yogas"]["by_house"]) >= 10

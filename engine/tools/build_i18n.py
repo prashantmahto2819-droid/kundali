@@ -195,6 +195,15 @@ for _hi, _en in (("पंचाधिकारियों में से, ल
                  ("मुन्था = जन्म-लग्न राशि + पूरे हुए वर्ष (हर वर्ष एक राशि आगे)।", "Muntha = birth-Lagna sign + completed years (one sign forward each year)."),
                  ("मुन्था:", "Muntha:"), ("राशि, वर्ष-कुंडली के भाव", "sign, in house"), ("में।", "of the annual chart."), ("वर्षफल देखिए", "Show varshaphal"), ("वर्ष (वर्षफल)", "Year (varshaphal)")):
     put(_hi, _en)
+# tajika yogas
+for _id, (_hi, _thi, _ten) in _tj.YOGA_HI.items():
+    put(_hi, _id.capitalize() if _id not in ("ikkavala", "induvara", "kamboola") else {"ikkavala": "Ikkavala", "induvara": "Induvara", "kamboola": "Kambula"}[_id]); put(_thi, _ten)
+put("लग्नेश और इस भाव के स्वामी में कोई ताजिक योग नहीं।", "No Tajika yoga between the Lagna lord and this house lord.")
+_tjy = _tj.tajika_yogas({"Sun": 10.0, "Moon": 100.0, "Mars": 200.0, "Mercury": 20.0, "Jupiter": 300.0, "Venus": 40.0, "Saturn": 250.0}, {k: 1.0 for k in _tj.SEVEN}, 5.0, {k: {"total": 50} for k in _tj.SEVEN}, {k: 1 for k in _tj.SEVEN}, set(), set())
+put(_tjy["note_hi"], _tjy["note_en"])
+for _hi, _en in (("भावेश", "House lord"), ("अर्थ", "Meaning")):
+    EXACT.setdefault(_hi, _en)
+TAJIKA_YOGA_PATTERNS = [("ताजिक योग (लग्नेश {1} बनाम भावेश)", "Tajika yogas (Lagna lord {1} vs house lords)"), ("({1} द्वारा)", "(via {1})")]
 # vastu from a floor plan
 import json as _json
 _vz = _json.loads((ROOT / "data" / "knowledge" / "vastu_zones.json").read_text(encoding="utf-8"))
@@ -294,13 +303,14 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]
 _tj_sample = _tj.tajika.__doc__  # noqa
-put("ताजिक परत (ड्राफ़्ट): पंचवर्गीय बल, पंचाधिकारी व वर्षेश, 12 सहम, मुद्दा दशा और इत्थशाल/ईसराफ दृष्टियाँ। 16 ताजिक योग (इक्कबाल, इंदुवार आदि) अभी नहीं जोड़े गए; सूत्र समीक्षा के लिए साथ दिखाए गए हैं।",
-    "Tajika layer (draft): panchavargiya bala, office-bearers and year lord, 12 sahams, mudda dasha and ithasala/ishrafa aspects. The 16 Tajika yogas (Ikkavala, Induvara etc.) are not yet included; formulas are shown for review.")
+_tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v in {"Sun": 10.0, "Moon": 100.0, "Mars": 200.0, "Mercury": 20.0, "Jupiter": 300.0, "Venus": 40.0, "Saturn": 250.0}.items()], "lagna": {"longitude": 5.0}},
+                  0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
+put(_tjs["note_hi"], _tjs["note_en"])
 put("ताजिक परत (वर्षेश, सहम, मुद्दा दशा, इत्थशाल) ड्राफ़्ट है; पाठ केवल दिशा-संकेत हैं।", "The Tajika layer (year lord, sahams, mudda dasha, ithasala) is a draft; texts are only pointers.")
 
 UI = {
