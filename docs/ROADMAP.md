@@ -31,3 +31,4 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
 - [x] Rule library v1: 9 planets x 12 houses (Hindi, draft, tendency language). Pending: English text, sign/dignity/aspect rules, classical citations, scholar sign-off.
 - [x] Dignity (exalted/debilitated/own) and retrograde rules v1 (26, Hindi, draft). Pending: neecha-bhanga, sign/aspect/conjunction rules, English text.
+- [x] Partial planetary strength v1 (uccha, dig, kendradi, naisargika; NOT full Shadbala). Pending: kala, cheshta, drik, saptavargaja, ojayugma, true bhava cusps.

@@ -106,6 +106,8 @@ def render(chart: dict) -> str:
                 f'{e(r["sign_name_hi"])} {int(r["degree_in_sign"])}°', str(r["house_from_moon"]),
                 str(r["house_from_lagna"]), str(r.get("bindus", "–")),
                 e(VERDICT_HI.get(r.get("verdict"), "–"))] for r in go["planets"]]
+    strength_rows = [[e(r["name_hi"]), str(r["uccha"]), str(r["dig"]), str(r["kendradi"]), str(r["naisargika"]),
+                      f'<b>{r["total"]}</b>', str(r["rank"])] for r in chart["strength"]["planets"]]
     ss = go["sade_sati"]
     sade = ("साढ़ेसाती चल रही है (" + {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] + " चरण)."
             if ss["active"] else ("अष्टम शनि चल रहा है." if ss["ashtama"] else "अभी साढ़ेसाती नहीं है."))
@@ -166,6 +168,10 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <p class="small">{e(av["why_hi"])}</p>
 {_table(sav_head, sav_rows)}
 {_table(["ग्रह"] + [str(i + 1) for i in range(12)] + ["कुल"], bav_rows)}
+
+<h2>ग्रह-बल (आंशिक षड्बल)</h2>
+<p class="small">{e(chart["strength"]["missing_hi"])}</p>
+{_table(["ग्रह", "उच्च", "दिक्", "केंद्रादि", "नैसर्गिक", "कुल", "क्रम"], strength_rows)}
 
 <h2>गोचर ({e(go["as_of"][:10])})</h2>
 <p class="small">{e(go["why_hi"])}</p>
