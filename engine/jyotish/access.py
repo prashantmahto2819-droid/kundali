@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import os
 import secrets
 import sqlite3
@@ -51,6 +52,9 @@ class Store:
             self._db.executescript(_SCHEMA)
             from . import people
             self._db.executescript(people.SCHEMA)
+            if "profile" not in [r[1] for r in self._db.execute("PRAGMA table_info(orgs)")]:      # migration: astrologer profile
+                self._db.execute("ALTER TABLE orgs ADD COLUMN profile TEXT")
+                self._db.commit()
 
     # ---- organisations and keys -------------------------------------------------
     def create_org(self, name: str, plan: str = "free") -> dict:
@@ -60,7 +64,7 @@ class Store:
             raise ValueError("organisation name is required")
         org = {"id": str(uuid.uuid4()), "name": name.strip(), "plan": plan, "created": _now().isoformat()}
         with self._lock:
-            self._db.execute("INSERT INTO orgs VALUES (:id,:name,:plan,:created)", org)
+            self._db.execute("INSERT INTO orgs(id, name, plan, created) VALUES (:id,:name,:plan,:created)", org)
             self._db.commit()
         return org
 
@@ -95,6 +99,24 @@ class Store:
             self._db.commit()
             r = self._db.execute("SELECT org_id FROM user_orgs WHERE user_id=?", (user_id,)).fetchone()
         return self.get_org(r["org_id"])
+
+    PROFILE_FIELDS = {"brand_name": 80, "phone": 30, "line": 160, "address": 200, "website": 120}
+
+    def get_profile(self, org_id: str) -> dict:
+        with self._lock:
+            r = self._db.execute("SELECT profile FROM orgs WHERE id=?", (org_id,)).fetchone()
+        try:
+            data = json.loads(r["profile"]) if r and r["profile"] else {}
+        except ValueError:
+            data = {}
+        return {k: str(data.get(k, ""))[:n] for k, n in self.PROFILE_FIELDS.items()}
+
+    def set_profile(self, org_id: str, data: dict) -> dict:
+        clean = {k: str(data.get(k, "") or "").strip()[:n] for k, n in self.PROFILE_FIELDS.items()}
+        with self._lock:
+            self._db.execute("UPDATE orgs SET profile=? WHERE id=?", (json.dumps(clean, ensure_ascii=False), org_id))
+            self._db.commit()
+        return clean
 
     def get_org(self, org_id: str) -> dict | None:
         with self._lock:

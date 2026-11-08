@@ -49,11 +49,12 @@ class ChartRequest(BaseModel):
 
 
 @app.api_route("/v1/people", methods=["GET", "POST"])
-@app.api_route("/v1/people/{rest:path}", methods=["GET", "DELETE"])
+@app.api_route("/v1/people/{rest:path}", methods=["GET", "PUT", "DELETE"])
+@app.api_route("/v1/me", methods=["GET", "PUT"])
 async def saved_people(request: Request, rest: str = ""):
-    """Saved birth data per organisation (see jyotish/people.py)."""
+    """Saved birth data and astrologer profile per organisation (see jyotish/people.py)."""
     payload = None
-    if request.method == "POST":
+    if request.method in ("POST", "PUT"):
         try:
             payload = await request.json()
         except ValueError:
@@ -147,9 +148,9 @@ def places(q: str = "", limit: int = 8):
 
 
 @app.post("/v1/report", response_class=HTMLResponse)
-def report(req: ChartRequest):
+def report(req: ChartRequest, request: Request):
     try:
-        return HTMLResponse(handlers.report_from_payload(req.model_dump(exclude_none=True)))
+        return HTMLResponse(handlers.report_from_payload(req.model_dump(exclude_none=True), brand=handlers.brand_for(request.headers)))
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 

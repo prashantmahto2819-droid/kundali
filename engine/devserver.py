@@ -50,13 +50,19 @@ class Handler(BaseHTTPRequestHandler):
     def _people(self, method):
         path = self.path.split("?")[0]
         payload = None
-        if method == "POST":
+        if method in ("POST", "PUT"):
             try:
                 payload = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
             except json.JSONDecodeError:
                 return self._json(400, {"detail": "invalid JSON"})
         status, body = people.api(method, path, self.headers, payload)
         return self._json(status, body)
+
+    def do_PUT(self):
+        path = self.path.split("?")[0]
+        if (path.startswith("/v1/people") or path.startswith("/v1/me")) and self._guard(path):
+            return self._people("PUT")
+        return self._json(404, {"error": "not found"})
 
     def do_DELETE(self):
         path = self.path.split("?")[0]
@@ -69,7 +75,7 @@ class Handler(BaseHTTPRequestHandler):
         path, _, query = self.path.partition("?")
         if not self._guard(path):
             return
-        if path.startswith("/v1/people"):
+        if path.startswith("/v1/people") or path.startswith("/v1/me"):
             return self._people("GET")
         if path == "/health":
             return self._json(200, handlers.health())
@@ -113,7 +119,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/v1/report":
             try:
                 length = int(self.headers.get("Content-Length", 0))
-                html = handlers.report_from_payload(json.loads(self.rfile.read(length) or b"{}"))
+                html = handlers.report_from_payload(json.loads(self.rfile.read(length) or b"{}"), brand=handlers.brand_for(self.headers))
                 return self._send(200, html.encode("utf-8"), "text/html; charset=utf-8")
             except handlers.BadRequest as exc:
                 return self._json(422, {"detail": str(exc)})

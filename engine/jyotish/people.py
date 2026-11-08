@@ -9,7 +9,10 @@ REST (shared by devserver.py and app.py):
     GET    /v1/people
     GET    /v1/people/{id}
     GET    /v1/people/{id}/chart
+    PUT    /v1/people/{id}       {name?, place?, note?}   (astrologer's private note, up to 2000 characters)
     DELETE /v1/people/{id}
+    GET    /v1/me                 org, plan, profile (branding for reports)
+    PUT    /v1/me                 {brand_name, phone, line, address, website}
 Always requires a valid API key or a Supabase login token (even when KUNDALI_AUTH=off), because the data belongs to an org.
 """
 from __future__ import annotations
@@ -66,6 +69,25 @@ def listing(store, org_id: str) -> list[dict]:
     return [_row(r) for r in rows]
 
 
+def update(store, org_id: str, pid: str, payload: dict) -> dict | None:
+    sets, vals = [], []
+    if "name" in payload:
+        name = str(payload["name"]).strip()
+        if not name or len(name) > 80:
+            raise handlers.BadRequest("name is required (max 80 characters)")
+        sets.append("name=?"); vals.append(name)
+    if "place" in payload:
+        sets.append("place=?"); vals.append(str(payload["place"] or "")[:120])
+    if "note" in payload:
+        sets.append("note=?"); vals.append(str(payload["note"] or "")[:2000])
+    if not sets:
+        raise handlers.BadRequest("nothing to update (name, place or note)")
+    with store._lock:
+        store._db.execute(f"UPDATE people SET {', '.join(sets)} WHERE id=? AND org_id=?", (*vals, pid, org_id))
+        store._db.commit()
+    return get(store, org_id, pid)
+
+
 def remove(store, org_id: str, pid: str) -> bool:
     with store._lock:
         cur = store._db.execute("DELETE FROM people WHERE id=? AND org_id=?", (pid, org_id))
@@ -79,7 +101,14 @@ def api(method: str, path: str, headers, payload: dict | None = None, store=None
     org, err = access.resolve(headers, store)
     if org is None:
         return 401, {"detail": err or "sign in or send an API key to use saved people"}
-    parts = [p for p in path.split("?")[0].split("/") if p][2:]       # after v1/people
+    clean = path.split("?")[0]
+    if clean.rstrip("/") == "/v1/me":
+        if method == "GET":
+            return 200, {"org": {"id": org["id"], "name": org["name"], "plan": org["plan"]}, "profile": store.get_profile(org["id"])}
+        if method == "PUT":
+            return 200, {"profile": store.set_profile(org["id"], payload or {})}
+        return 405, {"detail": "GET or PUT"}
+    parts = [p for p in clean.split("/") if p][2:]       # after v1/people
     try:
         if not parts:
             if method == "POST":
@@ -92,6 +121,8 @@ def api(method: str, path: str, headers, payload: dict | None = None, store=None
                 return 404, {"detail": "not found"}
             if len(parts) == 1 and method == "GET":
                 return 200, person
+            if len(parts) == 1 and method == "PUT":
+                return 200, update(store, org["id"], parts[0], payload or {})
             if len(parts) == 1 and method == "DELETE":
                 remove(store, org["id"], parts[0])
                 return 200, {"deleted": parts[0]}

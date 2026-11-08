@@ -127,10 +127,24 @@ def places_from_query(q: str, limit: int = 8) -> dict:
     return {"results": places.search(q, limit)}
 
 
-def report_from_payload(payload: dict) -> str:
-    """Printable Hindi HTML report for the same payload as /v1/chart."""
+def brand_for(headers) -> dict | None:
+    """The astrologer profile of the signed-in org (API key or login token), or None for anonymous callers."""
+    from . import access
+    try:
+        store = access.default_store()
+        org, _err = access.resolve(headers, store)
+        if not org:
+            return None
+        prof = store.get_profile(org["id"])
+        return prof if prof.get("brand_name") else None
+    except Exception:
+        return None
+
+
+def report_from_payload(payload: dict, brand: dict | None = None) -> str:
+    """Printable Hindi HTML report for the same payload as /v1/chart. `brand` = astrologer profile for the header."""
     from . import i18n, report
-    html = report.render(chart_from_payload(payload))
+    html = report.render(chart_from_payload(payload), brand=brand)
     if str(payload.get("lang", "hi")).lower() == "en":
         html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
     return html

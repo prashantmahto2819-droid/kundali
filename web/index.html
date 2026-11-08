@@ -259,7 +259,18 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lemail" type="email" placeholder="आपका ईमेल" style="flex:1;min-width:180px"><button type="button" id="lgo">लॉगिन लिंक भेजें</button></div>
       <div class="muted" id="lmsg"></div></div>
     <div id="signedin" style="display:none"><span class="muted" id="who"></span> <button type="button" id="lsave">इस कुंडली को सेव करें</button> <button type="button" id="lout">लॉग-आउट</button>
-      <div id="plist" style="margin-top:8px"></div><div id="lperr" style="color:#c62828"></div></div>
+      <div id="plist" style="margin-top:8px"></div><div id="lperr" style="color:#c62828"></div>
+      <details style="margin-top:10px"><summary>ज्योतिषी प्रोफ़ाइल (रिपोर्ट पर आपका नाम)</summary>
+        <div class="muted" style="font-size:.85rem">यह जानकारी आपकी हर PDF रिपोर्ट के ऊपर छपेगी।</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:6px">
+          <div><label>नाम / संस्था</label><input id="pf_brand_name" maxlength="80"></div>
+          <div><label>फ़ोन</label><input id="pf_phone" maxlength="30"></div>
+          <div><label>वेबसाइट</label><input id="pf_website" maxlength="120"></div>
+          <div><label>पता</label><input id="pf_address" maxlength="200"></div>
+          <div style="grid-column:1/-1"><label>एक पंक्ति (जैसे: "परामर्श के लिए संपर्क करें")</label><input id="pf_line" maxlength="160"></div>
+        </div>
+        <div style="margin-top:6px"><button type="button" id="pfsave" style="width:auto">प्रोफ़ाइल सेव करें</button> <span class="muted" id="pfmsg"></span></div>
+      </details></div>
   </div>
 
   </section>
@@ -810,8 +821,14 @@ $('vgo2').addEventListener('click', async () => {
     $('who').textContent = data.session.user.email;
     try {
       const {people} = await call('GET', '/v1/people');
-      $('plist').innerHTML = people.length ? people.map(p => `<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><b>${esc(p.name)}</b><span class="muted">${esc(p.birth.date)} ${esc(p.birth.time)} ${esc(p.place || '')}</span><button type="button" data-open="${esc(p.id)}">खोलें</button><button type="button" data-del="${esc(p.id)}">हटाएँ</button></div>`).join('') : '<span class="muted">अभी कोई कुंडली सेव नहीं है।</span>';
+      $('plist').innerHTML = people.length ? people.map(p => `<div style="margin:6px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 25%,transparent);padding-bottom:6px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>${esc(p.name)}</b><span class="muted">${esc(p.birth.date)} ${esc(p.birth.time)} ${esc(p.place || '')}</span>
+          <button type="button" style="width:auto" data-open="${esc(p.id)}">खोलें</button><button type="button" style="width:auto" data-note="${esc(p.id)}">नोट</button><button type="button" style="width:auto" data-del="${esc(p.id)}">हटाएँ</button></div>
+        ${p.note ? `<div class="muted" style="font-size:.85rem;white-space:pre-wrap">${esc(p.note)}</div>` : ''}
+        <div id="note_${esc(p.id)}" style="display:none;margin-top:4px"><textarea data-notefor="${esc(p.id)}" maxlength="2000" rows="3" style="width:100%;font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)">${esc(p.note || '')}</textarea>
+          <button type="button" style="width:auto;margin-top:4px" data-savenote="${esc(p.id)}">नोट सेव करें</button></div></div>`).join('') : '<span class="muted">अभी कोई कुंडली सेव नहीं है।</span>';
       window._people = Object.fromEntries(people.map(p => [p.id, p]));
+      try { const me = await call('GET', '/v1/me'); for (const k of ['brand_name', 'phone', 'website', 'address', 'line']) $('pf_' + k).value = me.profile[k] || ''; } catch (e) {}
     } catch (e) { $('lperr').textContent = 'त्रुटि: ' + e.message; }
   }
   sb.auth.onAuthStateChange(refresh);
@@ -827,9 +844,17 @@ $('vgo2').addEventListener('click', async () => {
       refresh();
     } catch (e) { $('lperr').textContent = 'त्रुटि: ' + e.message; }
   };
-  $('plist').onclick = async e => {
-    const open = e.target.dataset.open, del = e.target.dataset.del;
+  $('pfsave').onclick = async () => {
     try {
+      const body = {}; for (const k of ['brand_name', 'phone', 'website', 'address', 'line']) body[k] = $('pf_' + k).value.trim();
+      await call('PUT', '/v1/me', body); $('pfmsg').textContent = 'सेव हो गया।';
+    } catch (e) { $('pfmsg').textContent = 'त्रुटि: ' + e.message; }
+  };
+  $('plist').onclick = async e => {
+    const open = e.target.dataset.open, del = e.target.dataset.del, note = e.target.dataset.note, savenote = e.target.dataset.savenote;
+    try {
+      if (note) { const box = $('note_' + note); box.style.display = box.style.display === 'none' ? '' : 'none'; return; }
+      if (savenote) { const ta = document.querySelector(`textarea[data-notefor="${savenote}"]`); await call('PUT', '/v1/people/' + savenote, {note: ta.value}); refresh(); return; }
       if (open) { const p = window._people[open]; $('name').value = p.name; $('date').value = p.birth.date; $('time').value = p.birth.time; $('tz').value = p.birth.tz; $('lat').value = p.birth.lat; $('lon').value = p.birth.lon; $('f').requestSubmit(); }
       if (del) { await call('DELETE', '/v1/people/' + del); refresh(); }
     } catch (err) { $('lperr').textContent = 'त्रुटि: ' + err.message; }

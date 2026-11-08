@@ -79,7 +79,7 @@ def _table(head: list[str], rows: list[list[str]]) -> str:
     return f"<table><tr>{th}</tr>{body}</table>"
 
 
-def render(chart: dict) -> str:
+def render(chart: dict, brand: dict | None = None) -> str:
     inp, lg = chart["input"], chart["lagna"]
     pm = {p["name"]: p for p in chart["planets"]}
     moon = pm["Moon"]
@@ -191,6 +191,11 @@ def render(chart: dict) -> str:
         day_html = (f'<p>सूर्योदय {e(day["sunrise"][11:16])} · सूर्यास्त {e(day["sunset"][11:16])} (स्थानीय समय)।</p>')
     warn_html = "".join(f'<div class="banner" style="background:#fdecea;border-color:#e0a09a">⚠ {e(w["text_hi"])}</div>' for w in chart.get("input_warnings", []))
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    brand_html = ""
+    if brand and brand.get("brand_name"):
+        bits = [e(brand["brand_name"])] + [e(brand[k]) for k in ("phone", "website", "address") if brand.get(k)]
+        brand_html = (f'<div class="brand"><b>{bits[0]}</b>' + "".join(f" · {b}" for b in bits[1:]) + "</div>"
+                      + (f'<div class="small">{e(brand["line"])}</div>' if brand.get("line") else ""))
     caution = ("यह विकास-संस्करण की गणना है; ग्रह-स्थिति में कुछ कला तक अंतर संभव है और सटीकता का सत्यापन बाकी है। "
                if dev else "") + "सभी व्याख्याएँ ‘ड्राफ़्ट’ हैं और विद्वान-समीक्षा के अधीन हैं।"
 
@@ -205,8 +210,9 @@ h1 {{ font-size:22px; margin:0 0 2px; color:#7a4a12; }} h2 {{ font-size:15px; ma
 table {{ border-collapse:collapse; width:100%; margin:6px 0; page-break-inside:avoid; }} th,td {{ border:1px solid #d8c8a8; padding:3px 6px; text-align:center; }}
 th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 .charts {{ display:flex; gap:14px; }} .charts > div {{ flex:1; text-align:center; }} svg.chart {{ width:100%; max-width:330px; }}
-.small {{ font-size:11px; color:#6b5a44; }} .sum td {{ text-align:left; }}
+.small {{ font-size:11px; color:#6b5a44; }} .brand {{ font-size:14px; color:#7a4a12; border-bottom:2px solid #d8c8a8; padding-bottom:4px; margin-bottom:6px; }} .sum td {{ text-align:left; }}
 </style></head><body>
+{brand_html}
 <h1>कुंडली रिपोर्ट</h1>
 <div class="meta"><b>{e(name)}</b> · जन्म: {e(inp["date"])} {e(inp["time"])} ({e(inp["tz"])}) · अक्षांश {inp["lat"]}, देशांतर {inp["lon"]} · अयनांश: लाहिड़ी {e(chart["ayanamsa_dms"])}</div>
 <div class="banner">{e(caution)}</div>

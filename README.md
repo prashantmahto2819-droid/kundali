@@ -100,6 +100,9 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 | `GET /v1/people/{id}` · `DELETE /v1/people/{id}` | read / remove |
 | `GET /v1/people/{id}/chart` | full chart of the saved person |
 
+### Astrologer tools
+`PUT /v1/people/{id}` updates `name`, `place` or the private `note` (2000 chars). `GET/PUT /v1/me` reads/sets the org's profile (`brand_name`, `phone`, `website`, `address`, `line`); when a signed-in user or API key calls `POST /v1/report`, that profile is printed at the top of the report. The web page shows a note box per saved person and a profile form under "मेरी कुंडलियाँ".
+
 ## Login (Supabase Auth)
 Signed-in users send `Authorization: Bearer <access_token>`; the token is verified locally and mapped to a personal organisation (created on first login). Quota and saved people then work exactly as for API keys.
 
