@@ -3,7 +3,8 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from .constants import (KARANA_REPEATING, TITHI_NAMES, VARA, VARA_HI, YOGA_NAMES)
+from .constants import (KARANA_HI, KARANA_REPEATING, PAKSHA_HI, TITHI_HI, TITHI_NAMES, VARA, VARA_HI,
+                        YOGA_HI, YOGA_NAMES)
 from .core import nakshatra_of
 
 
@@ -18,7 +19,8 @@ def tithi_info(sun_sid: float, moon_sid: float) -> dict:
         name = "Amavasya"
     else:
         name = TITHI_NAMES[pos]
-    return {"number": n + 1, "paksha": paksha, "name": name,
+    return {"number": n + 1, "paksha": paksha, "paksha_hi": PAKSHA_HI[paksha], "name": name,
+            "name_hi": TITHI_HI[name],
             "fraction_elapsed": (diff % 12.0) / 12.0}
 
 
@@ -31,13 +33,13 @@ def karana_info(sun_sid: float, moon_sid: float) -> dict:
         name = KARANA_REPEATING[(k - 1) % 7]
     else:
         name = ["Shakuni", "Chatushpada", "Naga"][k - 57]
-    return {"number": k + 1, "name": name}
+    return {"number": k + 1, "name": name, "name_hi": KARANA_HI[name]}
 
 
 def yoga_info(sun_sid: float, moon_sid: float) -> dict:
     total = (sun_sid + moon_sid) % 360.0
     idx = int(total * 27 // 360) % 27
-    return {"number": idx + 1, "name": YOGA_NAMES[idx]}
+    return {"number": idx + 1, "name": YOGA_NAMES[idx], "name_hi": YOGA_HI[YOGA_NAMES[idx]]}
 
 
 def panchang(sun_sid: float, moon_sid: float, local_dt: datetime) -> dict:

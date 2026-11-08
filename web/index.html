@@ -286,10 +286,10 @@ function render(c) {
   const pc = c.panchang;
   $('panchang').innerHTML = `<table>
     <tr><th>वार</th><td>${esc(pc.vara.name_hi)}</td></tr>
-    <tr><th>तिथि</th><td>${esc(pc.tithi.paksha)} ${esc(pc.tithi.name)} (${pc.tithi.number})</td></tr>
+    <tr><th>तिथि</th><td>${esc(pc.tithi.paksha_hi)} ${esc(pc.tithi.name_hi)} (${pc.tithi.number})</td></tr>
     <tr><th>नक्षत्र</th><td>${esc(pc.nakshatra.name_hi)} पाद ${pc.nakshatra.pada}</td></tr>
-    <tr><th>योग</th><td>${esc(pc.yoga.name)}</td></tr>
-    <tr><th>करण</th><td>${esc(pc.karana.name)}</td></tr></table>
+    <tr><th>योग</th><td>${esc(pc.yoga.name_hi)}</td></tr>
+    <tr><th>करण</th><td>${esc(pc.karana.name_hi)}</td></tr></table>
     <div class="muted" style="font-size:.8rem">${esc(pc.note)}</div>`;
 
   // Ashtakavarga: houses counted from the lagna
@@ -311,7 +311,7 @@ function render(c) {
     go.planets.map(r => `<tr><td>${esc(r.name_hi)}${r.retrograde ? ' (व)' : ''}</td><td>${esc(r.sign_name_hi)} ${Math.floor(r.degree_in_sign)}°</td><td>${r.house_from_moon}</td><td>${r.house_from_lagna}</td>
       <td>${r.bindus ?? '–'}</td><td>${r.verdict ? `<span class="chip ${r.verdict==='supportive'?'yes':'muted'}">${GOV[r.verdict]}</span>` : '<span class="muted">–</span>'}</td></tr>`).join('') + '</table>';
 
-  $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
+  $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why_hi)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
 
   $('readings').innerHTML = c.readings.length ? c.readings.map(r => `<details open><summary><b>${esc(planetMap()[r.planet].name_hi)}</b> — भाव ${r.house}</summary>
       <div>${esc(r.text_hi)}</div>

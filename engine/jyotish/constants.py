@@ -60,3 +60,18 @@ YOGA_NAMES = [
     "Shukla", "Brahma", "Indra", "Vaidhriti",
 ]
 KARANA_REPEATING = ["Bava", "Balava", "Kaulava", "Taitila", "Gara", "Vanija", "Vishti"]
+
+TITHI_HI = {"Pratipada": "प्रतिपदा", "Dwitiya": "द्वितीया", "Tritiya": "तृतीया", "Chaturthi": "चतुर्थी",
+            "Panchami": "पंचमी", "Shashthi": "षष्ठी", "Saptami": "सप्तमी", "Ashtami": "अष्टमी",
+            "Navami": "नवमी", "Dashami": "दशमी", "Ekadashi": "एकादशी", "Dwadashi": "द्वादशी",
+            "Trayodashi": "त्रयोदशी", "Chaturdashi": "चतुर्दशी", "Purnima": "पूर्णिमा", "Amavasya": "अमावस्या"}
+PAKSHA_HI = {"Shukla": "शुक्ल", "Krishna": "कृष्ण"}
+YOGA_HI = {"Vishkambha": "विष्कंभ", "Priti": "प्रीति", "Ayushman": "आयुष्मान", "Saubhagya": "सौभाग्य",
+           "Shobhana": "शोभन", "Atiganda": "अतिगंड", "Sukarma": "सुकर्मा", "Dhriti": "धृति", "Shula": "शूल",
+           "Ganda": "गंड", "Vriddhi": "वृद्धि", "Dhruva": "ध्रुव", "Vyaghata": "व्याघात", "Harshana": "हर्षण",
+           "Vajra": "वज्र", "Siddhi": "सिद्धि", "Vyatipata": "व्यतीपात", "Variyan": "वरीयान", "Parigha": "परिघ",
+           "Shiva": "शिव", "Siddha": "सिद्ध", "Sadhya": "साध्य", "Shubha": "शुभ", "Shukla": "शुक्ल",
+           "Brahma": "ब्रह्म", "Indra": "ऐंद्र", "Vaidhriti": "वैधृति"}
+KARANA_HI = {"Bava": "बव", "Balava": "बालव", "Kaulava": "कौलव", "Taitila": "तैतिल", "Gara": "गर",
+             "Vanija": "वणिज", "Vishti": "विष्टि (भद्रा)", "Shakuni": "शकुनि", "Chatushpada": "चतुष्पद",
+             "Naga": "नाग", "Kimstughna": "किंस्तुघ्न"}

@@ -109,7 +109,7 @@ def render(chart: dict) -> str:
     ss = go["sade_sati"]
     sade = ("साढ़ेसाती चल रही है (" + {"rising": "पहला", "peak": "मध्य", "setting": "अंतिम"}[ss["phase"]] + " चरण)."
             if ss["active"] else ("अष्टम शनि चल रहा है." if ss["ashtama"] else "अभी साढ़ेसाती नहीं है."))
-    yoga_rows = [[e(y["name_hi"]), "बना है" if y["present"] else "नहीं", e(y["why"])] for y in chart["yogas"]]
+    yoga_rows = [[e(y["name_hi"]), "बना है" if y["present"] else "नहीं", e(y["why_hi"])] for y in chart["yogas"]]
     day = chart.get("day", {})
     day_html = ""
     if day.get("available"):
@@ -153,9 +153,9 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>पंचांग</h2>
 <table class="sum">
 <tr><td>वार</td><td>{e(pc["vara"]["name_hi"])}</td></tr>
-<tr><td>तिथि</td><td>{e(pc["tithi"]["paksha"])} {e(pc["tithi"]["name"])} ({pc["tithi"]["number"]})</td></tr>
+<tr><td>तिथि</td><td>{e(pc["tithi"]["paksha_hi"])} {e(pc["tithi"]["name_hi"])} ({pc["tithi"]["number"]})</td></tr>
 <tr><td>नक्षत्र</td><td>{e(pc["nakshatra"]["name_hi"])} पाद {pc["nakshatra"]["pada"]}</td></tr>
-<tr><td>योग / करण</td><td>{e(pc["yoga"]["name"])} / {e(pc["karana"]["name"])}</td></tr>
+<tr><td>योग / करण</td><td>{e(pc["yoga"]["name_hi"])} / {e(pc["karana"]["name_hi"])}</td></tr>
 </table>{day_html}
 
 <h2>विंशोत्तरी दशा</h2>
