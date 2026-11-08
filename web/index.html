@@ -799,7 +799,7 @@ const MPEOPLE = [['b','वर (Groom)','1990-05-17','06:45','0'], ['g','वध�
   const opts = $('city').innerHTML;
   $('mf').style.display = 'grid';
   $('mf').innerHTML = MPEOPLE.map(([k, lbl, d, t, ci]) => `
-    <div style="grid-column:1/-1;font-weight:600;color:var(--accent)">${lbl}</div>
+    <div style="grid-column:1/-1;font-weight:600;color:var(--accent);display:flex;gap:10px;align-items:center;flex-wrap:wrap">${lbl} <select id="${k}_saved" style="width:auto;font-weight:400;display:none"><option value="">सेव की गई कुंडली से भरें…</option></select></div>
     <div><label>नाम</label><input id="${k}_name"></div>
     <div><label>जन्म तारीख</label><input id="${k}_date" type="date" required value="${d}"></div>
     <div><label>जन्म समय</label><input id="${k}_time" type="time" required value="${t}"></div>
@@ -815,6 +815,22 @@ const MPEOPLE = [['b','वर (Groom)','1990-05-17','06:45','0'], ['g','वध�
     sel.addEventListener('change', apply); apply();
   });
 })();
+// fill a matching side from a saved person (list comes from the login module)
+window.fillMatchSavedLists = () => {
+  const people = Object.values(window._people || {});
+  for (const k of ['b', 'g']) {
+    const sel = $(k + '_saved'); if (!sel) continue;
+    sel.style.display = people.length ? '' : 'none';
+    sel.innerHTML = '<option value="">सेव की गई कुंडली से भरें…</option>' + people.map(p => `<option value="${esc(p.id)}">${esc(p.name)} · ${esc(p.birth.date)}</option>`).join('');
+    sel.onchange = () => { const p = window._people[sel.value]; if (!p) return;
+      $(k+'_name').value = p.name; $(k+'_date').value = p.birth.date; $(k+'_time').value = p.birth.time; $(k+'_tz').value = p.birth.tz; $(k+'_lat').value = p.birth.lat; $(k+'_lon').value = p.birth.lon; $(k+'_search').value = p.place || ''; };
+  }
+};
+window.matchSaved = (idA, idB) => {               // "match with..." from the saved list
+  window.showTab && window.showTab('t-match');
+  for (const [k, id] of [['b', idA], ['g', idB]]) { const sel = $(k + '_saved'); if (sel) { sel.value = id; sel.onchange(); } }
+  $('mf').requestSubmit();
+};
 const personBody = k => ({name:$(k+'_name').value || null, date:$(k+'_date').value, time:$(k+'_time').value,
                           tz:$(k+'_tz').value.trim(), lat:+$(k+'_lat').value, lon:+$(k+'_lon').value});
 const CONF = {firm:'पक्का नियम', draft:'ड्राफ़्ट (समीक्षा बाकी)'};
@@ -994,6 +1010,11 @@ $('vgo2').addEventListener('click', async () => {
         <div id="note_${esc(p.id)}" style="display:none;margin-top:4px"><textarea data-notefor="${esc(p.id)}" maxlength="2000" rows="3" style="width:100%;font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)">${esc(p.note || '')}</textarea>
           <button type="button" style="width:auto;margin-top:4px" data-savenote="${esc(p.id)}">नोट सेव करें</button></div></div>`).join('') : '<span class="muted">अभी कोई कुंडली सेव नहीं है।</span>';
       window._people = Object.fromEntries(people.map(p => [p.id, p]));
+      if (window.fillMatchSavedLists) window.fillMatchSavedLists();
+      if (people.length > 1) $('plist').insertAdjacentHTML('beforeend', `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px"><span class="muted">मिलान:</span>
+        <select id="pm_a" style="width:auto">${people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select><span class="muted">(वर)</span>
+        <select id="pm_b" style="width:auto">${people.map((p, i) => `<option value="${esc(p.id)}" ${i === 1 ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select><span class="muted">(वधू)</span>
+        <button type="button" style="width:auto" onclick="matchSaved(document.getElementById('pm_a').value, document.getElementById('pm_b').value)">मिलान देखिए</button></div>`);
       try { const me = await call('GET', '/v1/me'); for (const k of ['brand_name', 'phone', 'website', 'address', 'line']) $('pf_' + k).value = me.profile[k] || ''; } catch (e) {}
     } catch (e) { $('lperr').textContent = 'त्रुटि: ' + e.message; }
   }
