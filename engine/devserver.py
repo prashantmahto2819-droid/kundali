@@ -61,6 +61,15 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/numerology": handlers.numerology_from_payload,
                   "/v1/match": handlers.match_from_payload,
                   "/v1/tarot": handlers.tarot_from_payload}
+        if self.path == "/v1/report":
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                html = handlers.report_from_payload(json.loads(self.rfile.read(length) or b"{}"))
+                return self._send(200, html.encode("utf-8"), "text/html; charset=utf-8")
+            except handlers.BadRequest as exc:
+                return self._json(422, {"detail": str(exc)})
+            except json.JSONDecodeError:
+                return self._json(400, {"detail": "invalid JSON"})
         if self.path not in routes:
             return self._json(404, {"error": "not found"})
         try:

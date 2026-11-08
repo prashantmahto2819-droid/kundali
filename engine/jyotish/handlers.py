@@ -125,3 +125,9 @@ def tarot_from_payload(payload: dict) -> dict:
 
 def places_from_query(q: str, limit: int = 8) -> dict:
     return {"results": places.search(q, limit)}
+
+
+def report_from_payload(payload: dict) -> str:
+    """Printable Hindi HTML report for the same payload as /v1/chart."""
+    from . import report
+    return report.render(chart_from_payload(payload))

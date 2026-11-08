@@ -39,6 +39,8 @@ The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Ya
 
 `/v1/chart` also returns `gochara` for `as_of` (default now): current sidereal positions, house from Moon and Lagna, classical favourable-house check combined with ashtakavarga points, and Sade Sati / Ashtama Shani. Vedha is not applied yet.
 
+`POST /v1/report` (same body as `/v1/chart`) returns a printable Hindi HTML report (charts as inline SVG, planets, panchang, dasha, ashtakavarga, gochara, yogas). The web page has a button that opens it; print to PDF from the browser, or run `python tools/make_pdf.py DATE TIME TZ LAT LON out.pdf [NAME]` where Playwright/Chromium is installed (Chromium shapes Devanagari correctly).
+
 `POST /v1/match` with `{"boy": {...}, "girl": {...}}` (same birth fields as `/v1/chart`) returns the 36-point ashtakoota score with per-koota detail and confidence, plus a manglik comparison.
 
 `POST /v1/tarot` with `{"spread": "single|three|celtic", "question": "...", "seed": 7, "reversals": true}` draws from the 78-card deck (own wording, draft, Hindi + English). Omit `seed` for a random draw; the same seed gives the same draw.

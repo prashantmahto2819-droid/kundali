@@ -91,6 +91,7 @@
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="card" id="summary"></div>
+    <div><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button> <span class="muted" id="reperr"></span></div>
     <div class="grid">
       <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
@@ -322,6 +323,7 @@ $('f').addEventListener('submit', async e => {
     const r = await fetch(API + '/v1/chart', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
     const data = await r.json();
     if (!r.ok) throw new Error(data.detail || 'त्रुटि');
+    window.lastBody = body;
     render(data);
     renderNumerology(body);
   } catch (err) { $('err').textContent = 'त्रुटि: ' + err.message; }
@@ -405,6 +407,17 @@ $('tf').addEventListener('submit', async e => {
   bind('citysearch', 'lat', 'lon', 'tz');
   ['b', 'g'].forEach(k => bind(k + '_search', k + '_lat', k + '_lon', k + '_tz'));
 })();
+
+$('repbtn').addEventListener('click', async () => {
+  $('reperr').textContent = '';
+  const w = window.open('', '_blank');
+  try {
+    const r = await fetch(API + '/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(window.lastBody)});
+    if (!r.ok) throw new Error((await r.json()).detail || 'त्रुटि');
+    const html = await r.text();
+    w.document.open(); w.document.write(html); w.document.close();
+  } catch (err) { if (w) w.close(); $('reperr').textContent = 'त्रुटि: ' + err.message; }
+});
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
 if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); $('tf').requestSubmit(); }

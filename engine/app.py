@@ -6,6 +6,7 @@ import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from jyotish import handlers
@@ -98,3 +99,11 @@ def tarot(req: TarotRequest):
 @app.get("/v1/places")
 def places(q: str = "", limit: int = 8):
     return handlers.places_from_query(q, limit)
+
+
+@app.post("/v1/report", response_class=HTMLResponse)
+def report(req: ChartRequest):
+    try:
+        return HTMLResponse(handlers.report_from_payload(req.model_dump(exclude_none=True)))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
