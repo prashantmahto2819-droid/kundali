@@ -444,3 +444,51 @@ def render_prashna(r: dict) -> str:
 <div class="banner">{e(r["disclaimer_hi"])}</div>
 <p class="small">बनाया गया: {e(generated)}</p>
 </body></html>"""
+
+
+# ---- Numerology / Tarot / Vastu / Palm printable pages -------------------------------------------------
+def _page(title: str, h1: str, body: str, footer: str = "") -> str:
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    return (f'<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>{title}</title><style>{_PAGE_CSS}</style></head><body>'
+            f'<h1>{h1}</h1>{body}<p class="small">बनाया गया: {e(generated)}{(" · " + footer) if footer else ""}</p></body></html>')
+
+
+def render_numerology(n: dict, name: str | None, birth_date: str, numbers_kb: dict | None = None) -> str:
+    kb = numbers_kb or {}
+    tr = lambda num: e(kb.get(str(num), {}).get("traits_hi", ""))
+    rows = [["मूलांक", f'<b>{n["moolank"]["number"]}</b> ({e(PLANETS_HI.get(n["moolank"]["planet"], n["moolank"]["planet"]))})', tr(n["moolank"]["number"])],
+            ["भाग्यांक", f'<b>{n["bhagyank"]["number"]}</b> ({e(PLANETS_HI.get(n["bhagyank"]["planet"], n["bhagyank"]["planet"]))})', tr(n["bhagyank"]["number"])],
+            [f'वैयक्तिक वर्ष {n["personal_year"]["year"]}', f'<b>{n["personal_year"]["number"]}</b> ({e(PLANETS_HI.get(n["personal_year"]["planet"], n["personal_year"]["planet"]))})', tr(n["personal_year"]["number"])]]
+    if n.get("namank"):
+        c, p = n["namank"]["chaldean"], n["namank"]["pythagorean"]
+        rows.append(["नामांक (कैल्डियन)", f'<b>{c["number"]}</b> (योग {c["compound"]}, {e(PLANETS_HI.get(c["planet"], c["planet"]))})', tr(c["number"])])
+        rows.append(["नामांक (पाइथागोरियन)", f'<b>{p["number"]}</b> (योग {p["compound"]})', ""])
+    ls = n["lo_shu"]
+    grid = "<table style='width:auto'>" + "".join("<tr>" + "".join(f'<td style="text-align:center;width:34px;height:34px">{e(c)}</td>' for c in r) + "</tr>" for r in ls["grid"]) + "</table>"
+    body = (f'<p class="small">{e(name or "")} · जन्म {e(birth_date)}</p>{_table(["अंक", "मान", "स्वभाव (ड्राफ़्ट)"], rows)}'
+            f'<h2>लो-शू ग्रिड</h2>{grid}<p>अनुपस्थित अंक: {e(", ".join(map(str, ls["missing"])) or "कोई नहीं")} · दोहराए अंक: {e(", ".join(map(str, ls["repeated"])) or "कोई नहीं")}</p>'
+            f'<div class="banner">अंक-ज्योतिष परंपरागत मार्गदर्शन है; व्याख्याएँ ड्राफ़्ट हैं। नामांक अंग्रेज़ी (लैटिन) अक्षरों से गिना गया है।</div>')
+    return _page("अंक ज्योतिष", "अंक ज्योतिष", body)
+
+
+def render_tarot(t: dict) -> str:
+    cards = "".join(f'<tr><td><b>{e(c["position_hi"])}</b></td><td>{e(c["card"]["name_hi"])} <span class="small">({e(c["card"]["name"])})</span>{" · उलटा" if c["reversed"] else ""}</td><td>{e(c["meaning_hi"])}</td></tr>' for c in t["cards"])
+    body = (f'<p class="small">स्प्रेड: {e(t["spread_name_hi"])}' + (f' · प्रश्न: {e(t["question"])}' if t.get("question") else "") + f' · seed {t["seed"]}</p>'
+            f'<table><tr><th>स्थान</th><th>कार्ड</th><th>अर्थ (ड्राफ़्ट)</th></tr>{cards}</table>'
+            + "".join(f'<p class="small">{e(x)}</p>' for x in t.get("notes_hi", [])) + f'<div class="banner">{e(t["disclaimer_hi"])}</div>')
+    return _page("टैरो", "टैरो पठन", body)
+
+
+def render_vastu(v: dict) -> str:
+    rows = [[e(i["room_hi"]), e(i["direction_hi"]), f'<b>{e(i["rating_hi"])}</b>', e(", ".join(i["ideal_hi"])), e(i["why_hi"]) + (f'<br><i>{e(i["fix_hi"])}</i>' if i.get("fix_hi") else "")] for i in v["items"]]
+    body = _table(["कमरा", "दिशा", "स्थिति", "आदर्श दिशा", "कारण / सुझाव"], rows) + f'<div class="banner">{e(v.get("disclaimer_hi", "वास्तु परंपरागत मार्गदर्शन है; व्याख्याएँ ड्राफ़्ट हैं।"))}</div>'
+    return _page("वास्तु जाँच", "वास्तु जाँच", body)
+
+
+def render_palm(p: dict) -> str:
+    parts = []
+    for group, items in p["groups"].items():
+        rows = [[e(i["feature_hi"]), e(i["choice_hi"]), e(i["meaning_hi"])] for i in items]
+        parts.append(f"<h2>{e(group)}</h2>" + _table(["लक्षण", "आपका चुनाव", "अर्थ (ड्राफ़्ट)"], rows))
+    body = "".join(parts) + f'<div class="banner">{e(p.get("disclaimer_hi", "हस्तरेखा परंपरागत कला है, भविष्यवाणी नहीं; व्याख्याएँ ड्राफ़्ट हैं।"))}</div>'
+    return _page("हस्तरेखा", "हस्तरेखा (मार्गदर्शित)", body)

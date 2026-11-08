@@ -50,3 +50,18 @@ def test_prashna_and_muhurta_reports_render():
     men = handlers.muhurta_report_from_payload({"activity": "travel", "start": "2026-11-08", "days": 7, "lang": "en", **base})
     left = [t for t in re.findall(r">([^<>]+)<", men) if re.search(r"[ऀ-ॿ]", t)]
     assert left == [], left
+
+
+def test_small_reports_render_in_both_languages():
+    import re
+    cases = [("numerology_report_from_payload", {"date": "1990-05-17", "name": "Prashant"}, "अंक ज्योतिष"),
+             ("tarot_report_from_payload", {"spread": "three", "seed": 1, "question": "work"}, "टैरो पठन"),
+             ("vastu_report_from_payload", {"items": [{"room": "kitchen", "direction": "SE"}, {"room": "pooja", "direction": "SW"}]}, "वास्तु जाँच"),
+             ("palm_report_from_payload", {"choices": {"hand_shape": "earth", "life_length": "long"}}, "हस्तरेखा")]
+    for fn, payload, title in cases:
+        h = getattr(handlers, fn)(payload)
+        assert title in h and "<table" in h, fn
+        en = getattr(handlers, fn)({**payload, "lang": "en"})
+        left = [t for t in re.findall(r">([^<>]+)<", en) if re.search(r"[ऀ-ॿ]", t) and len(t.strip()) > 2]
+        assert '<html lang="en">' in en and left == [], (fn, left)
+    assert set(handlers.REPORT_ROUTES) >= {"/v1/numerology/report", "/v1/tarot/report", "/v1/vastu/report", "/v1/palm/report"}

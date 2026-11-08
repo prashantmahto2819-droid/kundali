@@ -156,6 +156,23 @@ def places(q: str = "", limit: int = 8):
     return handlers.places_from_query(q, limit)
 
 
+@app.post("/v1/numerology/report", response_class=HTMLResponse)
+@app.post("/v1/tarot/report", response_class=HTMLResponse)
+@app.post("/v1/vastu/report", response_class=HTMLResponse)
+@app.post("/v1/palm/report", response_class=HTMLResponse)
+async def small_reports(request: Request):
+    """Printable pages for numerology, tarot, vastu and palm (same payload as the JSON route, + lang)."""
+    try:
+        payload = await request.json()
+    except ValueError:
+        return JSONResponse({"detail": "invalid JSON"}, status_code=400)
+    fn = getattr(handlers, handlers.REPORT_ROUTES[request.url.path])
+    try:
+        return HTMLResponse(fn(payload if isinstance(payload, dict) else {}))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.post("/v1/report", response_class=HTMLResponse)
 def report(req: ChartRequest, request: Request):
     try:

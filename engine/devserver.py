@@ -119,19 +119,15 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/lalkitab/varshphal": handlers.lalkitab_varshphal_from_payload,
                   "/v1/varshaphal": handlers.varshaphal_from_payload,
                   "/v1/ask": handlers.ask_from_payload}
-        if self.path.split("?")[0] in ("/v1/report", "/v1/match/report", "/v1/muhurta/report", "/v1/prashna/report"):
+        if self.path.split("?")[0] in handlers.REPORT_ROUTES:
             try:
                 length = int(self.headers.get("Content-Length", 0))
                 payload = json.loads(self.rfile.read(length) or b"{}")
                 route = self.path.split("?")[0]
                 if route == "/v1/report":
                     html = handlers.report_from_payload(payload, brand=handlers.brand_for(self.headers))
-                elif route == "/v1/match/report":
-                    html = handlers.match_report_from_payload(payload)
-                elif route == "/v1/muhurta/report":
-                    html = handlers.muhurta_report_from_payload(payload)
                 else:
-                    html = handlers.prashna_report_from_payload(payload)
+                    html = getattr(handlers, handlers.REPORT_ROUTES[route])(payload)
                 return self._send(200, html.encode("utf-8"), "text/html; charset=utf-8")
             except handlers.BadRequest as exc:
                 return self._json(422, {"detail": str(exc)})

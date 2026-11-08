@@ -470,6 +470,26 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"PDF (प्रिंट)": "PDF (print)",
+"टैरो पठन": "Tarot reading",
+"कार्ड": "Card",
+"अर्थ (ड्राफ़्ट)": "Meaning (draft)",
+"आपका चुनाव": "Your choice",
+"लक्षण": "Feature",
+"मान": "Value",
+"टालने योग्य": "avoid",
+"स्वीकार्य": "acceptable",
+"यह परंपरागत वास्तु-मार्गदर्शन है, वैज्ञानिक या क़ानूनी सलाह नहीं। अलग-अलग परंपराओं में मतभेद हैं।": "This is traditional Vastu guidance, not scientific or legal advice. Traditions differ.",
+"हस्तरेखा परंपरागत कला है; इसका वैज्ञानिक आधार सिद्ध नहीं है। इसे आत्म-चिंतन और मनोरंजन की तरह लें। स्वास्थ्य, आयु, धन या क़ानूनी फ़ैसले इससे न करें।": "Palmistry is a traditional art; its scientific basis is not established. Take it as reflection and entertainment. Do not base health, lifespan, money or legal decisions on it.",
+"बहुत से बड़े अर्काना: बड़े जीवन-विषय या मोड़ का संकेत माना जाता है।": "Many major arcana: traditionally a sign of big life themes or a turning point.",
+"नामांक (कैल्डियन)": "Name number (Chaldean)",
+"नामांक (पाइथागोरियन)": "Name number (Pythagorean)",
+"स्वभाव (ड्राफ़्ट)": "Traits (draft)",
+"आदर्श दिशा": "Ideal direction",
+"अंक-ज्योतिष परंपरागत मार्गदर्शन है; व्याख्याएँ ड्राफ़्ट हैं। नामांक अंग्रेज़ी (लैटिन) अक्षरों से गिना गया है।": "Numerology is traditional guidance; readings are drafts. The name number is counted from Latin letters.",
+"वास्तु परंपरागत मार्गदर्शन है; व्याख्याएँ ड्राफ़्ट हैं।": "Vastu is traditional guidance; readings are drafts.",
+"हस्तरेखा परंपरागत कला है, भविष्यवाणी नहीं; व्याख्याएँ ड्राफ़्ट हैं।": "Palmistry is a traditional art, not prediction; readings are drafts.",
+"· उलटा": "· reversed",
 "पिछले प्रश्न": "Previous questions",
 "इतिहास मिटाएँ": "Clear history",
 "मुहूर्त PDF (प्रिंट)": "Muhurta PDF (print)",
@@ -2327,6 +2347,46 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"{1} · जन्म {2}",
+"{1} · born {2}"
+],
+[
+"· जन्म {1}",
+"· born {1}"
+],
+[
+"वैयक्तिक वर्ष {1}",
+"Personal year {1}"
+],
+[
+"अनुपस्थित अंक: {1} · दोहराए अंक: {2}",
+"Missing numbers: {1} · repeated numbers: {2}"
+],
+[
+"स्प्रेड: {1} · प्रश्न: {2} · seed {3}",
+"Spread: {1} · question: {2} · seed {3}"
+],
+[
+"स्प्रेड: {1} · seed {2}",
+"Spread: {1} · seed {2}"
+],
+[
+"{1} (योग {2}, {3})",
+"{1} (compound {2}, {3})"
+],
+[
+"{1} (योग {2})",
+"{1} (compound {2})"
+],
+[
+"(योग {1}, {2})",
+"(compound {1}, {2})"
+],
+[
+"(योग {1})",
+"(compound {1})"
 ],
 [
 "मुहूर्त खोज: {1}",

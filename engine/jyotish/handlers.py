@@ -316,6 +316,41 @@ def prashna_report_from_payload(payload: dict) -> str:
     return html
 
 
+def _localize(html: str, payload: dict) -> str:
+    from . import i18n
+    if str(payload.get("lang", "hi")).lower() == "en":
+        return i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
+    return html
+
+
+def numerology_report_from_payload(payload: dict) -> str:
+    import json as _json
+    from pathlib import Path
+    from . import report
+    kb = _json.loads((Path(__file__).resolve().parents[2] / "data" / "knowledge" / "numbers.json").read_text(encoding="utf-8")).get("numbers", {})
+    return _localize(report.render_numerology(numerology_from_payload(payload), payload.get("name"), str(payload.get("date", "")), kb), payload)
+
+
+def tarot_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_tarot(tarot_from_payload(payload)), payload)
+
+
+def vastu_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_vastu(vastu_from_payload(payload)), payload)
+
+
+def palm_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_palm(palm_from_payload(payload)), payload)
+
+
+REPORT_ROUTES = {"/v1/report": None, "/v1/match/report": "match_report_from_payload", "/v1/muhurta/report": "muhurta_report_from_payload",
+                 "/v1/prashna/report": "prashna_report_from_payload", "/v1/numerology/report": "numerology_report_from_payload",
+                 "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/palm/report": "palm_report_from_payload"}
+
+
 # ---- JSON safety net ------------------------------------------------------------------
 def plain(obj):
     """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""
