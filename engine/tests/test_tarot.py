@@ -45,3 +45,13 @@ def test_handler_validation():
         handlers.tarot_from_payload({"question": "x" * 301})
     with pytest.raises(handlers.BadRequest):
         handlers.tarot_from_payload({"seed": [1]})
+
+
+def test_minor_cards_have_their_own_text():
+    cards = {c["id"]: c for c in tarot.deck()}
+    assert len([c for c in cards.values() if c["arcana"] == "minor"]) == 56
+    ten = cards["swords-10"]
+    assert "in matters of" not in ten["upright"] and "के क्षेत्र में:" not in ten["upright_hi"]
+    assert "ending" in ten["upright"].lower() and ten["theme"]
+    ups = [c["upright"] for c in cards.values() if c["arcana"] == "minor"]
+    assert len(set(ups)) == 56 and all(len(u) > 25 for u in ups)       # all distinct, all substantive

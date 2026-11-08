@@ -1,68 +1,867 @@
 {
-  "_note": "Original wording written for this project (not copied from any book or deck). Review status: draft. Minor arcana meanings are composed from rank x suit themes; major arcana are hand-written.",
-  "review_status": "draft",
-  "majors": [
-    {"name":"The Fool","hi":"मूर्ख / यात्री","up":"A fresh start taken on trust; openness to the unknown.","rev":"Recklessness or hesitation at the edge of a leap.","up_hi":"भरोसे के साथ नई शुरुआत; अनजाने के लिए खुलापन।","rev_hi":"लापरवाही, या छलाँग के किनारे पर झिझक।"},
-    {"name":"The Magician","hi":"जादूगर","up":"You have the tools you need; focused will turns ideas into results.","rev":"Scattered skill, manipulation, or talent left unused.","up_hi":"ज़रूरी साधन आपके पास हैं; एकाग्र इच्छा से विचार परिणाम बनते हैं।","rev_hi":"बिखरी कुशलता, छल, या अनुपयोगी प्रतिभा।"},
-    {"name":"The High Priestess","hi":"महापुजारिन","up":"Quiet intuition and hidden knowledge; listen before acting.","rev":"Ignoring your inner voice, or secrets kept too long.","up_hi":"शांत अंतर्ज्ञान और छिपा ज्ञान; करने से पहले सुनिए।","rev_hi":"भीतर की आवाज़ की अनदेखी, या बहुत देर रखे राज़।"},
-    {"name":"The Empress","hi":"सम्राज्ञी","up":"Nurture, abundance and creative growth.","rev":"Smothering care, neglect of self, or a creative block.","up_hi":"पालन-पोषण, समृद्धि और रचनात्मक विकास।","rev_hi":"अति-देखभाल, स्वयं की उपेक्षा, या रचनात्मक अवरोध।"},
-    {"name":"The Emperor","hi":"सम्राट","up":"Structure, authority and steady leadership.","rev":"Rigidity, control for its own sake, or lack of discipline.","up_hi":"ढाँचा, अधिकार और स्थिर नेतृत्व।","rev_hi":"कठोरता, नियंत्रण की ज़िद, या अनुशासन की कमी।"},
-    {"name":"The Hierophant","hi":"गुरु / धर्माचार्य","up":"Tradition, teaching and shared values.","rev":"Questioning convention; dogma that no longer fits.","up_hi":"परंपरा, शिक्षा और साझा मूल्य।","rev_hi":"रूढ़ि पर सवाल; वह हठधर्मिता जो अब नहीं जँचती।"},
-    {"name":"The Lovers","hi":"प्रेमी","up":"A meaningful bond or a choice that reflects your values.","rev":"Misalignment, a hard choice avoided, or strained harmony.","up_hi":"अर्थपूर्ण संबंध, या मूल्यों से जुड़ा चुनाव।","rev_hi":"तालमेल की कमी, टाला गया कठिन चुनाव, या बिगड़ता सामंजस्य।"},
-    {"name":"The Chariot","hi":"रथ","up":"Determined progress; discipline steers opposing forces.","rev":"Loss of direction or force without control.","up_hi":"दृढ़ प्रगति; अनुशासन विपरीत शक्तियों को दिशा देता है।","rev_hi":"दिशा खोना, या बिना नियंत्रण का बल।"},
-    {"name":"Strength","hi":"शक्ति","up":"Patient courage and gentle mastery over impulse.","rev":"Self-doubt or letting anger and fear drive.","up_hi":"धैर्यवान साहस और आवेग पर कोमल नियंत्रण।","rev_hi":"आत्म-संदेह, या क्रोध और भय को हावी होने देना।"},
-    {"name":"The Hermit","hi":"साधु","up":"Solitude for reflection; a personal light to follow.","rev":"Isolation that has gone too far, or refusing guidance.","up_hi":"चिंतन के लिए एकांत; अपना भीतरी प्रकाश।","rev_hi":"हद से बढ़ा अकेलापन, या मार्गदर्शन से इनकार।"},
-    {"name":"Wheel of Fortune","hi":"भाग्य-चक्र","up":"A turning point; cycles change and timing matters.","rev":"Resistance to change, or a run of bad timing.","up_hi":"मोड़ का समय; चक्र बदलते हैं और समय मायने रखता है।","rev_hi":"बदलाव का विरोध, या समय का प्रतिकूल दौर।"},
-    {"name":"Justice","hi":"न्याय","up":"Fairness, honest accounting and consequences that follow choices.","rev":"Bias, avoidance of responsibility, or an unfair outcome.","up_hi":"निष्पक्षता, ईमानदार लेखा-जोखा और चुनावों के परिणाम।","rev_hi":"पक्षपात, ज़िम्मेदारी से बचाव, या अन्यायपूर्ण नतीजा।"},
-    {"name":"The Hanged Man","hi":"उलटा लटका पुरुष","up":"A pause that brings a new view; surrender to see differently.","rev":"Stalling for no gain, or needless sacrifice.","up_hi":"ठहराव जो नया दृष्टिकोण देता है; अलग देखने के लिए समर्पण।","rev_hi":"बिना लाभ की देरी, या व्यर्थ त्याग।"},
-    {"name":"Death","hi":"मृत्यु / रूपांतरण","up":"An ending that clears space; deep transformation, not literal death.","rev":"Clinging to what has finished, or a slow, resisted change.","up_hi":"समाप्ति जो जगह बनाती है; गहरा रूपांतरण, शाब्दिक मृत्यु नहीं।","rev_hi":"जो समाप्त हो चुका उससे चिपके रहना, या धीमा व विरोध-भरा बदलाव।"},
-    {"name":"Temperance","hi":"संयम","up":"Balance, patience and blending opposites well.","rev":"Excess, impatience or lost balance.","up_hi":"संतुलन, धैर्य और विपरीतों का सही मेल।","rev_hi":"अति, अधीरता या संतुलन का टूटना।"},
-    {"name":"The Devil","hi":"शैतान / बंधन","up":"Attachments and habits that bind; awareness is the first key.","rev":"Loosening a grip; recognising and breaking a dependency.","up_hi":"बाँधने वाली आसक्तियाँ और आदतें; जागरूकता पहली चाबी है।","rev_hi":"पकड़ ढीली होना; निर्भरता को पहचानकर तोड़ना।"},
-    {"name":"The Tower","hi":"मीनार","up":"Sudden upheaval that exposes what was unstable.","rev":"A disruption avoided or delayed; slow collapse of a weak structure.","up_hi":"अचानक उथल-पुथल जो अस्थिर चीज़ों को उजागर करती है।","rev_hi":"टाली गई या देर से आती उथल-पुथल; कमज़ोर ढाँचे का धीमा गिरना।"},
-    {"name":"The Star","hi":"तारा","up":"Hope, healing and renewed faith after hardship.","rev":"Discouragement or hope that feels out of reach.","up_hi":"कठिनाई के बाद आशा, उपचार और नया विश्वास।","rev_hi":"निराशा, या आशा जो दूर लगे।"},
-    {"name":"The Moon","hi":"चंद्रमा","up":"Uncertainty, dreams and feelings that are not yet clear.","rev":"Confusion lifting, or fear and illusion still at work.","up_hi":"अनिश्चितता, सपने और अभी अस्पष्ट भावनाएँ।","rev_hi":"भ्रम छँटना, या भय और माया का असर बाकी।"},
-    {"name":"The Sun","hi":"सूर्य","up":"Clarity, vitality and well-earned joy.","rev":"Joy dimmed or delayed; optimism that needs grounding.","up_hi":"स्पष्टता, ऊर्जा और कमाई हुई खुशी।","rev_hi":"मंद या विलंबित खुशी; आशावाद जिसे ज़मीन चाहिए।"},
-    {"name":"Judgement","hi":"निर्णय / पुकार","up":"A call to reflect, forgive and step into a new chapter.","rev":"Self-criticism or ignoring the call to change.","up_hi":"मनन, क्षमा और नए अध्याय में कदम रखने की पुकार।","rev_hi":"आत्म-आलोचना, या बदलाव की पुकार की अनदेखी।"},
-    {"name":"The World","hi":"विश्व","up":"Completion, wholeness and a cycle well finished.","rev":"Loose ends or a finish that is not yet complete.","up_hi":"पूर्णता, समग्रता और अच्छी तरह पूरा हुआ चक्र।","rev_hi":"अधूरे सिरे, या अभी अधूरा अंत।"}
-  ],
-  "suits": {
-    "Wands":     {"hi_obl":"दंड","hi":"दंड","element":"Fire","domain":"drive, work-passion and ambition","domain_hi":"जोश, काम की लगन और महत्वाकांक्षा"},
-    "Cups":      {"hi_obl":"प्यालों","hi":"प्याले","element":"Water","domain":"feelings and relationships","domain_hi":"भावनाओं और रिश्तों"},
-    "Swords":    {"hi_obl":"तलवारों","hi":"तलवारें","element":"Air","domain":"thought, speech and conflict","domain_hi":"विचार, वाणी और टकराव"},
-    "Pentacles": {"hi_obl":"सिक्कों","hi":"सिक्के","element":"Earth","domain":"money, craft and the body","domain_hi":"धन, कारीगरी और शरीर"}
+ "_note": "Original wording written for this project (not copied from any book or deck). Review status: draft. Minor arcana now carry per-card meanings ('minors'); the rank x suit composition remains as a fallback.",
+ "review_status": "draft",
+ "majors": [
+  {
+   "name": "The Fool",
+   "hi": "मूर्ख / यात्री",
+   "up": "A fresh start taken on trust; openness to the unknown.",
+   "rev": "Recklessness or hesitation at the edge of a leap.",
+   "up_hi": "भरोसे के साथ नई शुरुआत; अनजाने के लिए खुलापन।",
+   "rev_hi": "लापरवाही, या छलाँग के किनारे पर झिझक।"
   },
-  "ranks": [
-    {"name":"Ace","hi":"इक्का","up":"a new seed of energy","rev":"a seed that is blocked or delayed","up_hi":"ऊर्जा का नया बीज","rev_hi":"रुका या विलंबित बीज"},
-    {"name":"Two","hi":"दो","up":"a choice or a balance between two","rev":"indecision or imbalance","up_hi":"दो के बीच चुनाव या संतुलन","rev_hi":"असमंजस या असंतुलन"},
-    {"name":"Three","hi":"तीन","up":"first growth through collaboration","rev":"friction in teamwork or stalled growth","up_hi":"मिलकर पहली वृद्धि","rev_hi":"साझेदारी में खटास या रुकी वृद्धि"},
-    {"name":"Four","hi":"चार","up":"stability, rest and consolidation","rev":"stagnation or restlessness within a stable phase","up_hi":"स्थिरता, विश्राम और मज़बूती","rev_hi":"स्थिर दौर में ठहराव या बेचैनी"},
-    {"name":"Five","hi":"पाँच","up":"strain, competition or a test","rev":"conflict easing, or avoiding the test","up_hi":"तनाव, होड़ या परीक्षा","rev_hi":"टकराव घटना, या परीक्षा से बचना"},
-    {"name":"Six","hi":"छह","up":"relief, exchange and a smoother passage","rev":"unequal give-and-take or a passage that stalls","up_hi":"राहत, लेन-देन और सहज पड़ाव","rev_hi":"असमान लेन-देन या अटकता सफ़र"},
-    {"name":"Seven","hi":"सात","up":"assessment, effort and holding a position","rev":"doubt, scattered effort or giving up too soon","up_hi":"आकलन, प्रयास और डटे रहना","rev_hi":"संदेह, बिखरा प्रयास या जल्दी हार मान लेना"},
-    {"name":"Eight","hi":"आठ","up":"movement, skill-building and steady work","rev":"haste, burnout or work without direction","up_hi":"गति, कौशल-निर्माण और लगातार काम","rev_hi":"जल्दबाज़ी, थकान या दिशाहीन काम"},
-    {"name":"Nine","hi":"नौ","up":"near-completion and hard-won resilience","rev":"strain near the finish or over-protection","up_hi":"पूर्णता के निकट और कठिनाई से पाया धैर्य","rev_hi":"अंत के पास थकान या अति-सुरक्षा"},
-    {"name":"Ten","hi":"दस","up":"a cycle reaching its fullness, for better or heavier","rev":"a burden set down, or a cycle ending badly","up_hi":"चक्र का चरम, सुखद या बोझिल","rev_hi":"बोझ उतरना, या चक्र का बुरा अंत"},
-    {"name":"Page","hi":"पेज / संदेशवाहक","up":"curiosity and a message or lesson arriving","rev":"immaturity or a message misread","up_hi":"जिज्ञासा और आता संदेश या सबक","rev_hi":"अपरिपक्वता या ग़लत समझा संदेश"},
-    {"name":"Knight","hi":"नाइट / योद्धा","up":"energetic pursuit and movement toward a goal","rev":"rushing, stalling or going in circles","up_hi":"ऊर्जावान पीछा और लक्ष्य की ओर गति","rev_hi":"जल्दबाज़ी, ठहराव या गोल-गोल घूमना"},
-    {"name":"Queen","hi":"रानी","gen":"की","up":"mature, inward mastery and care","rev":"mastery turned moody, closed or draining","up_hi":"परिपक्व, भीतरी निपुणता और देखभाल","rev_hi":"निपुणता का चिड़चिड़ा, बंद या थकाऊ हो जाना"},
-    {"name":"King","hi":"राजा","up":"mature, outward command and responsibility","rev":"command turned rigid, careless or domineering","up_hi":"परिपक्व, बाहरी नेतृत्व और ज़िम्मेदारी","rev_hi":"नेतृत्व का कठोर, लापरवाह या दबंग हो जाना"}
-  ],
-  "spreads": {
-    "single":  {"name":"One card","hi":"एक कार्ड","positions":[{"key":"focus","hi":"आज का संदेश","en":"Message for now"}]},
-    "three":   {"name":"Past · Present · Future","hi":"भूत · वर्तमान · भविष्य","positions":[
-      {"key":"past","hi":"बीता प्रभाव","en":"What led here"},
-      {"key":"present","hi":"वर्तमान स्थिति","en":"Where things stand"},
-      {"key":"future","hi":"संभावित दिशा","en":"Where it is heading"}]},
-    "celtic":  {"name":"Ten-card cross","hi":"दस-कार्ड क्रॉस","positions":[
-      {"key":"heart","hi":"मामले का सार","en":"The heart of the matter"},
-      {"key":"crossing","hi":"बाधा या चुनौती","en":"What crosses it"},
-      {"key":"foundation","hi":"जड़/आधार","en":"Foundation"},
-      {"key":"past","hi":"हाल का अतीत","en":"Recent past"},
-      {"key":"crown","hi":"सर्वोत्तम संभावना","en":"Best possible outcome"},
-      {"key":"near","hi":"निकट भविष्य","en":"Near future"},
-      {"key":"self","hi":"आप स्वयं","en":"You in the situation"},
-      {"key":"around","hi":"आसपास का प्रभाव","en":"Surroundings and others"},
-      {"key":"hopes","hi":"आशाएँ और भय","en":"Hopes and fears"},
-      {"key":"outcome","hi":"संभावित परिणाम","en":"Likely outcome"}]}
+  {
+   "name": "The Magician",
+   "hi": "जादूगर",
+   "up": "You have the tools you need; focused will turns ideas into results.",
+   "rev": "Scattered skill, manipulation, or talent left unused.",
+   "up_hi": "ज़रूरी साधन आपके पास हैं; एकाग्र इच्छा से विचार परिणाम बनते हैं।",
+   "rev_hi": "बिखरी कुशलता, छल, या अनुपयोगी प्रतिभा।"
+  },
+  {
+   "name": "The High Priestess",
+   "hi": "महापुजारिन",
+   "up": "Quiet intuition and hidden knowledge; listen before acting.",
+   "rev": "Ignoring your inner voice, or secrets kept too long.",
+   "up_hi": "शांत अंतर्ज्ञान और छिपा ज्ञान; करने से पहले सुनिए।",
+   "rev_hi": "भीतर की आवाज़ की अनदेखी, या बहुत देर रखे राज़।"
+  },
+  {
+   "name": "The Empress",
+   "hi": "सम्राज्ञी",
+   "up": "Nurture, abundance and creative growth.",
+   "rev": "Smothering care, neglect of self, or a creative block.",
+   "up_hi": "पालन-पोषण, समृद्धि और रचनात्मक विकास।",
+   "rev_hi": "अति-देखभाल, स्वयं की उपेक्षा, या रचनात्मक अवरोध।"
+  },
+  {
+   "name": "The Emperor",
+   "hi": "सम्राट",
+   "up": "Structure, authority and steady leadership.",
+   "rev": "Rigidity, control for its own sake, or lack of discipline.",
+   "up_hi": "ढाँचा, अधिकार और स्थिर नेतृत्व।",
+   "rev_hi": "कठोरता, नियंत्रण की ज़िद, या अनुशासन की कमी।"
+  },
+  {
+   "name": "The Hierophant",
+   "hi": "गुरु / धर्माचार्य",
+   "up": "Tradition, teaching and shared values.",
+   "rev": "Questioning convention; dogma that no longer fits.",
+   "up_hi": "परंपरा, शिक्षा और साझा मूल्य।",
+   "rev_hi": "रूढ़ि पर सवाल; वह हठधर्मिता जो अब नहीं जँचती।"
+  },
+  {
+   "name": "The Lovers",
+   "hi": "प्रेमी",
+   "up": "A meaningful bond or a choice that reflects your values.",
+   "rev": "Misalignment, a hard choice avoided, or strained harmony.",
+   "up_hi": "अर्थपूर्ण संबंध, या मूल्यों से जुड़ा चुनाव।",
+   "rev_hi": "तालमेल की कमी, टाला गया कठिन चुनाव, या बिगड़ता सामंजस्य।"
+  },
+  {
+   "name": "The Chariot",
+   "hi": "रथ",
+   "up": "Determined progress; discipline steers opposing forces.",
+   "rev": "Loss of direction or force without control.",
+   "up_hi": "दृढ़ प्रगति; अनुशासन विपरीत शक्तियों को दिशा देता है।",
+   "rev_hi": "दिशा खोना, या बिना नियंत्रण का बल।"
+  },
+  {
+   "name": "Strength",
+   "hi": "शक्ति",
+   "up": "Patient courage and gentle mastery over impulse.",
+   "rev": "Self-doubt or letting anger and fear drive.",
+   "up_hi": "धैर्यवान साहस और आवेग पर कोमल नियंत्रण।",
+   "rev_hi": "आत्म-संदेह, या क्रोध और भय को हावी होने देना।"
+  },
+  {
+   "name": "The Hermit",
+   "hi": "साधु",
+   "up": "Solitude for reflection; a personal light to follow.",
+   "rev": "Isolation that has gone too far, or refusing guidance.",
+   "up_hi": "चिंतन के लिए एकांत; अपना भीतरी प्रकाश।",
+   "rev_hi": "हद से बढ़ा अकेलापन, या मार्गदर्शन से इनकार।"
+  },
+  {
+   "name": "Wheel of Fortune",
+   "hi": "भाग्य-चक्र",
+   "up": "A turning point; cycles change and timing matters.",
+   "rev": "Resistance to change, or a run of bad timing.",
+   "up_hi": "मोड़ का समय; चक्र बदलते हैं और समय मायने रखता है।",
+   "rev_hi": "बदलाव का विरोध, या समय का प्रतिकूल दौर।"
+  },
+  {
+   "name": "Justice",
+   "hi": "न्याय",
+   "up": "Fairness, honest accounting and consequences that follow choices.",
+   "rev": "Bias, avoidance of responsibility, or an unfair outcome.",
+   "up_hi": "निष्पक्षता, ईमानदार लेखा-जोखा और चुनावों के परिणाम।",
+   "rev_hi": "पक्षपात, ज़िम्मेदारी से बचाव, या अन्यायपूर्ण नतीजा।"
+  },
+  {
+   "name": "The Hanged Man",
+   "hi": "उलटा लटका पुरुष",
+   "up": "A pause that brings a new view; surrender to see differently.",
+   "rev": "Stalling for no gain, or needless sacrifice.",
+   "up_hi": "ठहराव जो नया दृष्टिकोण देता है; अलग देखने के लिए समर्पण।",
+   "rev_hi": "बिना लाभ की देरी, या व्यर्थ त्याग।"
+  },
+  {
+   "name": "Death",
+   "hi": "मृत्यु / रूपांतरण",
+   "up": "An ending that clears space; deep transformation, not literal death.",
+   "rev": "Clinging to what has finished, or a slow, resisted change.",
+   "up_hi": "समाप्ति जो जगह बनाती है; गहरा रूपांतरण, शाब्दिक मृत्यु नहीं।",
+   "rev_hi": "जो समाप्त हो चुका उससे चिपके रहना, या धीमा व विरोध-भरा बदलाव।"
+  },
+  {
+   "name": "Temperance",
+   "hi": "संयम",
+   "up": "Balance, patience and blending opposites well.",
+   "rev": "Excess, impatience or lost balance.",
+   "up_hi": "संतुलन, धैर्य और विपरीतों का सही मेल।",
+   "rev_hi": "अति, अधीरता या संतुलन का टूटना।"
+  },
+  {
+   "name": "The Devil",
+   "hi": "शैतान / बंधन",
+   "up": "Attachments and habits that bind; awareness is the first key.",
+   "rev": "Loosening a grip; recognising and breaking a dependency.",
+   "up_hi": "बाँधने वाली आसक्तियाँ और आदतें; जागरूकता पहली चाबी है।",
+   "rev_hi": "पकड़ ढीली होना; निर्भरता को पहचानकर तोड़ना।"
+  },
+  {
+   "name": "The Tower",
+   "hi": "मीनार",
+   "up": "Sudden upheaval that exposes what was unstable.",
+   "rev": "A disruption avoided or delayed; slow collapse of a weak structure.",
+   "up_hi": "अचानक उथल-पुथल जो अस्थिर चीज़ों को उजागर करती है।",
+   "rev_hi": "टाली गई या देर से आती उथल-पुथल; कमज़ोर ढाँचे का धीमा गिरना।"
+  },
+  {
+   "name": "The Star",
+   "hi": "तारा",
+   "up": "Hope, healing and renewed faith after hardship.",
+   "rev": "Discouragement or hope that feels out of reach.",
+   "up_hi": "कठिनाई के बाद आशा, उपचार और नया विश्वास।",
+   "rev_hi": "निराशा, या आशा जो दूर लगे।"
+  },
+  {
+   "name": "The Moon",
+   "hi": "चंद्रमा",
+   "up": "Uncertainty, dreams and feelings that are not yet clear.",
+   "rev": "Confusion lifting, or fear and illusion still at work.",
+   "up_hi": "अनिश्चितता, सपने और अभी अस्पष्ट भावनाएँ।",
+   "rev_hi": "भ्रम छँटना, या भय और माया का असर बाकी।"
+  },
+  {
+   "name": "The Sun",
+   "hi": "सूर्य",
+   "up": "Clarity, vitality and well-earned joy.",
+   "rev": "Joy dimmed or delayed; optimism that needs grounding.",
+   "up_hi": "स्पष्टता, ऊर्जा और कमाई हुई खुशी।",
+   "rev_hi": "मंद या विलंबित खुशी; आशावाद जिसे ज़मीन चाहिए।"
+  },
+  {
+   "name": "Judgement",
+   "hi": "निर्णय / पुकार",
+   "up": "A call to reflect, forgive and step into a new chapter.",
+   "rev": "Self-criticism or ignoring the call to change.",
+   "up_hi": "मनन, क्षमा और नए अध्याय में कदम रखने की पुकार।",
+   "rev_hi": "आत्म-आलोचना, या बदलाव की पुकार की अनदेखी।"
+  },
+  {
+   "name": "The World",
+   "hi": "विश्व",
+   "up": "Completion, wholeness and a cycle well finished.",
+   "rev": "Loose ends or a finish that is not yet complete.",
+   "up_hi": "पूर्णता, समग्रता और अच्छी तरह पूरा हुआ चक्र।",
+   "rev_hi": "अधूरे सिरे, या अभी अधूरा अंत।"
   }
+ ],
+ "suits": {
+  "Wands": {
+   "hi_obl": "दंड",
+   "hi": "दंड",
+   "element": "Fire",
+   "domain": "drive, work-passion and ambition",
+   "domain_hi": "जोश, काम की लगन और महत्वाकांक्षा"
+  },
+  "Cups": {
+   "hi_obl": "प्यालों",
+   "hi": "प्याले",
+   "element": "Water",
+   "domain": "feelings and relationships",
+   "domain_hi": "भावनाओं और रिश्तों"
+  },
+  "Swords": {
+   "hi_obl": "तलवारों",
+   "hi": "तलवारें",
+   "element": "Air",
+   "domain": "thought, speech and conflict",
+   "domain_hi": "विचार, वाणी और टकराव"
+  },
+  "Pentacles": {
+   "hi_obl": "सिक्कों",
+   "hi": "सिक्के",
+   "element": "Earth",
+   "domain": "money, craft and the body",
+   "domain_hi": "धन, कारीगरी और शरीर"
+  }
+ },
+ "ranks": [
+  {
+   "name": "Ace",
+   "hi": "इक्का",
+   "up": "a new seed of energy",
+   "rev": "a seed that is blocked or delayed",
+   "up_hi": "ऊर्जा का नया बीज",
+   "rev_hi": "रुका या विलंबित बीज"
+  },
+  {
+   "name": "Two",
+   "hi": "दो",
+   "up": "a choice or a balance between two",
+   "rev": "indecision or imbalance",
+   "up_hi": "दो के बीच चुनाव या संतुलन",
+   "rev_hi": "असमंजस या असंतुलन"
+  },
+  {
+   "name": "Three",
+   "hi": "तीन",
+   "up": "first growth through collaboration",
+   "rev": "friction in teamwork or stalled growth",
+   "up_hi": "मिलकर पहली वृद्धि",
+   "rev_hi": "साझेदारी में खटास या रुकी वृद्धि"
+  },
+  {
+   "name": "Four",
+   "hi": "चार",
+   "up": "stability, rest and consolidation",
+   "rev": "stagnation or restlessness within a stable phase",
+   "up_hi": "स्थिरता, विश्राम और मज़बूती",
+   "rev_hi": "स्थिर दौर में ठहराव या बेचैनी"
+  },
+  {
+   "name": "Five",
+   "hi": "पाँच",
+   "up": "strain, competition or a test",
+   "rev": "conflict easing, or avoiding the test",
+   "up_hi": "तनाव, होड़ या परीक्षा",
+   "rev_hi": "टकराव घटना, या परीक्षा से बचना"
+  },
+  {
+   "name": "Six",
+   "hi": "छह",
+   "up": "relief, exchange and a smoother passage",
+   "rev": "unequal give-and-take or a passage that stalls",
+   "up_hi": "राहत, लेन-देन और सहज पड़ाव",
+   "rev_hi": "असमान लेन-देन या अटकता सफ़र"
+  },
+  {
+   "name": "Seven",
+   "hi": "सात",
+   "up": "assessment, effort and holding a position",
+   "rev": "doubt, scattered effort or giving up too soon",
+   "up_hi": "आकलन, प्रयास और डटे रहना",
+   "rev_hi": "संदेह, बिखरा प्रयास या जल्दी हार मान लेना"
+  },
+  {
+   "name": "Eight",
+   "hi": "आठ",
+   "up": "movement, skill-building and steady work",
+   "rev": "haste, burnout or work without direction",
+   "up_hi": "गति, कौशल-निर्माण और लगातार काम",
+   "rev_hi": "जल्दबाज़ी, थकान या दिशाहीन काम"
+  },
+  {
+   "name": "Nine",
+   "hi": "नौ",
+   "up": "near-completion and hard-won resilience",
+   "rev": "strain near the finish or over-protection",
+   "up_hi": "पूर्णता के निकट और कठिनाई से पाया धैर्य",
+   "rev_hi": "अंत के पास थकान या अति-सुरक्षा"
+  },
+  {
+   "name": "Ten",
+   "hi": "दस",
+   "up": "a cycle reaching its fullness, for better or heavier",
+   "rev": "a burden set down, or a cycle ending badly",
+   "up_hi": "चक्र का चरम, सुखद या बोझिल",
+   "rev_hi": "बोझ उतरना, या चक्र का बुरा अंत"
+  },
+  {
+   "name": "Page",
+   "hi": "पेज / संदेशवाहक",
+   "up": "curiosity and a message or lesson arriving",
+   "rev": "immaturity or a message misread",
+   "up_hi": "जिज्ञासा और आता संदेश या सबक",
+   "rev_hi": "अपरिपक्वता या ग़लत समझा संदेश"
+  },
+  {
+   "name": "Knight",
+   "hi": "नाइट / योद्धा",
+   "up": "energetic pursuit and movement toward a goal",
+   "rev": "rushing, stalling or going in circles",
+   "up_hi": "ऊर्जावान पीछा और लक्ष्य की ओर गति",
+   "rev_hi": "जल्दबाज़ी, ठहराव या गोल-गोल घूमना"
+  },
+  {
+   "name": "Queen",
+   "hi": "रानी",
+   "gen": "की",
+   "up": "mature, inward mastery and care",
+   "rev": "mastery turned moody, closed or draining",
+   "up_hi": "परिपक्व, भीतरी निपुणता और देखभाल",
+   "rev_hi": "निपुणता का चिड़चिड़ा, बंद या थकाऊ हो जाना"
+  },
+  {
+   "name": "King",
+   "hi": "राजा",
+   "up": "mature, outward command and responsibility",
+   "rev": "command turned rigid, careless or domineering",
+   "up_hi": "परिपक्व, बाहरी नेतृत्व और ज़िम्मेदारी",
+   "rev_hi": "नेतृत्व का कठोर, लापरवाह या दबंग हो जाना"
+  }
+ ],
+ "spreads": {
+  "single": {
+   "name": "One card",
+   "hi": "एक कार्ड",
+   "positions": [
+    {
+     "key": "focus",
+     "hi": "आज का संदेश",
+     "en": "Message for now"
+    }
+   ]
+  },
+  "three": {
+   "name": "Past · Present · Future",
+   "hi": "भूत · वर्तमान · भविष्य",
+   "positions": [
+    {
+     "key": "past",
+     "hi": "बीता प्रभाव",
+     "en": "What led here"
+    },
+    {
+     "key": "present",
+     "hi": "वर्तमान स्थिति",
+     "en": "Where things stand"
+    },
+    {
+     "key": "future",
+     "hi": "संभावित दिशा",
+     "en": "Where it is heading"
+    }
+   ]
+  },
+  "celtic": {
+   "name": "Ten-card cross",
+   "hi": "दस-कार्ड क्रॉस",
+   "positions": [
+    {
+     "key": "heart",
+     "hi": "मामले का सार",
+     "en": "The heart of the matter"
+    },
+    {
+     "key": "crossing",
+     "hi": "बाधा या चुनौती",
+     "en": "What crosses it"
+    },
+    {
+     "key": "foundation",
+     "hi": "जड़/आधार",
+     "en": "Foundation"
+    },
+    {
+     "key": "past",
+     "hi": "हाल का अतीत",
+     "en": "Recent past"
+    },
+    {
+     "key": "crown",
+     "hi": "सर्वोत्तम संभावना",
+     "en": "Best possible outcome"
+    },
+    {
+     "key": "near",
+     "hi": "निकट भविष्य",
+     "en": "Near future"
+    },
+    {
+     "key": "self",
+     "hi": "आप स्वयं",
+     "en": "You in the situation"
+    },
+    {
+     "key": "around",
+     "hi": "आसपास का प्रभाव",
+     "en": "Surroundings and others"
+    },
+    {
+     "key": "hopes",
+     "hi": "आशाएँ और भय",
+     "en": "Hopes and fears"
+    },
+    {
+     "key": "outcome",
+     "hi": "संभावित परिणाम",
+     "en": "Likely outcome"
+    }
+   ]
+  }
+ },
+ "minors": {
+  "wands-01": {
+   "rank": "Ace",
+   "suit": "Wands",
+   "up": "A spark of a new venture or passion; the urge to begin.",
+   "rev": "A plan that lacks fuel; a start that keeps getting postponed.",
+   "up_hi": "नए काम या जोश की चिंगारी; शुरू करने की तड़प।",
+   "rev_hi": "ऐसी योजना जिसमें ईंधन नहीं; टलती हुई शुरुआत।"
+  },
+  "wands-02": {
+   "rank": "Two",
+   "suit": "Wands",
+   "up": "Looking out from what you have built and planning the next step.",
+   "rev": "Fear of leaving the known; plans stay on paper.",
+   "up_hi": "जो बनाया है वहाँ से आगे देखना और अगला क़दम सोचना।",
+   "rev_hi": "जाने-पहचाने को छोड़ने का डर; योजना काग़ज़ पर ही रहती है।"
+  },
+  "wands-03": {
+   "rank": "Three",
+   "suit": "Wands",
+   "up": "Early results arriving; widening your reach with others' help.",
+   "rev": "Delays in what you sent out; expecting too much too soon.",
+   "up_hi": "शुरुआती नतीजे आना; दूसरों की मदद से दायरा बढ़ाना।",
+   "rev_hi": "भेजे हुए काम में देर; बहुत जल्दी बहुत ज़्यादा की उम्मीद।"
+  },
+  "wands-04": {
+   "rank": "Four",
+   "suit": "Wands",
+   "up": "A milestone to celebrate; a stable base, home or team.",
+   "rev": "A celebration postponed; instability at home or in the team.",
+   "up_hi": "मनाने लायक पड़ाव; स्थिर आधार, घर या टीम।",
+   "rev_hi": "टला हुआ उत्सव; घर या टीम में अस्थिरता।"
+  },
+  "wands-05": {
+   "rank": "Five",
+   "suit": "Wands",
+   "up": "Healthy competition or friction that sharpens everyone.",
+   "rev": "Pointless quarrels; energy wasted on being right.",
+   "up_hi": "स्वस्थ प्रतिस्पर्धा या घर्षण जो सबको तराशे।",
+   "rev_hi": "बेमतलब झगड़े; सही साबित होने में ऊर्जा बर्बाद।"
+  },
+  "wands-06": {
+   "rank": "Six",
+   "suit": "Wands",
+   "up": "Recognition after effort; a win others can see.",
+   "rev": "Praise that feels hollow; a fall after pride.",
+   "up_hi": "मेहनत के बाद पहचान; ऐसी जीत जो सब देखें।",
+   "rev_hi": "खोखली तारीफ़; घमंड के बाद गिरावट।"
+  },
+  "wands-07": {
+   "rank": "Seven",
+   "suit": "Wands",
+   "up": "Holding your ground against pressure; defending what you earned.",
+   "rev": "Feeling overwhelmed; giving up a position too easily.",
+   "up_hi": "दबाव के सामने डटे रहना; अपनी कमाई हुई जगह बचाना।",
+   "rev_hi": "दबाव में घिर जाना; जगह बहुत आसानी से छोड़ देना।"
+  },
+  "wands-08": {
+   "rank": "Eight",
+   "suit": "Wands",
+   "up": "Fast movement; messages, travel and things falling into place quickly.",
+   "rev": "Rushing without direction; delays in messages or travel.",
+   "up_hi": "तेज़ गति; संदेश, यात्रा और चीज़ों का जल्दी बैठना।",
+   "rev_hi": "दिशा के बिना जल्दबाज़ी; संदेश या यात्रा में देर।"
+  },
+  "wands-09": {
+   "rank": "Nine",
+   "suit": "Wands",
+   "up": "Tired but still standing; one more effort before the end.",
+   "rev": "Exhaustion that asks for rest; defending against an imagined threat.",
+   "up_hi": "थके हुए पर डटे हुए; अंत से पहले एक और प्रयास।",
+   "rev_hi": "थकान जो आराम माँगे; काल्पनिक ख़तरे से बचाव।"
+  },
+  "wands-10": {
+   "rank": "Ten",
+   "suit": "Wands",
+   "up": "Carrying too much by choice; responsibility near completion.",
+   "rev": "Putting a burden down; delegating what was never yours.",
+   "up_hi": "अपनी मर्ज़ी से बहुत कुछ उठाना; पूरी होने वाली ज़िम्मेदारी।",
+   "rev_hi": "बोझ उतारना; जो आपका नहीं था उसे सौंपना।"
+  },
+  "wands-11": {
+   "rank": "Page",
+   "suit": "Wands",
+   "up": "Enthusiastic news or a fresh idea; eagerness to learn by doing.",
+   "rev": "Hasty words; an idea without follow-through.",
+   "up_hi": "उत्साही ख़बर या ताज़ा विचार; करके सीखने की ललक।",
+   "rev_hi": "जल्दबाज़ी के शब्द; बिना अमल का विचार।"
+  },
+  "wands-12": {
+   "rank": "Knight",
+   "suit": "Wands",
+   "up": "Bold action, travel, charging ahead with confidence.",
+   "rev": "Recklessness; moving fast in the wrong direction.",
+   "up_hi": "साहसी क़दम, यात्रा, आत्मविश्वास से आगे बढ़ना।",
+   "rev_hi": "लापरवाही; ग़लत दिशा में तेज़ी।"
+  },
+  "wands-13": {
+   "rank": "Queen",
+   "suit": "Wands",
+   "up": "Warm confidence and magnetism; leading by encouragement.",
+   "rev": "Jealousy or self-doubt behind a bright face.",
+   "up_hi": "गर्म आत्मविश्वास और आकर्षण; प्रोत्साहन से नेतृत्व।",
+   "rev_hi": "चमकते चेहरे के पीछे ईर्ष्या या आत्म-संदेह।"
+  },
+  "wands-14": {
+   "rank": "King",
+   "suit": "Wands",
+   "up": "Vision with authority; a leader who inspires action.",
+   "rev": "Domineering; expecting others to run on your fire.",
+   "up_hi": "अधिकार के साथ दृष्टि; ऐसा नेता जो काम करवा दे।",
+   "rev_hi": "दबंगई; दूसरों से अपनी आग पर दौड़ने की उम्मीद।"
+  },
+  "cups-01": {
+   "rank": "Ace",
+   "suit": "Cups",
+   "up": "An opening of the heart; new feeling, compassion or creativity.",
+   "rev": "Emotion held back; a cup not yet accepted.",
+   "up_hi": "हृदय का खुलना; नई भावना, करुणा या सृजन।",
+   "rev_hi": "रोकी हुई भावना; प्याला जो अभी स्वीकार नहीं हुआ।"
+  },
+  "cups-02": {
+   "rank": "Two",
+   "suit": "Cups",
+   "up": "A meeting of equals; mutual attraction or partnership.",
+   "rev": "Imbalance in a bond; misunderstanding between two.",
+   "up_hi": "बराबर वालों का मिलन; आपसी आकर्षण या साझेदारी।",
+   "rev_hi": "रिश्ते में असंतुलन; दो के बीच ग़लतफ़हमी।"
+  },
+  "cups-03": {
+   "rank": "Three",
+   "suit": "Cups",
+   "up": "Friendship and shared joy; a community that celebrates you.",
+   "rev": "Overindulgence; feeling left out of the group.",
+   "up_hi": "मित्रता और साझा आनंद; ऐसा समुदाय जो आपको माने।",
+   "rev_hi": "अति; समूह से बाहर छूटा हुआ महसूस करना।"
+  },
+  "cups-04": {
+   "rank": "Four",
+   "suit": "Cups",
+   "up": "Discontent despite plenty; an offer you have not noticed.",
+   "rev": "Waking from apathy; ready to accept what is offered.",
+   "up_hi": "बहुत होते हुए भी असंतोष; ऐसा प्रस्ताव जो दिखा नहीं।",
+   "rev_hi": "उदासीनता से जागना; जो मिला उसे लेने को तैयार।"
+  },
+  "cups-05": {
+   "rank": "Five",
+   "suit": "Cups",
+   "up": "Grieving what was spilled while cups still stand behind you.",
+   "rev": "Beginning to turn around; acceptance after loss.",
+   "up_hi": "जो छलका उसका शोक, जबकि पीछे प्याले अब भी खड़े हैं।",
+   "rev_hi": "पलटकर देखना शुरू; नुक़सान के बाद स्वीकार।"
+  },
+  "cups-06": {
+   "rank": "Six",
+   "suit": "Cups",
+   "up": "Nostalgia, innocence, a gift from the past or a childhood tie.",
+   "rev": "Stuck in the past; refusing to grow out of old roles.",
+   "up_hi": "स्मृति, मासूमियत, अतीत का उपहार या बचपन का नाता।",
+   "rev_hi": "अतीत में अटके; पुरानी भूमिकाओं से बाहर न आना।"
+  },
+  "cups-07": {
+   "rank": "Seven",
+   "suit": "Cups",
+   "up": "Many options and fantasies; choose with clear eyes.",
+   "rev": "Clarity arriving; a choice finally made.",
+   "up_hi": "कई विकल्प और कल्पनाएँ; साफ़ नज़र से चुनिए।",
+   "rev_hi": "स्पष्टता का आना; आख़िरकार चुनाव हो जाना।"
+  },
+  "cups-08": {
+   "rank": "Eight",
+   "suit": "Cups",
+   "up": "Walking away from what no longer satisfies, toward meaning.",
+   "rev": "Fear of leaving; drifting without deciding.",
+   "up_hi": "जो अब संतुष्ट न करे उसे छोड़कर अर्थ की ओर चलना।",
+   "rev_hi": "छोड़ने का डर; बिना तय किए बहते रहना।"
+  },
+  "cups-09": {
+   "rank": "Nine",
+   "suit": "Cups",
+   "up": "Contentment and a wish fulfilled; enjoy it without smugness.",
+   "rev": "Satisfaction that fades; wanting more for its own sake.",
+   "up_hi": "संतोष और पूरी हुई इच्छा; बिना अकड़ के इसे जिएँ।",
+   "rev_hi": "फीका पड़ता संतोष; बस और की चाह।"
+  },
+  "cups-10": {
+   "rank": "Ten",
+   "suit": "Cups",
+   "up": "Emotional harmony at home; a family or bond that feels whole.",
+   "rev": "A picture of harmony that hides strain.",
+   "up_hi": "घर में भावनात्मक सामंजस्य; परिवार या रिश्ता जो पूरा लगे।",
+   "rev_hi": "सामंजस्य की तस्वीर जिसके पीछे तनाव।"
+  },
+  "cups-11": {
+   "rank": "Page",
+   "suit": "Cups",
+   "up": "A tender message or a creative impulse; intuition speaking softly.",
+   "rev": "Emotional immaturity; a message that disappoints.",
+   "up_hi": "कोमल संदेश या सृजनात्मक उमंग; धीरे बोलती अंतर्दृष्टि।",
+   "rev_hi": "भावनात्मक अपरिपक्वता; निराश करने वाला संदेश।"
+  },
+  "cups-12": {
+   "rank": "Knight",
+   "suit": "Cups",
+   "up": "A romantic or idealistic offer; following the heart gracefully.",
+   "rev": "Moodiness; promises made in feeling, not kept in fact.",
+   "up_hi": "रोमांटिक या आदर्शवादी प्रस्ताव; शालीनता से दिल की सुनना।",
+   "rev_hi": "मूड की उथल-पुथल; भावना में किए वादे जो निभे नहीं।"
+  },
+  "cups-13": {
+   "rank": "Queen",
+   "suit": "Cups",
+   "up": "Deep empathy and intuition; care that does not drown itself.",
+   "rev": "Taking on everyone's feelings; emotional dependence.",
+   "up_hi": "गहरी सहानुभूति और अंतर्दृष्टि; ऐसी देखभाल जो ख़ुद को न डुबोए।",
+   "rev_hi": "सबकी भावनाएँ ओढ़ लेना; भावनात्मक निर्भरता।"
+  },
+  "cups-14": {
+   "rank": "King",
+   "suit": "Cups",
+   "up": "Calm mastery of feeling; wise, steady support for others.",
+   "rev": "Feelings suppressed until they leak out sideways; manipulation.",
+   "up_hi": "भावना पर शांत पकड़; दूसरों को बुद्धिमान, स्थिर सहारा।",
+   "rev_hi": "दबी भावनाएँ जो तिरछे रास्ते निकलें; हेरफेर।"
+  },
+  "swords-01": {
+   "rank": "Ace",
+   "suit": "Swords",
+   "up": "A breakthrough of clarity; truth cutting through confusion.",
+   "rev": "A sharp idea misused; confusion or cruel words.",
+   "up_hi": "स्पष्टता का उभार; सच का उलझन को काटना।",
+   "rev_hi": "तीखा विचार ग़लत इस्तेमाल; उलझन या कठोर शब्द।"
+  },
+  "swords-02": {
+   "rank": "Two",
+   "suit": "Swords",
+   "up": "A stalemate; refusing to look at what must be decided.",
+   "rev": "The blindfold comes off; a decision can no longer wait.",
+   "up_hi": "गतिरोध; जो तय करना है उसे न देखना।",
+   "rev_hi": "पट्टी उतरती है; फ़ैसला अब टल नहीं सकता।"
+  },
+  "swords-03": {
+   "rank": "Three",
+   "suit": "Swords",
+   "up": "Heartache from a painful truth; grief that needs naming.",
+   "rev": "Beginning to heal; releasing an old hurt.",
+   "up_hi": "कड़वे सच से दिल का दर्द; ऐसा शोक जिसे नाम देना हो।",
+   "rev_hi": "भरने की शुरुआत; पुरानी चोट को छोड़ना।"
+  },
+  "swords-04": {
+   "rank": "Four",
+   "suit": "Swords",
+   "up": "Rest and recovery; a pause to think before acting.",
+   "rev": "Restlessness; returning to action, ready or not.",
+   "up_hi": "आराम और सँभलना; काम से पहले सोचने का विराम।",
+   "rev_hi": "बेचैनी; तैयार हों या न हों, काम पर लौटना।"
+  },
+  "swords-05": {
+   "rank": "Five",
+   "suit": "Swords",
+   "up": "A win that costs more than it gives; conflict with no real victor.",
+   "rev": "Letting go of a fight; making amends.",
+   "up_hi": "ऐसी जीत जो देने से ज़्यादा लेती है; बिना विजेता का टकराव।",
+   "rev_hi": "लड़ाई छोड़ना; सुलह करना।"
+  },
+  "swords-06": {
+   "rank": "Six",
+   "suit": "Swords",
+   "up": "Moving away from trouble toward calmer waters; a transition.",
+   "rev": "Carrying the trouble with you; a move that is resisted.",
+   "up_hi": "मुसीबत से शांत पानी की ओर जाना; बदलाव का सफ़र।",
+   "rev_hi": "मुसीबत साथ ले जाना; ऐसा बदलाव जिसका विरोध हो।"
+  },
+  "swords-07": {
+   "rank": "Seven",
+   "suit": "Swords",
+   "up": "Strategy or stealth; getting away with something, for now.",
+   "rev": "A secret coming out; the cost of cleverness.",
+   "up_hi": "रणनीति या चुपके का काम; फ़िलहाल बच निकलना।",
+   "rev_hi": "राज़ का खुलना; चालाकी की क़ीमत।"
+  },
+  "swords-08": {
+   "rank": "Eight",
+   "suit": "Swords",
+   "up": "Feeling trapped by your own thoughts; the way out is nearer than it looks.",
+   "rev": "Loosening the binds; seeing the options again.",
+   "up_hi": "अपने ही विचारों में बँधा महसूस करना; रास्ता जितना लगता है उससे पास है।",
+   "rev_hi": "बंधन ढीले होना; विकल्प फिर दिखना।"
+  },
+  "swords-09": {
+   "rank": "Nine",
+   "suit": "Swords",
+   "up": "Anxiety and sleepless worry; fears larger than the facts.",
+   "rev": "The worst did not happen; worry starting to lift.",
+   "up_hi": "चिंता और नींद उड़ाने वाली फ़िक्र; तथ्यों से बड़े डर।",
+   "rev_hi": "सबसे बुरा नहीं हुआ; चिंता हल्की होना।"
+  },
+  "swords-10": {
+   "rank": "Ten",
+   "suit": "Swords",
+   "up": "An ending that is final; the low point from which the sun rises.",
+   "rev": "Recovery after collapse; refusing to stay down.",
+   "up_hi": "ऐसा अंत जो अंतिम है; सबसे नीचे का बिंदु जहाँ से सूरज उगता है।",
+   "rev_hi": "टूटने के बाद उठना; गिरे रहने से इनकार।"
+  },
+  "swords-11": {
+   "rank": "Page",
+   "suit": "Swords",
+   "up": "Curiosity and watchfulness; new information, questions asked.",
+   "rev": "Gossip or snooping; talk without substance.",
+   "up_hi": "जिज्ञासा और सतर्कता; नई जानकारी, पूछे गए सवाल।",
+   "rev_hi": "गपशप या ताक-झाँक; बिना सार की बातें।"
+  },
+  "swords-12": {
+   "rank": "Knight",
+   "suit": "Swords",
+   "up": "Direct, fast and argumentative; a rush toward the goal.",
+   "rev": "Aggression without a plan; words that wound.",
+   "up_hi": "सीधा, तेज़ और बहस करने वाला; लक्ष्य की ओर दौड़।",
+   "rev_hi": "बिना योजना का आक्रामक रुख़; घायल करने वाले शब्द।"
+  },
+  "swords-13": {
+   "rank": "Queen",
+   "suit": "Swords",
+   "up": "Clear perception and honest boundaries; independence earned.",
+   "rev": "Coldness or bitterness; sharpness turned against oneself.",
+   "up_hi": "साफ़ समझ और ईमानदार सीमाएँ; कमाई हुई स्वतंत्रता।",
+   "rev_hi": "ठंडापन या कड़वाहट; तीखापन ख़ुद के ख़िलाफ़।"
+  },
+  "swords-14": {
+   "rank": "King",
+   "suit": "Swords",
+   "up": "Intellectual authority; fair judgement, clear rules.",
+   "rev": "Misuse of authority; cleverness without conscience.",
+   "up_hi": "बौद्धिक अधिकार; निष्पक्ष निर्णय, स्पष्ट नियम।",
+   "rev_hi": "अधिकार का दुरुपयोग; बिना विवेक की चतुराई।"
+  },
+  "pentacles-01": {
+   "rank": "Ace",
+   "suit": "Pentacles",
+   "up": "A tangible new opportunity: money, work, health or a seed to plant.",
+   "rev": "An opportunity missed or mishandled; shaky foundations.",
+   "up_hi": "ठोस नया अवसर: धन, काम, स्वास्थ्य या बोने लायक बीज।",
+   "rev_hi": "चूका या बिगड़ा अवसर; कमज़ोर नींव।"
+  },
+  "pentacles-02": {
+   "rank": "Two",
+   "suit": "Pentacles",
+   "up": "Juggling priorities; adapting as resources shift.",
+   "rev": "Dropping a ball; overcommitted and disorganised.",
+   "up_hi": "प्राथमिकताओं की जुगलबंदी; साधन बदलने पर ढलना।",
+   "rev_hi": "कोई गेंद गिरना; ज़रूरत से ज़्यादा ज़िम्मेदारी और अव्यवस्था।"
+  },
+  "pentacles-03": {
+   "rank": "Three",
+   "suit": "Pentacles",
+   "up": "Skilled work recognised; collaboration that builds something lasting.",
+   "rev": "Sloppy work or a team that does not mesh.",
+   "up_hi": "कुशल काम की पहचान; ऐसा सहयोग जो टिकाऊ चीज़ बनाए।",
+   "rev_hi": "लापरवाह काम या टीम जो जमे नहीं।"
+  },
+  "pentacles-04": {
+   "rank": "Four",
+   "suit": "Pentacles",
+   "up": "Holding on to what you have; security, perhaps too tightly.",
+   "rev": "Loosening the grip; spending or sharing more freely.",
+   "up_hi": "जो है उसे थामे रहना; सुरक्षा, शायद कुछ ज़्यादा कसकर।",
+   "rev_hi": "पकड़ ढीली करना; खुले हाथ ख़र्च या साझा।"
+  },
+  "pentacles-05": {
+   "rank": "Five",
+   "suit": "Pentacles",
+   "up": "Hardship or feeling left out in the cold; help is closer than it seems.",
+   "rev": "Recovery from loss; finding support again.",
+   "up_hi": "कठिनाई या ठंड में छूटा हुआ महसूस करना; मदद जितनी लगती है उससे पास।",
+   "rev_hi": "नुक़सान से उबरना; सहारा फिर मिलना।"
+  },
+  "pentacles-06": {
+   "rank": "Six",
+   "suit": "Pentacles",
+   "up": "Giving and receiving in balance; generosity, charity, a fair deal.",
+   "rev": "Strings attached; a lopsided exchange.",
+   "up_hi": "देना और पाना संतुलन में; उदारता, दान, उचित सौदा।",
+   "rev_hi": "शर्तों वाली मदद; असंतुलित लेन-देन।"
+  },
+  "pentacles-07": {
+   "rank": "Seven",
+   "suit": "Pentacles",
+   "up": "Patient assessment of what you have grown; long-term thinking.",
+   "rev": "Impatience with slow returns; effort in the wrong field.",
+   "up_hi": "जो उगाया उसका धैर्य से आकलन; दूरगामी सोच।",
+   "rev_hi": "धीमे फल पर अधीरता; ग़लत खेत में मेहनत।"
+  },
+  "pentacles-08": {
+   "rank": "Eight",
+   "suit": "Pentacles",
+   "up": "Diligent practice; craftsmanship improving step by step.",
+   "rev": "Repetitive work without growth; cutting corners.",
+   "up_hi": "लगन से अभ्यास; क़दम-दर-क़दम निखरती कारीगरी।",
+   "rev_hi": "बिना विकास का दोहराव; काम में कोताही।"
+  },
+  "pentacles-09": {
+   "rank": "Nine",
+   "suit": "Pentacles",
+   "up": "Self-sufficiency and refined comfort earned by discipline.",
+   "rev": "Comfort that depends on others; living beyond means.",
+   "up_hi": "अनुशासन से कमाई आत्मनिर्भरता और सुरुचिपूर्ण सुख।",
+   "rev_hi": "दूसरों पर टिका आराम; हैसियत से ज़्यादा ख़र्च।"
+  },
+  "pentacles-10": {
+   "rank": "Ten",
+   "suit": "Pentacles",
+   "up": "Lasting wealth, family legacy and stability across generations.",
+   "rev": "Family disputes over money; stability that feels confining.",
+   "up_hi": "टिकाऊ संपन्नता, पारिवारिक विरासत और पीढ़ियों की स्थिरता।",
+   "rev_hi": "धन पर पारिवारिक विवाद; स्थिरता जो बाँधती लगे।"
+  },
+  "pentacles-11": {
+   "rank": "Page",
+   "suit": "Pentacles",
+   "up": "A student's attitude; a practical new skill or small income.",
+   "rev": "Procrastination; a lesson not applied.",
+   "up_hi": "विद्यार्थी का रवैया; व्यावहारिक नया हुनर या छोटी आय।",
+   "rev_hi": "टालमटोल; सीख जो अमल में न आई।"
+  },
+  "pentacles-12": {
+   "rank": "Knight",
+   "suit": "Pentacles",
+   "up": "Reliable, methodical progress; slow but it arrives.",
+   "rev": "Stuck in routine; stubborn about method.",
+   "up_hi": "भरोसेमंद, क्रमबद्ध प्रगति; धीमी पर पहुँचती है।",
+   "rev_hi": "दिनचर्या में अटके; तरीक़े को लेकर ज़िद।"
+  },
+  "pentacles-13": {
+   "rank": "Queen",
+   "suit": "Pentacles",
+   "up": "Practical nurturing; abundance shared with warmth.",
+   "rev": "Self-neglect while providing for others; materialism.",
+   "up_hi": "व्यावहारिक पोषण; गर्मजोशी से बाँटी संपन्नता।",
+   "rev_hi": "दूसरों की देखभाल में ख़ुद की उपेक्षा; भौतिकवाद।"
+  },
+  "pentacles-14": {
+   "rank": "King",
+   "suit": "Pentacles",
+   "up": "Prosperity through steady management; a dependable provider.",
+   "rev": "Greed or rigidity; worth measured only in money.",
+   "up_hi": "स्थिर प्रबंधन से समृद्धि; भरोसेमंद पालक।",
+   "rev_hi": "लालच या जड़ता; मूल्य सिर्फ़ पैसे से नापना।"
+  }
+ }
 }

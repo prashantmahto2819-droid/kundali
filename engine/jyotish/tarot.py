@@ -32,14 +32,17 @@ def deck() -> list[dict]:
                       "upright_hi": m["up_hi"], "reversed_hi": m["rev_hi"], "confidence": "draft"})
     for suit, s in k["suits"].items():
         for n, r in enumerate(k["ranks"]):
+            cid = f"{suit.lower()}-{n + 1:02d}"
+            own = k.get("minors", {}).get(cid)                       # per-card text; rank x suit is the fallback
             cards.append({
-                "id": f"{suit.lower()}-{n + 1:02d}", "name": f"{r['name']} of {suit}",
+                "id": cid, "name": f"{r['name']} of {suit}",
                 "name_hi": f"{s['hi_obl']} {r.get('gen', 'का')} {r['hi']}", "arcana": "minor", "suit": suit,
                 "number": n + 1, "element": s["element"],
-                "upright": f"{r['up'].capitalize()}, in matters of {s['domain']}.",
-                "reversed": f"{r['rev'].capitalize()}, in matters of {s['domain']}.",
-                "upright_hi": f"{s['domain_hi']} के क्षेत्र में: {r['up_hi']}।",
-                "reversed_hi": f"{s['domain_hi']} के क्षेत्र में: {r['rev_hi']}।",
+                "upright": own["up"] if own else f"{r['up'].capitalize()}, in matters of {s['domain']}.",
+                "reversed": own["rev"] if own else f"{r['rev'].capitalize()}, in matters of {s['domain']}.",
+                "upright_hi": own["up_hi"] if own else f"{s['domain_hi']} के क्षेत्र में: {r['up_hi']}।",
+                "reversed_hi": own["rev_hi"] if own else f"{s['domain_hi']} के क्षेत्र में: {r['rev_hi']}।",
+                "theme": f"{r['up']}; {s['domain']}", "theme_hi": f"{r['up_hi']}; {s['domain_hi']}",
                 "confidence": "draft"})
     return cards
 
