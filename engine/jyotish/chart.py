@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from . import ENGINE_VERSION
 from .constants import (ASPECTS, PLANETS, PLANETS_HI, PLANETS_SHORT_HI, SIGN_LORDS,
                         SIGNS, SIGNS_HI)
+from .ashtakavarga import ashtakavarga
 from .core import (ascendant_tropical, ayanamsa, dignity, navamsa_sign, nakshatra_of,
                    obliquity_deg, sign_of)
 from .dasha import current_periods, vimshottari
@@ -128,6 +129,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     if chart["day"].get("available"):  # the Vedic day starts at sunrise
         chart["panchang"]["vara"] = chart["day"]["vedic_vara"]
         chart["panchang"]["note"] = "Vara follows the sunrise-based Vedic day."
+    chart["ashtakavarga"] = ashtakavarga({**{p["name"]: p["sign"] for p in planets}, "Lagna": lagna_sign}, lagna_sign)
     chart["yogas"] = detect_yogas(chart)
     chart["readings"] = match_rules(chart)
     return chart

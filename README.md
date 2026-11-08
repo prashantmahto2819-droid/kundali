@@ -35,6 +35,8 @@ returns lagna, planets (sign, degree, house, nakshatra, pada, retrograde, dignit
 Vimshottari dasha (to antardasha) with the running period, yogas with their *why*, and matched rules with their sources.
 `POST /v1/numerology` with `{"date":"1990-05-17","name":"Prashant Mahto"}` returns moolank, bhagyank, namank (Chaldean and Pythagorean), Lo Shu grid and personal year.
 The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Yamaganda, Gulika, Abhijit, Choghadiya) and `vargas` (D1, D2, D3, D4, D7, D9, D10, D12).
+`/v1/chart` also returns `ashtakavarga` (BAV per planet and SAV by house, with strong/medium/weak bands; tables self-checked to the classical 337 total).
+
 `POST /v1/match` with `{"boy": {...}, "girl": {...}}` (same birth fields as `/v1/chart`) returns the 36-point ashtakoota score with per-koota detail and confidence, plus a manglik comparison.
 
 `POST /v1/tarot` with `{"spread": "single|three|celtic", "question": "...", "seed": 7, "reversals": true}` draws from the 78-card deck (own wording, draft, Hindi + English). Omit `seed` for a random draw; the same seed gives the same draw.

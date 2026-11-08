@@ -107,6 +107,11 @@
       <div class="card"><b>पंचांग</b><div id="panchang"></div></div>
       <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
     </div>
+    <div class="card"><b>अष्टकवर्ग</b>
+      <div class="muted" style="font-size:.85rem" id="avwhy"></div>
+      <div id="avsav" style="overflow-x:auto"></div>
+      <details style="margin-top:8px"><summary>ग्रह-वार भिन्नाष्टकवर्ग (BAV)</summary><div id="avbav" style="overflow-x:auto"></div></details>
+    </div>
     <div class="grid">
       <div class="card"><b>दिन का मुहूर्त</b><div id="muhurta"></div></div>
       <div class="card"><b>अंक ज्योतिष</b><div id="numer"><span class="muted">नाम और जन्म तारीख से।</span></div></div>
@@ -264,6 +269,15 @@ function render(c) {
     <tr><th>योग</th><td>${esc(pc.yoga.name)}</td></tr>
     <tr><th>करण</th><td>${esc(pc.karana.name)}</td></tr></table>
     <div class="muted" style="font-size:.8rem">${esc(pc.note)}</div>`;
+
+  // Ashtakavarga: houses counted from the lagna
+  const av = c.ashtakavarga, AVBAND = {strong:'मज़बूत', medium:'मध्यम', weak:'कमज़ोर'};
+  const hsign = h => SIGNS_HI[(c.lagna.sign + h) % 12];
+  $('avwhy').textContent = av.why_hi;
+  $('avsav').innerHTML = `<table><tr><th>भाव</th>${av.sav.by_house.map((_, h) => `<th>${h + 1}<br><span class="muted">${hsign(h)}</span></th>`).join('')}<th>कुल</th></tr>
+    <tr><th>SAV</th>${av.sav.by_house.map((v, h) => `<td><b>${v}</b><br><span class="chip ${av.sav.bands[h]==='strong'?'yes':'muted'}">${AVBAND[av.sav.bands[h]]}</span></td>`).join('')}<td><b>${av.sav.total}</b></td></tr></table>`;
+  $('avbav').innerHTML = `<table><tr><th>ग्रह</th>${av.sav.by_house.map((_, h) => `<th>${h + 1}</th>`).join('')}<th>कुल</th></tr>` +
+    Object.entries(av.bav).map(([pl, r]) => `<tr><th>${esc(planetMap()[pl].name_hi)}</th>${r.by_house.map(v => `<td>${v}</td>`).join('')}<td><b>${r.total}</b></td></tr>`).join('') + '</table>';
 
   $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
 
