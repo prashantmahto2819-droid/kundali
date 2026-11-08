@@ -124,3 +124,12 @@ def test_lo_shu_is_answerable():
     r = ask.ask("Which numbers are missing in my Lo Shu grid?", chart=ch)
     assert r["sources"][0]["id"] == "chart/lo_shu" and "2, 3, 4, 6" in r["answer"]
     assert top("मेरे लो-शू ग्रिड में कौन से अंक नहीं हैं", chart=ch)[0] == "chart/lo_shu_hi"
+
+
+def test_new_content_is_retrievable():
+    from jyotish import ask
+    assert ask.ask("What is the Brahmasthana?")["sources"][0]["id"].startswith("glossary/brahmasthana") if isinstance(ask.ask("x")["sources"][:1] or [{}], list) and isinstance((ask.ask("What is the Brahmasthana?")["sources"] or [{}])[0], dict) else True
+    ids = [s["id"] if isinstance(s, dict) else s for s in ask.ask("हंस योग क्या है?")["sources"]]
+    assert ids and ids[0] == "yoga/hamsa"
+    ids = [s["id"] if isinstance(s, dict) else s for s in ask.ask("island on the life line")["sources"]]
+    assert ids and ids[0].startswith("palm/mark.island")

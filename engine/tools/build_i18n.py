@@ -258,6 +258,11 @@ YOGA_PATTERNS = [("सातों ग्रहों के भाव: {1}", "h
                  ("{1} योग जाँचे गए (शास्त्रीय, पंच-महापुरुष, 32 नाभस आकृति-योग, युति-योग); {2} बने हैं।", "{1} yogas checked (classical, Pancha Mahapurusha, 32 Nabhasa pattern yogas, conjunction yogas); {2} are formed.")]
 for _hi, _en in (("स्वराशि", "own"), ("उच्च", "exalted"), ("सामान्य राशि", "ordinary")):
     EXACT.setdefault(_hi, _en)
+# learn tab (rendered directly in the chosen language; only the static card text needs the dictionary)
+for _hi, _en in (("सीखिए — दस पाठ, शब्दकोश और अभ्यास-प्रश्न", "Learn — ten lessons, glossary and practice questions"),
+                 ("ग्रह से पंचांग तक दस छोटे पाठ; हर पाठ के अंत में 8 प्रश्नों का अभ्यास। शब्दकोश में खोजिए। पाठ ड्राफ़्ट हैं (समीक्षा बाकी)।", "Ten short lessons from planets to panchang; eight practice questions at the end of each. Search the glossary. Lessons are drafts (review pending)."),
+                 ("पाठ", "Lessons"), ("शब्दकोश", "Glossary"), ("मिश्रित प्रश्नोत्तरी", "Mixed quiz"), ("सीखिए", "Learn")):
+    EXACT.setdefault(_hi, _en)
 # palm tracing
 from jyotish import palm_trace as _ptr
 _pk = _json.loads((ROOT / "data" / "knowledge" / "palm.json").read_text(encoding="utf-8"))

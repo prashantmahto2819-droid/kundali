@@ -23,6 +23,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 10a | Lal Kitab varshphal table (120 years x 12, transcribed from the Astrostudents chart): resolve the two printed duplicates (years 76 and 96) against the book | `data/lalkitab_varshphal.json` | 2 rows | 46th-year row verified |
 | 10 | Lal Kitab planet/house texts and upay | `data/lalkitab.json` | 9×12 | marked draft; pakka-ghar logic |
 | 11 | Nakshatra/sign/house/planet teaching texts | `data/knowledge/*.json` | — | learn panel; Hindi and English |
+| 11a | Glossary (54 terms) and ten lesson intros | `data/knowledge/glossary.json` (built by `engine/tools/glossary_data.py`) | 64 | draft |
 | 13 | KP layer: ayanamsa constant, Placidus cusps vs a KP program, sub-lord table, significator levels | `engine/jyotish/kp.py` | — | draft; compare one chart with a KP software |
 | 14 | Jaimini: karaka scheme (7 vs 8), arudha exception rule, karakamsa | `engine/jyotish/jaimini.py` | — | draft |
 | 15 | Muhurta finder: activity nakshatra/weekday lists, scoring weights | `engine/jyotish/muhurta_find.py` (`ACTIVITIES`) | 6 | draft |

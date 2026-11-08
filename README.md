@@ -111,6 +111,9 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 ## Palmistry from a photo (traced)
 `POST /v1/palm/trace` `{landmarks: {wrist, index, middle, ring, little, thumb: [x,y]}, lines: {life, head, heart, fate?, sun?: [[x,y]…]}, marks?: [{line, type, x, y}], extras?: {union_lines, bracelets, travel_lines, girdle_of_venus: n}, choices?: {…}}`. The photo never leaves the browser; only points arrive. The engine (`engine/jyotish/palm_trace.py`) measures the lines as ratios of the palm frame (life-line reach and sweep, head-line span and drop, heart-line end position and curvature, fate/sun presence), turns them into the checklist choices of `/v1/palm`, reads marks on lines (island, break, chain, cross, star, fork, square, triangle, branches) and counted lines (union, bracelets, travel, girdle of Venus) from `data/knowledge/palm.json`, and never predicts health or lifespan. `GET /v1/palm/trace/catalog`, printable `POST /v1/palm/trace/report`. Thresholds are draft (`docs/REVIEW.md` F).
 
+## Learn tab
+Ten lessons (planets, signs, houses, nakshatras, dasha, yogas, transits, vargas, matching, panchang) rendered from the knowledge files, a searchable 54-term glossary (`data/knowledge/glossary.json`) and quizzes generated in the browser from the same data (sign lords, exaltations, nakshatra lords/deities/symbols, house meanings, term definitions). Everything is bilingual and the glossary is part of the Ask corpus.
+
 ## Login (Supabase Auth)
 Signed-in users send `Authorization: Bearer <access_token>`; the token is verified locally and mapped to a personal organisation (created on first login). Quota and saved people then work exactly as for API keys.
 

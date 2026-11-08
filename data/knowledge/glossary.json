@@ -1,0 +1,520 @@
+{
+ "_comment": "Glossary of terms and the ten-lesson course outline for the learning layer. Own wording; draft.",
+ "review_status": "draft",
+ "terms": [
+  {
+   "key": "lagna",
+   "hi": "लग्न",
+   "en": "Lagna (Ascendant)",
+   "group": "jyotish",
+   "definition_hi": "जन्म के समय पूर्वी क्षितिज पर उदित राशि-बिंदु; कुंडली का पहला भाव यहीं से गिना जाता है। शरीर, स्वभाव और जीवन की समग्र दिशा का सूचक।",
+   "definition_en": "The zodiac point rising on the eastern horizon at birth; the first house is counted from here. Signifies body, temperament and the overall direction of life."
+  },
+  {
+   "key": "rashi",
+   "hi": "राशि",
+   "en": "Rashi (sign)",
+   "group": "jyotish",
+   "definition_hi": "भचक्र के 360° के बारह 30° भाग: मेष से मीन तक। हर राशि का एक स्वामी ग्रह, तत्व और स्वभाव (चर/स्थिर/द्विस्वभाव) है।",
+   "definition_en": "The twelve 30° divisions of the zodiac, Mesha to Meena. Each has a ruling planet, an element and a quality (movable, fixed, dual)."
+  },
+  {
+   "key": "bhava",
+   "hi": "भाव",
+   "en": "Bhava (house)",
+   "group": "jyotish",
+   "definition_hi": "जीवन के बारह क्षेत्र (शरीर, धन, भाई, माता/घर, संतान, रोग/सेवा, जीवनसाथी, आयु/परिवर्तन, भाग्य, कर्म, लाभ, व्यय)। इस ऐप में पूर्ण-राशि भाव: लग्न की पूरी राशि = पहला भाव।",
+   "definition_en": "The twelve areas of life (body, wealth, siblings, mother/home, children, service, partner, change, fortune, career, gains, expense). This app uses whole-sign houses: the Lagna's whole sign is house 1."
+  },
+  {
+   "key": "graha",
+   "hi": "ग्रह",
+   "en": "Graha (planet)",
+   "group": "jyotish",
+   "definition_hi": "ज्योतिष के नौ ग्रह: सूर्य, चंद्र, मंगल, बुध, गुरु, शुक्र, शनि और छाया-ग्रह राहु-केतु। 'ग्रह' का अर्थ है पकड़ने वाला, यानी जो प्रभाव डालता है।",
+   "definition_en": "The nine grahas: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn and the shadow planets Rahu and Ketu. 'Graha' means 'that which grips', an influence."
+  },
+  {
+   "key": "nakshatra",
+   "hi": "नक्षत्र",
+   "en": "Nakshatra",
+   "group": "jyotish",
+   "definition_hi": "भचक्र के 27 भाग (13°20' प्रत्येक), हर एक के चार पाद। चंद्र का नक्षत्र जन्म-नक्षत्र कहलाता है और विंशोत्तरी दशा का आरंभ तय करता है।",
+   "definition_en": "The 27 divisions of the zodiac (13°20' each), each with four padas. The Moon's nakshatra is the birth star and fixes the start of the Vimshottari dasha."
+  },
+  {
+   "key": "pada",
+   "hi": "पाद (चरण)",
+   "en": "Pada",
+   "group": "jyotish",
+   "definition_hi": "नक्षत्र का चौथाई भाग (3°20'), नवांश के बराबर। नामाक्षर और नवांश राशि पाद से तय होते हैं।",
+   "definition_en": "A quarter of a nakshatra (3°20'), equal to one navamsa. The name syllable and the navamsa sign come from the pada."
+  },
+  {
+   "key": "ayanamsa",
+   "hi": "अयनांश",
+   "en": "Ayanamsa",
+   "group": "jyotish",
+   "definition_hi": "सायन (उष्णकटिबंधीय) और निरयन (नक्षत्र-आधारित) राशिचक्र का अंतर, लगभग 24°। यह ऐप लाहिड़ी (चित्रपक्ष) अयनांश उपयोग करता है।",
+   "definition_en": "The difference between the tropical and the sidereal zodiac, about 24°. This app uses the Lahiri (Chitrapaksha) ayanamsa."
+  },
+  {
+   "key": "dasha",
+   "hi": "दशा",
+   "en": "Dasha",
+   "group": "jyotish",
+   "definition_hi": "ग्रहों की काल-अवधियाँ जो बताती हैं कि जीवन के किस दौर में कौन-सा ग्रह सक्रिय है। विंशोत्तरी दशा 120 वर्ष का चक्र है: महादशा → अंतर्दशा → प्रत्यंतर।",
+   "definition_en": "Planetary periods showing which planet is active in which phase of life. Vimshottari is a 120-year cycle: mahadasha → antardasha → pratyantar."
+  },
+  {
+   "key": "vimshottari",
+   "hi": "विंशोत्तरी",
+   "en": "Vimshottari",
+   "group": "jyotish",
+   "definition_hi": "सबसे प्रचलित दशा-पद्धति: केतु 7, शुक्र 20, सूर्य 6, चंद्र 10, मंगल 7, राहु 18, गुरु 16, शनि 19, बुध 17 वर्ष (कुल 120)। आरंभ जन्म-नक्षत्र के स्वामी से।",
+   "definition_en": "The most used dasha system: Ketu 7, Venus 20, Sun 6, Moon 10, Mars 7, Rahu 18, Jupiter 16, Saturn 19, Mercury 17 years (120 in all), starting from the birth star's lord."
+  },
+  {
+   "key": "gochara",
+   "hi": "गोचर",
+   "en": "Gochara (transit)",
+   "group": "jyotish",
+   "definition_hi": "ग्रहों की वर्तमान चाल को जन्म-कुंडली (प्राय: चंद्र राशि) से गिनना। साढ़ेसाती शनि का चंद्र से 12-1-2 भावों का गोचर है।",
+   "definition_en": "The current movement of planets read against the birth chart (usually from the Moon sign). Sade Sati is Saturn's transit through houses 12, 1 and 2 from the Moon."
+  },
+  {
+   "key": "vedha",
+   "hi": "वेध",
+   "en": "Vedha",
+   "group": "jyotish",
+   "definition_hi": "गोचर में एक ग्रह की शुभता को दूसरे ग्रह की किसी खास स्थिति द्वारा रोक देना; फलदीपिका की सारणी से।",
+   "definition_en": "In transits, the blocking of one planet's good result by another planet standing in a specific house; from the Phaladeepika table."
+  },
+  {
+   "key": "varga",
+   "hi": "वर्ग (अंश कुंडली)",
+   "en": "Varga (divisional chart)",
+   "group": "jyotish",
+   "definition_hi": "राशि को बराबर भागों में बाँटकर बनी कुंडलियाँ: D9 नवांश (विवाह, भाग्य), D10 दशांश (कर्म), D7 सप्तांश (संतान) आदि। षोडशवर्ग में 16 वर्ग।",
+   "definition_en": "Charts made by dividing each sign into equal parts: D9 navamsa (marriage, fortune), D10 dashamsha (career), D7 saptamsha (children) and so on. Shodashavarga has 16 of them."
+  },
+  {
+   "key": "navamsa",
+   "hi": "नवांश",
+   "en": "Navamsa (D9)",
+   "group": "jyotish",
+   "definition_hi": "राशि का नौवाँ भाग (3°20')। नवांश कुंडली ग्रहों की भीतरी शक्ति और विवाह/भाग्य के लिए देखी जाती है; नवांश में अपनी ही राशि में ग्रह 'वर्गोत्तम' कहलाता है।",
+   "definition_en": "A ninth of a sign (3°20'). The navamsa chart shows a planet's inner strength and is read for marriage and fortune; a planet in the same sign in D1 and D9 is 'vargottama'."
+  },
+  {
+   "key": "yoga",
+   "hi": "योग",
+   "en": "Yoga (combination)",
+   "group": "jyotish",
+   "definition_hi": "ग्रहों की विशेष स्थिति-संयोजन जिसका एक नामित फल माना गया है, जैसे गजकेसरी (गुरु चंद्र से केंद्र में) या पंच-महापुरुष योग।",
+   "definition_en": "A named combination of planetary positions with a traditional result, e.g. Gajakesari (Jupiter in a kendra from the Moon) or the Pancha Mahapurusha yogas."
+  },
+  {
+   "key": "kendra",
+   "hi": "केंद्र",
+   "en": "Kendra",
+   "group": "jyotish",
+   "definition_hi": "भाव 1, 4, 7, 10: कुंडली के स्तंभ। यहाँ बैठे ग्रह प्रबल माने जाते हैं।",
+   "definition_en": "Houses 1, 4, 7 and 10: the pillars of the chart. Planets here are considered strong."
+  },
+  {
+   "key": "trikona",
+   "hi": "त्रिकोण",
+   "en": "Trikona",
+   "group": "jyotish",
+   "definition_hi": "भाव 1, 5, 9: धर्म और भाग्य के भाव; इनके स्वामी शुभ माने जाते हैं। केंद्र-त्रिकोण स्वामियों का संबंध राजयोग कहलाता है।",
+   "definition_en": "Houses 1, 5 and 9: the houses of dharma and fortune; their lords are benefic. A link between kendra and trikona lords is called a raja yoga."
+  },
+  {
+   "key": "dusthana",
+   "hi": "दुःस्थान (त्रिक)",
+   "en": "Dusthana",
+   "group": "jyotish",
+   "definition_hi": "भाव 6, 8, 12: संघर्ष, परिवर्तन और व्यय के भाव। इनके स्वामी आपस में बदलें तो विपरीत राजयोग माना जाता है।",
+   "definition_en": "Houses 6, 8 and 12: struggle, change and expense. When their lords exchange, a Viparita Raja yoga is read."
+  },
+  {
+   "key": "uchcha_neecha",
+   "hi": "उच्च / नीच",
+   "en": "Exaltation / debilitation",
+   "group": "jyotish",
+   "definition_hi": "हर ग्रह की एक उच्च राशि (सबसे बली) और उसके सामने की नीच राशि (सबसे निर्बल) है; जैसे सूर्य मेष में उच्च, तुला में नीच। नीच-भंग से निर्बलता घटती है।",
+   "definition_en": "Each planet has an exaltation sign (strongest) and the opposite debilitation sign (weakest); e.g. the Sun is exalted in Mesha and debilitated in Tula. Neecha-bhanga cancels the weakness."
+  },
+  {
+   "key": "drishti",
+   "hi": "दृष्टि",
+   "en": "Drishti (aspect)",
+   "group": "jyotish",
+   "definition_hi": "ग्रह जिस भाव को देखता है: हर ग्रह सातवें को; मंगल 4 और 8 को भी, गुरु 5 और 9 को, शनि 3 और 10 को।",
+   "definition_en": "The houses a planet 'sees': every planet aspects the 7th; Mars also the 4th and 8th, Jupiter the 5th and 9th, Saturn the 3rd and 10th."
+  },
+  {
+   "key": "shadbala",
+   "hi": "षड्बल",
+   "en": "Shadbala",
+   "group": "jyotish",
+   "definition_hi": "ग्रह-बल की छह-घटक गणना: स्थान, दिग्, काल, चेष्टा, नैसर्गिक और दृक् बल; रूपा और विरुपा में मापा जाता है।",
+   "definition_en": "The six-fold strength of a planet: positional, directional, temporal, motional, natural and aspectual, measured in rupas and virupas."
+  },
+  {
+   "key": "ashtakavarga",
+   "hi": "अष्टकवर्ग",
+   "en": "Ashtakavarga",
+   "group": "jyotish",
+   "definition_hi": "हर राशि को सात ग्रहों और लग्न से मिले बिंदु (बिंदु/रेखा)। सर्वाष्टकवर्ग में 28+ बिंदु वाली राशि अनुकूल मानी जाती है; गोचर के फल में उपयोगी।",
+   "definition_en": "Points each sign receives from the seven planets and the Lagna. In the Sarvashtakavarga a sign with 28+ points is favourable; used to grade transits."
+  },
+  {
+   "key": "panchang",
+   "hi": "पंचांग",
+   "en": "Panchang",
+   "group": "jyotish",
+   "definition_hi": "दिन के पाँच अंग: तिथि, वार, नक्षत्र, योग, करण। मुहूर्त इन्हीं से निकलता है।",
+   "definition_en": "The five limbs of the day: tithi, weekday, nakshatra, yoga and karana. Muhurta is drawn from these."
+  },
+  {
+   "key": "tithi",
+   "hi": "तिथि",
+   "en": "Tithi",
+   "group": "jyotish",
+   "definition_hi": "चंद्र-सूर्य के बीच 12° का अंतर = एक तिथि; महीने में 30 (शुक्ल 1–15, कृष्ण 1–15)। रिक्ता तिथियाँ 4, 9, 14 शुभ कार्यों में टाली जाती हैं।",
+   "definition_en": "Every 12° of separation between the Moon and the Sun is one tithi; 30 in a month (15 bright, 15 dark). The rikta tithis 4, 9 and 14 are avoided for auspicious work."
+  },
+  {
+   "key": "muhurta",
+   "hi": "मुहूर्त",
+   "en": "Muhurta",
+   "group": "jyotish",
+   "definition_hi": "किसी कार्य के लिए शुभ समय चुनना: पंचांग, चौघड़िया, राहु काल, अभिजित, और जातक के चंद्र से ताराबल-चंद्रबल।",
+   "definition_en": "Choosing an auspicious time for an act from the panchang, choghadiya, Rahu kaal, Abhijit and, with the person's Moon, tarabala and chandrabala."
+  },
+  {
+   "key": "rahu_kaal",
+   "hi": "राहु काल",
+   "en": "Rahu kaal",
+   "group": "jyotish",
+   "definition_hi": "दिन का लगभग डेढ़ घंटे का खंड (दिनमान का आठवाँ भाग) जो वार के अनुसार बदलता है और नए कार्यों के लिए टाला जाता है।",
+   "definition_en": "A roughly 90-minute part of the day (an eighth of the daylight) that moves with the weekday and is avoided for new undertakings."
+  },
+  {
+   "key": "sade_sati",
+   "hi": "साढ़ेसाती",
+   "en": "Sade Sati",
+   "group": "jyotish",
+   "definition_hi": "शनि का जन्म-चंद्र से 12वीं, पहली और दूसरी राशि में लगभग साढ़े सात वर्ष का गोचर; तीन चरण। परंपरा में परिश्रम और धैर्य का काल।",
+   "definition_en": "Saturn's roughly seven-and-a-half-year transit through the 12th, 1st and 2nd signs from the birth Moon, in three phases; traditionally a time of effort and patience."
+  },
+  {
+   "key": "mangal_dosha",
+   "hi": "मंगल दोष",
+   "en": "Mangal dosha",
+   "group": "jyotish",
+   "definition_hi": "मंगल का लग्न से 1, 2, 4, 7, 8 या 12वें भाव में होना; विवाह-मिलान में देखा जाता है, कई परिहार (रद्द करने की शर्तें) हैं।",
+   "definition_en": "Mars in house 1, 2, 4, 7, 8 or 12 from the Lagna; considered in match-making, with many parihara (cancellation) conditions."
+  },
+  {
+   "key": "ashtakoota",
+   "hi": "अष्टकूट (गुण मिलान)",
+   "en": "Ashtakoota",
+   "group": "jyotish",
+   "definition_hi": "विवाह-मिलान के आठ कूट: वर्ण 1, वश्य 2, तारा 3, योनि 4, ग्रह-मैत्री 5, गण 6, भकूट 7, नाड़ी 8 = 36 गुण। 18+ सामान्यतः स्वीकार्य।",
+   "definition_en": "The eight factors of match-making: varna 1, vashya 2, tara 3, yoni 4, graha-maitri 5, gana 6, bhakoot 7, nadi 8 = 36 points; 18+ is generally acceptable."
+  },
+  {
+   "key": "kp",
+   "hi": "कृष्णमूर्ति पद्धति (KP)",
+   "en": "KP system",
+   "group": "jyotish",
+   "definition_hi": "नक्षत्र-आधारित पद्धति: हर अंश का राशि-स्वामी, नक्षत्र-स्वामी और उप-स्वामी; प्लेसिडस भाव-स्पष्ट; 1–249 अंक से प्रश्न।",
+   "definition_en": "A nakshatra-based system: every degree has a sign lord, star lord and sub lord; Placidus cusps; horary by a number 1–249."
+  },
+  {
+   "key": "jaimini",
+   "hi": "जैमिनी",
+   "en": "Jaimini",
+   "group": "jyotish",
+   "definition_hi": "महर्षि जैमिनी की पद्धति: चर कारक (आत्मकारक आदि), आरूढ़ पद, राशि-दशा (चर दशा) और राशि-दृष्टि।",
+   "definition_en": "The system of sage Jaimini: chara karakas (Atmakaraka etc.), arudha padas, sign-based dashas (Chara dasha) and sign aspects."
+  },
+  {
+   "key": "lal_kitab",
+   "hi": "लाल किताब",
+   "en": "Lal Kitab",
+   "group": "jyotish",
+   "definition_hi": "20वीं सदी की उर्दू-पंजाबी परंपरा: मेष को सदा पहला घर मानकर ग्रह-घर, पक्के घर, 120-वर्ष की वर्षफल सारणी और सरल उपाय।",
+   "definition_en": "A 20th-century Urdu-Punjabi tradition: Aries always as the first house, permanent houses, a 120-year varshphal table and simple remedies."
+  },
+  {
+   "key": "varshaphal",
+   "hi": "वर्षफल (ताजिक)",
+   "en": "Varshaphal (Tajika)",
+   "group": "jyotish",
+   "definition_hi": "सौर-वापसी कुंडली: जिस क्षण सूर्य जन्म के अंश पर लौटे। मुन्था, वर्षेश, सहम, मुद्दा दशा और इत्थशाल जैसी ताजिक दृष्टियाँ।",
+   "definition_en": "The solar-return chart for the moment the Sun returns to its natal degree: muntha, year lord, sahams, mudda dasha and Tajika aspects such as ithasala."
+  },
+  {
+   "key": "prashna",
+   "hi": "प्रश्न कुंडली",
+   "en": "Prashna (horary)",
+   "group": "jyotish",
+   "definition_hi": "प्रश्न पूछने के क्षण की कुंडली से उत्तर; KP में प्रश्न-भाव के उप-स्वामी और 1–249 अंक से।",
+   "definition_en": "Answering from the chart of the moment a question is asked; in KP by the sub lord of the question's cusp and a number 1–249."
+  },
+  {
+   "key": "retrograde",
+   "hi": "वक्री",
+   "en": "Retrograde",
+   "group": "jyotish",
+   "definition_hi": "पृथ्वी से देखने पर ग्रह का उल्टा चलता दिखना। परंपरा में वक्री ग्रह का फल भीतर की ओर मुड़ा, देर से या दोहराया हुआ माना जाता है।",
+   "definition_en": "A planet appearing to move backwards as seen from Earth. Tradition reads a retrograde planet's results as turned inward, delayed or repeated."
+  },
+  {
+   "key": "combust",
+   "hi": "अस्त",
+   "en": "Combust",
+   "group": "jyotish",
+   "definition_hi": "सूर्य के बहुत पास आने से ग्रह का 'जलना': उसका फल दबा हुआ माना जाता है (बुध-शुक्र को छोड़ प्रायः 8–17° के भीतर)।",
+   "definition_en": "A planet 'burnt' by closeness to the Sun; its results are read as suppressed (within about 8–17°, less for Mercury and Venus)."
+  },
+  {
+   "key": "moolank",
+   "hi": "मूलांक",
+   "en": "Moolank (root number)",
+   "group": "numerology",
+   "definition_hi": "जन्म-तारीख़ के अंकों का योग एक अंक तक: 25 तारीख़ → 2+5 = 7। स्वभाव का अंक।",
+   "definition_en": "The birth day reduced to one digit: the 25th → 2+5 = 7. The number of temperament."
+  },
+  {
+   "key": "bhagyank",
+   "hi": "भाग्यांक",
+   "en": "Bhagyank (destiny number)",
+   "group": "numerology",
+   "definition_hi": "पूरी जन्म-तारीख़ (दिन+माह+वर्ष) का एक अंक तक योग; जीवन-पथ का अंक।",
+   "definition_en": "The whole birth date (day+month+year) reduced to one digit; the life-path number."
+  },
+  {
+   "key": "namank",
+   "hi": "नामांक",
+   "en": "Name number",
+   "group": "numerology",
+   "definition_hi": "नाम के अक्षरों के अंक-मान (चैल्डियन या पाइथागोरियन) का योग; इस ऐप में दोनों दिखते हैं।",
+   "definition_en": "The sum of the letter values of the name (Chaldean or Pythagorean); this app shows both."
+  },
+  {
+   "key": "lo_shu",
+   "hi": "लो-शू ग्रिड",
+   "en": "Lo Shu grid",
+   "group": "numerology",
+   "definition_hi": "3×3 जादुई वर्ग में जन्म-तारीख़ के अंक रखना; किस अंक की कमी या अधिकता है, उससे प्रवृत्तियाँ।",
+   "definition_en": "Placing the digits of the birth date in a 3×3 magic square; missing or repeated numbers suggest tendencies."
+  },
+  {
+   "key": "major_arcana",
+   "hi": "मेजर आर्काना",
+   "en": "Major Arcana",
+   "group": "tarot",
+   "definition_hi": "टैरो के 22 बड़े पत्ते (द फ़ूल से द वर्ल्ड तक): जीवन के बड़े विषय और मोड़।",
+   "definition_en": "The 22 trump cards (The Fool to The World): life's larger themes and turning points."
+  },
+  {
+   "key": "minor_arcana",
+   "hi": "माइनर आर्काना",
+   "en": "Minor Arcana",
+   "group": "tarot",
+   "definition_hi": "56 पत्ते, चार सूट (छड़ी/वैंड, प्याला/कप, तलवार, सिक्का/पेंटाकल) में इक्का से राजा तक: रोज़मर्रा की स्थितियाँ।",
+   "definition_en": "56 cards in four suits (wands, cups, swords, pentacles), ace to king: everyday situations."
+  },
+  {
+   "key": "reversed",
+   "hi": "उलटा पत्ता",
+   "en": "Reversed card",
+   "group": "tarot",
+   "definition_hi": "उलटा निकला पत्ता: उसी विषय का भीतरी, अवरुद्ध या अतिरेक वाला रूप; भविष्यवाणी नहीं, चिंतन-बिंदु।",
+   "definition_en": "A card drawn upside down: the same theme turned inward, blocked or in excess; a point for reflection, not a prediction."
+  },
+  {
+   "key": "vastu_purusha",
+   "hi": "वास्तु पुरुष मंडल",
+   "en": "Vastu Purusha Mandala",
+   "group": "vastu",
+   "definition_hi": "भूखंड पर 81 (9×9) पदों का जाल जिसमें 45 देवताओं के स्थान हैं; केंद्र ब्रह्मस्थान खुला-हल्का रखा जाता है।",
+   "definition_en": "The 81-pada (9×9) grid laid on a plot with the seats of 45 devatas; the centre (Brahmasthana) is kept open and light."
+  },
+  {
+   "key": "brahmasthana",
+   "hi": "ब्रह्मस्थान",
+   "en": "Brahmasthana",
+   "group": "vastu",
+   "definition_hi": "भवन का केंद्रीय भाग (मंडल के बीच के 9 पद); परंपरा में इसे भारी निर्माण, सीढ़ी या शौचालय से मुक्त रखा जाता है।",
+   "definition_en": "The central part of a building (the middle 9 padas); tradition keeps it free of heavy construction, stairs or toilets."
+  },
+  {
+   "key": "ishan",
+   "hi": "ईशान",
+   "en": "Ishaan (north-east)",
+   "group": "vastu",
+   "definition_hi": "उत्तर-पूर्व दिशा, जल तत्व; पूजा, प्रवेश और खुलेपन के लिए सबसे अनुकूल; कटा ईशान सबसे अधिक टाला जाता है।",
+   "definition_en": "The north-east, water element; most suited to worship, entrance and openness; a cut north-east is avoided most."
+  },
+  {
+   "key": "agneya",
+   "hi": "आग्नेय",
+   "en": "Agneya (south-east)",
+   "group": "vastu",
+   "definition_hi": "दक्षिण-पूर्व, अग्नि तत्व: रसोई और बिजली के उपकरणों की दिशा।",
+   "definition_en": "The south-east, fire element: the direction for the kitchen and electrical equipment."
+  },
+  {
+   "key": "nairutya",
+   "hi": "नैऋत्य",
+   "en": "Nairutya (south-west)",
+   "group": "vastu",
+   "definition_hi": "दक्षिण-पश्चिम, पृथ्वी तत्व: भारी, ऊँचा और स्थिर; मुख्य शयनकक्ष और तिजोरी की दिशा।",
+   "definition_en": "The south-west, earth element: heavy, high and stable; the direction for the master bedroom and the safe."
+  },
+  {
+   "key": "vayavya",
+   "hi": "वायव्य",
+   "en": "Vayavya (north-west)",
+   "group": "vastu",
+   "definition_hi": "उत्तर-पश्चिम, वायु तत्व: गति और आवाजाही; अतिथि-कक्ष, भंडार और वाहन की दिशा।",
+   "definition_en": "The north-west, air element: movement and coming-and-going; guest room, store and vehicles."
+  },
+  {
+   "key": "sixteen_zones",
+   "hi": "16 ज़ोन",
+   "en": "16 zones",
+   "group": "vastu",
+   "definition_hi": "आठ दिशाओं को आधा कर 22.5° के सोलह ज़ोन; हर ज़ोन का एक विषय (जैसे उत्तर = अवसर, नैऋत्य = स्थिरता) और अनुकूल/प्रतिकूल कमरे।",
+   "definition_en": "The eight directions halved into sixteen 22.5° zones, each with a theme (north = opportunity, south-west = stability) and suited or unsuited rooms."
+  },
+  {
+   "key": "life_line",
+   "hi": "जीवन रेखा",
+   "en": "Life line",
+   "group": "palmistry",
+   "definition_hi": "अंगूठे के आधार को घेरने वाली रेखा; परंपरा में जीवन-शक्ति और ऊर्जा की लय, आयु नहीं।",
+   "definition_en": "The line curving around the base of the thumb; traditionally the rhythm of vitality and energy, not lifespan."
+  },
+  {
+   "key": "head_line",
+   "hi": "मस्तिष्क रेखा",
+   "en": "Head line",
+   "group": "palmistry",
+   "definition_hi": "हथेली के बीच से गुज़रती रेखा; सोचने का ढंग: सीधी = व्यावहारिक, ढलवाँ = कल्पनाशील।",
+   "definition_en": "The line crossing the middle of the palm; the way of thinking: straight = practical, sloping = imaginative."
+  },
+  {
+   "key": "heart_line",
+   "hi": "हृदय रेखा",
+   "en": "Heart line",
+   "group": "palmistry",
+   "definition_hi": "उँगलियों के नीचे की ऊपरी रेखा; भावनाओं की अभिव्यक्ति: तर्जनी तक = आदर्शवादी, मध्यमा तक = व्यावहारिक।",
+   "definition_en": "The upper line under the fingers; emotional expression: ending under the index = idealistic, under the middle finger = practical."
+  },
+  {
+   "key": "fate_line",
+   "hi": "भाग्य रेखा",
+   "en": "Fate line",
+   "group": "palmistry",
+   "definition_hi": "कलाई से मध्यमा की ओर जाती रेखा; कार्य-दिशा और दायित्व-बोध; कई हाथों में अस्पष्ट, जो सामान्य है।",
+   "definition_en": "The line rising from the wrist towards the middle finger; sense of direction and duty; faint in many hands, which is normal."
+  },
+  {
+   "key": "mounts",
+   "hi": "पर्वत",
+   "en": "Mounts",
+   "group": "palmistry",
+   "definition_hi": "हथेली के उभार: गुरु (तर्जनी के नीचे), शनि, सूर्य, बुध, शुक्र (अंगूठे के पास), चंद्र (बाहरी किनारा); उभार = उस गुण की प्रधानता।",
+   "definition_en": "The pads of the palm: Jupiter (under the index), Saturn, Sun, Mercury, Venus (by the thumb), Moon (outer edge); prominence = emphasis of that quality."
+  }
+ ],
+ "lessons": [
+  {
+   "key": "planets",
+   "title_hi": "पाठ 1: नौ ग्रह",
+   "title_en": "Lesson 1: The nine grahas",
+   "intro_hi": "ग्रह ज्योतिष के पात्र हैं। हर ग्रह कुछ विषयों का कारक है (सूर्य: आत्मा, पिता, अधिकार; चंद्र: मन, माता), किसी राशि में उच्च और उसके सामने नीच होता है, और कुछ राशियों का स्वामी है। पहले नौ ग्रहों के कारकत्व याद कीजिए, फिर उनकी राशियाँ।",
+   "intro_en": "The grahas are the actors of jyotish. Each signifies certain matters (Sun: soul, father, authority; Moon: mind, mother), is exalted in one sign and debilitated in the opposite, and rules one or two signs. Learn the significations first, then the signs they rule.",
+   "content": "planets"
+  },
+  {
+   "key": "signs",
+   "title_hi": "पाठ 2: बारह राशियाँ",
+   "title_en": "Lesson 2: The twelve rashis",
+   "intro_hi": "राशियाँ मंच हैं जिन पर ग्रह खड़े होते हैं। चार तत्व (अग्नि, पृथ्वी, वायु, जल) और तीन स्वभाव (चर, स्थिर, द्विस्वभाव) से हर राशि का रंग बनता है। राशि-स्वामी को जाने बिना कुंडली नहीं पढ़ी जा सकती।",
+   "intro_en": "The signs are the stage the planets stand on. Four elements (fire, earth, air, water) and three qualities (movable, fixed, dual) colour each sign. A chart cannot be read without knowing the sign lords.",
+   "content": "signs"
+  },
+  {
+   "key": "houses",
+   "title_hi": "पाठ 3: बारह भाव",
+   "title_en": "Lesson 3: The twelve bhavas",
+   "intro_hi": "भाव जीवन के क्षेत्र हैं। लग्न से गिनकर पहला भाव शरीर, दूसरा धन-कुटुंब, … दसवाँ कर्म, बारहवाँ व्यय। केंद्र (1,4,7,10) और त्रिकोण (1,5,9) शुभ स्तंभ हैं; 6, 8, 12 दुःस्थान।",
+   "intro_en": "Houses are the areas of life. Counting from the Lagna, the first is body, the second wealth and family, … the tenth career, the twelfth expense. Kendras (1,4,7,10) and trikonas (1,5,9) are the good pillars; 6, 8 and 12 the dusthanas.",
+   "content": "houses"
+  },
+  {
+   "key": "nakshatras",
+   "title_hi": "पाठ 4: 27 नक्षत्र",
+   "title_en": "Lesson 4: The 27 nakshatras",
+   "intro_hi": "नक्षत्र राशि से सूक्ष्म हैं: 13°20' का हर खंड एक देवता, प्रतीक और स्वामी ग्रह रखता है। चंद्र का नक्षत्र स्वभाव की बारीक परत और विंशोत्तरी दशा का आरंभ देता है।",
+   "intro_en": "Nakshatras are finer than signs: each 13°20' piece has a deity, a symbol and a ruling planet. The Moon's nakshatra gives a fine layer of temperament and the start of the Vimshottari dasha.",
+   "content": "nakshatras"
+  },
+  {
+   "key": "dasha",
+   "title_hi": "पाठ 5: दशा — समय की घड़ी",
+   "title_en": "Lesson 5: Dasha, the clock of time",
+   "intro_hi": "कुंडली 'क्या' बताती है, दशा 'कब'। विंशोत्तरी में जन्म-नक्षत्र के स्वामी से 120 वर्ष का क्रम चलता है; चल रही महादशा-अंतर्दशा के स्वामी किस भाव में हैं और किनके स्वामी हैं, वही उस दौर के विषय हैं।",
+   "intro_en": "The chart says 'what', the dasha says 'when'. Vimshottari runs a 120-year sequence from the birth star's lord; the houses the running dasha lords occupy and own are that period's themes.",
+   "content": "glossary:dasha,vimshottari"
+  },
+  {
+   "key": "yogas",
+   "title_hi": "पाठ 6: योग",
+   "title_en": "Lesson 6: Yogas",
+   "intro_hi": "योग ग्रहों के ऐसे संयोग हैं जिन्हें परंपरा ने नाम दिया है। पंच-महापुरुष (ग्रह स्वराशि/उच्च में केंद्र में), गजकेसरी, चंद्र-योग (सुनफा-अनफा-दुरुधरा), राजयोग (केंद्र-त्रिकोण स्वामी), विपरीत राजयोग, और 32 नाभस आकृति-योग।",
+   "intro_en": "Yogas are planetary combinations tradition has named: Pancha Mahapurusha (a planet in own/exalted sign in a kendra), Gajakesari, the Moon yogas (Sunapha, Anapha, Durudhara), raja yogas (kendra–trikona lords), Viparita Raja and the 32 Nabhasa pattern yogas.",
+   "content": "glossary:yoga,kendra,trikona,dusthana"
+  },
+  {
+   "key": "gochara",
+   "title_hi": "पाठ 7: गोचर और साढ़ेसाती",
+   "title_en": "Lesson 7: Transits and Sade Sati",
+   "intro_hi": "आज के ग्रह जन्म-चंद्र से किस भाव में हैं, यही गोचर है। हर ग्रह के कुछ अनुकूल भाव हैं (गुरु 2,5,7,9,11; शनि 3,6,11), और वेध उन्हें रोक सकता है। शनि का चंद्र से 12-1-2 भावों में गोचर साढ़ेसाती है।",
+   "intro_en": "Where today's planets stand from the birth Moon is the transit. Each planet has favourable houses (Jupiter 2,5,7,9,11; Saturn 3,6,11), and vedha can block them. Saturn's transit through 12-1-2 from the Moon is Sade Sati.",
+   "content": "glossary:gochara,vedha,sade_sati,ashtakavarga"
+  },
+  {
+   "key": "vargas",
+   "title_hi": "पाठ 8: वर्ग कुंडलियाँ",
+   "title_en": "Lesson 8: Divisional charts",
+   "intro_hi": "D1 शरीर है, वर्ग उसकी परतें। D9 नवांश विवाह और ग्रह की भीतरी शक्ति, D10 कर्म, D7 संतान, D12 माता-पिता, D60 सूक्ष्मतम। वर्गोत्तम (D1 और D9 में एक ही राशि) ग्रह को दृढ़ करता है।",
+   "intro_en": "D1 is the body, the vargas its layers. D9 for marriage and inner strength, D10 for career, D7 for children, D12 for parents, D60 the subtlest. Vargottama (same sign in D1 and D9) steadies a planet.",
+   "content": "glossary:varga,navamsa"
+  },
+  {
+   "key": "matching",
+   "title_hi": "पाठ 9: कुंडली मिलान",
+   "title_en": "Lesson 9: Match-making",
+   "intro_hi": "अष्टकूट के 36 गुण आठ कूटों से बनते हैं; नाड़ी (8) और भकूट (7) सबसे भारी हैं और इनके दोष के परिहार भी हैं। मंगल दोष अलग से देखा जाता है। गुण केवल एक पहलू हैं, ग्रह-मैत्री और दोनों कुंडलियों की स्वतंत्र शक्ति भी देखी जाती है।",
+   "intro_en": "The 36 points of Ashtakoota come from eight factors; nadi (8) and bhakoot (7) weigh most and have cancellations. Mangal dosha is checked separately. Points are one aspect; planetary friendship and each chart's own strength matter too.",
+   "content": "glossary:ashtakoota,mangal_dosha"
+  },
+  {
+   "key": "panchang",
+   "title_hi": "पाठ 10: पंचांग और मुहूर्त",
+   "title_en": "Lesson 10: Panchang and muhurta",
+   "intro_hi": "तिथि, वार, नक्षत्र, योग, करण — ये पाँच अंग दिन का चरित्र बताते हैं। मुहूर्त में रिक्ता तिथि, वर्जित योग, विष्टि करण और राहु काल टाले जाते हैं; चौघड़िया और अभिजित से घंटा चुना जाता है।",
+   "intro_en": "Tithi, weekday, nakshatra, yoga and karana describe the character of a day. Muhurta avoids rikta tithis, the inauspicious yogas, Vishti karana and Rahu kaal, and picks the hour by choghadiya and Abhijit.",
+   "content": "glossary:panchang,tithi,muhurta,rahu_kaal"
+  }
+ ]
+}

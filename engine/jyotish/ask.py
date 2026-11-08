@@ -74,7 +74,7 @@ def _walk(obj, label, src, out):
     if isinstance(obj, dict):
         name = next((obj[k] for k in ("name_en", "name", "en", "hi", "name_hi") if isinstance(obj.get(k), str)), label)
         for k, v in obj.items():
-            if k in ("source", "review_status", "when", "minors") or k.startswith("_"):   # minors: added with card names below
+            if k in ("source", "review_status", "when", "minors", "hi_t", "en_t") or k.startswith("_"):   # minors / templates: added below
                 continue
             _walk(v, name if isinstance(name, str) else label, f"{src}.{k}", out)
     elif isinstance(obj, list):
@@ -88,8 +88,8 @@ def _walk(obj, label, src, out):
 def corpus() -> tuple[dict, ...]:
     out: list[dict] = []
     for f in sorted((DATA / "knowledge").glob("*.json")):
-        if f.stem == "numbers":
-            continue                                        # labelled below so "Moolank 5" is findable
+        if f.stem in ("numbers", "glossary"):
+            continue                                        # labelled below so "Moolank 5" is findable; glossary gets its own prefix
         _walk(json.loads(f.read_text(encoding="utf-8")), "", f"knowledge/{f.stem}", out)
     for num, d in json.loads((DATA / "knowledge" / "numbers.json").read_text(encoding="utf-8"))["numbers"].items():
         out.append({"id": f"numbers/{num}", "lang": "en",
@@ -109,6 +109,23 @@ def corpus() -> tuple[dict, ...]:
                 if r.get(key):
                     out.append({"id": f"rules/{r['id']}", "text": r[key], "lang": lg})
     _walk(json.loads((DATA / "lalkitab.json").read_text(encoding="utf-8")), "Lal Kitab", "lalkitab", out)
+    for t in json.loads((DATA / "knowledge" / "glossary.json").read_text(encoding="utf-8"))["terms"]:
+        out.append({"id": f"glossary/{t['key']}", "lang": "hi", "text": f"{t['hi']} ({t['en']}): {t['definition_hi']}"})
+        out.append({"id": f"glossary/{t['key']}_en", "lang": "en", "text": f"{t['en']} ({t['hi']}): {t['definition_en']}"})
+    # palm marks x lines (templated texts), pattern yogas
+    pk = json.loads((DATA / "knowledge" / "palm.json").read_text(encoding="utf-8"))
+    for mk, m in pk.get("marks", {}).items():
+        for lk, ln in pk.get("lines", {}).items():
+            out.append({"id": f"palm/mark.{mk}.{lk}", "lang": "hi", "text": m["hi_t"].replace("{line}", ln["hi"])})
+            out.append({"id": f"palm/mark.{mk}.{lk}_en", "lang": "en", "text": m["en_t"].replace("{line}", ln["en"])})
+    from . import yogas_nabhasa as _yn
+    for _pl, (yid, nm, hi, thi, ten) in _yn.MAHAPURUSHA.items():
+        out.append({"id": f"yoga/{yid}", "lang": "hi", "text": f"{hi} महापुरुष योग ({_yn.PLANETS_HI[_pl]} स्वराशि/उच्च में केंद्र में): {thi}"})
+        out.append({"id": f"yoga/{yid}_en", "lang": "en", "text": f"{nm} Mahapurusha Yoga ({_pl} in own/exalted sign in a kendra): {ten}"})
+    for yid, (nm, hi, grp, thi, ten) in _yn.NABHASA_TEXT.items():
+        out.append({"id": f"yoga/{yid}", "lang": "hi", "text": f"{hi} नाभस योग: {thi}"}); out.append({"id": f"yoga/{yid}_en", "lang": "en", "text": f"{nm} Nabhasa yoga: {ten}"})
+    for yid, (nm, hi, thi, ten) in _yn.CONJ_TEXT.items():
+        out.append({"id": f"yoga/{yid}", "lang": "hi", "text": f"{hi} योग: {thi}"}); out.append({"id": f"yoga/{yid}_en", "lang": "en", "text": f"{nm} yoga: {ten}"})
     seen, uniq = set(), []
     for p in out:
         if p["text"] not in seen:
@@ -250,7 +267,7 @@ def ask(question: str, lang: str | None = None, chart: dict | None = None, llm=N
         passages = [p for p in mine if p["lang"] == lang] + passages
     personal = bool(re.search(r"\b(my|mine|me|i)\b|मेरा|मेरी|मेरे|मुझे|मैं", question.lower()))
     yoga_q = bool(re.search(r"yoga|dosha|dosh|combination|योग|दोष", question.lower()))
-    hits = rank(question, passages, k, boost={"chart": 3.0 if personal else 1.6, "yoga": 1.0 if yoga_q else 0.35})
+    hits = rank(question, passages, k, boost={"chart": 3.0 if personal else 1.6, "yoga": 1.0 if yoga_q else 0.35, "glossary": 0.75})
     if not hits:
         msg = {"hi": "इस प्रश्न का उत्तर मेरी सामग्री में नहीं मिला। कृपया ग्रह, भाव, राशि, नक्षत्र या दशा के बारे में पूछिए।",
                "en": "I could not find this in my material. Please ask about a planet, house, sign, nakshatra or dasha."}[lang]

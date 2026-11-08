@@ -88,6 +88,7 @@
   <button type="button" data-tab="t-muhurta"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> मुहूर्त</button>
   <button type="button" data-tab="t-prashna"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7M12 17h.01"/></svg> प्रश्न</button>
   <button type="button" data-tab="t-ask"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z"/></svg> पूछिए</button>
+  <button type="button" data-tab="t-learn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> सीखिए</button>
   <button type="button" data-tab="t-mine" id="tab-mine" style="display:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg> मेरी कुंडलियाँ</button>
 </nav>
 <main>
@@ -383,6 +384,18 @@
     <div id="asksugg" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
     <div id="askout"></div>
     <details id="askhist" style="margin-top:10px;display:none"><summary class="muted">पिछले प्रश्न</summary><div id="askhistlist"></div></details>
+  </div>
+  </section>
+  <section class="tab" id="t-learn">
+  <div class="card" id="learncard">
+    <b>सीखिए — दस पाठ, शब्दकोश और अभ्यास-प्रश्न</b>
+    <div class="muted" style="font-size:.85rem">ग्रह से पंचांग तक दस छोटे पाठ; हर पाठ के अंत में 8 प्रश्नों का अभ्यास। शब्दकोश में खोजिए। पाठ ड्राफ़्ट हैं (समीक्षा बाकी)।</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button type="button" id="ln-lessons" style="width:auto">पाठ</button>
+      <button type="button" class="ghost" id="ln-glossary" style="width:auto">शब्दकोश</button>
+      <button type="button" class="ghost" id="ln-quiz" style="width:auto">मिश्रित प्रश्नोत्तरी</button>
+    </div>
+    <div id="lnbody" style="margin-top:10px"></div>
   </div>
   </section>
   <section class="tab" id="t-mine">
@@ -1189,6 +1202,97 @@ $('repbtn').addEventListener('click', async () => {
         `<ul class="muted">${d.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(d.disclaimer_hi)}</div>`;
     } catch (err) { $('perr').textContent = 'त्रुटि: ' + err.message; }
   };
+})();
+
+// Learn tab: lessons from the knowledge files, glossary, generated quizzes (rendered directly in the chosen language)
+(async function learnTabUI() {
+  const ENL = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  const TT = (hi, en) => ENL() ? (en || hi) : hi;
+  let G, K = {};
+  try {
+    const [g, p, sg, h, n] = await Promise.all(['glossary', 'planets', 'signs', 'houses', 'nakshatras'].map(f => fetch(API + '/data/knowledge/' + f + '.json').then(r => r.json())));
+    G = g; K = {planets: p.planets, signs: sg.signs, houses: h.houses, nakshatras: n.nakshatras};
+  } catch (e) { $('learncard').style.display = 'none'; return; }
+  const PL_HI = {Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'};
+  const SIGN_HI = Object.fromEntries(K.signs.map(s => [s.name, s.hi]));
+  const PN = n => TT(PL_HI[n] || n, n), SN = n => TT(SIGN_HI[n] || n, n);
+  let view = 'lessons', openLesson = null, quiz = null;
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const pick = (arr, n, not) => shuffle(arr.filter(x => x !== not)).slice(0, n);
+  // ---- question generators (each returns {q, options:[...], answer})
+  const planetNames = Object.keys(K.planets), signNames = K.signs.map(s => s.name);
+  const GEN = {
+    planets: [
+      () => { const p = pick(planetNames, 1)[0], d = K.planets[p]; if (!d.exalted) return null; return {q: TT(`${PL_HI[p]} किस राशि में उच्च का होता है?`, `In which sign is ${p} exalted?`), options: [d.exalted, ...pick(signNames, 3, d.exalted)].map(SN), answer: SN(d.exalted)}; },
+      () => { const p = pick(planetNames, 1)[0], d = K.planets[p]; if (!d.rules || !d.rules.length) return null; const a = d.rules[0]; return {q: TT(`${a && SIGN_HI[a]} राशि का स्वामी कौन है?`, `Who rules ${a}?`), options: [p, ...pick(planetNames.filter(x => !K.planets[x].rules?.includes(a)), 3, p)].map(PN), answer: PN(p)}; },
+      () => { const p = pick(planetNames, 1)[0], d = K.planets[p]; const sig = TT(d.signifies_hi?.[0], d.signifies_en?.[0]); if (!sig) return null; const others = pick(planetNames, 3, p); return {q: TT(`"${sig}" का कारक ग्रह कौन है?`, `Which planet signifies "${sig}"?`), options: [p, ...others].map(PN), answer: PN(p)}; },
+    ],
+    signs: [
+      () => { const s = pick(K.signs, 1)[0]; return {q: TT(`${s.hi} राशि का तत्व क्या है?`, `What is the element of ${s.name}?`), options: shuffle([...new Set(K.signs.map(x => TT(x.element_hi, x.element_en)))]), answer: TT(s.element_hi, s.element_en)}; },
+      () => { const s = pick(K.signs, 1)[0]; return {q: TT(`${s.hi} राशि का स्वभाव?`, `What is the quality of ${s.name}?`), options: shuffle([...new Set(K.signs.map(x => TT(x.modality_hi, x.modality_en)))]), answer: TT(s.modality_hi, s.modality_en)}; },
+      () => { const s = pick(K.signs, 1)[0]; return {q: TT(`${s.hi} राशि का स्वामी?`, `Who rules ${s.name}?`), options: [s.lord, ...pick(planetNames.filter(x => x !== s.lord && !['Rahu','Ketu'].includes(x)), 3)].map(PN), answer: PN(s.lord)}; },
+    ],
+    houses: [
+      () => { const keys = Object.keys(K.houses); const h = pick(keys, 1)[0], d = K.houses[h]; const sig = TT(d.signifies_hi?.[0], d.signifies_en?.[0]); return {q: TT(`"${sig}" किस भाव से देखा जाता है?`, `Which house shows "${sig}"?`), options: [h, ...pick(keys, 3, h)].map(x => TT(`${x}वाँ भाव`, `House ${x}`)), answer: TT(`${h}वाँ भाव`, `House ${h}`)}; },
+      () => { const keys = Object.keys(K.houses); const h = pick(keys, 1)[0], d = K.houses[h]; return {q: TT(`${h}वें भाव का नाम?`, `The name of house ${h}?`), options: [h, ...pick(keys, 3, h)].map(x => TT(K.houses[x].name_hi, K.houses[x].name_en)), answer: TT(d.name_hi, d.name_en)}; },
+    ],
+    nakshatras: [
+      () => { const n = pick(K.nakshatras, 1)[0]; return {q: TT(`${n.hi} नक्षत्र का स्वामी?`, `Who rules ${n.name}?`), options: [n.lord, ...pick(planetNames, 3, n.lord)].map(PN), answer: PN(n.lord)}; },
+      () => { const n = pick(K.nakshatras, 1)[0]; return {q: TT(`${n.hi} नक्षत्र का प्रतीक?`, `The symbol of ${n.name}?`), options: [n, ...pick(K.nakshatras, 3, n)].map(x => TT(x.symbol_hi, x.symbol_en)), answer: TT(n.symbol_hi, n.symbol_en)}; },
+      () => { const n = pick(K.nakshatras, 1)[0]; return {q: TT(`${n.hi} नक्षत्र का देवता?`, `The deity of ${n.name}?`), options: [n, ...pick(K.nakshatras, 3, n)].map(x => TT(x.deity_hi, x.deity_en)), answer: TT(n.deity_hi, n.deity_en)}; },
+    ],
+    glossary: [
+      () => { const t = pick(G.terms, 1)[0]; const d = TT(t.definition_hi, t.definition_en); return {q: TT(`किस शब्द की यह परिभाषा है: "${d}"`, `Which term is defined as: "${d}"`), options: [t, ...pick(G.terms.filter(x => x.group === t.group), 3, t)].map(x => TT(x.hi, x.en)), answer: TT(t.hi, t.en)}; },
+    ],
+  };
+  function makeQuiz(topics, n) {
+    const gens = topics.flatMap(t => GEN[t] || []); const out = []; let guard = 0;
+    while (out.length < n && guard++ < 200) { const q = gens[Math.floor(Math.random() * gens.length)](); if (q && !out.some(x => x.q === q.q)) { q.options = shuffle([...new Set(q.options)]); if (q.options.length >= 2) out.push(q); } }
+    return out;
+  }
+  function lessonContent(l) {
+    const c = l.content;
+    if (c === 'planets') return `<table><tr><th>${TT('ग्रह','Planet')}</th><th>${TT('कारकत्व','Signifies')}</th><th>${TT('स्वराशि','Rules')}</th><th>${TT('उच्च','Exalted')}</th><th>${TT('नीच','Debilitated')}</th></tr>${Object.entries(K.planets).map(([k, d]) => `<tr><td>${esc(PN(k))}</td><td class="muted">${esc((ENL() ? d.signifies_en : d.signifies_hi || []).slice(0, 3).join(', '))}</td><td>${esc((d.rules || []).map(SN).join(', '))}</td><td>${esc(d.exalted ? SN(d.exalted) : '—')}</td><td>${esc(d.debilitated ? SN(d.debilitated) : '—')}</td></tr>`).join('')}</table>`;
+    if (c === 'signs') return `<table><tr><th>${TT('राशि','Sign')}</th><th>${TT('स्वामी','Lord')}</th><th>${TT('तत्व','Element')}</th><th>${TT('स्वभाव','Quality')}</th><th>${TT('प्रवृत्ति','Traits')}</th></tr>${K.signs.map(s => `<tr><td>${esc(TT(s.hi, s.name))}</td><td>${esc(PN(s.lord))}</td><td>${esc(TT(s.element_hi, s.element_en))}</td><td>${esc(TT(s.modality_hi, s.modality_en))}</td><td class="muted">${esc(TT(s.traits_hi, s.traits_en))}</td></tr>`).join('')}</table>`;
+    if (c === 'houses') return `<table><tr><th>${TT('भाव','House')}</th><th>${TT('नाम','Name')}</th><th>${TT('विषय','Signifies')}</th></tr>${Object.entries(K.houses).map(([h, d]) => `<tr><td>${h}</td><td>${esc(TT(d.name_hi, d.name_en))}</td><td class="muted">${esc((ENL() ? d.signifies_en : d.signifies_hi || []).join(', '))}</td></tr>`).join('')}</table>`;
+    if (c === 'nakshatras') return `<table><tr><th>#</th><th>${TT('नक्षत्र','Nakshatra')}</th><th>${TT('स्वामी','Lord')}</th><th>${TT('देवता','Deity')}</th><th>${TT('प्रतीक','Symbol')}</th><th>${TT('प्रवृत्ति','Traits')}</th></tr>${K.nakshatras.map(n => `<tr><td>${n.index + 1}</td><td>${esc(TT(n.hi, n.name))}</td><td>${esc(PN(n.lord))}</td><td>${esc(TT(n.deity_hi, n.deity_en))}</td><td>${esc(TT(n.symbol_hi, n.symbol_en))}</td><td class="muted">${esc(TT(n.traits_hi, n.traits_en))}</td></tr>`).join('')}</table>`;
+    if (c.startsWith('glossary:')) { const keys = c.slice(9).split(','); return G.terms.filter(t => keys.includes(t.key)).map(t => `<p style="margin:6px 0"><b>${esc(TT(t.hi, t.en))}</b><br><span class="muted">${esc(TT(t.definition_hi, t.definition_en))}</span></p>`).join(''); }
+    return '';
+  }
+  const quizTopics = l => l.content.startsWith('glossary:') ? ['glossary'] : [l.content];
+  function renderQuiz(qz, host) {
+    host.innerHTML = qz.items.map((it, i) => `<div class="qz" data-i="${i}" style="margin:10px 0;padding:8px;border:1px solid var(--line);border-radius:8px"><b>${i + 1}. ${esc(it.q)}</b><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${it.options.map(o => `<button type="button" class="ghost qzo" data-o="${esc(o)}" style="width:auto">${esc(o)}</button>`).join('')}</div><div class="qzr muted" style="margin-top:4px"></div></div>`).join('') + `<div id="qzscore" class="muted" style="margin-top:8px"></div>`;
+    let done = 0, right = 0;
+    host.querySelectorAll('.qz').forEach(box => box.querySelectorAll('.qzo').forEach(btn => btn.onclick = () => {
+      if (box.dataset.done) return; box.dataset.done = '1'; const it = qz.items[+box.dataset.i]; const ok = btn.dataset.o === it.answer; done++; if (ok) right++;
+      box.querySelectorAll('.qzo').forEach(b => { b.disabled = true; if (b.dataset.o === it.answer) b.style.borderColor = 'var(--ok)'; if (b === btn && !ok) b.style.borderColor = '#c62828'; });
+      box.querySelector('.qzr').textContent = ok ? TT('सही!', 'Correct!') : TT(`सही उत्तर: ${it.answer}`, `Correct answer: ${it.answer}`);
+      if (done === qz.items.length) host.querySelector('#qzscore').innerHTML = `<b>${TT(`${right} / ${done} सही`, `${right} / ${done} correct`)}</b>`;
+    }));
+  }
+  function render() {
+    const body = $('lnbody');
+    ['ln-lessons', 'ln-glossary', 'ln-quiz'].forEach(id => $(id).className = (id === 'ln-' + view) ? '' : 'ghost');
+    if (view === 'lessons') {
+      body.innerHTML = G.lessons.map(l => `<details ${openLesson === l.key ? 'open' : ''} data-l="${l.key}"><summary><b>${esc(TT(l.title_hi, l.title_en))}</b></summary><p>${esc(TT(l.intro_hi, l.intro_en))}</p>${lessonContent(l)}<div style="margin-top:8px"><button type="button" class="ghost lqz" data-l="${l.key}" style="width:auto">${TT('इस पाठ का अभ्यास (8 प्रश्न)', 'Practise this lesson (8 questions)')}</button></div><div class="lqzhost"></div></details>`).join('');
+      body.querySelectorAll('details').forEach(d => d.addEventListener('toggle', () => { if (d.open) openLesson = d.dataset.l; }));
+      body.querySelectorAll('.lqz').forEach(b => b.onclick = () => { const l = G.lessons.find(x => x.key === b.dataset.l); renderQuiz({items: makeQuiz(quizTopics(l), 8)}, b.parentNode.nextElementSibling); });
+    } else if (view === 'glossary') {
+      const groups = {jyotish: TT('ज्योतिष', 'Jyotish'), numerology: TT('अंक', 'Numerology'), tarot: TT('टैरो', 'Tarot'), vastu: TT('वास्तु', 'Vastu'), palmistry: TT('हस्तरेखा', 'Palmistry')};
+      body.innerHTML = `<input id="lnsearch" placeholder="${TT('शब्द खोजिए…', 'Search a term…')}" style="max-width:320px"><div id="lnterms" style="margin-top:8px"></div>`;
+      const list = q => { q = (q || '').toLowerCase(); $('lnterms').innerHTML = Object.entries(groups).map(([g, gl]) => { const ts = G.terms.filter(t => t.group === g && (!q || (t.hi + ' ' + t.en + ' ' + t.definition_hi + ' ' + t.definition_en).toLowerCase().includes(q))); return ts.length ? `<h4 style="margin:12px 0 4px">${esc(gl)}</h4>` + ts.map(t => `<p style="margin:6px 0"><b>${esc(TT(t.hi, t.en))}</b> <span class="muted" style="font-size:.8rem">${esc(TT(t.en, t.hi))}</span><br><span class="muted">${esc(TT(t.definition_hi, t.definition_en))}</span></p>`).join('') : ''; }).join('') || `<div class="muted">${TT('कुछ नहीं मिला।', 'Nothing found.')}</div>`; };
+      list(''); $('lnsearch').addEventListener('input', e => list(e.target.value));
+    } else {
+      body.innerHTML = `<p class="muted">${TT('ग्रह, राशि, भाव, नक्षत्र और शब्दकोश से 12 मिले-जुले प्रश्न। हर बार नए।', '12 mixed questions from planets, signs, houses, nakshatras and the glossary. New every time.')}</p><div style="margin-bottom:8px"><button type="button" id="lnnewquiz" style="width:auto">${TT('नई प्रश्नोत्तरी', 'New quiz')}</button></div><div id="lnquizhost"></div>`;
+      const start = () => { quiz = {items: makeQuiz(['planets', 'signs', 'houses', 'nakshatras', 'glossary'], 12)}; renderQuiz(quiz, $('lnquizhost')); };
+      $('lnnewquiz').onclick = start; start();
+    }
+  }
+  $('ln-lessons').onclick = () => { view = 'lessons'; render(); };
+  $('ln-glossary').onclick = () => { view = 'glossary'; render(); };
+  $('ln-quiz').onclick = () => { view = 'quiz'; render(); };
+  const prev = window.rerenderLearn; window.rerenderLearn = () => { if (prev) prev(); render(); };
+  render();
 })();
 
 // Palm photo tracing (photo stays in the browser; only points are sent)
