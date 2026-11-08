@@ -118,6 +118,9 @@ _mr = _mf.find("general", 23.18, 79.99, "Asia/Kolkata", "2026-01-01", 1)
 put(_mr["note_hi"], _mr["note_en"])
 for _a in _mf.ACTIVITIES.values():
     put(_a["hi"], _a["en"])
+for _hi, _en in (("तिथि इस कार्य की सूची में नहीं", "tithi not in the preferred list"), ("कृष्ण पक्ष (शुक्ल पक्ष वांछित)", "Krishna paksha (Shukla preferred)"), ("मास इस संस्कार के वांछित मासों में नहीं", "month not among the preferred months"),
+                 ("खरमास (सूर्य धनु/मीन में)", "Kharmas (Sun in Dhanu/Meena)"), ("अधिक मास", "Adhika masa"), ("चातुर्मास", "Chaturmas"), ("होलाष्टक", "Holashtak"), ("पितृ पक्ष", "Pitru paksha"), ("गुरु अस्त", "Jupiter combust"), ("शुक्र अस्त", "Venus combust")):
+    put(_hi, _en)
 from jyotish import jaimini as _jm  # noqa: E402
 for _k, _hi in _jm.KARAKA_HI.items():
     put(_hi, _k)
@@ -232,7 +235,10 @@ UI_CAL = {"कैलेंडर": "Calendar", "कैलेंडर डिज�
           "तारीख़": "Date", "नोट": "Note", "पाठ (ख़ाली = सिर्फ़ छुट्टी)": "Text (empty = holiday only)", "जोड़िए": "Add", "झलक ताज़ा कीजिए": "Refresh preview", "प्रिंट / PDF": "Print / PDF", "डिज़ाइन सहेजिए": "Save design", "रीसेट": "Reset",
           "प्रिंट संवाद में \"Save as PDF\" चुनिए, कागज़ वही आकार, मार्जिन \"None/Default\", \"Background graphics\" चालू।": "In the print dialog choose \"Save as PDF\", the same paper size, margins \"None/Default\", \"Background graphics\" on.",
           "डिज़ाइन इस डिवाइस पर सहेजा गया।": "Design saved on this device.", "शहर": "City", "हिंदी": "Hindi", "विज्ञापन के लिए स्थान": "Space for an advertisement", "(छुट्टी)": "(holiday)"}
-UI_CAL.update({"टेम्पलेट चुनिए, रंग-फ़ॉन्ट-पृष्ठभूमि सजाइए, ऊपर-नीचे-बगल की विज्ञापन पट्टियाँ और लोगो लगाइए, माह की तस्वीर जोड़िए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं; डिज़ाइन इसी डिवाइस पर सहेजे जाते हैं।":
+UI_CAL.update({"वार्षिक शुभ-मुहूर्त पृष्ठ": "Yearly auspicious-dates page", "वार्षिक शुभ मुहूर्त": "Auspicious dates of the year",
+               "पंचांग-स्तर: तिथि, नक्षत्र, वार, योग, भद्रा; संस्कारों में खरमास, चातुर्मास, होलाष्टक, अधिक मास, पितृ पक्ष, गुरु-शुक्र अस्त वर्जित": "Almanac level: tithi, nakshatra, weekday, yoga, Bhadra; samskaras exclude Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha, Jupiter/Venus combust",
+               "विवाह, उपनयन आदि संस्कारों के लिए लग्न-शुद्धि सहित पंडित से मुहूर्त निकलवाएँ; यह सूची दिशा-संकेत है।": "For marriage, upanayana and other samskaras have a pandit fix the muhurta with the lagna; this list is a pointer.",
+"टेम्पलेट चुनिए, रंग-फ़ॉन्ट-पृष्ठभूमि सजाइए, ऊपर-नीचे-बगल की विज्ञापन पट्टियाँ और लोगो लगाइए, माह की तस्वीर जोड़िए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं; डिज़ाइन इसी डिवाइस पर सहेजे जाते हैं।":
                "Choose a template, set colours, fonts and background, add top/bottom/side advertisement bands and a logo, add a month picture; live preview on the right, then \"Print / PDF\". Images stay in your browser; designs are saved on this device.",
                "1. टेम्पलेट": "1. Template", "क्लासिक ग्रिड": "Classic grid", "ग्रिड + दाईं ओर पर्व-सूची": "Grid + festival list on the right", "मॉडर्न": "Modern", "तस्वीर-पट्टी, बड़ा माह, पिल्स": "Hero image, big month, pills",
                "पोस्टर सूची": "Poster list", "दिन-वार खड़ी सूची": "Vertical day list", "पूर्ण पंचांग": "Full panchang", "तिथि-नक्षत्र-योग-करण समय, राहु काल, मुहूर्त, गोचर": "Tithi/nakshatra/yoga/karana times, Rahu kaal, muhurta, ingresses",

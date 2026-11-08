@@ -27,7 +27,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 11a | Glossary (54 terms) and ten lesson intros | `data/knowledge/glossary.json` (built by `engine/tools/glossary_data.py`) | 64 | draft |
 | 13 | KP layer: ayanamsa constant, Placidus cusps vs a KP program, sub-lord table, significator levels | `engine/jyotish/kp.py` | — | draft; compare one chart with a KP software |
 | 14 | Jaimini: karaka scheme (7 vs 8), arudha exception rule, karakamsa | `engine/jyotish/jaimini.py` | — | draft |
-| 15 | Muhurta finder: activity nakshatra/weekday lists, scoring weights | `engine/jyotish/muhurta_find.py` (`ACTIVITIES`) | 6 | draft |
+| 15 | Muhurta finder: activity nakshatra/weekday/tithi lists, preferred months, scoring weights, period blocks (Kharmas, Chaturmas span, Holashtak, Pitru paksha, combustion orbs 11°/10°) | `engine/jyotish/muhurta_find.py` (`ACTIVITIES`, `month_flags`) | 13 | draft; no lagna shuddhi |
 | 16 | Prashna: topic house groups (favour/deny), verdict rule | `engine/jyotish/prashna.py` (`TOPICS`) | 10 | draft |
 | 17 | Birth-time rectification aid: event→house map (marriage 7/2/11, child 5/2/11, job 10/6/2/11, property 4/11, travel 9/12/3, education 4/5/9), dasha-lord connection rule | `engine/jyotish/rectify.py` (`EVENT_HOUSES`) | 6 | draft; signature = lagna + navamsa lagna + Moon nakshatra |
 | 18 | Festival rules: month/tithi/moment per festival (`FESTIVALS`), Ekadashi names, kshaya handling; compare one year with a printed panchang | `engine/jyotish/festivals.py` | 33 | draft; 2025 Diwali/Holi/Navratri checked against published dates |

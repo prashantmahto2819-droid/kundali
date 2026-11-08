@@ -276,6 +276,24 @@ def tpl_compact_pair(m1, m2, design, hi, sv) -> str:
     return _page(design, f'<div class="pair">{half(m1)}{half(m2)}</div>{_foot(design, hi)}')
 
 
+def tpl_muhurta_year(year, months, design, hi) -> str:
+    """Yearly page: auspicious dates per activity for every month (almanac level)."""
+    acts: dict[str, dict] = {}
+    for m in months:
+        for x in m.get("muhurta", []):
+            a = acts.setdefault(x["activity"], {"hi": x["activity_hi"], "en": x["activity_en"], "months": []})
+            a["months"].append((m["month"], [y["day"] for y in x["dates"]]))
+    rows = ""
+    for key, a in acts.items():
+        cells = "".join(f'<li><b>{(MONTH_HI if hi else MONTH_EN)[mo - 1][:3 if not hi else 4]}</b> {", ".join(map(str, days))}</li>' for mo, days in a["months"])
+        rows += f'<div class="box"><h3>{e(a["hi"] if hi else a["en"])}</h3><ul class="mlist">{cells}</ul></div>'
+    head = (f'<div class="title panchang"><div class="pl">{_logo(design)}</div><div class="pc"><div class="m">{"वार्षिक शुभ मुहूर्त" if hi else "Auspicious dates of the year"} <span class="y">{year}</span></div>'
+            f'<div class="sub">{"पंचांग-स्तर: तिथि, नक्षत्र, वार, योग, भद्रा; संस्कारों में खरमास, चातुर्मास, होलाष्टक, अधिक मास, पितृ पक्ष, गुरु-शुक्र अस्त वर्जित" if hi else "Almanac level: tithi, nakshatra, weekday, yoga, Bhadra; samskaras exclude Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha, Jupiter/Venus combust"}</div></div></div>')
+    legend = ("विवाह, उपनयन आदि संस्कारों के लिए लग्न-शुद्धि सहित पंडित से मुहूर्त निकलवाएँ; यह सूची दिशा-संकेत है।" if hi else
+              "For marriage, upanayana and other samskaras have a pandit fix the muhurta with the lagna; this list is a pointer.")
+    return _page(design, f'{head}<div class="boxes year">{rows}</div><p class="legend">{legend}</p>{_foot(design, hi)}')
+
+
 def tpl_cover(year, months, design, hi) -> str:
     minis = []
     order = _order(design)
@@ -365,6 +383,7 @@ table.list td.dn {{ font-family:{font['display']}; font-weight:800; font-size:{f
 table.list td.fest {{ color:var(--fest); font-weight:700; }} table.list td.fest i {{ color:var(--accent); font-weight:500; }} table.list td.fest .sp {{ color:var(--ink); font-weight:500; opacity:.8; }}
 table.list tbody tr:nth-child(even) {{ background:color-mix(in srgb, var(--accent) 4%, transparent); }}
 .boxes {{ flex:0 0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:3mm; }}
+.boxes.year {{ flex:1 1 auto; grid-template-columns:repeat(2,1fr); align-content:start; }} .boxes.year .box {{ max-height:none; font-size:{fs(8.6)}; }} .mlist {{ columns:2; }} .mlist li {{ display:block; break-inside:avoid; }} .mlist b {{ color:var(--accent); display:inline-block; min-width:9mm; }}
 .box {{ border:0.3mm solid var(--line); border-radius:2mm; padding:1.6mm 2.2mm; font-size:{fs(7.2)}; background:color-mix(in srgb, var(--accent) 3%, transparent); max-height:40mm; overflow:hidden; }} .box li {{ margin:0 0 .4mm; }} .box b.dt {{ min-width:5.5mm; font-size:{fs(6.6)}; }}
 .box li b {{ color:var(--accent); }}
 .pair {{ flex:1 1 auto; display:grid; grid-template-rows:1fr 1fr; gap:4mm; min-height:0; }}
@@ -401,6 +420,8 @@ def render_calendar(year: int, months: list[int], lat: float, lon: float, tz: st
     pages = []
     if design.get("cover") and len(months) > 1:
         pages.append(tpl_cover(year, data, design, hi))
+    if design.get("muhurta_page") and len(months) > 1:
+        pages.append(tpl_muhurta_year(year, data, design, hi))
     if tpl == "compact":
         for i in range(0, len(data), 2):
             pages.append(tpl_compact_pair(data[i], data[i + 1] if i + 1 < len(data) else None, design, hi, sv))

@@ -178,9 +178,9 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
     muhurta = []
     try:
         from .muhurta_find import ACTIVITIES, find
-        for act in ("business", "griha_pravesh", "vehicle", "education", "travel"):
+        for act in ("marriage", "griha_pravesh", "bhoomi_pujan", "property", "vehicle", "business", "mundan", "namakaran", "upanayana", "education", "travel"):
             res = find(act, lat, lon, tz, start_date=f"{year}-{mon:02d}-01", days=ndays)
-            good = [r for r in res["best"] if r["score"] >= 60][:4]
+            good = sorted([r for r in res["all"] if r["score"] >= 65], key=lambda r: r["date"])[:8]
             if good:
                 muhurta.append({"activity": act, "activity_hi": ACTIVITIES[act]["hi"], "activity_en": ACTIVITIES[act]["en"], "dates": [{"date": r["date"], "day": int(r["date"][8:]), "score": r["score"], "nakshatra_hi": r["nakshatra_hi"]} for r in good]})
     except Exception:

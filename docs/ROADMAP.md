@@ -36,6 +36,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Yoga batch 2: Sunapha/Anapha/Durudhara/Kemadruma, Vesi/Vasi/Ubhayachari, Adhi, Amala, Viparita Raja (Harsha/Sarala/Vimala), Parivartana, Dhana (2/11 with 5/9), Raja (kendra–trikona), Lakshmi, Saraswati. 27 yogas total, all draft.
 
 ## Panchang
+- [x] Muhurta finder v2: 13 activities incl. marriage, mundan, namakaran, annaprashan, upanayana, bhoomi pujan, property; preferred tithis, Shukla-only, preferred months; period blocks (Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha, Jupiter/Venus combust). Monthly panchang lists dates per activity; yearly auspicious-dates page in the calendar studio. Pending: lagna shuddhi for marriage muhurta, regional variants.
 - [x] Festival and vrat calendar (`festivals.py`, `/v1/festivals`): 32 festivals, 24+ Ekadashis, Purnima/Amavasya, adhika masa, per year and place. [x] Moonrise/moonset computed (`moon.py`). [x] Monthly panchang (`panchang_month.py`) and the calendar design studio (`calendar_design.py`, कैलेंडर tab): v2: five templates incl. a full almanac page (end times, Rahu kaal, special yogas, muhurta dates, ingresses), custom colours, fonts, backgrounds, side ad band, hero images, cover page, saved designs. Pending: Marathi/Gujarati/Tamil month names, server-side PDF export, 3-months-per-page layout. Pending: pradosha/sankashti chaturthi lists, regional variants (Tamil/Bengali/Gujarati calendars).
 
 ## Yogas (patterns)

@@ -26,3 +26,20 @@ def test_tarabala_and_handler():
         handlers.muhurta_from_payload({"activity": "general", "lat": "x", "lon": 1})
     with pytest.raises(handlers.BadRequest):
         handlers.muhurta_from_payload({"activity": "general", "lat": 1, "lon": 1, "start": "8-11-2026"})
+
+
+def test_samskara_activities_and_period_blocks():
+    from jyotish.muhurta_find import ACTIVITIES, find, month_flags
+    from datetime import datetime, timezone
+    assert {"marriage", "mundan", "namakaran", "annaprashan", "upanayana", "bhoomi_pujan", "property"} <= set(ACTIVITIES)
+    # Kharmas: Sun in Dhanu from mid-December → marriage days score low
+    r = find("marriage", 28.61, 77.2, "Asia/Kolkata", "2026-12-16", 20)
+    assert all(x["score"] <= 40 for x in r["all"]) and any("खरमास" in " ".join(x["reasons_hi"]) for x in r["all"])
+    # late November 2026: marriage dates exist
+    r2 = find("marriage", 28.61, 77.2, "Asia/Kolkata", "2026-11-15", 25)
+    assert any(x["score"] >= 65 for x in r2["all"])
+    # chaturmas (amanta Shravana) blocks marriage, not property
+    f = month_flags(datetime(2026, 8, 10, 1, 0, tzinfo=timezone.utc), 110.0, 20.0, 3, False, 5)
+    assert any(x["key"] == "chaturmas" for x in f)
+    r3 = find("property", 28.61, 77.2, "Asia/Kolkata", "2026-08-01", 15)
+    assert any(x["score"] >= 60 for x in r3["all"])

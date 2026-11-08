@@ -351,7 +351,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <b>मुहूर्त खोज</b>
     <div class="muted" style="font-size:.85rem">किस काम के लिए, कहाँ, और कब से: अगले दिनों में पंचांग के आधार पर अच्छे दिन और उनके शुभ चौघड़िया। कुंडली बनी हो तो ताराबल-चंद्रबल भी जुड़ते हैं।</div>
     <form id="muf" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
-      <div><label>कार्य</label><select id="mu_act"><option value="general">सामान्य शुभ कार्य</option><option value="travel">यात्रा</option><option value="business">व्यापार / नया काम</option><option value="griha_pravesh">गृह प्रवेश</option><option value="vehicle">वाहन ख़रीद</option><option value="education">विद्यारंभ / पढ़ाई</option></select></div>
+      <div><label>कार्य</label><select id="mu_act"><option value="general">सामान्य शुभ कार्य</option><option value="marriage">विवाह</option><option value="griha_pravesh">गृह प्रवेश</option><option value="bhoomi_pujan">भूमि पूजन / नींव</option><option value="property">संपत्ति ख़रीद / रजिस्ट्री</option><option value="vehicle">वाहन ख़रीद</option><option value="business">व्यापार / नया काम</option><option value="travel">यात्रा</option><option value="education">विद्यारंभ / पढ़ाई</option><option value="mundan">मुंडन</option><option value="namakaran">नामकरण</option><option value="annaprashan">अन्नप्राशन</option><option value="upanayana">उपनयन (जनेऊ)</option></select></div>
       <div><label>कब से</label><input id="mu_start" type="date"></div>
       <div><label>कितने दिन</label><input id="mu_days" type="number" min="1" max="60" value="30" style="width:90px"></div>
       <div><label>स्थान</label><input id="mu_city" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)"></div>
@@ -417,6 +417,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
           </div>
           <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">
             <label class="ck"><input type="checkbox" id="ccover"> पूरे वर्ष में कवर पृष्ठ</label>
+            <label class="ck"><input type="checkbox" id="cmuhurta"> वार्षिक शुभ-मुहूर्त पृष्ठ</label>
             <label class="ck"><input type="checkbox" id="cbiling"> माह-नाम दोनों भाषाओं में</label>
             <label class="ck"><input type="checkbox" id="cmonday"> सप्ताह सोमवार से</label>
           </div></details>
@@ -1391,7 +1392,7 @@ $('repbtn').addEventListener('click', async () => {
   $('cnadd').onclick = () => { const d = $('cndate').value, t = $('cntext').value.trim(); if (!d) return; if (t) { D.notes = D.notes.filter(n => n.date !== d); D.notes.push({date: d, text: t}); } else if (!D.holidays.some(h => h.date === d)) D.holidays.push({date: d}); $('cntext').value = ''; renderNotes(); preview(); };
   // ---- fields ↔ D
   const F = {cbg: 'background', cfontp: 'font', csize: 'size', cfont: 'font_scale', cheropos: 'hero_position', cplace: 'place', ccovertitle: 'cover_title', ccoversub: 'cover_subtitle'};
-  const B = {ccover: 'cover', cbiling: 'bilingual', clogofoot: 'logo_in_footer', cwebfonts: 'web_fonts'};
+  const B = {ccover: 'cover', cmuhurta: 'muhurta_page', cbiling: 'bilingual', clogofoot: 'logo_in_footer', cwebfonts: 'web_fonts'};
   function fromUI() { Object.entries(F).forEach(([id, k]) => D[k] = id === 'cfont' ? +$(id).value : $(id).value); Object.entries(B).forEach(([id, k]) => D[k] = $(id).checked); D.week_start = $('cmonday').checked ? 'monday' : 'sunday';
     D.business = {name: $('cbizname').value, line: $('cbizline').value, website: $('cbizweb').value, tagline: $('cbiztag').value}; const show = {}; document.querySelectorAll('[data-show]').forEach(c => show[c.dataset.show] = c.checked); D.show = show; }
   function toUI() { Object.entries(F).forEach(([id, k]) => { if (D[k] !== undefined && D[k] !== '') $(id).value = D[k]; }); Object.entries(B).forEach(([id, k]) => $(id).checked = !!D[k]); $('cmonday').checked = D.week_start === 'monday';

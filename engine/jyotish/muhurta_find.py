@@ -46,6 +46,30 @@ ACTIVITIES = {
                   "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Hasta", "Chitra", "Swati", "Anuradha", "Shravana",
                                "Revati", "Uttara Phalguni"],
                   "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Jyeshtha", "Mula"], "bad_vara": [0, 2, 6]},
+    "marriage": {"hi": "विवाह", "en": "Marriage",
+                 "good_nak": ["Rohini", "Mrigashira", "Magha", "Uttara Phalguni", "Hasta", "Swati", "Anuradha", "Mula", "Uttara Ashadha", "Uttara Bhadrapada", "Revati"],
+                 "bad_nak": ["Bharani", "Krittika", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Purva Phalguni", "Chitra", "Vishakha", "Jyeshtha", "Purva Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Ashwini"],
+                 "good_tithi": [2, 3, 5, 7, 10, 11, 12, 13], "bad_vara": [2], "samskara": True, "no_kharmas": True, "no_chaturmas": True, "no_holashtak": True, "no_asta": True},
+    "mundan": {"hi": "मुंडन", "en": "Mundan (first haircut)",
+               "good_nak": ["Ashwini", "Mrigashira", "Punarvasu", "Pushya", "Hasta", "Chitra", "Swati", "Jyeshtha", "Shravana", "Dhanishta", "Shatabhisha", "Revati"],
+               "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Vishakha", "Mula", "Purva Bhadrapada"], "good_tithi": [2, 3, 5, 7, 10, 11, 13], "bad_vara": [0, 2, 6],
+               "samskara": True, "no_chaturmas": True, "no_asta": True, "months": [11, 0, 1, 2]},
+    "namakaran": {"hi": "नामकरण", "en": "Naming ceremony",
+                  "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Anuradha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Uttara Bhadrapada", "Revati"],
+                  "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Vishakha", "Jyeshtha", "Mula", "Purva Bhadrapada"], "good_tithi": [1, 2, 3, 5, 6, 7, 10, 11, 12, 13, 15], "bad_vara": [2, 6], "samskara": True},
+    "annaprashan": {"hi": "अन्नप्राशन", "en": "First feeding (annaprashan)",
+                    "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Anuradha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Uttara Bhadrapada", "Revati"],
+                    "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Vishakha", "Jyeshtha", "Mula", "Purva Bhadrapada"], "good_tithi": [2, 3, 5, 7, 10, 11, 12, 13, 15], "bad_vara": [2, 6], "samskara": True},
+    "upanayana": {"hi": "उपनयन (जनेऊ)", "en": "Upanayana (sacred thread)",
+                  "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Hasta", "Chitra", "Swati", "Anuradha", "Shravana", "Dhanishta", "Shatabhisha", "Revati"],
+                  "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Vishakha", "Jyeshtha", "Mula", "Purva Bhadrapada"], "good_tithi": [2, 3, 5, 10, 11, 12], "bad_vara": [2, 6],
+                  "samskara": True, "no_asta": True, "no_chaturmas": True, "shukla_only": True, "months": [9, 10, 11, 0, 1, 2]},
+    "bhoomi_pujan": {"hi": "भूमि पूजन / नींव", "en": "Ground-breaking (bhoomi pujan)",
+                     "good_nak": ["Rohini", "Mrigashira", "Pushya", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Anuradha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Uttara Bhadrapada", "Revati"],
+                     "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Jyeshtha", "Mula", "Purva Bhadrapada"], "good_tithi": [2, 3, 5, 6, 7, 10, 11, 12, 13, 15], "bad_vara": [0, 2], "no_chaturmas": True, "no_asta": True},
+    "property": {"hi": "संपत्ति ख़रीद / रजिस्ट्री", "en": "Property purchase / registry",
+                 "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Anuradha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Uttara Bhadrapada", "Revati"],
+                 "bad_nak": ["Bharani", "Krittika", "Ardra", "Ashlesha", "Magha", "Vishakha", "Jyeshtha", "Mula", "Purva Bhadrapada"], "bad_vara": [2]},
     "general": {"hi": "सामान्य शुभ कार्य", "en": "General auspicious work",
                 "good_nak": ["Ashwini", "Rohini", "Mrigashira", "Punarvasu", "Pushya", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Anuradha",
                              "Uttara Ashadha", "Shravana", "Dhanishta", "Uttara Bhadrapada", "Revati"],
@@ -60,6 +84,38 @@ def _sid(dt_utc: datetime) -> tuple[float, float]:
     pos = _BACKEND.positions(jd_tt)
     ayan = ayanamsa(jd_tt)
     return norm360(pos["Sun"] - ayan), norm360(pos["Moon"] - ayan)
+
+
+def _asta(sun: float, planet_lon: float, orb: float) -> bool:
+    return abs((planet_lon - sun + 180.0) % 360.0 - 180.0) <= orb
+
+
+def month_flags(dt_utc: datetime, sun: float, moon: float, amanta_masa: int | None, adhika: bool, tithi_number: int) -> list[dict]:
+    """Period-level cautions used by the samskara activities: Kharmas (Sun in Dhanu/Meena), Chaturmas (Ashadha Shukla 11 →
+    Kartika Shukla 11, amanta), adhika masa, Holashtak (Phalguna Shukla 8 → Purnima), Pitru paksha (Bhadrapada Krishna, amanta),
+    Guru/Shukra asta (combust within 11°/10° of the Sun)."""
+    flags = []
+    ss = int(sun // 30)
+    if ss in (8, 11):
+        flags.append({"key": "kharmas", "hi": "खरमास (सूर्य धनु/मीन में)", "en": "Kharmas (Sun in Dhanu/Meena)"})
+    if adhika:
+        flags.append({"key": "adhika", "hi": "अधिक मास", "en": "Adhika masa"})
+    if amanta_masa is not None:
+        # chaturmas: from Ashadha (2) Shukla 11 to Kartika (6) Shukla 11
+        if (amanta_masa == 2 and tithi_number >= 11) or amanta_masa in (3, 4, 5) or (amanta_masa == 6 and tithi_number < 11):
+            flags.append({"key": "chaturmas", "hi": "चातुर्मास", "en": "Chaturmas"})
+        if amanta_masa == 10 and 8 <= tithi_number <= 15:
+            flags.append({"key": "holashtak", "hi": "होलाष्टक", "en": "Holashtak"})
+        if amanta_masa == 4 and tithi_number > 15:
+            flags.append({"key": "pitru_paksha", "hi": "पितृ पक्ष", "en": "Pitru paksha"})
+    jd_ut = julian_day(dt_utc)
+    jd_tt = jd_ut + delta_t(year_fraction(dt_utc)) / 86400.0
+    pos = _BACKEND.positions(jd_tt); ayan = ayanamsa(jd_tt)
+    if _asta(sun, norm360(pos["Jupiter"] - ayan), 11.0):
+        flags.append({"key": "guru_asta", "hi": "गुरु अस्त", "en": "Jupiter combust"})
+    if _asta(sun, norm360(pos["Venus"] - ayan), 10.0):
+        flags.append({"key": "shukra_asta", "hi": "शुक्र अस्त", "en": "Venus combust"})
+    return flags
 
 
 def find(activity: str, lat: float, lon: float, tz: str, start_date: str | None = None, days: int = 30,
@@ -97,6 +153,23 @@ def find(activity: str, lat: float, lon: float, tz: str, start_date: str | None 
             score -= 25; why.append(f"nakshatra avoided for this ({nak})"); why_hi.append(f"इस कार्य के लिए वर्जित नक्षत्र ({pc['nakshatra']['name_hi']})")
         if vara in act["bad_vara"]:
             score -= 15; why.append("weekday avoided for this"); why_hi.append("इस कार्य के लिए वर्जित वार")
+        if act.get("good_tithi") and t["number"] not in act["good_tithi"] and (t["number"] - 15) not in act["good_tithi"] and t["number"] not in RIKTA and t["number"] - 15 not in RIKTA and t["number"] != 30:
+            score -= 10; why.append("tithi not in the preferred list"); why_hi.append("तिथि इस कार्य की सूची में नहीं")
+        if act.get("shukla_only") and t["number"] > 15:
+            score -= 15; why.append("Krishna paksha (Shukla preferred)"); why_hi.append("कृष्ण पक्ष (शुक्ल पक्ष वांछित)")
+        # period-level cautions (samskaras and new beginnings)
+        from .patri import lunar_month
+        _u = sunrise.astimezone(ZoneInfo("UTC")); _jd = julian_day(_u) + delta_t(year_fraction(_u)) / 86400.0
+        lm = lunar_month(_BACKEND, _jd, ayanamsa(_jd))
+        masa_i, adhika = lm["index"], bool(lm["adhika"])
+        for fl in month_flags(sunrise.astimezone(ZoneInfo("UTC")), sun, moon, masa_i, adhika, t["number"]):
+            k = fl["key"]
+            blocks = ((k == "kharmas" and act.get("no_kharmas")) or (k == "chaturmas" and act.get("no_chaturmas")) or (k == "holashtak" and act.get("no_holashtak"))
+                      or (k in ("guru_asta", "shukra_asta") and act.get("no_asta")) or (k == "adhika" and act.get("samskara")) or (k == "pitru_paksha" and act.get("samskara")))
+            if blocks:
+                score -= 40; why.append(fl["en"]); why_hi.append(fl["hi"])
+        if act.get("months") and masa_i is not None and masa_i not in act["months"]:
+            score -= 10; why.append("month not among the preferred months"); why_hi.append("मास इस संस्कार के वांछित मासों में नहीं")
         if birth_moon_lon is not None:
             # tarabala: count from the birth star to the day's star; 3, 5, 7 (vipat, pratyak, naidhana) are avoided
             bn = nakshatra_of(birth_moon_lon)["index"]
@@ -123,7 +196,7 @@ def find(activity: str, lat: float, lon: float, tz: str, start_date: str | None 
     ranked = sorted(out, key=lambda x: (-x["score"], x["date"]))
     return {"activity": activity, "activity_hi": act["hi"], "activity_en": act["en"], "from": first.isoformat(), "days": days,
             "best": ranked[:5], "all": out, "review_status": "draft",
-            "note_hi": "पंचांग-स्तर का मुहूर्त (सूर्योदय की तिथि-नक्षत्र-योग-करण, वार, चौघड़िया)। जन्म-कुंडली दी हो तो ताराबल और चंद्रबल भी। "
-                       "यह मार्गदर्शन है; विवाह, उपनयन जैसे बड़े संस्कारों के लिए पंडित से मुहूर्त निकलवाएँ।",
-            "note_en": "Almanac-level muhurta (tithi, nakshatra, yoga, karana at sunrise; weekday; choghadiya). With a birth chart, tarabala and chandrabala are added. "
-                       "Guidance only; for major samskaras such as marriage, have a pandit fix the muhurta."}
+            "note_hi": "पंचांग-स्तर का मुहूर्त (सूर्योदय की तिथि-नक्षत्र-योग-करण, वार, चौघड़िया; संस्कारों के लिए खरमास, चातुर्मास, होलाष्टक, अधिक मास, पितृ पक्ष और गुरु-शुक्र अस्त की जाँच)। जन्म-कुंडली दी हो तो ताराबल और चंद्रबल भी। "
+                       "यह मार्गदर्शन है; विवाह, उपनयन जैसे बड़े संस्कारों के लिए लग्न-शुद्धि सहित पंडित से मुहूर्त निकलवाएँ।",
+            "note_en": "Almanac-level muhurta (tithi, nakshatra, yoga, karana at sunrise; weekday; choghadiya; for samskaras also Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha and Jupiter/Venus combustion). With a birth chart, tarabala and chandrabala are added. "
+                       "Guidance only; for major samskaras such as marriage, have a pandit fix the muhurta including the lagna."}
