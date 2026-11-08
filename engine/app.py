@@ -12,7 +12,7 @@ from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from jyotish import access, handlers
+from jyotish import access, handlers, people
 
 app = FastAPI(title="Kundali Engine", version=handlers.ENGINE_VERSION)
 app.add_middleware(
@@ -45,6 +45,20 @@ class ChartRequest(BaseModel):
     year_days: float = 365.25
     as_of: str | None = None
     dasha_level: int = 2
+
+
+@app.api_route("/v1/people", methods=["GET", "POST"])
+@app.api_route("/v1/people/{rest:path}", methods=["GET", "DELETE"])
+async def saved_people(request: Request, rest: str = ""):
+    """Saved birth data per organisation (see jyotish/people.py)."""
+    payload = None
+    if request.method == "POST":
+        try:
+            payload = await request.json()
+        except ValueError:
+            return JSONResponse({"detail": "invalid JSON"}, status_code=400)
+    status, body = people.api(request.method, request.url.path, request.headers, payload)
+    return JSONResponse(body, status_code=status)
 
 
 @app.get("/health")

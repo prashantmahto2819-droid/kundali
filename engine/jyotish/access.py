@@ -48,6 +48,8 @@ class Store:
         self._db.row_factory = sqlite3.Row
         with self._lock:
             self._db.executescript(_SCHEMA)
+            from . import people
+            self._db.executescript(people.SCHEMA)
 
     # ---- organisations and keys -------------------------------------------------
     def create_org(self, name: str, plan: str = "free") -> dict:

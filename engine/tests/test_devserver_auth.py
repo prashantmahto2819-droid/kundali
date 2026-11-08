@@ -55,3 +55,19 @@ def test_optional_and_off_modes_keep_the_public_page_working(server, monkeypatch
     assert call(url, "/v1/chart")[0] == 200                               # anonymous, like the web page
     monkeypatch.setenv("KUNDALI_AUTH", "off")
     assert call(url, "/v1/chart", "kd_whatever")[0] == 200
+
+
+def test_people_over_http(server, monkeypatch):
+    url, key = server
+    monkeypatch.setenv("KUNDALI_AUTH", "off")                 # saved people need a key even so
+    payload = json.dumps({"name": "Sita", **json.loads(BODY)}).encode()
+    assert call(url, "/v1/people", None, payload)[0] == 401
+    s, _, b = call(url, "/v1/people", key, payload)
+    pid = json.loads(b)["id"]
+    assert s == 201
+    req = urllib.request.Request(f"{url}/v1/people/{pid}/chart", headers={"X-API-Key": key})
+    with urllib.request.urlopen(req) as r:
+        assert json.loads(r.read())["chart"]["lagna"]["sign_name"] == "Vrishabha"
+    req = urllib.request.Request(f"{url}/v1/people/{pid}", method="DELETE", headers={"X-API-Key": key})
+    with urllib.request.urlopen(req) as r:
+        assert r.status == 200

@@ -9,7 +9,7 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from jyotish import access, handlers
+from jyotish import access, handlers, people
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,13 +44,33 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "*")
         self.send_header("Access-Control-Expose-Headers", "X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE")
         self.end_headers()
+
+    def _people(self, method):
+        path = self.path.split("?")[0]
+        payload = None
+        if method == "POST":
+            try:
+                payload = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
+            except json.JSONDecodeError:
+                return self._json(400, {"detail": "invalid JSON"})
+        status, body = people.api(method, path, self.headers, payload)
+        return self._json(status, body)
+
+    def do_DELETE(self):
+        path = self.path.split("?")[0]
+        if path.startswith("/v1/people") and self._guard(path):
+            return self._people("DELETE")
+        if not path.startswith("/v1/people"):
+            return self._json(404, {"error": "not found"})
 
     def do_GET(self):
         path, _, query = self.path.partition("?")
         if not self._guard(path):
             return
+        if path.startswith("/v1/people"):
+            return self._people("GET")
         if path == "/health":
             return self._json(200, handlers.health())
         if path == "/v1/palm/catalog":
@@ -80,6 +100,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self._guard(self.path.split("?")[0]):
             return
+        if self.path.split("?")[0].startswith("/v1/people"):
+            return self._people("POST")
         routes = {"/v1/chart": handlers.chart_from_payload,
                   "/v1/numerology": handlers.numerology_from_payload,
                   "/v1/match": handlers.match_from_payload,

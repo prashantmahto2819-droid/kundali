@@ -89,3 +89,13 @@ python tools/admin.py usage <org_id>
 python tools/admin.py set-plan <org_id> pro    # free 200/day, pro 20000/day, unlimited
 python tools/admin.py revoke <key_prefix>
 ```
+
+## Saved people (per organisation)
+Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored; charts are recomputed on demand. Each org sees only its own records (max 500).
+
+| Call | What |
+|---|---|
+| `POST /v1/people` | `{name, date, time, tz, lat, lon, place?, note?}` → 201 + id |
+| `GET /v1/people` | list |
+| `GET /v1/people/{id}` · `DELETE /v1/people/{id}` | read / remove |
+| `GET /v1/people/{id}/chart` | full chart of the saved person |
