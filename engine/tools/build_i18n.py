@@ -92,6 +92,12 @@ put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
 put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
 put(_full["jaimini"]["chara_dasha"]["note_hi"], _full["jaimini"]["chara_dasha"]["note_en"])
 put(_full["kp"]["ruling_planets"]["note_hi"], _full["kp"]["ruling_planets"]["note_en"])
+from jyotish import prashna as _pr  # noqa: E402
+for _t in _pr.TOPICS.values():
+    put(_t["hi"], _t["en"])
+put("कोई नहीं", "none")
+_prr = _pr.prashna("general", __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc), 23.18, 79.99, __import__("jyotish.ephemeris", fromlist=["AnalyticBackend"]).AnalyticBackend())
+put(_prr["disclaimer_hi"], _prr["disclaimer_en"])
 from jyotish import muhurta_find as _mf  # noqa: E402
 _mr = _mf.find("general", 23.18, 79.99, "Asia/Kolkata", "2026-01-01", 1)
 put(_mr["note_hi"], _mr["note_en"])
@@ -213,7 +219,11 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "मुहूर्त": "Muhurta", "मुहूर्त खोज": "Muhurta finder", "कार्य": "Activity", "कब से": "From", "कितने दिन": "How many days", "स्थान": "Place",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "प्रश्न": "Prashna", "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)", "विषय": "Topic", "KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
+ "समय (ख़ाली = अभी)": "Time (blank = now)", "प्रश्न पूछिए": "Ask the question", "गणना…": "Computing…", "रूलिंग प्लैनेट्स:": "Ruling planets:", "भाव-स्पष्ट और ग्रह": "Cusps and planets",
+ "अनुकूल": "favourable", "प्रतिकूल": "unfavourable", "मिश्रित (देरी या शर्तों के साथ)": "mixed (with delay or conditions)", "अस्पष्ट": "unclear",
+ "प्रश्न का विषय चुनिए। कुंडली इसी क्षण (या दिए समय) और स्थान की बनती है; चाहें तो 1 से 249 के बीच कोई अंक मन से कहिए (KP पद्धति)। स्वास्थ्य, क़ानून और आयु के प्रश्न यहाँ नहीं लिए जाते।":
+ "Choose the topic. The chart is cast for this moment (or the given time) and place; you may also give a number from 1 to 249 that comes to mind (KP method). Health, legal and lifespan questions are not taken here.", "मुहूर्त": "Muhurta", "मुहूर्त खोज": "Muhurta finder", "कार्य": "Activity", "कब से": "From", "कितने दिन": "How many days", "स्थान": "Place",
  "शहर (ख़ाली = कुंडली वाला)": "City (blank = the chart's)", "खोजिए": "Search", "सबसे अच्छे दिन": "Best days", "सभी दिन": "All days", "तारीख़": "Date", "स्कोर": "Score", "पंचांग": "Panchang",
  "शुभ समय": "Good times", "सामान्य शुभ कार्य": "General auspicious work", "यात्रा": "Travel", "व्यापार / नया काम": "Business / new venture", "गृह प्रवेश": "House-warming",
  "वाहन ख़रीद": "Buying a vehicle", "विद्यारंभ / पढ़ाई": "Starting studies", "(ताराबल-चंद्रबल सहित)": "(with tarabala and chandrabala)", "अमावस्या": "amavasya",
@@ -419,7 +429,11 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1}: {2} से {3} दिन", "{1}: {3} days from {2}"), (": {1} से {2} दिन", ": {2} days from {1}"), (": {1} से {2} दिन (ताराबल-चंद्रबल सहित)", ": {2} days from {1} (with tarabala and chandrabala)"), ("{1}: {2} से {3} दिन (ताराबल-चंद्रबल सहित)", "{1}: {3} days from {2} (with tarabala and chandrabala)"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("प्रश्न लग्न: {1} {2}° · समय: {3}", "Prashna Lagna: {1} {2}° · time: {3}"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"),
+                   ("{1} का भाव {2}; उसके भाव-स्पष्ट का उप-स्वामी {3} है।", "House {2} rules {1}; the sub-lord of its cusp is {3}."),
+                   ("{1} भाव {2} का कारक है: अनुकूल भाव {3}, प्रतिकूल भाव {4}।", "{1} signifies houses {2}: favouring {3}, denying {4}."),
+                   ("चंद्र (प्रश्नकर्ता का मन) {1} में, उप-स्वामी {2}: प्रश्न विषय से जुड़ा है।", "The Moon (the querent's mind) in {1}, sub-lord {2}: connected to the matter."),
+                   ("चंद्र (प्रश्नकर्ता का मन) {1} में, उप-स्वामी {2}: प्रश्न विषय से सीधा जुड़ाव नहीं दिखता।", "The Moon (the querent's mind) in {1}, sub-lord {2}: no direct connection to the matter."), ("{1}: {2} से {3} दिन", "{1}: {3} days from {2}"), (": {1} से {2} दिन", ": {2} days from {1}"), (": {1} से {2} दिन (ताराबल-चंद्रबल सहित)", ": {2} days from {1} (with tarabala and chandrabala)"), ("{1}: {2} से {3} दिन (ताराबल-चंद्रबल सहित)", "{1}: {3} days from {2} (with tarabala and chandrabala)"),
                    ("रिक्ता तिथि ({1})", "rikta tithi ({1})"), ("अशुभ योग ({1})", "inauspicious yoga ({1})"), ("अनुकूल नक्षत्र ({1})", "favourable nakshatra ({1})"), ("इस कार्य के लिए वर्जित नक्षत्र ({1})", "nakshatra avoided for this ({1})"),
                    ("ताराबल प्रतिकूल ({1}वाँ तारा)", "tarabala unfavourable ({1}th tara)"), ("चंद्रबल प्रतिकूल ({1}वाँ)", "chandrabala unfavourable ({1}th)"), ("अभिजित {1}–{2}", "Abhijit {1}–{2}"), ("राहु काल {1}–{2}", "Rahu kaal {1}–{2}"), ("अभी: {1} महादशा ({2} → {3}), अंतर्दशा {4} ({5} → {6})", "Now: {1} mahadasha ({2} → {3}), antardasha {4} ({5} → {6})"),
                    ("अभी: {1} ({2} → {3})", "Now: {1} ({2} → {3})"), ("महादशा ({1} → {2}), अंतर्दशा", "mahadasha ({1} → {2}), antardasha"), ("महादशा ({1} → {2})", "mahadasha ({1} → {2})"), ("अभी: {1} महादशा ({2} → {3})", "Now: {1} mahadasha ({2} → {3})"), ("{1} (अपवाद)", "{1} (exception)"), ("{1} कारकांश: {2}।", "{1} Karakamsa: {2}."), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),

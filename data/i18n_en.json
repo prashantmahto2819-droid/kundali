@@ -470,6 +470,19 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"प्रश्न": "Prashna",
+"प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)",
+"विषय": "Signifies",
+"KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
+"समय (ख़ाली = अभी)": "Time (blank = now)",
+"प्रश्न पूछिए": "Ask the question",
+"गणना…": "Computing…",
+"रूलिंग प्लैनेट्स:": "Ruling planets:",
+"भाव-स्पष्ट और ग्रह": "Cusps and planets",
+"प्रतिकूल": "unfavourable",
+"मिश्रित (देरी या शर्तों के साथ)": "mixed (with delay or conditions)",
+"अस्पष्ट": "unclear",
+"प्रश्न का विषय चुनिए। कुंडली इसी क्षण (या दिए समय) और स्थान की बनती है; चाहें तो 1 से 249 के बीच कोई अंक मन से कहिए (KP पद्धति)। स्वास्थ्य, क़ानून और आयु के प्रश्न यहाँ नहीं लिए जाते।": "Choose the topic. The chart is cast for this moment (or the given time) and place; you may also give a number from 1 to 249 that comes to mind (KP method). Health, legal and lifespan questions are not taken here.",
 "मुहूर्त": "Muhurta",
 "मुहूर्त खोज": "Muhurta finder",
 "कार्य": "Activity",
@@ -521,7 +534,6 @@
 "आरूढ़ पद": "Arudha padas",
 "जैमिनी: चर कारक और आरूढ़ पद": "Jaimini: chara karakas and arudha padas",
 "कारक": "Karaka",
-"विषय": "Signifies",
 "पद": "Pada",
 "पद की राशि": "Pada sign",
 "8-कारक (राहु सहित)": "8-karaka scheme (with Rahu)",
@@ -1736,6 +1748,16 @@
 "जैमिनी व्यवस्था v1: चर कारक (7-कारक मुख्य, 8-कारक राहु सहित भी दिए), आरूढ़ पद (एक ही भाव या सप्तम में पड़ने पर दशम लिया), कारकांश। ड्राफ़्ट; जैमिनी के जानकार की समीक्षा चाहिए।": "Jaimini v1: chara karakas (7-karaka main, 8-karaka with Rahu also given), arudha padas (10th taken when the pada falls in the same house or its 7th), karakamsa. Draft; needs review by a Jaimini practitioner.",
 "चर दशा (के. एन. राव की प्रचलित विधि, v1): विषम-पाद लग्न से सीधा क्रम, सम-पाद से उल्टा; वर्ष = राशि से उसके स्वामी तक की गिनती (स्वराशि में 12), उच्च +1, नीच −1। वृश्चिक/कुंभ के दो स्वामियों का नियम सरल किया गया है (मंगल/शनि)। अंतर्दशाएँ अगली राशि से बराबर भागों में।": "Chara dasha (K. N. Rao's common method, v1): direct order from odd-footed Lagnas, reverse from even-footed; years = count from sign to its lord (12 in own sign), +1 exalted, -1 debilitated. The dual-lord rule for Vrishchika/Kumbha is simplified (Mars/Saturn). Antardashas in equal parts from the next sign.",
 "रूलिंग प्लैनेट्स प्रश्न के समय और स्थान के हैं (वार-स्वामी, चंद्र और लग्न के राशि/नक्षत्र/उप-स्वामी)। वार सूर्योदय से माना गया है (लगभग)।": "Ruling planets are for the time and place of the query (day lord; sign/star/sub lords of the Moon and the Lagna). Weekday taken from sunrise (approx.).",
+"विवाह": "Marriage",
+"नौकरी": "Job",
+"धन / वसूली": "Money / recovery",
+"संपत्ति / मकान": "Property / house",
+"शिक्षा / परीक्षा": "Education / exam",
+"विदेश / यात्रा": "Travel / abroad",
+"खोई वस्तु": "Lost item",
+"सामान्य प्रश्न (सफलता)": "General question (success)",
+"कोई नहीं": "none",
+"प्रश्न कुंडली प्रवृत्ति बताती है, निश्चित उत्तर नहीं। स्वास्थ्य, क़ानून या आयु के प्रश्न यहाँ नहीं लिए जाते। KP विशेषज्ञ की समीक्षा बाकी है।": "A prashna chart shows a tendency, not a certain answer. Health, legal and lifespan questions are not taken here. Pending review by a KP practitioner.",
 "पंचांग-स्तर का मुहूर्त (सूर्योदय की तिथि-नक्षत्र-योग-करण, वार, चौघड़िया)। जन्म-कुंडली दी हो तो ताराबल और चंद्रबल भी। यह मार्गदर्शन है; विवाह, उपनयन जैसे बड़े संस्कारों के लिए पंडित से मुहूर्त निकलवाएँ।": "Almanac-level muhurta (tithi, nakshatra, yoga, karana at sunrise; weekday; choghadiya). With a birth chart, tarabala and chandrabala are added. Guidance only; for major samskaras such as marriage, have a pandit fix the muhurta.",
 "यात्रा": "Travel",
 "व्यापार / नया काम": "Business / new venture",
@@ -2130,6 +2152,30 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"प्रश्न लग्न: {1} {2}° · समय: {3}",
+"Prashna Lagna: {1} {2}° · time: {3}"
+],
+[
+"प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}",
+"Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"
+],
+[
+"{1} का भाव {2}; उसके भाव-स्पष्ट का उप-स्वामी {3} है।",
+"House {2} rules {1}; the sub-lord of its cusp is {3}."
+],
+[
+"{1} भाव {2} का कारक है: अनुकूल भाव {3}, प्रतिकूल भाव {4}।",
+"{1} signifies houses {2}: favouring {3}, denying {4}."
+],
+[
+"चंद्र (प्रश्नकर्ता का मन) {1} में, उप-स्वामी {2}: प्रश्न विषय से जुड़ा है।",
+"The Moon (the querent's mind) in {1}, sub-lord {2}: connected to the matter."
+],
+[
+"चंद्र (प्रश्नकर्ता का मन) {1} में, उप-स्वामी {2}: प्रश्न विषय से सीधा जुड़ाव नहीं दिखता।",
+"The Moon (the querent's mind) in {1}, sub-lord {2}: no direct connection to the matter."
 ],
 [
 "{1}: {2} से {3} दिन",

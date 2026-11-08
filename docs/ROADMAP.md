@@ -23,6 +23,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
+## Prashna
+- [x] Prashna (KP horary) v1: 10 topics, cusp sub-lord vs house groups, Moon sub-lord, ruling planets, KP 1-249 number. Pending KP practitioner review.
+
 ## Muhurta
 - [x] Muhurta finder v1 (6 activity types, panchang rules at sunrise, tarabala/chandrabala with a chart, choghadiya windows). Pending: scholar review of nakshatra lists, hora/lagna-level muhurta.
 

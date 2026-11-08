@@ -63,6 +63,7 @@
   <button type="button" data-tab="t-vastu">वास्तु</button>
   <button type="button" data-tab="t-palm">हस्तरेखा</button>
   <button type="button" data-tab="t-muhurta">मुहूर्त</button>
+  <button type="button" data-tab="t-prashna">प्रश्न</button>
   <button type="button" data-tab="t-ask">पूछिए</button>
   <button type="button" data-tab="t-mine" id="tab-mine" style="display:none">मेरी कुंडलियाँ</button>
 </nav>
@@ -256,6 +257,21 @@
     </form>
     <div id="muerr" style="color:#c62828;margin-top:6px"></div>
     <div id="muout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-prashna">
+  <div class="card" id="prashnacard">
+    <b>प्रश्न कुंडली (KP होरारी)</b>
+    <div class="muted" style="font-size:.85rem">प्रश्न का विषय चुनिए। कुंडली इसी क्षण (या दिए समय) और स्थान की बनती है; चाहें तो 1 से 249 के बीच कोई अंक मन से कहिए (KP पद्धति)। स्वास्थ्य, क़ानून और आयु के प्रश्न यहाँ नहीं लिए जाते।</div>
+    <form id="prf" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <div><label>विषय</label><select id="pr_topic"><option value="general">सामान्य प्रश्न (सफलता)</option><option value="marriage">विवाह</option><option value="job">नौकरी</option><option value="business">व्यापार</option><option value="money">धन / वसूली</option><option value="property">संपत्ति / मकान</option><option value="education">शिक्षा / परीक्षा</option><option value="children">संतान</option><option value="travel">विदेश / यात्रा</option><option value="lost_item">खोई वस्तु</option></select></div>
+      <div><label>KP अंक (1-249, वैकल्पिक)</label><input id="pr_num" type="number" min="1" max="249" style="width:120px"></div>
+      <div><label>समय (ख़ाली = अभी)</label><input id="pr_when" type="datetime-local"></div>
+      <div><label>स्थान</label><input id="pr_city" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)"></div>
+      <div><button type="submit">प्रश्न पूछिए</button></div>
+    </form>
+    <div id="prerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="prout"></div>
   </div>
   </section>
   <section class="tab" id="t-ask">
@@ -910,6 +926,32 @@ $('vgo2').addEventListener('click', async () => {
         <details><summary>सभी दिन</summary><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.all.map(row).join('')}</table></details>
         <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
     } catch (err) { $('muout').innerHTML = ''; $('muerr').textContent = 'त्रुटि: ' + err.message; }
+  });
+})();
+
+// ---- Prashna (KP horary)
+(function prashnaUI() {
+  $('prf').addEventListener('submit', async e => {
+    e.preventDefault(); $('prerr').textContent = ''; $('prout').innerHTML = '<div class="muted">गणना…</div>';
+    try {
+      let lat = +$('lat').value, lon = +$('lon').value, tz = $('tz').value.trim();
+      const q = $('pr_city').value.trim();
+      if (q) { const r = await apiFetch('/v1/places?q=' + encodeURIComponent(q) + '&limit=1'); const d = await r.json(); if (d.results && d.results[0]) { lat = d.results[0].lat; lon = d.results[0].lon; tz = d.results[0].tz || tz; } }
+      const body = {topic: $('pr_topic').value, lat, lon, tz};
+      if ($('pr_num').value) body.kp_number = +$('pr_num').value;
+      if ($('pr_when').value) body.when = $('pr_when').value.replace('T', ' ');
+      const r = await apiFetch('/v1/prashna', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const H = n => ({Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'})[n] || n;
+      const rp = d.ruling_planets;
+      $('prout').innerHTML = `<p style="font-size:1.1rem"><b>${esc(d.topic_hi)}:</b> <b class="${d.verdict === 'favourable' ? 'yes' : ''}">${esc(d.verdict_hi)}</b></p>
+        <ul>${d.reasons_hi.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        <p class="muted">प्रश्न लग्न: ${esc(d.lagna.sign_name_hi)} ${d.lagna.degree_in_sign}°${d.kp_number ? ` (KP अंक ${d.kp_number})` : ''} · समय: ${esc(d.at)}</p>
+        <p><b>रूलिंग प्लैनेट्स:</b> ${rp.ranked.map(H).map(esc).join(', ')}${rp.agents.length ? ' (+ ' + rp.agents.map(H).map(esc).join(', ') + ')' : ''}</p>
+        <details><summary>भाव-स्पष्ट और ग्रह</summary><table><tr><th>भाव</th><th>राशि</th><th>उप-स्वामी</th></tr>${d.cusps.map(c => `<tr><td>${c.house}</td><td>${esc(c.sign_name_hi)}</td><td>${esc(H(c.sub_lord))}</td></tr>`).join('')}</table>
+        <table><tr><th>ग्रह</th><th>राशि</th><th>भाव</th><th>नक्षत्र-स्वामी</th><th>उप-स्वामी</th></tr>${Object.entries(d.planets).map(([n, v]) => `<tr><td>${esc(H(n))}</td><td>${esc(v.sign_name_hi)}</td><td>${v.house}</td><td>${esc(H(v.star_lord))}</td><td>${esc(H(v.sub_lord))}</td></tr>`).join('')}</table></details>
+        <div class="muted" style="font-size:.8rem">${esc(d.disclaimer_hi)}</div>`;
+    } catch (err) { $('prout').innerHTML = ''; $('prerr').textContent = 'त्रुटि: ' + err.message; }
   });
 })();
 

@@ -173,6 +173,23 @@ def muhurta(req: MuhurtaRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+class PrashnaRequest(BaseModel):
+    topic: str = "general"
+    lat: float
+    lon: float
+    tz: str = "Asia/Kolkata"
+    when: str | None = None
+    kp_number: int | None = Field(None, ge=1, le=249)
+
+
+@app.post("/v1/prashna")
+def prashna(req: PrashnaRequest):
+    try:
+        return handlers.prashna_from_payload(req.model_dump(exclude_none=True))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 class VastuItem(BaseModel):
     room: str
     direction: str | None = None

@@ -115,6 +115,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/vastu": handlers.vastu_from_payload,
                   "/v1/palm": handlers.palm_from_payload,
                   "/v1/muhurta": handlers.muhurta_from_payload,
+                  "/v1/prashna": handlers.prashna_from_payload,
                   "/v1/varshaphal": handlers.varshaphal_from_payload,
                   "/v1/ask": handlers.ask_from_payload}
         if self.path == "/v1/report":

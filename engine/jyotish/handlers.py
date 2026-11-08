@@ -238,6 +238,42 @@ def muhurta_from_payload(payload: dict) -> dict:
         raise BadRequest(str(exc)) from exc
 
 
+def prashna_from_payload(payload: dict) -> dict:
+    """POST /v1/prashna  {topic, lat, lon, tz, when?: 'YYYY-MM-DD HH:MM' local (default now), kp_number?: 1-249}"""
+    from . import prashna
+    try:
+        lat, lon = float(payload.get("lat")), float(payload.get("lon"))
+    except (TypeError, ValueError):
+        raise BadRequest("lat and lon are required numbers")
+    tz = str(payload.get("tz") or "Asia/Kolkata")
+    try:
+        zone = ZoneInfo(tz)
+    except ZoneInfoNotFoundError:
+        raise BadRequest(f"unknown time zone '{tz}'")
+    when = payload.get("when")
+    if when:
+        try:
+            when_utc = datetime.strptime(str(when)[:16].replace("T", " "), "%Y-%m-%d %H:%M").replace(tzinfo=zone).astimezone(timezone.utc)
+        except ValueError:
+            raise BadRequest("when must be 'YYYY-MM-DD HH:MM' (local time)")
+    else:
+        when_utc = datetime.now(timezone.utc)
+    n = payload.get("kp_number")
+    if n not in (None, "", 0):
+        try:
+            n = int(n)
+        except (TypeError, ValueError):
+            raise BadRequest("kp_number must be 1-249")
+        if not 1 <= n <= 249:
+            raise BadRequest("kp_number must be 1-249")
+    else:
+        n = None
+    try:
+        return prashna.prashna(str(payload.get("topic", "general")), when_utc, lat, lon, backend(), tz, n)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
 # ---- JSON safety net ------------------------------------------------------------------
 def plain(obj):
     """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""
