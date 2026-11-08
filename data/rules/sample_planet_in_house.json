@@ -1,0 +1,50 @@
+{
+  "_comment": "SAMPLE rules to demonstrate the format. Texts are generic karaka-based statements written for this project, NOT quotations. Every rule is 'draft' until a scholar adds the exact classical reference and signs it off.",
+  "rules": [
+    {
+      "id": "sun_in_10",
+      "category": "planet_in_house",
+      "when": {"planet": "Sun", "house": 10},
+      "text_en": "The Sun is the significator of authority and status, and the 10th house is career and public standing, so this placement is traditionally read as a drive toward leadership and recognition in work.",
+      "text_hi": "सूर्य अधिकार और प्रतिष्ठा का कारक है और दशम भाव कर्म तथा सार्वजनिक स्थान का, इसलिए यह स्थिति परंपरा में कार्यक्षेत्र में नेतृत्व और मान-सम्मान की ओर झुकाव मानी जाती है।",
+      "source": {"text": "Karaka principles (general); exact classical citation pending", "chapter": null, "verse": null},
+      "review_status": "draft"
+    },
+    {
+      "id": "moon_in_4",
+      "category": "planet_in_house",
+      "when": {"planet": "Moon", "house": 4},
+      "text_en": "The Moon signifies the mind and mother, and the 4th house is home, comfort and inner peace, so this placement is traditionally read as an emotionally home-centred nature.",
+      "text_hi": "चंद्र मन और माता का कारक है और चतुर्थ भाव घर, सुख और मानसिक शांति का, इसलिए यह स्थिति परंपरा में घर और भावनात्मक सुरक्षा से जुड़े स्वभाव की ओर संकेत मानी जाती है।",
+      "source": {"text": "Karaka principles (general); exact classical citation pending", "chapter": null, "verse": null},
+      "review_status": "draft"
+    },
+    {
+      "id": "jupiter_in_5",
+      "category": "planet_in_house",
+      "when": {"planet": "Jupiter", "house": 5},
+      "text_en": "Jupiter signifies wisdom, teaching and children, and the 5th house is intellect, education and progeny, so this placement is traditionally read as favourable for learning and guidance.",
+      "text_hi": "गुरु ज्ञान, शिक्षा और संतान का कारक है और पंचम भाव बुद्धि, विद्या और संतान का, इसलिए यह स्थिति परंपरा में विद्या और मार्गदर्शन के लिए अनुकूल मानी जाती है।",
+      "source": {"text": "Karaka principles (general); exact classical citation pending", "chapter": null, "verse": null},
+      "review_status": "draft"
+    },
+    {
+      "id": "saturn_in_7",
+      "category": "planet_in_house",
+      "when": {"planet": "Saturn", "house": 7},
+      "text_en": "Saturn signifies delay, discipline and duty, and the 7th house is marriage and partnerships, so this placement is traditionally read as slower, more serious partnerships that mature with time.",
+      "text_hi": "शनि विलंब, अनुशासन और कर्तव्य का कारक है और सप्तम भाव विवाह तथा साझेदारी का, इसलिए यह स्थिति परंपरा में धीमे, गंभीर और समय के साथ परिपक्व होने वाले संबंधों की ओर संकेत मानी जाती है।",
+      "source": {"text": "Karaka principles (general); exact classical citation pending", "chapter": null, "verse": null},
+      "review_status": "draft"
+    },
+    {
+      "id": "mars_exalted",
+      "category": "planet_dignity",
+      "when": {"planet": "Mars", "dignity": "exalted"},
+      "text_en": "Mars in its sign of exaltation (Makara) is traditionally considered strong: energy, courage and initiative are said to be well supported.",
+      "text_hi": "मंगल अपनी उच्च राशि (मकर) में परंपरा में बलवान माना जाता है; ऊर्जा, साहस और पहल की क्षमता को सहारा मिलने की बात कही जाती है।",
+      "source": {"text": "Dignity tables (general); exact classical citation pending", "chapter": null, "verse": null},
+      "review_status": "draft"
+    }
+  ]
+}

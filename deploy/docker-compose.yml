@@ -1,0 +1,23 @@
+# One-VPS production layout. Only Cloudflare Tunnel talks to the internet;
+# no ports are published, so the VPS IP is not exposed.
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    environment:
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://example.com}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on: [api]

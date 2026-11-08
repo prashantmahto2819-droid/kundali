@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>कुंडली — पहला संस्करण</title>
+<style>
+  :root { --bg:#fbf7ef; --ink:#2a2118; --muted:#7a6a58; --line:#b08a4a; --card:#fff; --accent:#8a3b12; --ok:#2e7d32; --warn:#b26a00; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#17120d; --ink:#f1e6d3; --muted:#b9a88f; --line:#c9a25f; --card:#221a12; --accent:#f0a060; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,"Noto Sans Devanagari",sans-serif; }
+  header { padding:20px 16px 8px; max-width:1100px; margin:auto; }
+  h1 { margin:0; font-size:1.5rem; color:var(--accent); }
+  .sub { color:var(--muted); font-size:.9rem; }
+  main { max-width:1100px; margin:auto; padding:8px 16px 48px; }
+  .card { background:var(--card); border:1px solid color-mix(in srgb,var(--line) 40%,transparent); border-radius:12px; padding:14px 16px; margin:12px 0; }
+  form { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; align-items:end; }
+  label { font-size:.8rem; color:var(--muted); display:block; }
+  input,select,button { width:100%; padding:9px 10px; font:inherit; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--ink); }
+  button { background:var(--accent); color:#fff; border:0; cursor:pointer; font-weight:600; }
+  .banner { border-left:4px solid var(--warn); padding:8px 12px; background:color-mix(in srgb,var(--warn) 10%,transparent); border-radius:6px; font-size:.88rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
+  svg text { font-family:inherit; }
+  svg .house { fill:transparent; stroke:var(--line); stroke-width:1.6; cursor:pointer; }
+  svg .house:hover { fill:color-mix(in srgb,var(--accent) 10%,transparent); }
+  svg .signno { fill:var(--muted); font-size:12px; text-anchor:middle; pointer-events:none; }
+  svg .pl { fill:var(--ink); font-size:15px; font-weight:600; text-anchor:middle; cursor:pointer; }
+  svg .pl:hover { fill:var(--accent); }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  th,td { text-align:left; padding:5px 6px; border-bottom:1px solid color-mix(in srgb,var(--line) 25%,transparent); }
+  th { color:var(--muted); font-weight:600; }
+  .chip { display:inline-block; padding:1px 8px; border-radius:99px; font-size:.75rem; border:1px solid var(--line); margin-left:4px; }
+  .yes { color:var(--ok); } .muted { color:var(--muted); }
+  details { margin:4px 0; } summary { cursor:pointer; }
+  #learn h3 { margin:.2rem 0; color:var(--accent); }
+  #err { color:#c62828; margin-top:8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>कुंडली <span class="chip">पहला संस्करण</span></h1>
+  <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
+</header>
+<main>
+  <div class="card">
+    <form id="f">
+      <div><label>नाम (वैकल्पिक)</label><input id="name" placeholder="नाम"></div>
+      <div><label>जन्म तारीख</label><input id="date" type="date" required value="1990-05-17"></div>
+      <div><label>जन्म समय</label><input id="time" type="time" step="60" required value="06:45"></div>
+      <div><label>शहर</label>
+        <select id="city">
+          <option value="23.1815,79.9864">जबलपुर</option>
+          <option value="28.6139,77.2090">दिल्ली</option>
+          <option value="19.0760,72.8777">मुंबई</option>
+          <option value="22.5726,88.3639">कोलकाता</option>
+          <option value="13.0827,80.2707">चेन्नई</option>
+          <option value="25.5941,85.1376">पटना</option>
+          <option value="23.3441,85.3096">रांची</option>
+          <option value="25.3176,82.9739">वाराणसी</option>
+          <option value="26.8467,80.9462">लखनऊ</option>
+          <option value="23.2599,77.4126">भोपाल</option>
+          <option value="">अन्य (नीचे अक्षांश/देशांतर भरें)</option>
+        </select></div>
+      <div><label>अक्षांश (उत्तर +)</label><input id="lat" type="number" step="0.0001" value="23.1815"></div>
+      <div><label>देशांतर (पूर्व +)</label><input id="lon" type="number" step="0.0001" value="79.9864"></div>
+      <div><label>समय-क्षेत्र (IANA)</label><input id="tz" value="Asia/Kolkata"></div>
+      <div><button type="submit">कुंडली बनाइए</button></div>
+    </form>
+    <div id="err"></div>
+  </div>
+  <div id="out" hidden>
+    <div class="banner" id="note"></div>
+    <div class="card" id="summary"></div>
+    <div class="grid">
+      <div class="card"><b>लग्न कुंडली (D1)</b><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
+      <div class="card"><b>नवांश (D9)</b><svg id="d9" viewBox="-4 -4 408 408" width="100%"></svg></div>
+    </div>
+    <div class="card" id="learn"><h3>सीखिए</h3><div class="muted">किसी खाने या ग्रह पर क्लिक कीजिए।</div></div>
+    <div class="card"><b>ग्रह स्थिति</b><div id="ptable"></div></div>
+    <div class="grid">
+      <div class="card"><b>पंचांग</b><div id="panchang"></div></div>
+      <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
+    </div>
+    <div class="card"><b>शास्त्रीय संकेत (नमूना नियम)</b><div id="readings"></div></div>
+    <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
+  </div>
+</main>
+<script>
+const API = new URLSearchParams(location.search).get('api') || '';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let chart = null, KB = {planets:null, houses:null};
+
+$('city').addEventListener('change', e => {
+  if (!e.target.value) return;
+  const [la, lo] = e.target.value.split(',');
+  $('lat').value = la; $('lon').value = lo;
+});
+
+// North-Indian chart geometry (house 1 = top diamond, anticlockwise)
+const HOUSES = {
+  1:[[200,200],[100,100],[200,0],[300,100],[200,92]],
+  2:[[0,0],[200,0],[100,100],[null],[100,38]],
+  3:[[0,0],[100,100],[0,200],[null],[38,100]],
+  4:[[100,100],[0,200],[100,300],[200,200],[98,200]],
+  5:[[0,200],[100,300],[0,400],[null],[38,300]],
+  6:[[0,400],[100,300],[200,400],[null],[100,362]],
+  7:[[200,200],[100,300],[200,400],[300,300],[200,308]],
+  8:[[200,400],[300,300],[400,400],[null],[300,362]],
+  9:[[400,400],[300,300],[400,200],[null],[362,300]],
+  10:[[200,200],[300,300],[400,200],[300,100],[302,200]],
+  11:[[400,200],[300,100],[400,0],[null],[362,100]],
+  12:[[400,0],[300,100],[200,0],[null],[300,38]],
+};
+function drawChart(svg, cells, kind) {
+  let out = '';
+  for (let h = 1; h <= 12; h++) {
+    const g = HOUSES[h], pts = g.slice(0,4).filter(p => p[0] !== null).map(p => p.join(',')).join(' ');
+    const [cx, cy] = g[4], c = cells[h-1];
+    out += `<polygon class="house" points="${pts}" data-house="${h}"/>`;
+    out += `<text class="signno" x="${cx}" y="${cy-14}">${c.sign+1}</text>`;
+    c.planets.forEach((p, i) => {
+      const col = i % 3, row = Math.floor(i / 3), n = Math.min(3, c.planets.length - row*3);
+      const x = cx + (col - (n-1)/2) * 24, y = cy + 6 + row * 18;
+      out += `<text class="pl" x="${x}" y="${y}" data-planet="${esc(p.name)}">${esc(p.short)}${p.retro?'<tspan font-size="9" dy="-6">v</tspan>':''}</text>`;
+    });
+  }
+  svg.innerHTML = out;
+  svg.onclick = e => {
+    const t = e.target;
+    if (t.dataset.planet) showPlanet(t.dataset.planet);
+    else if (t.dataset.house) showHouse(+t.dataset.house, kind);
+  };
+}
+
+function planetMap() { return Object.fromEntries(chart.planets.map(p => [p.name, p])); }
+
+function showPlanet(name) {
+  const k = KB.planets?.planets?.[name], p = planetMap()[name];
+  if (!k || !p) return;
+  $('learn').innerHTML = `<h3>${esc(k.name_hi)} — ${esc(k.name_en)}</h3>
+    <p><b>आपकी कुंडली में:</b> ${esc(p.sign_name_hi)} राशि, ${esc(p.dms)}, भाव ${p.house}, ${esc(p.nakshatra_hi)} नक्षत्र (पाद ${p.pada})${p.retrograde?', वक्री':''}${p.dignity?', '+esc(p.dignity):''}</p>
+    <p><b>कारकत्व:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>
+    <p><b>क्यों:</b> ${esc(k.why_en)}</p>
+    <p class="muted">स्थिति: ${esc(k.nature)}. दृष्टि भाव: ${p.aspects_houses.join(', ')}.</p>`;
+  $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function showHouse(h, kind) {
+  const k = KB.houses?.houses?.[h]; if (!k) return;
+  const hs = chart.houses[h-1];
+  $('learn').innerHTML = `<h3>भाव ${h} — ${esc(k.name_hi)}</h3>
+    <p>${kind==='d9' ? 'नवांश में ' : ''}इस भाव में राशि: <b>${esc(hs.sign_name_hi)}</b>, स्वामी: <b>${esc(chart.planets.find(p=>p.name===hs.lord)?.name_hi || hs.lord)}</b> (भाव ${hs.lord_house} में)</p>
+    <p><b>विषय:</b> ${k.signifies_hi.map(esc).join(' · ')}</p>
+    <p class="muted">प्रकार: ${esc(k.type)}. इस भाव में ग्रह: ${hs.planets.length ? hs.planets.map(n=>planetMap()[n].name_hi).join(', ') : 'कोई नहीं'}.</p>`;
+  $('learn').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function render(c) {
+  chart = c;
+  $('out').hidden = false;
+  $('note').textContent = `गणना इंजन: ${c.backend}. ${c.backend_note}`;
+  const m = c.planets.find(p => p.name === 'Moon');
+  $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
+    चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
+  const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
+  const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde}))}));
+  const d9 = c.navamsa.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:false}))}));
+  drawChart($('d1'), d1, 'd1'); drawChart($('d9'), d9, 'd9');
+
+  $('ptable').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव</th><th>नक्षत्र (पाद)</th><th>स्थिति</th></tr>` +
+    c.planets.map(p => `<tr><td><a href="#" data-p="${esc(p.name)}">${esc(p.name_hi)}</a></td><td>${esc(p.sign_name_hi)}</td><td>${esc(p.dms)}</td><td>${p.house}</td><td>${esc(p.nakshatra_hi)} (${p.pada})</td><td>${p.retrograde?'वक्री ':''}${esc(DIGNITY_HI[p.dignity]||'')}</td></tr>`).join('') + `</table>`;
+  $('ptable').onclick = e => { const a = e.target.closest('a[data-p]'); if (a) { e.preventDefault(); showPlanet(a.dataset.p); } };
+
+  const pc = c.panchang;
+  $('panchang').innerHTML = `<table>
+    <tr><th>वार</th><td>${esc(pc.vara.name_hi)}</td></tr>
+    <tr><th>तिथि</th><td>${esc(pc.tithi.paksha)} ${esc(pc.tithi.name)} (${pc.tithi.number})</td></tr>
+    <tr><th>नक्षत्र</th><td>${esc(pc.nakshatra.name_hi)} पाद ${pc.nakshatra.pada}</td></tr>
+    <tr><th>योग</th><td>${esc(pc.yoga.name)}</td></tr>
+    <tr><th>करण</th><td>${esc(pc.karana.name)}</td></tr></table>
+    <div class="muted" style="font-size:.8rem">${esc(pc.note)}</div>`;
+
+  $('yogas').innerHTML = c.yogas.map(y => `<details><summary>${esc(y.name_hi)} <span class="chip ${y.present?'yes':'muted'}">${y.present?'बना है':'नहीं'}</span></summary><div class="muted">${esc(y.why)} <i>(ड्राफ़्ट: विद्वान-समीक्षा बाकी)</i></div></details>`).join('');
+
+  $('readings').innerHTML = c.readings.length ? c.readings.map(r => `<details open><summary><b>${esc(planetMap()[r.planet].name_hi)}</b> — भाव ${r.house}</summary>
+      <div>${esc(r.text_hi)}</div>
+      <div class="muted" style="font-size:.8rem">क्यों: ${esc(r.because.planet)} → भाव ${r.because.house}, राशि ${esc(r.because.sign)}. स्रोत: ${esc(r.source?.text)} · स्थिति: ${esc(r.review_status)}</div></details>`).join('')
+    : '<span class="muted">इस कुंडली पर अभी कोई नमूना नियम लागू नहीं हुआ। (नियम-डेटा चरण 2 में बढ़ेगा।)</span>';
+
+  const run = c.dasha_running, lbl = ['महादशा','अंतर्दशा','प्रत्यंतर'];
+  const fmt = s => s.slice(0,10);
+  $('dasha').innerHTML = `<p><b>अभी चल रही:</b> ${run.map(r => `${lbl[r.level-1]} ${esc(KBname(r.lord))} (${fmt(r.start)} → ${fmt(r.end)})`).join(' · ')}</p>` +
+    c.dasha.mahadashas.map(md => `<details><summary>${esc(KBname(md.lord))} महादशा — ${fmt(md.start)} → ${fmt(md.end)}</summary>
+      <table>${(md.children||[]).map(ad => `<tr><td>${esc(KBname(ad.lord))}</td><td>${fmt(ad.start)}</td><td>${fmt(ad.end)}</td></tr>`).join('')}</table></details>`).join('');
+}
+const HI = {Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'};
+const KBname = n => HI[n] || n;
+const DIGNITY_HI = {exalted:'उच्च', debilitated:'नीच', own:'स्वराशि'};
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault(); $('err').textContent = '';
+  const body = {name:$('name').value || null, date:$('date').value, time:$('time').value, tz:$('tz').value.trim(), lat:+$('lat').value, lon:+$('lon').value};
+  try {
+    if (!KB.planets) {
+      const [p, h] = await Promise.all([fetch(API + '/data/knowledge/planets.json'), fetch(API + '/data/knowledge/houses.json')]);
+      if (p.ok) KB.planets = await p.json(); if (h.ok) KB.houses = await h.json();
+    }
+    const r = await fetch(API + '/v1/chart', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || 'त्रुटि');
+    render(data);
+  } catch (err) { $('err').textContent = 'त्रुटि: ' + err.message; }
+});
+// ?auto=1 runs the form once on load (handy for demos and screenshots)
+if (new URLSearchParams(location.search).get('auto')) $('f').requestSubmit();
+</script>
+</body>
+</html>
