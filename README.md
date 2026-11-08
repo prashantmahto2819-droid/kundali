@@ -45,7 +45,7 @@ The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Ya
 
 `POST /v1/palm` with `{"choices":{"life_length":"long","hand_shape":"water"}}` turns a guided palm checklist into a Hindi reading; `GET /v1/palm/catalog` lists the 16 features, where to look and the options. It never predicts lifespan or illness. Photo analysis (vision model, with consent) is a later step.
 
-`/v1/chart` also returns `relations` (neecha-bhanga with the exact conditions met, conjunctions, combustion, aspects by planet and by house; draft). It also returns `strength`: most of Shadbala in virupas (sthana incl. saptavargaja/ojayugma/drekkana, dig, kala: natonnata/paksha/tribhaga/vara/hora/ayana, naisargika, drik; cheshta only for Sun and Moon). Missing: cheshta of the five planets, abda, masa, yuddha. It is flagged `complete: false` and lists `assumptions`; rank excludes cheshta; do not compare totals with the classical minimum tables.
+`/v1/chart` also returns `lalkitab` (draft; two house views, traditional remedies with disclaimer). It also returns `relations` (neecha-bhanga with the exact conditions met, conjunctions, combustion, aspects by planet and by house; draft). It also returns `strength`: most of Shadbala in virupas (sthana incl. saptavargaja/ojayugma/drekkana, dig, kala: natonnata/paksha/tribhaga/vara/hora/ayana, naisargika, drik; cheshta only for Sun and Moon). Missing: cheshta of the five planets, abda, masa, yuddha. It is flagged `complete: false` and lists `assumptions`; rank excludes cheshta; do not compare totals with the classical minimum tables.
 
 `POST /v1/varshaphal` (chart fields plus `year`, optional `return_lat/return_lon/return_tz`) returns the solar-return chart and muntha for that year.
 

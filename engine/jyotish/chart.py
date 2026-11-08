@@ -15,6 +15,7 @@ from .panchang import panchang
 from .muhurta import day_table
 from .rules import match_rules
 from .timeutil import delta_t, julian_day, local_time_issue, local_to_utc, year_fraction
+from .lalkitab import lalkitab
 from .relations import relations
 from .strength import strength
 from .timeline import dasha_timeline
@@ -155,6 +156,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["gochara"] = gochara(chart, positions_at(now, backend, ayanamsa_system), now)
     chart["timeline"] = dasha_timeline(chart, now)
     chart["relations"] = relations(chart)
+    chart["lalkitab"] = lalkitab(chart)
     chart["yogas"] = detect_yogas(chart)
     chart["readings"] = match_rules(chart)
     return chart

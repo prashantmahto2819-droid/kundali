@@ -126,6 +126,8 @@ def render(chart: dict) -> str:
     rel_html = "<ul>" + "".join(rel_items) + "</ul>" if rel_items else "<p>कोई नीच ग्रह, निकट युति या अस्त ग्रह नहीं मिला।</p>"
     asp_rows = [[e(r["from_hi"]), f'{r["from_house"]}', f'{r["aspect"]}वीं', f'{r["to_house"]}',
                  e(", ".join(r["on_hi"]) or "–")] for r in rl["aspects"]["planets"]]
+    lk_rows = [[e(r["name_hi"]), str(r["views"]["lagna"]["house"]), str(r["views"]["aries"]["house"]), str(r["pakka_ghar"]),
+                e(r["views"]["lagna"]["text_hi"]), e(r["upay_hi"])] for r in chart["lalkitab"]["planets"]]
     day = chart.get("day", {})
     day_html = ""
     if day.get("available"):
@@ -202,6 +204,11 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 {rel_html}
 <p class="small">{e(rl["aspects"]["why_hi"])}</p>
 {_table(["ग्रह", "स्थित भाव", "दृष्टि", "देखा गया भाव", "उस भाव में ग्रह"], asp_rows)}
+
+<h2>लाल किताब (ड्राफ़्ट)</h2>
+<p class="small">{e(chart["lalkitab"]["views_note_hi"])}</p>
+{_table(["ग्रह", "घर (लग्न)", "घर (मेष)", "पक्का घर", "संकेत", "परंपरागत उपाय"], lk_rows)}
+<p class="small">{e(chart["lalkitab"]["disclaimer_hi"])}</p>
 
 <h2>योग और दोष</h2>
 {_table(["योग", "स्थिति", "कारण"], yoga_rows)}
