@@ -119,10 +119,14 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/lalkitab/varshphal": handlers.lalkitab_varshphal_from_payload,
                   "/v1/varshaphal": handlers.varshaphal_from_payload,
                   "/v1/ask": handlers.ask_from_payload}
-        if self.path == "/v1/report":
+        if self.path.split("?")[0] in ("/v1/report", "/v1/match/report"):
             try:
                 length = int(self.headers.get("Content-Length", 0))
-                html = handlers.report_from_payload(json.loads(self.rfile.read(length) or b"{}"), brand=handlers.brand_for(self.headers))
+                payload = json.loads(self.rfile.read(length) or b"{}")
+                if self.path.split("?")[0] == "/v1/report":
+                    html = handlers.report_from_payload(payload, brand=handlers.brand_for(self.headers))
+                else:
+                    html = handlers.match_report_from_payload(payload)
                 return self._send(200, html.encode("utf-8"), "text/html; charset=utf-8")
             except handlers.BadRequest as exc:
                 return self._json(422, {"detail": str(exc)})

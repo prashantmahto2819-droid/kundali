@@ -100,6 +100,9 @@ put("मूल लाल किताब वर्षफल सारणी स�
 put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
 put(_full["jaimini"]["chara_dasha"]["note_hi"], _full["jaimini"]["chara_dasha"]["note_en"])
 put(_full["kp"]["ruling_planets"]["note_hi"], _full["kp"]["ruling_planets"]["note_en"])
+from jyotish import matching as _mt  # noqa: E402
+_mm = _mt.ashtakoota(5.0, 215.0)
+put(_mm["parihara_note_hi"], _mm["parihara_note_en"])
 from jyotish import prashna as _pr  # noqa: E402
 for _t in _pr.TOPICS.values():
     put(_t["hi"], _t["en"])
@@ -227,7 +230,8 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "लिंक कॉपी करें": "Copy link", "लिंक कॉपी हो गया।": "Link copied.", "आज क्या ख़ास है": "What matters today", "दशा:": "Dasha:", "शनि:": "Saturn:", "गुरु:": "Jupiter:", "आगे:": "Ahead:", "सक्रिय क्षेत्र:": "active areas:",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)": "Open matching report (print for PDF)", "कुंडली मिलान (अष्टकूट)": "Kundali matching (Ashtakoota)", "मंगल दोष तुलना": "Manglik comparison",
+ "अष्टकूट": "Ashtakoota", "वर": "Groom", "वधू": "Bride", "लिंक कॉपी करें": "Copy link", "लिंक कॉपी हो गया।": "Link copied.", "आज क्या ख़ास है": "What matters today", "दशा:": "Dasha:", "शनि:": "Saturn:", "गुरु:": "Jupiter:", "आगे:": "Ahead:", "सक्रिय क्षेत्र:": "active areas:",
  "दशा और गोचर को साथ पढ़ने का संक्षेप; पूरा विवरण संबंधित टैब में।": "A short reading of dasha and transits together; full detail in the related tabs.",
  "चल रही है (पहला चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (first phase); traditionally a time for patience and discipline.",
  "चल रही है (मध्य चरण); धैर्य और अनुशासन का समय माना जाता है।": "is running (middle phase); traditionally a time for patience and discipline.",
@@ -448,7 +452,10 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1} महादशा, {2} अंतर्दशा ({3} तक) — {4}; सक्रिय क्षेत्र: {5}।", "{1} mahadasha, {2} antardasha (until {3}) — {4}; active areas: {5}."),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("कुंडली मिलान — {1} / {2}", "Kundali matching — {1} / {2}"),
+                   ("— पारंपरिक न्यूनतम 18 से कम", "— below the traditional minimum of 18"), ("— स्वीकार्य (18-24)", "— acceptable (18-24)"), ("— अच्छा (25-32)", "— good (25-32)"), ("— उत्तम (33+)", "— excellent (33+)"), ("लग्न {1} {2} · चंद्र {3}, {4} पाद {5}", "Lagna {1} {2} · Moon {3}, {4} pada {5}"), ("जन्म {1} {2} · लग्न {3} {4} · चंद्र {5}, {6} पाद {7}", "Born {1} {2} · Lagna {3} {4} · Moon {5}, {6} pada {7}"),
+                   ("बनाया गया: {1} · बैकएंड: {2}। यह रिपोर्ट शिक्षा और मार्गदर्शन के लिए है; विवाह जैसे निर्णय में पूरी कुंडली और विशेषज्ञ की सलाह देखें।", "Generated: {1} · backend: {2}. This report is for education and guidance; for a decision such as marriage, consider the full charts and an expert's advice."),
+                   ("वर: {1}", "Groom: {1}"), ("वधू: {1}", "Bride: {1}"), ("{1} महादशा, {2} अंतर्दशा ({3} तक) — {4}; सक्रिय क्षेत्र: {5}।", "{1} mahadasha, {2} antardasha (until {3}) — {4}; active areas: {5}."),
                    ("{1} महादशा — {2}; सक्रिय क्षेत्र: {3}।", "{1} mahadasha — {2}; active areas: {3}."), ("{1} को {2} {3} में (चंद्र से {4}वाँ)।", "{2} enters {3} on {1} ({4}th from the Moon)."), ("{1} तक", "until {1}"), ("लग्न {1} मिनट में बदलता", "Lagna changes in {1} min"), ("{1} से {2}: जीवन का {3}वाँ वर्ष (चक्र वर्ष {4})। {5}", "{1} to {2}: year {3} of life (cycle year {4}). {5}"), ("अष्टम शनि: {1}", "Ashtama Shani: {1}"),
                    ("{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}", "{1}: {2}–{3} · {4}: {5}–{6} · {7}: {8}–{9}"), ("{1}: {2}–{3} · {4}: {5}–{6}", "{1}: {2}–{3} · {4}: {5}–{6}"), ("{1}: {2}–{3}", "{1}: {2}–{3}"), ("प्रश्न लग्न: {1} {2}° · समय: {3}", "Prashna Lagna: {1} {2}° · time: {3}"), ("प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4}", "Prashna Lagna: {1} {2}° (KP number {3}) · time: {4}"),
                    ("{1} का भाव {2}; उसके भाव-स्पष्ट का उप-स्वामी {3} है।", "House {2} rules {1}; the sub-lord of its cusp is {3}."),

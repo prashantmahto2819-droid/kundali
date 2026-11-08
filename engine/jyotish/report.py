@@ -335,3 +335,58 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <p class="small" style="margin-top:18px">इंजन संस्करण {e(ENGINE_VERSION)} · बैकएंड: {e(chart["backend"])} · बनाया गया: {e(generated)}।
 यह रिपोर्ट शिक्षा और मार्गदर्शन के लिए है; स्वास्थ्य, धन या क़ानून के फ़ैसले विशेषज्ञ की सलाह से लें।</p>
 </body></html>"""
+
+
+# ---- Matching (ashtakoota) report ---------------------------------------------------------------------
+def render_match(m: dict) -> str:
+    """Printable Hindi HTML for a /v1/match result (both D1 charts, koota table, doshas/parihara, manglik)."""
+    CONF = {"firm": "पक्का नियम", "draft": "ड्राफ़्ट (समीक्षा बाकी)"}
+    rows = [[e(k["name_hi"]) + f' <span class="small">({e(k["name"])})</span>', f'<b>{k["score"]}</b> / {k["max"]}', e(k["detail"]), CONF.get(k["confidence"], "")]
+            for k in m["kootas"]]
+    charts_html = ""
+    for role, label in (("boy", "वर"), ("girl", "वधू")):
+        ch = m.get(role + "_chart")
+        if not ch:
+            continue
+        pm = {p["name"]: p for p in ch["planets"]}
+        cells = [{"sign": h["sign"], "planets": [(pm[n]["short_hi"], pm[n]["retrograde"]) for n in h["planets"]]} for h in ch["houses"]]
+        who = m.get(role + "_name") or label
+        moon = pm["Moon"]
+        charts_html += (f'<div><b>{label}: {e(who)}</b><div class="small">जन्म {e(ch["input"]["date"])} {e(ch["input"]["time"])} · लग्न {e(ch["lagna"]["sign_name_hi"])} {e(ch["lagna"]["dms"])} · '
+                        f'चंद्र {e(moon["sign_name_hi"])}, {e(moon["nakshatra_hi"])} पाद {moon["pada"]}</div>{north_chart_svg(cells)}</div>')
+    dosh = ""
+    if m.get("doshas"):
+        dosh = "<p><b>दोष:</b> " + ", ".join(f'{e(d["name_hi"])} दोष' + (" (परिहार मिला)" if d["cancelled"] else "") for d in m["doshas"]) + "</p>"
+        if m.get("parihara"):
+            dosh += "<p class='small'>परिहार: " + "; ".join(("नाड़ी" if x["dosha"] == "Nadi" else "भकूट") + " — " + e(x["why_hi"]) for x in m["parihara"]) + "</p>"
+        if m.get("total_with_parihara", m["total"]) > m["total"]:
+            dosh += f'<p><b>परिहार सहित योग: {m["total_with_parihara"]} / 36</b></p>'
+    else:
+        dosh = "<p>भकूट या नाड़ी दोष नहीं।</p>"
+    mg = m["manglik"]
+    mtxt = lambda x: f'लग्न से भाव {x["mars_house_from_lagna"]} · चंद्र से भाव {x["mars_house_from_moon"]} → {"मांगलिक" if (x["from_lagna"] or x["from_moon"]) else "मांगलिक नहीं"}'
+    mang = ("दोनों की स्थिति समान है (दोनों मांगलिक या दोनों नहीं)।" if mg["level"] == "balanced" else "केवल एक साथी मांगलिक है; परंपरा में परिहार (काट) देखना ज़रूरी माना जाता है।")
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    return f"""<!doctype html><html lang="hi"><head><meta charset="utf-8">
+<title>कुंडली मिलान — {e(m.get("boy_name") or "वर")} / {e(m.get("girl_name") or "वधू")}</title>
+<style>
+@page {{ size: A4; margin: 14mm; }}
+body {{ font-family: 'Noto Sans Devanagari','Noto Serif Devanagari','FreeSans','Mangal',sans-serif; color:#2b2118; font-size:12.5px; line-height:1.55; }}
+h1 {{ font-size:22px; margin:0 0 2px; color:#7a4a12; }} h2 {{ font-size:15px; margin:18px 0 6px; color:#7a4a12; border-bottom:1px solid #d8c8a8; padding-bottom:2px; }}
+table {{ border-collapse:collapse; width:100%; margin:6px 0; }} th,td {{ border:1px solid #d8c8a8; padding:3px 6px; text-align:left; }} th {{ background:#f6ecd6; }}
+.charts {{ display:flex; gap:14px; }} .charts > div {{ flex:1; }} svg.chart {{ width:100%; max-width:330px; }}
+.small {{ font-size:11px; color:#6b5a44; }} .banner {{ border-left:4px solid #b26a00; background:#fbf1dc; padding:6px 10px; border-radius:4px; font-size:11.5px; }}
+.big {{ font-size:18px; }}
+</style></head><body>
+<h1>कुंडली मिलान (अष्टकूट)</h1>
+<p class="big"><b>कुल: {m["total"]} / 36</b> — {e(m["band_hi"])}</p>
+<div class="charts">{charts_html}</div>
+<h2>अष्टकूट</h2>
+{_table(["कूट", "अंक", "कारण", "भरोसा"], rows)}
+{dosh}
+<h2>मंगल दोष तुलना</h2>
+<p>{mang}<br><span class="small">वर: {mtxt(mg["boy"])}<br>वधू: {mtxt(mg["girl"])}</span></p>
+<div class="banner">{e(m["caution"])}</div>
+<p class="small">{e(m.get("parihara_note_hi", ""))}</p>
+<p class="small">बनाया गया: {e(generated)} · बैकएंड: {e(m.get("backend", ""))}। यह रिपोर्ट शिक्षा और मार्गदर्शन के लिए है; विवाह जैसे निर्णय में पूरी कुंडली और विशेषज्ञ की सलाह देखें।</p>
+</body></html>"""

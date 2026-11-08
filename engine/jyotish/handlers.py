@@ -104,8 +104,23 @@ def match_from_payload(payload: dict) -> dict:
     result["backend"] = people["boy"]["chart"]["backend"]
     result["backend_note"] = people["boy"]["chart"]["backend_note"]
     for role in ("boy", "girl"):
-        result[role + "_name"] = people[role]["chart"]["input"].get("name")
+        ch = people[role]["chart"]
+        result[role + "_name"] = ch["input"].get("name")
+        result[role + "_chart"] = {"lagna": {k: ch["lagna"][k] for k in ("sign", "sign_name", "sign_name_hi", "dms")},
+                                   "houses": [{"house": h["house"], "sign": h["sign"], "planets": h["planets"]} for h in ch["houses"]],
+                                   "planets": [{k: p[k] for k in ("name", "name_hi", "short_hi", "sign", "sign_name_hi", "house", "degree_in_sign", "dms", "nakshatra_hi", "pada", "retrograde")} for p in ch["planets"]],
+                                   "dasha_running": [{"level": d["level"], "lord": d["lord"], "end": d["end"]} for d in ch["dasha_running"]],
+                                   "input": ch["input"]}
     return result
+
+
+def match_report_from_payload(payload: dict) -> str:
+    """POST /v1/match/report: printable Hindi HTML of the matching result (same payload as /v1/match, + lang)."""
+    from . import i18n, report
+    html = report.render_match(match_from_payload(payload))
+    if str(payload.get("lang", "hi")).lower() == "en":
+        html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
+    return html
 
 
 def tarot_from_payload(payload: dict) -> dict:

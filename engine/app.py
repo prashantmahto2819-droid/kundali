@@ -117,12 +117,21 @@ class Person(BaseModel):
 class MatchRequest(BaseModel):
     boy: Person
     girl: Person
+    lang: str = "hi"
 
 
 @app.post("/v1/match")
 def match(req: MatchRequest):
     try:
         return handlers.match_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/match/report", response_class=HTMLResponse)
+def match_report(req: MatchRequest):
+    try:
+        return HTMLResponse(handlers.match_report_from_payload(req.model_dump(exclude_none=True)))
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 

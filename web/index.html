@@ -425,6 +425,7 @@ function drawChart(svg, cells, kind) {
   }
   svg.innerHTML = out;
   svg.onclick = e => {
+    if (kind === 'match') return;                      // match charts are display-only (learn panel belongs to the main chart)
     const t = e.target;
     if (t.dataset.planet) showPlanet(t.dataset.planet);
     else if (t.dataset.house) showHouse(+t.dataset.house, kind);
@@ -833,12 +834,23 @@ $('mf').addEventListener('submit', async e => {
         (m.parihara.length ? `<br><span class="muted">परिहार: ${m.parihara.map(x => esc(x.dosha === 'Nadi' ? 'नाड़ी' : 'भकूट') + ' — ' + esc(x.why_hi)).join('; ')}</span>` : '') +
         (m.total_with_parihara > m.total ? `<br><b>परिहार सहित योग: ${m.total_with_parihara} / 36</b>` : '') + `</p>`
       : '<p class="muted">भकूट या नाड़ी दोष नहीं।</p>';
-    $('mout').innerHTML = `<p style="font-size:1.1rem;margin:12px 0 4px"><b>कुल: ${m.total} / 36</b> — ${esc(m.band_hi)}</p>
+    const chartBox = (role, label) => { const ch = m[role + '_chart']; if (!ch) return ''; const pm = Object.fromEntries(ch.planets.map(p => [p.name, p])); const moon = pm.Moon;
+      return `<div class="card" style="margin:0;flex:1 1 300px"><b>${label}: ${esc(m[role + '_name'] || label)}</b><div class="muted" style="font-size:.85rem">लग्न ${esc(ch.lagna.sign_name_hi)} ${esc(ch.lagna.dms)} · चंद्र ${esc(moon.sign_name_hi)}, ${esc(moon.nakshatra_hi)} पाद ${moon.pada}</div><svg id="m_${role}" viewBox="-4 -4 408 408" width="100%"></svg></div>`; };
+    const chartsHtml = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin:10px 0">${chartBox('boy', 'वर')}${chartBox('girl', 'वधू')}</div>`;
+    $('mout').innerHTML = `<p style="font-size:1.1rem;margin:12px 0 4px"><b>कुल: ${m.total} / 36</b> — ${esc(m.band_hi)}</p>${chartsHtml}
+      <div class="actions"><button type="button" id="mrep">मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button></div>
       <div class="muted" style="font-size:.85rem">वर: ${esc(m.groom.moon_sign)} राशि, ${esc(m.groom.nakshatra_hi)} पाद ${m.groom.pada} · वधू: ${esc(m.bride.moon_sign)} राशि, ${esc(m.bride.nakshatra_hi)} पाद ${m.bride.pada}</div>
       <table style="margin-top:8px"><tr><th>कूट</th><th>अंक</th><th>कारण</th><th>भरोसा</th></tr>${rows}</table>
       ${dosh}
       <p><b>मंगल दोष तुलना:</b> ${mg.level==='balanced' ? 'दोनों की स्थिति समान है (दोनों मांगलिक या दोनों नहीं)।' : 'केवल एक साथी मांगलिक है; परंपरा में परिहार (काट) देखना ज़रूरी माना जाता है।'}<br><span class="muted">वर: ${mtxt(mg.boy)}<br>वधू: ${mtxt(mg.girl)}</span></p>
       <div class="banner">यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, भकूट-नाड़ी परिहार की प्रचलित शर्तें जाँची जाती हैं (ड्राफ़्ट)। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।</div>`;
+    for (const role of ['boy', 'girl']) { const ch = m[role + '_chart']; if (!ch) continue; const pm = Object.fromEntries(ch.planets.map(p => [p.name, p]));
+      drawChart($('m_' + role), ch.houses.map(h => ({sign: h.sign, planets: h.planets.map(n => ({name: n, short: pm[n].short_hi, retro: pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms}`}))})), 'match'); }
+    $('mrep').onclick = async () => {
+      try { const r = await apiFetch('/v1/match/report', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({boy: personBody('b'), girl: personBody('g'), lang: window.getLang ? window.getLang() : 'hi'})});
+        const html = await r.text(); if (!r.ok) throw new Error('रिपोर्ट नहीं बनी'); const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close(); }
+      catch (e) { $('merr').textContent = 'त्रुटि: ' + e.message; }
+    };
   } catch (err) { $('merr').textContent = 'त्रुटि: ' + err.message; }
 });
 

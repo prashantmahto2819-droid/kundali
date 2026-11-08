@@ -470,6 +470,12 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)": "Open matching report (print for PDF)",
+"कुंडली मिलान (अष्टकूट)": "Kundali matching (Ashtakoota)",
+"मंगल दोष तुलना": "Manglik comparison",
+"अष्टकूट": "Ashtakoota",
+"वर": "Groom",
+"वधू": "Bride",
 "लिंक कॉपी करें": "Copy link",
 "लिंक कॉपी हो गया।": "Link copied.",
 "आज क्या ख़ास है": "What matters today",
@@ -1907,6 +1913,7 @@
 "जैमिनी व्यवस्था v1: चर कारक (7-कारक मुख्य, 8-कारक राहु सहित भी दिए), आरूढ़ पद (एक ही भाव या सप्तम में पड़ने पर दशम लिया), कारकांश। ड्राफ़्ट; जैमिनी के जानकार की समीक्षा चाहिए।": "Jaimini v1: chara karakas (7-karaka main, 8-karaka with Rahu also given), arudha padas (10th taken when the pada falls in the same house or its 7th), karakamsa. Draft; needs review by a Jaimini practitioner.",
 "चर दशा (के. एन. राव की प्रचलित विधि, v1): विषम-पाद लग्न से सीधा क्रम, सम-पाद से उल्टा; वर्ष = राशि से उसके स्वामी तक की गिनती (स्वराशि में 12), उच्च +1, नीच −1। वृश्चिक/कुंभ के दो स्वामियों का नियम सरल किया गया है (मंगल/शनि)। अंतर्दशाएँ अगली राशि से बराबर भागों में।": "Chara dasha (K. N. Rao's common method, v1): direct order from odd-footed Lagnas, reverse from even-footed; years = count from sign to its lord (12 in own sign), +1 exalted, -1 debilitated. The dual-lord rule for Vrishchika/Kumbha is simplified (Mars/Saturn). Antardashas in equal parts from the next sign.",
 "रूलिंग प्लैनेट्स प्रश्न के समय और स्थान के हैं (वार-स्वामी, चंद्र और लग्न के राशि/नक्षत्र/उप-स्वामी)। वार सूर्योदय से माना गया है (लगभग)।": "Ruling planets are for the time and place of the query (day lord; sign/star/sub lords of the Moon and the Lagna). Weekday taken from sunrise (approx.).",
+"भकूट और नाड़ी दोष के परिहार (निवारण) की प्रचलित शर्तें जाँची गई हैं; परिहार मिलने पर वह गुण 'परिहार सहित योग' में जोड़ा गया है। यह ड्राफ़्ट है, विद्वान-समीक्षा के अधीन।": "Common parihara (cancellation) conditions for Bhakoot and Nadi dosha are checked; a cancelled dosha's points are added in 'total with parihara'. Draft, pending scholar review.",
 "विवाह": "Marriage",
 "नौकरी": "Job",
 "धन / वसूली": "Money / recovery",
@@ -2311,6 +2318,46 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"कुंडली मिलान — {1} / {2}",
+"Kundali matching — {1} / {2}"
+],
+[
+"— पारंपरिक न्यूनतम 18 से कम",
+"— below the traditional minimum of 18"
+],
+[
+"— स्वीकार्य (18-24)",
+"— acceptable (18-24)"
+],
+[
+"— अच्छा (25-32)",
+"— good (25-32)"
+],
+[
+"— उत्तम (33+)",
+"— excellent (33+)"
+],
+[
+"लग्न {1} {2} · चंद्र {3}, {4} पाद {5}",
+"Lagna {1} {2} · Moon {3}, {4} pada {5}"
+],
+[
+"जन्म {1} {2} · लग्न {3} {4} · चंद्र {5}, {6} पाद {7}",
+"Born {1} {2} · Lagna {3} {4} · Moon {5}, {6} pada {7}"
+],
+[
+"बनाया गया: {1} · बैकएंड: {2}। यह रिपोर्ट शिक्षा और मार्गदर्शन के लिए है; विवाह जैसे निर्णय में पूरी कुंडली और विशेषज्ञ की सलाह देखें।",
+"Generated: {1} · backend: {2}. This report is for education and guidance; for a decision such as marriage, consider the full charts and an expert's advice."
+],
+[
+"वर: {1}",
+"Groom: {1}"
+],
+[
+"वधू: {1}",
+"Bride: {1}"
 ],
 [
 "{1} महादशा, {2} अंतर्दशा ({3} तक) — {4}; सक्रिय क्षेत्र: {5}।",

@@ -112,3 +112,19 @@ def test_parihara_of_bhakoot_and_nadi():
     r = m.ashtakoota(1.0, 81.0)                       # Ashwini and Punarvasu (index 6): both Adi nadi, different signs/lords
     nadi = next(k for k in r["kootas"] if k["name"] == "Nadi")
     assert nadi["score"] == 0 and not nadi.get("dosha_cancelled")
+
+
+def test_match_result_carries_both_charts_and_report_renders():
+    from jyotish import handlers, report, i18n
+    P = {"date": "1990-05-17", "time": "06:45", "tz": "Asia/Kolkata", "lat": 23.18, "lon": 79.99}
+    Q = {"date": "1991-11-10", "time": "14:20", "tz": "Asia/Kolkata", "lat": 22.3667, "lon": 82.7667, "name": "B"}
+    m = handlers.match_from_payload({"boy": P, "girl": Q})
+    for role in ("boy", "girl"):
+        ch = m[role + "_chart"]
+        assert len(ch["houses"]) == 12 and len(ch["planets"]) == 9 and ch["lagna"]["sign_name_hi"]
+    html = handlers.match_report_from_payload({"boy": P, "girl": Q})
+    assert "कुंडली मिलान" in html and html.count("<svg") == 2 and "वधू: B" in html
+    en = handlers.match_report_from_payload({"boy": P, "girl": Q, "lang": "en"})
+    import re
+    left = [t for t in re.findall(r">([^<>]+)<", en) if re.search(r"[ऀ-ॿ]", t) and len(t.strip()) > 3]   # ignore SVG planet abbreviations
+    assert '<html lang="en">' in en and left == []
