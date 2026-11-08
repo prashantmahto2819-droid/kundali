@@ -32,7 +32,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] First real reference chart (Korba 1991, family printout, N.C. Lahiri): lagna sign, Moon sign/nakshatra/pada, ayanamsa (−0.2′), tithi, paksha, yoga, Ketu balance (−2.2 days), avakahada all match. Pending: a reference with planet degrees (Jagannatha Hora export) and one more birth year/place.
 
 ## Next
-1. Phase 1 (in progress): [x] sunrise/sunset, sunrise-based vara, Rahu Kaal, Choghadiya, Abhijit; [x] D2/D3/D4/D7/D10/D12; [x] numerology; [ ] geocoding + timezone lookup, rectification warnings, bhava-chalit option, D16-D60.
+1. Phase 1 (in progress): [x] sunrise/sunset, sunrise-based vara, Rahu Kaal, Choghadiya, Abhijit; [x] D2/D3/D4/D7/D10/D12; [x] numerology; [x] D16/D20/D24/D27/D30/D40/D45/D60 vargas; [ ] geocoding + timezone lookup, rectification warnings, bhava-chalit option.
 2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v1: Vashya/Yoni/Gana to verify; parihara pending), [x] numerology, [x] tarot (v2: all 78 cards hand-written, upright/reversed, Hindi+English; reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).
 3. Phase 3: [x] RAG chat v1 (`/v1/ask`: BM25 retrieval + guardrails + optional LLM + web Ask card; LLM path untested; FastAPI route verified on the Relay server), [ ] course content, [x] numerology passages in retrieval, [ ] retrieval quality evaluation set.
 4. Phase 4: palmistry (needs a labelled palm dataset) and vastu overlay.

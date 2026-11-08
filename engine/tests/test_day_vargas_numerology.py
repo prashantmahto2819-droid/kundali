@@ -76,7 +76,7 @@ def test_all_vargas_shape():
                for i, n in enumerate(["Sun", "Moon", "Mars", "Mercury", "Jupiter",
                                       "Venus", "Saturn", "Rahu", "Ketu"])]
     v = all_vargas(123.4, planets)
-    assert set(v) == {"D1", "D2", "D3", "D4", "D7", "D9", "D10", "D12"}
+    assert {"D1", "D2", "D3", "D4", "D7", "D9", "D10", "D12", "D16", "D20", "D24", "D27", "D30", "D40", "D45", "D60"} <= set(v)
     for chart in v.values():
         assert len(chart["houses"]) == 12
         assert sum(len(h["planets"]) for h in chart["houses"]) == 9
@@ -121,3 +121,19 @@ def test_chart_now_contains_day_and_vargas():
                                          "lat": 23.1815, "lon": 79.9864})
     assert chart["day"]["available"] and "D10" in chart["vargas"]
     assert chart["panchang"]["vara"]["name"] == "Guruvara"   # 1990-05-17 was a Thursday
+
+
+def test_higher_vargas_rules():
+    from jyotish import strength as st
+    mesha_1 = 0.3                                   # Mesha 0.3 deg: first part everywhere (D60 parts are 0.5 deg)
+    assert varga_sign(mesha_1, "D16") == 0 and varga_sign(mesha_1, "D20") == 0 and varga_sign(mesha_1, "D24") == 4
+    assert varga_sign(mesha_1, "D27") == 0 and varga_sign(mesha_1, "D40") == 0 and varga_sign(mesha_1, "D45") == 0 and varga_sign(mesha_1, "D60") == 0
+    vrishabha_1 = 30.3                              # fixed, even, earth sign
+    assert varga_sign(vrishabha_1, "D16") == 4 and varga_sign(vrishabha_1, "D20") == 8 and varga_sign(vrishabha_1, "D24") == 3
+    assert varga_sign(vrishabha_1, "D27") == 3 and varga_sign(vrishabha_1, "D40") == 6 and varga_sign(vrishabha_1, "D45") == 4 and varga_sign(vrishabha_1, "D60") == 1
+    mithuna_29 = 60 + 29.9                          # dual, last part
+    assert varga_sign(mithuna_29, "D16") == (8 + 15) % 12 and varga_sign(mithuna_29, "D60") == (2 + 59) % 12
+    for lon in (2.0, 7.0, 14.0, 20.0, 28.0, 32.0, 38.0, 45.0, 52.0, 58.0, 200.5, 359.9):
+        assert varga_sign(lon, "D30") == st.trimsamsa_sign(lon)      # same unequal trimsamsa as Shadbala
+    from jyotish.vargas import NAMES, MEANING_EN, MEANING_HI
+    assert set(NAMES) == set(MEANING_EN) == set(MEANING_HI) and len(NAMES) == 16
