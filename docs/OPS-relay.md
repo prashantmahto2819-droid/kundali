@@ -70,6 +70,14 @@ cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com
 It must end with `ALL OK`. Open the sub-domain in a browser too. `/health` should say `"backend": "jpl-de440s"`.
 Send me the output, especially any `FAIL`/`WARN` line.
 
+## Updating after a new push (run all three every time)
+```bash
+cd /srv/kundali && git pull && cd deploy && docker compose -f docker-compose.relay.yml up -d --build
+docker compose -f docker-compose.relay.yml ps          # wait for "healthy"
+cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com   # must end with ALL OK
+```
+If smoke prints FAIL, send `docker logs kundali-api --tail 60`. Roll back with `git checkout <previous commit>` and rebuild.
+
 ## 10. Later (before real customers)
 Daily backup and uptime alert: steps 8 and 9 in `docs/OPS.md`. Restore test before the first paying customer.
 
