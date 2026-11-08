@@ -39,3 +39,17 @@ def test_dignity_and_retrograde_rules_fire_correctly():
     blob = open(__import__("pathlib").Path(__file__).resolve().parents[2] / "data" / "rules" / "dignity_retrograde.json", encoding="utf-8").read()
     for bad in ("मृत्यु", "बीमारी", "रोग", "दरिद्र", "विनाश"):
         assert bad not in blob
+
+
+def test_every_rule_has_english_text_in_tendency_language():
+    from jyotish.rules import load_rules
+    rules = load_rules()
+    assert len(rules) == 134
+    banned = ("death", "die ", "disease", "illness", "accident", "doom", "curse", "will lose", "will die")
+    for r in rules:
+        t = r["text_en"]
+        assert t and len(t) > 40, r["id"]
+        assert not any(b in t.lower() for b in banned), r["id"]
+        assert "इंजन अभी उन्हें नहीं जाँचता" not in r["text_hi"]
+    mars = next(r for r in rules if r["id"] == "mars_in_7")
+    assert "Mangal Dosha" in mars["text_en"]
