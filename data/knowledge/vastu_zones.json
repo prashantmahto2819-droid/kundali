@@ -1,0 +1,549 @@
+{
+ "_comment": "16-zone vastu wheel (22.5 deg each, N centred on 0) and the 45 devatas of the 81-pada Vastu Purusha Mandala. Own wording; draft.",
+ "review_status": "draft",
+ "zones": [
+  {
+   "key": "N",
+   "hi": "उत्तर",
+   "en": "North",
+   "centre_deg": 0.0,
+   "from_deg": 348.75,
+   "to_deg": 11.25,
+   "element_hi": "जल",
+   "element": "water",
+   "theme_hi": "धन-प्रवाह, अवसर, करियर की दिशा",
+   "theme": "flow of money, opportunity, career path",
+   "good_rooms": [
+    "living",
+    "office",
+    "safe"
+   ],
+   "avoid_rooms": [
+    "kitchen",
+    "toilet",
+    "staircase"
+   ]
+  },
+  {
+   "key": "NNE",
+   "hi": "उत्तर-उत्तर-पूर्व",
+   "en": "North-north-east",
+   "centre_deg": 22.5,
+   "from_deg": 11.25,
+   "to_deg": 33.75,
+   "element_hi": "जल",
+   "element": "water",
+   "theme_hi": "स्वास्थ्य-लाभ, रोग-निवारण की ऊर्जा",
+   "theme": "recovery and healing energy",
+   "good_rooms": [
+    "pooja",
+    "living",
+    "borewell"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "kitchen",
+    "store"
+   ]
+  },
+  {
+   "key": "NE",
+   "hi": "ईशान",
+   "en": "North-east",
+   "centre_deg": 45.0,
+   "from_deg": 33.75,
+   "to_deg": 56.25,
+   "element_hi": "जल",
+   "element": "water",
+   "theme_hi": "स्पष्टता, ज्ञान, साधना, निर्णय",
+   "theme": "clarity, knowledge, meditation, decisions",
+   "good_rooms": [
+    "pooja",
+    "living",
+    "study"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "kitchen",
+    "master_bedroom",
+    "staircase",
+    "septic_tank"
+   ]
+  },
+  {
+   "key": "ENE",
+   "hi": "पूर्व-उत्तर-पूर्व",
+   "en": "East-north-east",
+   "centre_deg": 67.5,
+   "from_deg": 56.25,
+   "to_deg": 78.75,
+   "element_hi": "वायु",
+   "element": "air",
+   "theme_hi": "मनोरंजन, ताज़गी, हल्कापन",
+   "theme": "recreation, freshness, lightness",
+   "good_rooms": [
+    "living",
+    "study",
+    "guest_bedroom"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "store"
+   ]
+  },
+  {
+   "key": "E",
+   "hi": "पूर्व",
+   "en": "East",
+   "centre_deg": 90.0,
+   "from_deg": 78.75,
+   "to_deg": 101.25,
+   "element_hi": "वायु",
+   "element": "air",
+   "theme_hi": "सामाजिक जुड़ाव, नई शुरुआत, ऊर्जा",
+   "theme": "social connections, new beginnings, vitality",
+   "good_rooms": [
+    "living",
+    "entrance",
+    "dining",
+    "study"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "store"
+   ]
+  },
+  {
+   "key": "ESE",
+   "hi": "पूर्व-दक्षिण-पूर्व",
+   "en": "East-south-east",
+   "centre_deg": 112.5,
+   "from_deg": 101.25,
+   "to_deg": 123.75,
+   "element_hi": "वायु",
+   "element": "air",
+   "theme_hi": "मंथन, चिंतन, विश्लेषण",
+   "theme": "churning, analysis, reflection",
+   "good_rooms": [
+    "study",
+    "store",
+    "toilet"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "master_bedroom"
+   ]
+  },
+  {
+   "key": "SE",
+   "hi": "आग्नेय",
+   "en": "South-east",
+   "centre_deg": 135.0,
+   "from_deg": 123.75,
+   "to_deg": 146.25,
+   "element_hi": "अग्नि",
+   "element": "fire",
+   "theme_hi": "अग्नि, पाचन, नक़दी-प्रवाह",
+   "theme": "fire, digestion, cash flow",
+   "good_rooms": [
+    "kitchen",
+    "electrical",
+    "generator"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "borewell",
+    "master_bedroom"
+   ]
+  },
+  {
+   "key": "SSE",
+   "hi": "दक्षिण-दक्षिण-पूर्व",
+   "en": "South-south-east",
+   "centre_deg": 157.5,
+   "from_deg": 146.25,
+   "to_deg": 168.75,
+   "element_hi": "अग्नि",
+   "element": "fire",
+   "theme_hi": "शक्ति, आत्मविश्वास, साहस",
+   "theme": "power, confidence, courage",
+   "good_rooms": [
+    "kitchen",
+    "gym",
+    "children_bedroom"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "borewell"
+   ]
+  },
+  {
+   "key": "S",
+   "hi": "दक्षिण",
+   "en": "South",
+   "centre_deg": 180.0,
+   "from_deg": 168.75,
+   "to_deg": 191.25,
+   "element_hi": "अग्नि",
+   "element": "fire",
+   "theme_hi": "विश्राम, यश, पहचान",
+   "theme": "rest, fame, recognition",
+   "good_rooms": [
+    "master_bedroom",
+    "store",
+    "staircase"
+   ],
+   "avoid_rooms": [
+    "entrance",
+    "pooja",
+    "borewell"
+   ]
+  },
+  {
+   "key": "SSW",
+   "hi": "दक्षिण-दक्षिण-पश्चिम",
+   "en": "South-south-west",
+   "centre_deg": 202.5,
+   "from_deg": 191.25,
+   "to_deg": 213.75,
+   "element_hi": "पृथ्वी",
+   "element": "earth",
+   "theme_hi": "व्यय, निष्कासन, त्याग",
+   "theme": "expense, disposal, letting go",
+   "good_rooms": [
+    "toilet",
+    "store",
+    "staircase"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "safe",
+    "kitchen"
+   ]
+  },
+  {
+   "key": "SW",
+   "hi": "नैऋत्य",
+   "en": "South-west",
+   "centre_deg": 225.0,
+   "from_deg": 213.75,
+   "to_deg": 236.25,
+   "element_hi": "पृथ्वी",
+   "element": "earth",
+   "theme_hi": "स्थिरता, संबंध, कौशल, जड़ें",
+   "theme": "stability, relationships, skills, roots",
+   "good_rooms": [
+    "master_bedroom",
+    "safe",
+    "store"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "kitchen",
+    "septic_tank",
+    "entrance",
+    "borewell"
+   ]
+  },
+  {
+   "key": "WSW",
+   "hi": "पश्चिम-दक्षिण-पश्चिम",
+   "en": "West-south-west",
+   "centre_deg": 247.5,
+   "from_deg": 236.25,
+   "to_deg": 258.75,
+   "element_hi": "पृथ्वी",
+   "element": "earth",
+   "theme_hi": "शिक्षा, बचत, ज्ञान-संचय",
+   "theme": "education, savings, accumulated knowledge",
+   "good_rooms": [
+    "study",
+    "children_bedroom",
+    "store"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "kitchen"
+   ]
+  },
+  {
+   "key": "W",
+   "hi": "पश्चिम",
+   "en": "West",
+   "centre_deg": 270.0,
+   "from_deg": 258.75,
+   "to_deg": 281.25,
+   "element_hi": "आकाश",
+   "element": "space",
+   "theme_hi": "लाभ, फल-प्राप्ति, संतुष्टि",
+   "theme": "gains, fulfilment, satisfaction",
+   "good_rooms": [
+    "dining",
+    "children_bedroom",
+    "study"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "entrance"
+   ]
+  },
+  {
+   "key": "WNW",
+   "hi": "पश्चिम-उत्तर-पश्चिम",
+   "en": "West-north-west",
+   "centre_deg": 292.5,
+   "from_deg": 281.25,
+   "to_deg": 303.75,
+   "element_hi": "आकाश",
+   "element": "space",
+   "theme_hi": "मनोभाव, मन की हलचल",
+   "theme": "mood, emotional stirring",
+   "good_rooms": [
+    "store",
+    "toilet",
+    "staircase"
+   ],
+   "avoid_rooms": [
+    "master_bedroom",
+    "pooja"
+   ]
+  },
+  {
+   "key": "NW",
+   "hi": "वायव्य",
+   "en": "North-west",
+   "centre_deg": 315.0,
+   "from_deg": 303.75,
+   "to_deg": 326.25,
+   "element_hi": "वायु",
+   "element": "air",
+   "theme_hi": "सहयोग, गति, आवाजाही",
+   "theme": "support, movement, comings and goings",
+   "good_rooms": [
+    "guest_bedroom",
+    "store",
+    "toilet",
+    "garage"
+   ],
+   "avoid_rooms": [
+    "pooja",
+    "safe",
+    "master_bedroom"
+   ]
+  },
+  {
+   "key": "NNW",
+   "hi": "उत्तर-उत्तर-पश्चिम",
+   "en": "North-north-west",
+   "centre_deg": 337.5,
+   "from_deg": 326.25,
+   "to_deg": 348.75,
+   "element_hi": "वायु",
+   "element": "air",
+   "theme_hi": "आकर्षण, संबंधों की मिठास",
+   "theme": "attraction, warmth in relationships",
+   "good_rooms": [
+    "master_bedroom",
+    "guest_bedroom",
+    "living"
+   ],
+   "avoid_rooms": [
+    "toilet",
+    "kitchen",
+    "store"
+   ]
+  }
+ ],
+ "mandala": {
+  "outer_32_clockwise_from_ne": [
+   {
+    "en": "Isha",
+    "hi": "ईश"
+   },
+   {
+    "en": "Parjanya",
+    "hi": "पर्जन्य"
+   },
+   {
+    "en": "Jayanta",
+    "hi": "जयंत"
+   },
+   {
+    "en": "Indra",
+    "hi": "इंद्र"
+   },
+   {
+    "en": "Surya",
+    "hi": "सूर्य"
+   },
+   {
+    "en": "Satya",
+    "hi": "सत्य"
+   },
+   {
+    "en": "Bhrisha",
+    "hi": "भृश"
+   },
+   {
+    "en": "Antariksha",
+    "hi": "अंतरिक्ष"
+   },
+   {
+    "en": "Agni",
+    "hi": "अग्निदेव"
+   },
+   {
+    "en": "Pusha",
+    "hi": "पूषा"
+   },
+   {
+    "en": "Vitatha",
+    "hi": "वितथ"
+   },
+   {
+    "en": "Grihakshata",
+    "hi": "गृहक्षत"
+   },
+   {
+    "en": "Yama",
+    "hi": "यम"
+   },
+   {
+    "en": "Gandharva",
+    "hi": "गंधर्व"
+   },
+   {
+    "en": "Bhringaraja",
+    "hi": "भृंगराज"
+   },
+   {
+    "en": "Mriga",
+    "hi": "मृग"
+   },
+   {
+    "en": "Pitru",
+    "hi": "पितृ"
+   },
+   {
+    "en": "Dauvarika",
+    "hi": "दौवारिक"
+   },
+   {
+    "en": "Sugriva",
+    "hi": "सुग्रीव"
+   },
+   {
+    "en": "Pushpadanta",
+    "hi": "पुष्पदंत"
+   },
+   {
+    "en": "Varuna",
+    "hi": "वरुण"
+   },
+   {
+    "en": "Asura",
+    "hi": "असुर"
+   },
+   {
+    "en": "Shosha",
+    "hi": "शोष"
+   },
+   {
+    "en": "Papayakshma",
+    "hi": "पापयक्ष्मा"
+   },
+   {
+    "en": "Roga",
+    "hi": "रोग"
+   },
+   {
+    "en": "Naga",
+    "hi": "नाग"
+   },
+   {
+    "en": "Mukhya",
+    "hi": "मुख्य"
+   },
+   {
+    "en": "Bhallata",
+    "hi": "भल्लाट"
+   },
+   {
+    "en": "Soma",
+    "hi": "सोम"
+   },
+   {
+    "en": "Bhujaga",
+    "hi": "भुजग"
+   },
+   {
+    "en": "Aditi",
+    "hi": "अदिति"
+   },
+   {
+    "en": "Diti",
+    "hi": "दिति"
+   }
+  ],
+  "inner_8": {
+   "E": {
+    "en": "Aryama",
+    "hi": "अर्यमा"
+   },
+   "SE": {
+    "en": "Savita",
+    "hi": "सविता"
+   },
+   "S": {
+    "en": "Vivasvan",
+    "hi": "विवस्वान"
+   },
+   "SW": {
+    "en": "Indra-Jaya",
+    "hi": "इंद्र-जय"
+   },
+   "W": {
+    "en": "Mitra",
+    "hi": "मित्र"
+   },
+   "NW": {
+    "en": "Rudra",
+    "hi": "रुद्र"
+   },
+   "N": {
+    "en": "Prithvidhara",
+    "hi": "पृथ्वीधर"
+   },
+   "NE": {
+    "en": "Apa",
+    "hi": "आप"
+   }
+  },
+  "centre": {
+   "en": "Brahma",
+   "hi": "ब्रह्मा"
+  }
+ },
+ "extra_rooms": {
+  "septic_tank": {
+   "hi": "सेप्टिक टैंक",
+   "en": "Septic tank"
+  },
+  "electrical": {
+   "hi": "बिजली का मीटर / पैनल",
+   "en": "Electrical panel"
+  },
+  "generator": {
+   "hi": "जनरेटर / इन्वर्टर",
+   "en": "Generator / inverter"
+  },
+  "gym": {
+   "hi": "व्यायाम कक्ष",
+   "en": "Gym"
+  },
+  "safe": {
+   "hi": "तिजोरी",
+   "en": "Safe / locker"
+  }
+ }
+}

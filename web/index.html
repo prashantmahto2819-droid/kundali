@@ -278,6 +278,37 @@
     <div id="verr" style="color:#c62828;margin-top:6px"></div>
     <div id="vout"></div>
   </div>
+  <div class="card" id="vplancard">
+    <b>नक्शे से वास्तु — 16-ज़ोन डिग्री-चक्र और वास्तु पुरुष मंडल</b>
+    <div class="muted" style="font-size:.85rem">घर/प्लॉट का नक्शा (PDF, AutoCAD DXF, PNG/JPG) चढ़ाइए, उत्तर दिशा बताइए, प्लॉट की सीमा और कमरे चित्र पर चिह्नित कीजिए। हर कमरे का अंश, 16-ज़ोन, 8-दिशा और 81-पद देवता निकलेगा। DWG हो तो पहले DXF या PDF में सेव कीजिए।</div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <div><label>1. नक्शा फ़ाइल</label><input type="file" id="vpfile" accept=".pdf,.dxf,.png,.jpg,.jpeg,.webp,image/*,application/pdf"></div>
+      <div><label>2. उत्तर-कोण (चित्र के ऊपर से घड़ी की दिशा में, °)</label><input id="vpnorth" type="number" min="0" max="359" value="0" style="max-width:110px"></div>
+      <button type="button" class="ghost" id="vpnorthdraw" style="width:auto">चित्र पर उत्तर तीर खींचिए</button>
+      <button type="button" class="ghost" id="vpcompass" style="width:auto">फ़ोन कम्पास से</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <button type="button" id="vppoly" style="width:auto">3. प्लॉट सीमा बनाइए</button>
+      <button type="button" class="ghost" id="vppolydone" style="width:auto">सीमा पूरी</button>
+      <div><label>4. कमरा</label><select id="vproom" style="width:auto"></select></div>
+      <button type="button" id="vproomplace" style="width:auto">कमरा रखिए</button>
+      <button type="button" class="ghost" id="vpundo" style="width:auto">पीछे</button>
+      <button type="button" class="ghost" id="vpclear" style="width:auto">साफ़</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <div><label>5. स्थान (नक्शे पर दिखाने के लिए)</label><input id="vpplace" list="placelist" placeholder="शहर / गाँव" autocomplete="off" style="max-width:200px"></div>
+      <div><label>अक्षांश</label><input id="vplat" type="number" step="0.0001" style="max-width:120px"></div>
+      <div><label>देशांतर</label><input id="vplon" type="number" step="0.0001" style="max-width:120px"></div>
+      <button type="button" class="ghost" id="vpgeo" style="width:auto">मेरा स्थान</button>
+      <button type="button" id="vpgo" style="width:auto">विश्लेषण</button>
+    </div>
+    <div class="muted" style="font-size:.8rem;margin-top:6px" id="vpmode"></div>
+    <div style="margin-top:8px;display:flex;gap:16px;flex-wrap:wrap"><label style="display:inline-flex;align-items:center;gap:6px;margin:0"><input type="checkbox" id="vpshowwheel" checked style="width:auto;margin:0"> 16-ज़ोन चक्र</label><label style="display:inline-flex;align-items:center;gap:6px;margin:0"><input type="checkbox" id="vpshowgrid" style="width:auto;margin:0"> 81-पद मंडल</label><label style="display:inline-flex;align-items:center;gap:6px;margin:0"><input type="checkbox" id="vpshowdeg" checked style="width:auto;margin:0"> अंश-चिह्न</label></div>
+    <canvas id="vpcanvas" style="max-width:100%;border:1px solid var(--line);border-radius:8px;margin-top:6px;display:none;touch-action:none"></canvas>
+    <div id="vpmap" style="height:300px;border-radius:8px;margin-top:8px;display:none"></div>
+    <div id="vperr" style="color:#c62828;margin-top:6px"></div>
+    <div id="vpout"></div>
+  </div>
   </section>
   <section class="tab" id="t-palm">
   <div class="card" id="palmcard">
@@ -986,6 +1017,132 @@ $('repbtn').addEventListener('click', async () => {
           <td class="muted">${esc(i.why_hi)}${i.rating==='avoid' ? `<br><b>सुझाव:</b> ${esc(i.fix_hi)}` : ''}${i.rating!=='ideal' ? `<br>उत्तम दिशा: ${esc(i.ideal_hi.join(', '))}` : ''}</td></tr>`).join('') +
         `</table><ul class="muted">${v.general_hi.map(g => `<li>${esc(g)}</li>`).join('')}</ul><div class="banner">${esc(v.disclaimer_hi)} अर्थ ड्राफ़्ट हैं।</div>`;
     } catch (err) { $('verr').textContent = 'त्रुटि: ' + err.message; }
+  };
+})();
+
+// Vastu from a floor plan: upload → PNG, mark plot + rooms on a canvas, 16-zone wheel + 81-pada grid, map with location
+(async function vastuPlanUI() {
+  let cat; try { cat = await (await apiFetch('/v1/vastu/plan/catalog')).json(); } catch (e) { $('vplancard').style.display = 'none'; return; }
+  $('vproom').innerHTML = Object.entries(cat.rooms).map(([k, r]) => `<option value="${k}">${esc(r.hi)}</option>`).join('');
+  const cv = $('vpcanvas'), ctx = cv.getContext('2d');
+  const st = {img: null, W: 0, H: 0, poly: [], rooms: [], mode: null, northPts: [], result: null, scale: 1};
+  const MODE_HI = {poly: 'प्लॉट की सीमा: कोनों पर क्लिक कीजिए, फिर "सीमा पूरी"।', room: 'चुने हुए कमरे के बीच में क्लिक कीजिए।', north: 'पहले प्लॉट के बीच में, फिर उत्तर की ओर एक बिंदु पर क्लिक कीजिए।'};
+  const setMode = m => { st.mode = m; $('vpmode').textContent = m ? MODE_HI[m] : ''; };
+  const RATING_COLOR = {ideal: '#2e7d32', neutral: '#8d6e63', avoid: '#c62828', ok: '#2e7d32'};
+  const fit = () => { const maxW = Math.min(900, cv.parentNode.clientWidth - 2); st.scale = Math.min(1, maxW / st.W); cv.width = Math.round(st.W * st.scale); cv.height = Math.round(st.H * st.scale); };
+  const toImg = e => { const r = cv.getBoundingClientRect(); const sx = cv.width / r.width; return [(e.clientX - r.left) * sx / st.scale, (e.clientY - r.top) * sx / st.scale]; };
+  function centroid(P) { let a = 0, cx = 0, cy = 0; for (let i = 0; i < P.length; i++) { const [x0, y0] = P[i], [x1, y1] = P[(i + 1) % P.length]; const c = x0 * y1 - x1 * y0; a += c; cx += (x0 + x1) * c; cy += (y0 + y1) * c; } if (Math.abs(a) < 1e-9) return [P.reduce((s, p) => s + p[0], 0) / P.length, P.reduce((s, p) => s + p[1], 0) / P.length]; a *= .5; return [cx / (6 * a), cy / (6 * a)]; }
+  function draw() {
+    if (!st.img) return;
+    const k = st.scale; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(st.img, 0, 0, cv.width, cv.height);
+    const north = (+$('vpnorth').value || 0) * Math.PI / 180;
+    // north arrow (top-left)
+    ctx.save(); ctx.translate(34, 34); ctx.rotate(north); ctx.strokeStyle = '#c62828'; ctx.fillStyle = '#c62828'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, 22); ctx.lineTo(0, -16); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(-6, -12); ctx.lineTo(6, -12); ctx.closePath(); ctx.fill();
+    ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('N', 0, -28); ctx.restore();
+    if (st.poly.length) {
+      ctx.strokeStyle = '#1565c0'; ctx.lineWidth = 2; ctx.beginPath(); st.poly.forEach(([x, y], i) => i ? ctx.lineTo(x * k, y * k) : ctx.moveTo(x * k, y * k)); if (st.poly.length > 2 && st.mode !== 'poly') ctx.closePath(); ctx.stroke();
+      ctx.fillStyle = '#1565c0'; st.poly.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x * k, y * k, 4, 0, 7); ctx.fill(); });
+    }
+    if (st.poly.length > 2) {
+      const [cx, cy] = centroid(st.poly); const R = Math.max(...st.poly.map(([x, y]) => Math.hypot(x - cx, y - cy))) * k; const CX = cx * k, CY = cy * k;
+      if ($('vpshowgrid').checked) {       // 81-pada grid on the north-aligned bounding box
+        const rot = ([x, y]) => { const dx = x - cx, dy = y - cy, a = -north; return [dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a)]; };
+        const rp = st.poly.map(rot); const xs = rp.map(p => p[0]), ys = rp.map(p => p[1]); const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+        ctx.save(); ctx.translate(CX, CY); ctx.rotate(north); ctx.strokeStyle = 'rgba(123,63,0,.55)'; ctx.lineWidth = 1;
+        for (let i = 0; i <= 9; i++) { const x = (x0 + (x1 - x0) * i / 9) * k, y = (y0 + (y1 - y0) * i / 9) * k; ctx.beginPath(); ctx.moveTo(x, y0 * k); ctx.lineTo(x, y1 * k); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x0 * k, y); ctx.lineTo(x1 * k, y); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(123,63,0,.9)'; ctx.lineWidth = 2; ctx.strokeRect(x0 * k, y0 * k, (x1 - x0) * k, (y1 - y0) * k); ctx.strokeRect((x0 + (x1 - x0) / 3) * k, (y0 + (y1 - y0) / 3) * k, (x1 - x0) / 3 * k, (y1 - y0) / 3 * k);
+        ctx.fillStyle = 'rgba(123,63,0,.9)'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(window.getLang && window.getLang() === 'en' ? 'Brahma' : 'ब्रह्मा', (x0 + x1) / 2 * k, (y0 + y1) / 2 * k + 4); ctx.restore();
+      }
+      if ($('vpshowwheel').checked) {      // 16 zones: boundary lines every 22.5°, labels on the centre lines
+        ctx.save(); ctx.translate(CX, CY); ctx.rotate(north);
+        for (let i = 0; i < 16; i++) { const a = (i * 22.5 - 11.25) * Math.PI / 180; ctx.strokeStyle = i % 2 ? 'rgba(21,101,192,.35)' : 'rgba(21,101,192,.7)'; ctx.lineWidth = i % 2 ? 1 : 1.5; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(R * Math.sin(a), -R * Math.cos(a)); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(21,101,192,.6)'; ctx.beginPath(); ctx.arc(0, 0, R * .92, 0, 7); ctx.stroke();
+        ctx.fillStyle = '#0d47a1'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const Z = cat.zones; for (let i = 0; i < 16; i++) { const a = i * 22.5 * Math.PI / 180, r = R * .98; ctx.save(); ctx.translate(r * Math.sin(a), -r * Math.cos(a)); ctx.rotate(-north); ctx.fillText(Z[i].key, 0, 0); ctx.restore(); }
+        if ($('vpshowdeg').checked) { ctx.strokeStyle = 'rgba(13,71,161,.8)'; ctx.font = '9px sans-serif'; for (let d = 0; d < 360; d += 10) { const a = d * Math.PI / 180, r0 = R * .92, r1 = d % 30 ? R * .89 : R * .86; ctx.beginPath(); ctx.moveTo(r0 * Math.sin(a), -r0 * Math.cos(a)); ctx.lineTo(r1 * Math.sin(a), -r1 * Math.cos(a)); ctx.stroke(); if (d % 30 === 0) { ctx.save(); ctx.translate(R * .82 * Math.sin(a), -R * .82 * Math.cos(a)); ctx.rotate(-north); ctx.fillText(d + '°', 0, 0); ctx.restore(); } } }
+        ctx.restore();
+      }
+      ctx.fillStyle = '#1565c0'; ctx.beginPath(); ctx.arc(CX, CY, 5, 0, 7); ctx.fill();
+    }
+    st.rooms.forEach((r, i) => { const res = st.result && st.result.rooms[i]; const col = res ? RATING_COLOR[res.rating] : '#6a1b9a'; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(r.x * k, r.y * k, 7, 0, 7); ctx.fill();
+      ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; const label = cat.rooms[r.room][window.getLang && window.getLang() === 'en' ? 'en' : 'hi'] + (res ? ` ${res.zone} ${res.bearing}°` : ''); const w = ctx.measureText(label).width; ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(r.x * k + 9, r.y * k - 12, w + 6, 16); ctx.fillStyle = col; ctx.fillText(label, r.x * k + 12, r.y * k); });
+    if (st.northPts.length === 1) { ctx.fillStyle = '#c62828'; ctx.beginPath(); ctx.arc(st.northPts[0][0] * k, st.northPts[0][1] * k, 5, 0, 7); ctx.fill(); }
+  }
+  $('vpfile').onchange = async () => {
+    const f = $('vpfile').files[0]; if (!f) return; $('vperr').textContent = ''; $('vpout').innerHTML = '<div class="muted">फ़ाइल पढ़ी जा रही है…</div>';
+    try {
+      const b64 = await new Promise((ok, no) => { const rd = new FileReader(); rd.onload = () => ok(rd.result.split(',')[1]); rd.onerror = no; rd.readAsDataURL(f); });
+      const r = await apiFetch('/v1/vastu/plan', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({filename: f.name, content_b64: b64})});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const img = new Image(); await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = 'data:image/png;base64,' + d.image_png_b64; });
+      st.img = img; st.W = d.width; st.H = d.height; st.poly = []; st.rooms = []; st.result = null; st.northPts = []; fit(); cv.style.display = 'block'; draw();
+      $('vpout').innerHTML = d.note_hi ? `<div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>` : ''; setMode('poly');
+    } catch (err) { $('vpout').innerHTML = ''; $('vperr').textContent = 'त्रुटि: ' + err.message; }
+  };
+  cv.addEventListener('click', e => {
+    if (!st.img || !st.mode) return; const [x, y] = toImg(e);
+    if (st.mode === 'poly') st.poly.push([x, y]);
+    else if (st.mode === 'room') st.rooms.push({room: $('vproom').value, x, y});
+    else if (st.mode === 'north') { st.northPts.push([x, y]); if (st.northPts.length === 2) { const [[x0, y0], [x1, y1]] = st.northPts; $('vpnorth').value = Math.round((Math.atan2(x1 - x0, -(y1 - y0)) * 180 / Math.PI + 360) % 360); st.northPts = []; setMode('room'); } }
+    st.result = null; draw();
+  });
+  $('vppoly').onclick = () => { st.poly = []; st.result = null; setMode('poly'); draw(); };
+  $('vppolydone').onclick = () => { if (st.poly.length < 3) { $('vperr').textContent = 'कम से कम 3 कोने चाहिए।'; return; } $('vperr').textContent = ''; setMode('room'); draw(); };
+  $('vproomplace').onclick = () => setMode('room');
+  $('vpnorthdraw').onclick = () => { st.northPts = []; setMode('north'); };
+  $('vpundo').onclick = () => { if (st.mode === 'poly') st.poly.pop(); else st.rooms.pop(); st.result = null; draw(); };
+  $('vpclear').onclick = () => { st.poly = []; st.rooms = []; st.result = null; st.northPts = []; $('vpout').innerHTML = ''; setMode(st.img ? 'poly' : null); draw(); };
+  ['vpnorth', 'vpshowwheel', 'vpshowgrid', 'vpshowdeg'].forEach(id => $(id).addEventListener('input', () => { if (id === 'vpnorth') st.result = null; draw(); }));
+  window.addEventListener('resize', () => { if (st.img) { fit(); draw(); } });
+  $('langbtn').addEventListener('click', () => setTimeout(draw, 100));
+  $('vpcompass').onclick = async () => {
+    $('vperr').textContent = '';
+    try {
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') { const p = await DeviceOrientationEvent.requestPermission(); if (p !== 'granted') throw new Error('कम्पास की अनुमति नहीं मिली'); }
+      $('vpmode').textContent = 'फ़ोन को नक्शे के ऊपर की ओर सीधा पकड़िए… (3 सेकंड)';
+      const h = await new Promise((ok, no) => { let got = null; const fn = e => { const v = e.webkitCompassHeading != null ? e.webkitCompassHeading : (e.absolute && e.alpha != null ? (360 - e.alpha) % 360 : null); if (v != null) got = v; }; window.addEventListener('deviceorientationabsolute', fn, true); window.addEventListener('deviceorientation', fn, true); setTimeout(() => { window.removeEventListener('deviceorientationabsolute', fn, true); window.removeEventListener('deviceorientation', fn, true); got == null ? no(new Error('इस डिवाइस पर कम्पास नहीं मिला')) : ok(got); }, 3000); });
+      $('vpnorth').value = Math.round((360 - h) % 360); st.result = null; draw(); $('vpmode').textContent = `फ़ोन का शीर्ष ${Math.round(h)}° की ओर था → उत्तर-कोण ${$('vpnorth').value}°।`;
+    } catch (err) { $('vperr').textContent = 'त्रुटि: ' + err.message; }
+  };
+  $('vpgeo').onclick = () => { if (!navigator.geolocation) { $('vperr').textContent = 'इस ब्राउज़र में स्थान सेवा नहीं है।'; return; } navigator.geolocation.getCurrentPosition(p => { $('vplat').value = p.coords.latitude.toFixed(5); $('vplon').value = p.coords.longitude.toFixed(5); showMap(); }, () => { $('vperr').textContent = 'स्थान नहीं मिला (अनुमति दीजिए)।'; }, {enableHighAccuracy: true, timeout: 8000}); };
+  $('vpplace').addEventListener('change', async () => { const q = $('vpplace').value.trim(); if (!q) return; try { const r = await apiFetch('/v1/places?q=' + encodeURIComponent(q) + '&limit=1'); const d = await r.json(); if (d.results && d.results[0]) { $('vplat').value = d.results[0].lat; $('vplon').value = d.results[0].lon; showMap(); } } catch (e) {} });
+  let map = null, layer = null;
+  async function showMap() {
+    const lat = +$('vplat').value, lon = +$('vplon').value; if (!lat && !lon) return;
+    try {
+      if (!window.L) {
+        await new Promise((ok, no) => { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'; document.head.appendChild(l);
+          const sc = document.createElement('script'); sc.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
+      }
+    } catch (e) { $('vperr').textContent = 'नक्शा लाइब्रेरी नहीं मिली (ऑफ़लाइन?)। स्थान सहेजा गया है।'; return; }
+    $('vpmap').style.display = 'block';
+    if (!map) { map = L.map('vpmap'); L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '© OpenStreetMap'}).addTo(map); }
+    if (layer) layer.remove(); layer = L.layerGroup().addTo(map); map.setView([lat, lon], 17);
+    L.marker([lat, lon]).addTo(layer);
+    const R = 0.0004, kx = 1 / Math.cos(lat * Math.PI / 180), Z = cat.zones;     // 16 sectors (~45 m) in true compass directions
+    Z.forEach((z, i) => { const pts = [[lat, lon]]; for (let d = i * 22.5 - 11.25; d <= i * 22.5 + 11.25; d += 2.5) { const a = d * Math.PI / 180; pts.push([lat + R * Math.cos(a), lon + R * kx * Math.sin(a)]); }
+      L.polygon(pts, {color: i % 2 ? '#1565c0' : '#0d47a1', weight: 1, fillOpacity: .08}).addTo(layer).bindTooltip(`${z.hi} (${z.centre_deg}°): ${z.theme_hi}`); });
+    const up = (-(+$('vpnorth').value || 0) + 360) % 360 * Math.PI / 180;    // the plan's "up" direction on the ground
+    L.polyline([[lat, lon], [lat + R * 1.2 * Math.cos(up), lon + R * 1.2 * kx * Math.sin(up)]], {color: '#c62828', weight: 3}).addTo(layer).bindTooltip('नक्शे का ऊपरी सिरा इस ओर');
+    setTimeout(() => map.invalidateSize(), 50);
+  }
+  $('vpgo').onclick = async () => {
+    $('vperr').textContent = '';
+    if (st.poly.length < 3) { $('vperr').textContent = 'पहले प्लॉट की सीमा बनाइए (कम से कम 3 कोने)।'; return; }
+    const body = {polygon: st.poly, north_angle: +$('vpnorth').value || 0, rooms: st.rooms, lat: $('vplat').value ? +$('vplat').value : null, lon: $('vplon').value ? +$('vplon').value : null, place: $('vpplace').value || null};
+    try {
+      const r = await apiFetch('/v1/vastu/zones', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      st.result = d; window._lastVastuPlan = body; draw(); if (body.lat != null) showMap();
+      const RC = {ideal: 'yes', neutral: 'muted', avoid: 'muted'};
+      $('vpout').innerHTML = `<div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/vastu/plan/report', window._lastVastuPlan).catch(e => { document.getElementById('vperr').textContent = 'त्रुटि: ' + e.message; })">PDF (प्रिंट)</button></div>
+        <p>स्कोर <b>${d.score} / ${d.max}</b> · उत्तर-कोण ${d.north_angle}°${d.cut_corners.length ? ` · कटे कोने: ${d.cut_corners.map(c => esc(c.corner_hi)).join(', ')}` : ''}</p>
+        ${d.rooms.length ? `<table><tr><th>कमरा</th><th>अंश</th><th>ज़ोन (16)</th><th>दिशा (8)</th><th>पद देवता</th><th>स्थिति</th><th>कारण / सुझाव</th></tr>${d.rooms.map(x => `<tr><td>${esc(x.room_hi)}${x.inside_plot ? '' : ' <span class="muted">(सीमा से बाहर)</span>'}</td><td>${x.bearing}°</td><td>${esc(x.zone_hi)}<br><span class="muted" style="font-size:.8rem">${esc(x.zone_theme_hi)}</span></td><td>${esc(x.direction_hi)}</td><td>${esc(x.pada.devata_hi)}</td><td><span class="chip ${RC[x.rating]}">${esc(x.rating_hi)}</span></td><td class="muted">${esc(x.why_hi || '')}${x.fix_hi ? `<br><b>सुझाव:</b> ${esc(x.fix_hi)}` : ''}${x.good_zones_hi && x.rating !== 'ideal' ? `<br>उत्तम ज़ोन: ${esc(x.good_zones_hi.join(', '))}` : ''}</td></tr>`).join('')}</table>` : '<div class="muted">कमरे चिह्नित नहीं किए गए; केवल चक्र और मंडल दिखाए गए हैं।</div>'}
+        ${d.cut_corners.map(c => `<div class="banner">${esc(c.text_hi)}</div>`).join('')}${d.skew_note ? `<div class="muted">${esc(d.skew_note.hi)}</div>` : ''}
+        <details><summary>16-ज़ोन चक्र (अंश-सारणी)</summary><table><tr><th>ज़ोन (16)</th><th>केंद्र अंश</th><th>तत्व</th><th>ज़ोन-विषय</th></tr>${d.wheel.map(z => `<tr><td>${esc(z.hi)}</td><td>${z.centre_deg}°</td><td>${esc(z.element_hi)}</td><td>${esc(z.theme_hi)}</td></tr>`).join('')}</table></details>
+        <div class="banner">${esc(d.note_hi)}</div>`;
+    } catch (err) { $('vperr').textContent = 'त्रुटि: ' + err.message; }
   };
 })();
 

@@ -5,5 +5,8 @@ pydantic>=2.6
 skyfield>=1.48
 # Login tokens (Supabase JWT):
 PyJWT[crypto]>=2.8
+# Floor-plan uploads (vastu): PDF page render + image handling
+pypdfium2>=4.30
+pillow>=10
 # Tests
 pytest>=8

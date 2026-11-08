@@ -348,7 +348,7 @@ def palm_report_from_payload(payload: dict) -> str:
 
 REPORT_ROUTES = {"/v1/report": None, "/v1/match/report": "match_report_from_payload", "/v1/muhurta/report": "muhurta_report_from_payload",
                  "/v1/prashna/report": "prashna_report_from_payload", "/v1/numerology/report": "numerology_report_from_payload",
-                 "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/palm/report": "palm_report_from_payload"}
+                 "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/vastu/plan/report": "vastu_plan_report_from_payload", "/v1/palm/report": "palm_report_from_payload"}
 
 
 # ---- JSON safety net ------------------------------------------------------------------
@@ -416,3 +416,50 @@ def rectify_from_payload(payload: dict) -> dict:
         return rectify.rectify(str(date), str(time_)[:5], tz, lat, lon, range_min, step_min, clean)
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc
+
+
+def vastu_plan_upload_from_payload(payload: dict) -> dict:
+    """POST /v1/vastu/plan  {filename, content_b64}  → PNG of the plan (PDF page 1 / DXF drawing / image)."""
+    import base64, binascii
+    from . import vastu_plan
+    b64 = payload.get("content_b64")
+    if not isinstance(b64, str) or not b64:
+        raise BadRequest("content_b64 (base64 of the file) is required")
+    if "," in b64[:80] and b64.startswith("data:"):
+        b64 = b64.split(",", 1)[1]
+    if len(b64) > 17 * 1024 * 1024:
+        raise BadRequest("file is larger than 12 MB")
+    try:
+        data = base64.b64decode(b64, validate=False)
+    except (binascii.Error, ValueError) as exc:
+        raise BadRequest("content_b64 is not valid base64") from exc
+    try:
+        return vastu_plan.convert_upload(str(payload.get("filename") or ""), data)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+    except Exception as exc:                      # a damaged PDF/image: say so instead of a 500
+        raise BadRequest(f"could not read the file ({type(exc).__name__})") from exc
+
+
+def vastu_plan_from_payload(payload: dict) -> dict:
+    """POST /v1/vastu/zones  {polygon: [[x,y]...], north_angle, rooms: [{room, x, y}], lat?, lon?}"""
+    from . import vastu_plan
+    try:
+        out = vastu_plan.evaluate_plan(payload)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+    for k in ("lat", "lon", "place"):
+        if payload.get(k) not in (None, ""):
+            out[k] = payload[k]
+    return out
+
+
+def vastu_plan_catalog() -> dict:
+    from . import vastu_plan
+    z = vastu_plan.zones_data()
+    return {"rooms": vastu_plan.room_catalog(), "zones": z["zones"], "mandala": z["mandala"], "review_status": z["review_status"]}
+
+
+def vastu_plan_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_vastu_plan(vastu_plan_from_payload(payload)), payload)

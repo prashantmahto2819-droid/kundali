@@ -488,6 +488,25 @@ def render_vastu(v: dict) -> str:
     return _page("वास्तु जाँच", "वास्तु जाँच", body)
 
 
+def render_vastu_plan(v: dict) -> str:
+    rows = [[e(r["room_hi"]), f'{r["bearing"]}°', e(r["zone_hi"]), e(r["direction_hi"]), e(r["pada"]["devata_hi"]), f'<b>{e(r["rating_hi"])}</b>',
+             e(r.get("why_hi", r["zone_theme_hi"])) + (f'<br><i>{e(r["fix_hi"])}</i>' if r.get("fix_hi") else "")
+             + (f'<br>उत्तम ज़ोन: {e(", ".join(r["good_zones_hi"]))}' if r.get("good_zones_hi") and r["rating"] != "ideal" else "")] for r in v["rooms"]]
+    body = f'<p>उत्तर-कोण (चित्र पर): <b>{v["north_angle"]}°</b> · प्लॉट केंद्र ({v["centre"]["x"]}, {v["centre"]["y"]}) · अंक {v["score"]} / {v["max"]}'
+    if v.get("place") or v.get("lat") is not None:
+        body += f' · स्थान {e(str(v.get("place") or ""))} {v.get("lat", "")}, {v.get("lon", "")}'
+    body += '</p>'
+    body += _table(["कमरा", "दिशा-अंश", "ज़ोन (16)", "दिशा (8)", "पद देवता", "स्थिति", "कारण / सुझाव"], rows)
+    if v["cut_corners"]:
+        body += "<h2>कटे कोने</h2><ul>" + "".join(f"<li>{e(c['text_hi'])}</li>" for c in v["cut_corners"]) + "</ul>"
+    if v.get("skew_note"):
+        body += f'<p class="muted">{e(v["skew_note"]["hi"])}</p>'
+    zrows = [[e(z["hi"]), f'{z["centre_deg"]}°', e(z["element_hi"]), e(z["theme_hi"])] for z in v["wheel"]]
+    body += "<h2>16-ज़ोन चक्र</h2>" + _table(["ज़ोन (16)", "केंद्र अंश", "तत्व", "ज़ोन-विषय"], zrows)
+    body += f'<div class="banner">{e(v["note_hi"])}</div>'
+    return _page("वास्तु (नक्शे से)", "वास्तु — नक्शे से 16-ज़ोन विश्लेषण", body)
+
+
 def render_palm(p: dict) -> str:
     parts = []
     for group, items in p["groups"].items():

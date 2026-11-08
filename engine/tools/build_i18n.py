@@ -54,6 +54,8 @@ def harvest(obj):
 
 
 for f in (ROOT / "data" / "knowledge").glob("*.json"):
+    if f.name == "vastu_zones.json":          # handled below: its devata names must not override planet names (सूर्य → Sun)
+        continue
     harvest(json.loads(f.read_text(encoding="utf-8")))
 lk = json.loads((ROOT / "data" / "lalkitab.json").read_text(encoding="utf-8"))
 LK_THEMES_EN = {"1": "self, personality and beginnings", "2": "family, savings and speech", "3": "siblings, courage and effort",
@@ -193,7 +195,53 @@ for _hi, _en in (("पंचाधिकारियों में से, ल
                  ("मुन्था = जन्म-लग्न राशि + पूरे हुए वर्ष (हर वर्ष एक राशि आगे)।", "Muntha = birth-Lagna sign + completed years (one sign forward each year)."),
                  ("मुन्था:", "Muntha:"), ("राशि, वर्ष-कुंडली के भाव", "sign, in house"), ("में।", "of the annual chart."), ("वर्षफल देखिए", "Show varshaphal"), ("वर्ष (वर्षफल)", "Year (varshaphal)")):
     put(_hi, _en)
-TAJIKA_PATTERNS = [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+# vastu from a floor plan
+import json as _json
+_vz = _json.loads((ROOT / "data" / "knowledge" / "vastu_zones.json").read_text(encoding="utf-8"))
+for z in _vz["zones"]:
+    put(z["hi"], z["en"]); put(z["theme_hi"], z["theme"]); put(z["element_hi"], z["element"])
+for d in _vz["mandala"]["outer_32_clockwise_from_ne"] + list(_vz["mandala"]["inner_8"].values()) + [_vz["mandala"]["centre"]]:
+    if d["hi"] not in PHRASES and d["hi"] not in EXACT:      # planet names (सूर्य → Sun) keep priority over the devata spelling
+        put(d["hi"], d["en"])
+for r in _vz["extra_rooms"].values():
+    put(r["hi"], r["en"])
+from jyotish import vastu_plan as _vp
+_vpr = _vp.evaluate_plan({"polygon": [[0, 0], [10, 0], [10, 10], [0, 10]], "north_angle": 0, "rooms": []})
+put(_vpr["note_hi"], _vpr["note_en"])
+_vpc = _vp.evaluate_plan({"polygon": [[0, 0], [10, 0], [10, 10], [5, 10], [5, 5], [0, 5]], "north_angle": 0, "rooms": []})
+for c in _vpc["cut_corners"]:
+    put(c["text_hi"], c["text_en"])
+for n in (90, 180, 270):
+    for c in _vp.evaluate_plan({"polygon": [[0, 0], [10, 0], [10, 10], [5, 10], [5, 5], [0, 5]], "north_angle": n, "rooms": []})["cut_corners"]:
+        put(c["text_hi"], c["text_en"])
+_sk = _vp.evaluate_plan({"polygon": [[0, 0], [10, 0], [10, 10], [5, 10], [5, 5], [0, 5]], "north_angle": 45, "rooms": []})["skew_note"]
+put(_sk["hi"], _sk["en"])
+UI_VPLAN = {"नक्शे से वास्तु — 16-ज़ोन डिग्री-चक्र और वास्तु पुरुष मंडल": "Vastu from a floor plan — 16-zone degree wheel and Vastu Purusha Mandala",
+            "घर/प्लॉट का नक्शा (PDF, AutoCAD DXF, PNG/JPG) चढ़ाइए, उत्तर दिशा बताइए, प्लॉट की सीमा और कमरे चित्र पर चिह्नित कीजिए। हर कमरे का अंश, 16-ज़ोन, 8-दिशा और 81-पद देवता निकलेगा। DWG हो तो पहले DXF या PDF में सेव कीजिए।":
+            "Upload the house/plot plan (PDF, AutoCAD DXF, PNG/JPG), set the north direction, mark the plot boundary and rooms on the picture. Each room gets its degree, 16-zone, 8-direction and 81-pada devata. For a DWG, save it as DXF or PDF first.",
+            "1. नक्शा फ़ाइल": "1. Plan file", "2. उत्तर-कोण (चित्र के ऊपर से घड़ी की दिशा में, °)": "2. North angle (clockwise from the top of the picture, °)",
+            "चित्र पर उत्तर तीर खींचिए": "Draw the north arrow", "फ़ोन कम्पास से": "From phone compass", "3. प्लॉट सीमा बनाइए": "3. Draw plot boundary", "सीमा पूरी": "Boundary done",
+            "4. कमरा": "4. Room", "कमरा रखिए": "Place room", "पीछे": "Undo", "साफ़": "Clear", "5. स्थान (नक्शे पर दिखाने के लिए)": "5. Location (to show on the map)",
+            "शहर / गाँव": "City / village", "अक्षांश": "Latitude", "देशांतर": "Longitude", "मेरा स्थान": "My location", "विश्लेषण": "Analyse",
+            "16-ज़ोन चक्र": "16-zone wheel", "81-पद मंडल": "81-pada mandala", "अंश-चिह्न": "Degree ticks",
+            "प्लॉट की सीमा: कोनों पर क्लिक कीजिए, फिर \"सीमा पूरी\"।": "Plot boundary: click the corners, then \"Boundary done\".", "चुने हुए कमरे के बीच में क्लिक कीजिए।": "Click the middle of the chosen room.",
+            "पहले प्लॉट के बीच में, फिर उत्तर की ओर एक बिंदु पर क्लिक कीजिए।": "Click the plot centre first, then a point towards north.",
+            "फ़ाइल पढ़ी जा रही है…": "Reading the file…", "कम से कम 3 कोने चाहिए।": "At least 3 corners are needed.", "पहले प्लॉट की सीमा बनाइए (कम से कम 3 कोने)।": "Draw the plot boundary first (at least 3 corners).",
+            "नक्शा लाइब्रेरी नहीं मिली (ऑफ़लाइन?)। स्थान सहेजा गया है।": "Map library not available (offline?). The location was kept.", "इस ब्राउज़र में स्थान सेवा नहीं है।": "This browser has no location service.",
+            "स्थान नहीं मिला (अनुमति दीजिए)।": "Location not found (allow access).", "नक्शे का ऊपरी सिरा इस ओर": "The top of the plan points this way",
+            "कमरे चिह्नित नहीं किए गए; केवल चक्र और मंडल दिखाए गए हैं।": "No rooms marked; only the wheel and the mandala are shown.", "(सीमा से बाहर)": "(outside the boundary)",
+            "ज़ोन (16)": "Zone (16)", "दिशा (8)": "Direction (8)", "पद देवता": "Pada devata", "16-ज़ोन चक्र (अंश-सारणी)": "16-zone wheel (degree table)", "केंद्र अंश": "Centre degree", "ज़ोन-विषय": "Zone theme", "ज़ोन": "Zone",
+            "उत्तम ज़ोन:": "Best zones:", "अंश": "Degrees", "दिशा-अंश": "Bearing", "कटे कोने": "Cut corners", "उत्तर-कोण (चित्र पर):": "North angle (on the picture):", "प्लॉट केंद्र": "plot centre",
+            "वास्तु (नक्शे से)": "Vastu (from the plan)", "वास्तु — नक्शे से 16-ज़ोन विश्लेषण": "Vastu — 16-zone analysis from the plan", "PDF का पहला पृष्ठ चित्र में बदला गया।": "Page 1 of the PDF was rendered to an image.",
+            "DWG है: AutoCAD/LibreCAD से DXF या PDF में सेव करके चढ़ाइए।": "DWG: save it as DXF or PDF from AutoCAD/LibreCAD and upload that."}
+for hi, en in UI_VPLAN.items():
+    EXACT.setdefault(hi, en)
+VPLAN_PATTERNS = [("अंक {1} / {2} · उत्तर-कोण {3}°", "Score {1} / {2} · north angle {3}°"), ("अंक {1} / {2} · उत्तर-कोण {3}° · कटे कोने: {4}", "Score {1} / {2} · north angle {3}° · cut corners: {4}"),
+                  ("कटे कोने: {1}", "cut corners: {1}"), ("· उत्तर-कोण {1}°", "· north angle {1}°"), ("उत्तम ज़ोन: {1}", "Best zones: {1}"),
+                  ("फ़ोन का शीर्ष {1}° की ओर था → उत्तर-कोण {2}°।", "The phone's top pointed to {1}° → north angle {2}°."),
+                  ("DXF की {1} रेखा-आकृतियाँ (LINE/POLYLINE/CIRCLE/ARC) चित्र में बदली गईं; टेक्स्ट, हैच और ब्लॉक नहीं दिखते। DWG हो तो AutoCAD/LibreCAD से DXF में सेव कीजिए।",
+                   "{1} DXF entities (LINE/POLYLINE/CIRCLE/ARC) rendered; text, hatches and blocks are not shown. For a DWG, save it as DXF from AutoCAD/LibreCAD.")]
+TAJIKA_PATTERNS = VPLAN_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

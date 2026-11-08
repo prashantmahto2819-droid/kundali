@@ -84,6 +84,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, palm.catalog())
         if path == "/v1/vastu/catalog":
             return self._json(200, handlers.vastu_catalog())
+        if path == "/v1/vastu/plan/catalog":
+            return self._json(200, handlers.vastu_plan_catalog())
         if path == "/v1/places":
             from urllib.parse import parse_qs
             qs = parse_qs(query)
@@ -113,6 +115,8 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/match": handlers.match_from_payload,
                   "/v1/tarot": handlers.tarot_from_payload,
                   "/v1/vastu": handlers.vastu_from_payload,
+                  "/v1/vastu/plan": handlers.vastu_plan_upload_from_payload,
+                  "/v1/vastu/zones": handlers.vastu_plan_from_payload,
                   "/v1/palm": handlers.palm_from_payload,
                   "/v1/muhurta": handlers.muhurta_from_payload,
                   "/v1/prashna": handlers.prashna_from_payload,

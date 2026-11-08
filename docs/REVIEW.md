@@ -56,7 +56,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | # | What | File |
 |---|------|------|
 | 1 | Room × direction ratings, why/fix texts | `data/knowledge/vastu.json` (16 rooms × 8 directions) |
-| 2 | 16-zone model (not built yet) | — |
+| 2 | 16-zone wheel: zone themes, good/avoid room lists per zone; 45 devata placement on the 81-pada grid (inner ring assignment by direction) | `data/knowledge/vastu_zones.json` (built by `engine/tools/vastu_zones_data.py`) |
 
 ## F. Palmistry — a palmist
 | # | What | File |

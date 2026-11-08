@@ -159,6 +159,7 @@ def places(q: str = "", limit: int = 8):
 @app.post("/v1/numerology/report", response_class=HTMLResponse)
 @app.post("/v1/tarot/report", response_class=HTMLResponse)
 @app.post("/v1/vastu/report", response_class=HTMLResponse)
+@app.post("/v1/vastu/plan/report", response_class=HTMLResponse)
 @app.post("/v1/palm/report", response_class=HTMLResponse)
 async def small_reports(request: Request):
     """Printable pages for numerology, tarot, vastu and palm (same payload as the JSON route, + lang)."""
@@ -298,6 +299,47 @@ def vastu(req: VastuRequest):
 @app.get("/v1/vastu/catalog")
 def vastu_catalog():
     return handlers.vastu_catalog()
+
+
+@app.get("/v1/vastu/plan/catalog")
+def vastu_plan_catalog():
+    return handlers.vastu_plan_catalog()
+
+
+class VastuPlanUpload(BaseModel):
+    filename: str = ""
+    content_b64: str = Field(..., max_length=17 * 1024 * 1024)
+
+
+@app.post("/v1/vastu/plan")
+def vastu_plan_upload(req: VastuPlanUpload):
+    try:
+        return handlers.vastu_plan_upload_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+class VastuRoomPoint(BaseModel):
+    room: str
+    x: float
+    y: float
+
+
+class VastuZonesRequest(BaseModel):
+    polygon: list[list[float]] = Field(..., min_length=3, max_length=60)
+    north_angle: float = 0.0
+    rooms: list[VastuRoomPoint] = Field(default_factory=list, max_length=60)
+    lat: float | None = None
+    lon: float | None = None
+    place: str | None = Field(None, max_length=120)
+
+
+@app.post("/v1/vastu/zones")
+def vastu_zones(req: VastuZonesRequest):
+    try:
+        return handlers.vastu_plan_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
 
 class VarshaphalRequest(ChartRequest):
