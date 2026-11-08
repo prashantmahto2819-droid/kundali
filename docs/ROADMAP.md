@@ -39,7 +39,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 2. Phase 2: remaining vargas, aspects/strengths (shadbala), [x] ashtakavarga v1 (BAV/SAV; shodhana reductions + transit use done in gochara v1), [x] kundali matching (v2: Bhakoot/Nadi parihara conditions + total with parihara; Vashya/Yoni/Gana tables to verify), [x] numerology, [x] tarot (v2: all 78 cards hand-written, upright/reversed, Hindi+English; reader review pending), [x] report v1 (HTML/print-PDF, Hindi), accounts, [x] city search v1 (151 cities, offline; full geocoder later).
 3. Phase 3: [x] RAG chat v1 (`/v1/ask`: BM25 retrieval + guardrails + optional LLM + web Ask card; LLM path untested; FastAPI route verified on the Relay server), [ ] course content, [x] numerology passages in retrieval, [ ] retrieval quality evaluation set.
 4. Phase 4: palmistry (needs a labelled palm dataset) and vastu overlay.
-5. Phase 5: [x] Lal Kitab (draft), [x] KP v1 (KP ayanamsa, Placidus cusps, star/sub/sub-sub lords, 4-level significators; draft), [x] Jaimini v1 (chara karakas 7/8, arudha padas, karakamsa; draft), [ ] astrologer tools, mobile app.
+5. Phase 5: [x] Lal Kitab (draft), [x] KP v1 (KP ayanamsa, Placidus cusps, star/sub/sub-sub lords, 4-level significators; draft), [x] Jaimini v1 (chara karakas 7/8, arudha padas, karakamsa; draft), [x] mobile: PWA (manifest, service worker, install button, offline shell); [ ] astrologer tools; native store apps later if needed.
 
 - [x] Vastu v1 (room x direction rating, 16 rooms, Hindi). Pending: floor-plan/plot analysis, 16-zone model, scholar review.
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.

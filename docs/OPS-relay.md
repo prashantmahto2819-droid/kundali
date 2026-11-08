@@ -73,7 +73,7 @@ Send me the output, especially any `FAIL`/`WARN` line.
 
 ## Updating after a new push (run all three every time)
 ```bash
-cd /srv/kundali && git pull && cd deploy && docker compose -f docker-compose.relay.yml up -d --build
+cd /srv/kundali && git pull && cd deploy && GIT_SHA=$(git rev-parse --short HEAD) docker compose -f docker-compose.relay.yml up -d --build
 docker compose -f docker-compose.relay.yml ps          # wait for "healthy"
 cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com   # must end with ALL OK
 ```

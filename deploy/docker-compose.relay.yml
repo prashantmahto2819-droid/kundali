@@ -7,6 +7,8 @@ services:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA:-dev}
     container_name: kundali-api
     restart: unless-stopped
     environment:

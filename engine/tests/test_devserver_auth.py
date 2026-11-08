@@ -91,3 +91,24 @@ def test_resolve_without_pyjwt_does_not_crash(monkeypatch, tmp_path):
     assert access.resolve({}, store) == (None, None)                       # anonymous: no import needed at all
     org, err = access.resolve({"Authorization": "Bearer abc"}, store)
     assert org is None and "PyJWT" in err
+
+
+def test_pwa_files_are_served(monkeypatch):
+    import json, threading, urllib.request
+    from http.server import ThreadingHTTPServer
+    import devserver
+    monkeypatch.setenv("KUNDALI_AUTH", "off")
+    srv = ThreadingHTTPServer(("127.0.0.1", 0), devserver.Handler)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        base = f"http://127.0.0.1:{srv.server_address[1]}"
+        with urllib.request.urlopen(base + "/manifest.webmanifest") as r:
+            m = json.loads(r.read()); assert r.headers["Content-Type"].startswith("application/manifest+json") and m["display"] == "standalone"
+        with urllib.request.urlopen(base + "/sw.js") as r:
+            assert b"caches.open" in r.read() and "javascript" in r.headers["Content-Type"]
+        with urllib.request.urlopen(base + "/icons/icon-192.png") as r:
+            assert r.read()[:8] == b"\x89PNG\r\n\x1a\n"
+        with urllib.request.urlopen(base + "/") as r:
+            html = r.read().decode(); assert 'rel="manifest"' in html and "serviceWorker" in html
+    finally:
+        srv.shutdown()

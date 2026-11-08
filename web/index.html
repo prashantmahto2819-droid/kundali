@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>कुंडली — पहला संस्करण</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#8a3b12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="कुंडली">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
 <style>
   :root { --bg:#fbf7ef; --ink:#2a2118; --muted:#7a6a58; --line:#b08a4a; --card:#fff; --accent:#8a3b12; --ok:#2e7d32; --warn:#b26a00; }
   @media (prefers-color-scheme: dark) { :root { --bg:#17120d; --ink:#f1e6d3; --muted:#b9a88f; --line:#c9a25f; --card:#221a12; --accent:#f0a060; } }
@@ -46,6 +52,7 @@
 <body>
 <header>
   <button type="button" id="langbtn" style="float:right;width:auto;padding:4px 14px;margin:0" title="Language">English</button>
+  <button type="button" id="installbtn" style="float:right;width:auto;padding:4px 14px;margin:0 8px 0 0;display:none" onclick="deferredInstall && deferredInstall.prompt()">ऐप इंस्टॉल करें</button>
   <h1>कुंडली <span class="chip">पहला संस्करण</span></h1>
   <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
 </header>
@@ -257,7 +264,15 @@
 
   </section>
 </main>
+<div id="offline" class="banner" style="display:none;max-width:1100px;margin:8px auto">ऑफ़लाइन: कुंडली बनाने के लिए इंटरनेट चाहिए; सीखने की सामग्री खुली रहेगी।</div>
 <script src="config.js"></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') { navigator.serviceWorker.register('sw.js').catch(() => {}); }
+const offlineBanner = () => { const el = document.getElementById('offline'); if (el) el.style.display = navigator.onLine ? 'none' : ''; };
+window.addEventListener('online', offlineBanner); window.addEventListener('offline', offlineBanner); offlineBanner();
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; const b = document.getElementById('installbtn'); if (b) b.style.display = ''; });
+</script>
 <script>
 const API = new URLSearchParams(location.search).get('api') || '';
 const $ = id => document.getElementById(id);
