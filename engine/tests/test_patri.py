@@ -60,3 +60,10 @@ def test_sunrise_conventions():
     b = KORBA["patri"]["birth"]
     assert b["sunrise"] == "06:07" and b["sunrise_centre"] == "06:11"     # centre/no-refraction is ~4 min later
     assert b["ishta_kaal"]["text"] == "20:22"                              # printout 20:25 (its sunrise 06:10:43)
+
+
+def test_purnimanta_name():
+    b = KORBA["patri"]["birth"]["masa"]
+    assert (b["name"], b["purnimanta"]) == ("Kartika", "Kartika")              # shukla paksha: same name
+    k = patri.details(JBP)["birth"]["masa"]                                      # 1990-05-17 is Vaishakha krishna
+    assert (k["name"], k["purnimanta"]) == ("Vaishakha", "Jyeshtha")

@@ -33,7 +33,7 @@ def test_kendradi_and_naisargika():
 def test_chart_integration():
     c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
     s = c["strength"]
-    assert len(s["planets"]) == 7 and not s["complete"] and s["missing"]
+    assert len(s["planets"]) == 7 and s["complete"] and not s["missing"]
     for r in s["planets"]:
         assert 0 <= r["uccha"] <= 60 and 0 <= r["dig"] <= 60 and r["kendradi"] in (60, 30, 15)
         assert r["total"] == pytest.approx(r["sthana"] + r["dig"] + r["kala"] + r["cheshta"] + r["naisargika"] + r["drik"], abs=0.1)
@@ -109,3 +109,18 @@ def test_cheshta_bala_motion():
     for n in ("Mars", "Mercury", "Jupiter", "Venus", "Saturn"):
         assert 0 <= st.cheshta_bala(n, 123.4, jd) <= 60
     assert "cheshta" not in " ".join(c["strength"]["missing"])
+
+
+def test_abda_masa_yuddha():
+    c = compute_chart("1991-11-10", "14:20", "Asia/Kolkata", 22.3667, 82.7667)
+    s = c["strength"]
+    assert s["complete"] and s["missing"] == [] and s["lords"]["ahargana"] == 1860105
+    assert s["lords"]["abda_lord"] in st.VARA_LORDS and s["lords"]["masa_lord"] in st.VARA_LORDS
+    kala = {r["name"]: r["detail"]["kala"] for r in s["planets"]}
+    assert kala[s["lords"]["abda_lord"]]["abda"] == 15.0 and kala[s["lords"]["masa_lord"]]["masa"] == 30.0
+    assert sum(v["abda"] for v in kala.values()) == 15.0 and sum(v["masa"] for v in kala.values()) == 30.0
+    # synthetic war: Jupiter and Venus 0.5 deg apart -> larger disc (Jupiter) gains, Venus loses the same amount
+    rows = [{"name": n, "total": t} for n, t in (("Jupiter", 400.0), ("Venus", 300.0), ("Mars", 200.0), ("Mercury", 250.0), ("Saturn", 220.0))]
+    wars = st.yuddha_adjust(rows, {"Jupiter": 100.0, "Venus": 100.5, "Mars": 10.0, "Mercury": 200.0, "Saturn": 300.0})
+    assert wars == [{"winner": "Jupiter", "loser": "Venus", "gap_deg": 0.5, "adjust": round(100 / (190.4 - 16.6), 2)}]
+    assert rows[0]["yuddha"] > 0 and rows[1]["yuddha"] == -rows[0]["yuddha"]

@@ -137,8 +137,8 @@ def render(chart: dict) -> str:
                       ["योग", e(b["yoga"]["name_hi"])], ["करण", e(b["karana"]["name_hi"])],
                       ["सूर्योदय / सूर्यास्त", f'{e(b["sunrise"] or "—")} ({e(b.get("sunrise_centre") or "")}) / {e(b["sunset"] or "—")} ({e(b.get("sunset_centre") or "")})'],
                       ["इष्टकाल (घटी:पल)", e(b["ishta_kaal"]["text"]) if b["ishta_kaal"] else "—"],
-                      ["मास (अमांत) ≈", e(b["masa"]["name_hi"])], ["ऋतु", e(b["ritu"]["name_hi"])], ["अयन", e(b["ayana"]["name_hi"])],
-                      ["विक्रम संवत् ≈", str(b["vikram_samvat"])], ["शक संवत् ≈", str(b["shaka_samvat"])],
+                      ["मास (अमांत / पूर्णिमांत)", f'{e(b["masa"]["name_hi"])} / {e(b["masa"].get("purnimanta_hi", ""))}'], ["ऋतु", e(b["ritu"]["name_hi"])], ["अयन", e(b["ayana"]["name_hi"])],
+                      ["विक्रम संवत्", str(b["vikram_samvat"])], ["शक संवत्", str(b["shaka_samvat"])],
                       ["सूर्य राशि (पाश्चात्य)", e(b["sun_sign_tropical"]["name_hi"])], ["अयनांश (लाहिरी)", e(b["ayanamsa"])]]
         ava_rows = [["लग्न-लग्नेश", f'{e(a["lagna"]["name_hi"])}-{e(a["lagna"]["lord_hi"])}'],
                     ["राशि-राशि स्वामी", f'{e(a["rashi"]["name_hi"])}-{e(a["rashi"]["lord_hi"])}'],
@@ -218,7 +218,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 {_table(sav_head, sav_rows)}
 {_table(["ग्रह"] + [str(i + 1) for i in range(12)] + ["कुल"], bav_rows)}
 
-<h2>ग्रह-बल (आंशिक षड्बल)</h2>
+<h2>ग्रह-बल (षड्बल)</h2>
 <p class="small">{e(chart["strength"]["missing_hi"])}</p>
 {_table(["ग्रह", "स्थान", "दिक्", "काल", "चेष्टा", "दृग्", "नैसर्गिक", "कुल", "रूप", "क्रम"], strength_rows)}
 

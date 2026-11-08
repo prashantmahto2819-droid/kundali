@@ -129,7 +129,7 @@
     </section>
     <section class="sub" id="s-planets">
     <div class="card"><b>ग्रह स्थिति</b><div id="ptable"></div></div>
-    <div class="card"><b>ग्रह-बल (आंशिक षड्बल)</b>
+    <div class="card"><b>ग्रह-बल (षड्बल)</b>
       <div class="muted" style="font-size:.85rem" id="stwhy"></div>
       <div id="sttable" style="overflow-x:auto"></div>
     </div>
@@ -408,8 +408,8 @@ function renderPatri(c) {
     ['योग', esc(b.yoga.name_hi)], ['करण', esc(b.karana.name_hi)],
     ['सूर्योदय / सूर्यास्त', b.sunrise ? `${esc(b.sunrise)} (${esc(b.sunrise_centre || '')}) / ${esc(b.sunset)} (${esc(b.sunset_centre || '')})` : '—'],
     ['इष्टकाल (घटी:पल)', b.ishta_kaal ? esc(b.ishta_kaal.text) : '—'],
-    ['मास (अमांत)', esc(b.masa.name_hi) + ' <span class="muted">≈</span>'], ['ऋतु', esc(b.ritu.name_hi)], ['अयन', esc(b.ayana.name_hi)],
-    ['विक्रम संवत्', b.vikram_samvat + ' <span class="muted">≈</span>'], ['शक संवत्', b.shaka_samvat + ' <span class="muted">≈</span>'],
+    ['मास (अमांत / पूर्णिमांत)', `${esc(b.masa.name_hi)} / ${esc(b.masa.purnimanta_hi)}`], ['ऋतु', esc(b.ritu.name_hi)], ['अयन', esc(b.ayana.name_hi)],
+    ['विक्रम संवत्', b.vikram_samvat], ['शक संवत्', b.shaka_samvat],
     ['सूर्य राशि (पाश्चात्य)', esc(b.sun_sign_tropical.name_hi)], ['अयनांश (लाहिरी)', esc(b.ayanamsa)],
   ]) + `<div class="muted" style="font-size:.8rem;margin-top:6px">${esc(P.note_hi)}</div>`;
   $('patri2').innerHTML = kv([

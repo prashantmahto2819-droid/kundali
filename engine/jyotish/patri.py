@@ -41,8 +41,8 @@ RITU = {"Chaitra": "Vasanta", "Vaishakha": "Vasanta", "Jyeshtha": "Grishma", "As
         "Shravana": "Varsha", "Bhadrapada": "Varsha", "Ashwina": "Sharad", "Kartika": "Sharad",
         "Margashirsha": "Hemanta", "Pausha": "Hemanta", "Magha": "Shishira", "Phalguna": "Shishira"}
 RITU_HI = {"Vasanta": "वसंत", "Grishma": "ग्रीष्म", "Varsha": "वर्षा", "Sharad": "शरद", "Hemanta": "हेमंत", "Shishira": "शिशिर"}
-NOTE_HI = "मास अमांत गणना से, अधिक मास सहित; ऋतु और संवत् उसी से (अनुमानित)। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।"
-NOTE_EN = "Masa by amanta reckoning incl. adhika masa; ritu and samvat follow it (approximate). Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one."
+NOTE_HI = "मास असली अमावस्याओं से, अधिक मास सहित (अमांत और पूर्णिमांत दोनों नाम); संवत् चैत्र शुक्ल से। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।"
+NOTE_EN = "Masa from the actual new moons incl. adhika masa (amanta and purnimanta names); samvat from Chaitra Shukla. Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one."
 WESTERN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio",
            "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
 HI = {"Brahmin": "ब्राह्मण", "Kshatriya": "क्षत्रिय", "Vaishya": "वैश्य", "Shudra": "शूद्र",
@@ -179,7 +179,10 @@ def details(chart: dict) -> dict:
         "sunrise": day.get("sunrise"), "sunset": day.get("sunset"),
         "sunrise_centre": day.get("sunrise_centre"), "sunset_centre": day.get("sunset_centre"),
         "ishta_kaal": ishta,
-        "masa": {"name": ("Adhika " if adhika else "") + masa, "name_hi": ("अधिक " if adhika else "") + MASA_HI[masa_i], "adhika": adhika},
+        "masa": {"name": ("Adhika " if adhika else "") + masa, "name_hi": ("अधिक " if adhika else "") + MASA_HI[masa_i], "adhika": adhika,
+                 # purnimanta (north-Indian) reckoning: the krishna paksha belongs to the following month's name
+                 "purnimanta": ("Adhika " if adhika else "") + (MASA[(masa_i + 1) % 12] if t["paksha"] == "Krishna" else masa),
+                 "purnimanta_hi": ("अधिक " if adhika else "") + (MASA_HI[(masa_i + 1) % 12] if t["paksha"] == "Krishna" else MASA_HI[masa_i])},
         "ritu": {"name": RITU[masa], "name_hi": RITU_HI[RITU[masa]]},
         "ayana": {"name": ayana, "name_hi": HI[ayana]},
         "vikram_samvat": vikram, "shaka_samvat": shaka, "samvat_approx": True,

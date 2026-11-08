@@ -143,7 +143,7 @@ UI = {
  "गोचर (आज का आकाश)": "Transit (today's sky)", "अभी साढ़ेसाती नहीं है।": "Sade Sati is not running now.",
  "चंद्र से भाव": "House from Moon", "लग्न से भाव": "House from Lagna", "बिंदु": "Bindus", "संकेत": "Indication",
  "सहायक": "supportive", "कठिन": "demanding", "मिश्रित": "mixed", "अनुकूल": "favourable", "परिश्रम-साध्य": "needs effort",
- "ग्रह-बल (आंशिक षड्बल)": "Planet strength (partial Shadbala)", "स्थान": "Sthana", "दिक्": "Dig", "काल": "Kala",
+ "ग्रह-बल (षड्बल)": "Planet strength (Shadbala)", "स्थान": "Sthana", "दिक्": "Dig", "काल": "Kala",
  "दृग्": "Drik", "केंद्रादि": "Kendradi", "नैसर्गिक": "Naisargika", "क्रम": "Rank",
  "दिन का मुहूर्त": "Muhurta of the day", "सूर्योदय / सूर्यास्त": "Sunrise / Sunset", "वैदिक वार": "Vedic weekday",
  "राहुकाल": "Rahu Kaal", "यमगंड": "Yamaganda", "गुलिक": "Gulika", "अभिजित": "Abhijit",
@@ -185,7 +185,7 @@ UI = {
  "दुर्ग-भिलाई": "Durg-Bhilai",
  # patri
  "जन्म विवरण": "Birth details", "अवकहड़ा चक्र": "Avakahada chakra", "वार": "Weekday", "नक्षत्र-चरण": "Nakshatra-pada",
- "सूर्योदय / सूर्यास्त": "Sunrise / sunset", "इष्टकाल (घटी:पल)": "Ishta kaal (ghati:pala)", "मास (अमांत)": "Lunar month (amanta)",
+ "सूर्योदय / सूर्यास्त": "Sunrise / sunset", "इष्टकाल (घटी:पल)": "Ishta kaal (ghati:pala)", "मास (अमांत)": "Lunar month (amanta)", "मास (अमांत / पूर्णिमांत)": "Lunar month (amanta / purnimanta)",
  "मास (अमांत) ≈": "Lunar month (amanta) ≈", "ऋतु": "Season (ritu)", "अयन": "Ayana", "विक्रम संवत्": "Vikram samvat", "शक संवत्": "Shaka samvat",
  "विक्रम संवत् ≈": "Vikram samvat ≈", "शक संवत् ≈": "Shaka samvat ≈",
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
@@ -231,6 +231,8 @@ REPORT = {
    "In Ashtakavarga each planet gives 0 to 8 bindus in every sign (the seven planets and the Lagna contribute). The higher the Sarvashtakavarga (SAV) total of a house, the more easily its results are considered to flow. The average is about 28; 30+ is strong and below 25 is weak — a rule of thumb, not a final verdict.",
  "गोचर में हर ग्रह जन्म-चंद्र राशि से कुछ ख़ास भावों में शुभ माना जाता है। हमने इसे उस राशि में ग्रह के अष्टकवर्ग बिंदुओं (4 या अधिक = सहायक) से मिलाया है। ‘मिश्रित’ का मतलब है कि दोनों संकेत अलग-अलग हैं। वेध अभी लागू नहीं है; यह दिशा-संकेत है, भविष्यवाणी नहीं।":
    "In transit, each planet is considered favourable in certain houses from the natal Moon sign. We cross-checked this with the planet's Ashtakavarga bindus in that sign (4 or more = supportive). ‘Mixed’ means the two indications differ. Vedha is not applied yet; this is a directional indication, not a prediction.",
+ "सभी छह बल (स्थान, दिक्, काल सहित अब्द-मास-वार-होरा, चेष्टा, नैसर्गिक, दृग्) और ग्रह-युद्ध शामिल हैं। यह संस्करण-1 की गणना है; कुल अंक शास्त्रीय न्यूनतम-आवश्यकता से तुलना के लिए हैं, पर व्याख्या विद्वान-समीक्षा के अधीन है।":
+   "All six strengths (sthana, dig, kala incl. abda-masa-vara-hora, cheshta, naisargika, drik) and planetary war are included. This is a version-1 computation; totals can be compared with the classical minimum-requirement table, but interpretation awaits scholar review.",
  "अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण षड्बल नहीं है। कुल अंकों की तुलना शास्त्रीय न्यूनतम-आवश्यकता तालिका से न करें; केवल एक ही कुंडली के ग्रहों की आपस में तुलना करें।":
    "Abda bala, masa bala and yuddha bala are not included yet, so this is not the full Shadbala. Do not compare the totals with the classical minimum-requirement tables; compare only the planets of one chart with each other.",
  "यह समय-रेखा बताती है कि किस दशा में जीवन के कौन-से क्षेत्र सक्रिय रहते हैं, घटनाओं की भविष्यवाणी नहीं। बल-संकेत दशेश की स्थिति (गरिमा, भाव, अष्टकवर्ग बिंदु) से बनता है; गोचर, दृष्टियाँ और योग अभी शामिल नहीं हैं।":

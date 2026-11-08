@@ -81,7 +81,8 @@ def test_resolve_without_pyjwt_does_not_crash(monkeypatch, tmp_path):
     real_import = builtins.__import__
 
     def fake_import(name, *a, **k):
-        if name == "jwt" or name.endswith("auth_supabase"):
+        fromlist = a[2] if len(a) > 2 else k.get("fromlist") or ()
+        if name == "jwt" or name.endswith("auth_supabase") or "auth_supabase" in (fromlist or ()):
             raise ImportError("no jwt")
         return real_import(name, *a, **k)
     sys.modules.pop("jyotish.auth_supabase", None)

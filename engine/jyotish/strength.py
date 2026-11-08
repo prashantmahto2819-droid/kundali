@@ -249,6 +249,36 @@ def cheshta_bala(name: str, true_tropical: float, jd_tt: float) -> float:
     return kendra / 3.0
 
 
+# ---- Abda, masa (year/month lords from the ahargana) and yuddha (planetary war) --------------------
+KALI_EPOCH_JD = 588465.5                 # 18 Feb 3102 BCE (JD at the start of Kali yuga, midnight)
+_DISC = {"Mars": 9.4, "Mercury": 6.6, "Jupiter": 190.4, "Venus": 16.6, "Saturn": 158.0}   # BPHS bimba (viklas)
+
+
+def year_month_lords(jd_ut: float) -> dict:
+    """Abda and masa adhipati from the ahargana (days since the Kali epoch), BPHS 27."""
+    ahargana = int(jd_ut - KALI_EPOCH_JD)
+    year_lord = VARA_LORDS[((ahargana // 360) * 3 + 1) % 7]
+    month_lord = VARA_LORDS[((ahargana // 30) * 2 + 1) % 7]
+    return {"ahargana": ahargana, "abda_lord": year_lord, "masa_lord": month_lord}
+
+
+def yuddha_adjust(rows: list[dict], lons: dict) -> list[dict]:
+    """Planetary war: two of Mars..Saturn within 1 degree. The planet with the larger disc wins; the difference of
+    their totals divided by the difference of their discs is added to the winner and taken from the loser (BPHS 27)."""
+    wars = []
+    names = [n for n in ("Mars", "Mercury", "Jupiter", "Venus", "Saturn")]
+    by = {r["name"]: r for r in rows}
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            gap = abs((lons[a] - lons[b] + 180) % 360 - 180)
+            if gap < 1.0:
+                win, lose = (a, b) if _DISC[a] >= _DISC[b] else (b, a)
+                diff = abs(by[a]["total"] - by[b]["total"]) / abs(_DISC[a] - _DISC[b])
+                by[win]["yuddha"], by[lose]["yuddha"] = round(diff, 2), round(-diff, 2)
+                wars.append({"winner": win, "loser": lose, "gap_deg": round(gap, 3), "adjust": round(diff, 2)})
+    return wars
+
+
 def strength(chart: dict) -> dict:
     lagna_lon = chart["lagna"]["longitude"]
     lons = {p["name"]: p["longitude"] for p in chart["planets"]}
@@ -256,6 +286,7 @@ def strength(chart: dict) -> dict:
     names_hi = {p["name"]: p["name_hi"] for p in chart["planets"]}
     tc = time_context(chart)
     ayan, obl = chart["ayanamsa_value"], chart["obliquity"]
+    ym = year_month_lords(chart["jd_ut"])
     rows = []
     for n in SEVEN:
         lon = lons[n]
@@ -264,7 +295,7 @@ def strength(chart: dict) -> dict:
                   "drekkana": drekkana_bala(n, lon)}
         ay = ayana_bala(n, lon + ayan, obl)
         pk = paksha_bala(n, lons["Sun"], lons["Moon"])
-        kala = {"paksha": pk, "ayana": ay}
+        kala = {"paksha": pk, "ayana": ay, "abda": 15.0 if n == ym["abda_lord"] else 0.0, "masa": 30.0 if n == ym["masa_lord"] else 0.0}
         if tc:
             kala.update({"natonnata": natonnata_bala(n, tc), "tribhaga": tribhaga_bala(n, tc),
                          "vara": 45.0 if n == tc["vara_lord"] else 0.0,
@@ -286,16 +317,30 @@ def strength(chart: dict) -> dict:
                      "cheshta_known": True,
                      "total": round(total, 2), "rupas": round(total / 60.0, 2),
                      "comparable": round(total, 2)})
+    for r in rows:
+        r["yuddha"] = 0.0
+    wars = yuddha_adjust(rows, lons)
+    for r in rows:
+        if r["yuddha"]:
+            r["total"] = round(r["total"] + r["yuddha"], 2)
+            r["rupas"] = round(r["total"] / 60.0, 2)
+            r["comparable"] = r["total"]
     for i, r in enumerate(sorted(rows, key=lambda r: -r["total"]), 1):
         r["rank"] = i
-    missing = ["abda", "masa", "yuddha"]
+    missing = []
     if not tc:
         missing += ["natonnata", "tribhaga", "vara", "hora (sunrise/sunset unavailable)"]
-    return {"planets": rows, "unit": "virupa", "complete": False, "missing": missing,
-            "missing_hi": ("अब्दबल, मासबल और युद्धबल अभी शामिल नहीं हैं, इसलिए यह पूर्ण "
-                           "षड्बल नहीं है। कुल अंकों की तुलना शास्त्रीय न्यूनतम-आवश्यकता तालिका से न करें; "
+    complete = not missing
+    return {"planets": rows, "unit": "virupa", "complete": complete, "missing": missing, "wars": wars,
+            "lords": {**ym, "vara_lord": tc["vara_lord"] if tc else None, "hora_lord": tc["hora_lord"] if tc else None},
+            "missing_hi": ("सभी छह बल (स्थान, दिक्, काल सहित अब्द-मास-वार-होरा, चेष्टा, नैसर्गिक, दृग्) और ग्रह-युद्ध शामिल हैं। "
+                           "यह संस्करण-1 की गणना है; कुल अंक शास्त्रीय न्यूनतम-आवश्यकता से तुलना के लिए हैं, पर व्याख्या विद्वान-समीक्षा के अधीन है।"
+                           if complete else
+                           "कुछ बल अभी शामिल नहीं हैं (" + ", ".join(missing) + "), इसलिए यह पूर्ण षड्बल नहीं है। "
                            "केवल एक ही कुंडली के ग्रहों की आपस में तुलना करें।"),
-            "assumptions": ["cheshta bala from Meeus mean longitudes and the BPHS half-sum kendra, reduced to 0-180",
+            "assumptions": ["abda/masa lords from the ahargana since the Kali epoch (JD 588465.5), BPHS 27",
+                            "yuddha: war when two of Mars..Saturn are within 1 degree; the larger disc (BPHS bimba) wins",
+                            "cheshta bala from Meeus mean longitudes and the BPHS half-sum kendra, reduced to 0-180",
                             "Mercury counted as benefic in paksha and drik bala",
                             "Moon benefic in drik bala only when waxing",
                             "Sun's ayana bala doubled",
