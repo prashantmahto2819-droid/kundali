@@ -92,6 +92,11 @@ put(_full["kp"]["note_hi"], _full["kp"]["note_en"])
 put(_full["jaimini"]["note_hi"], _full["jaimini"]["note_en"])
 put(_full["jaimini"]["chara_dasha"]["note_hi"], _full["jaimini"]["chara_dasha"]["note_en"])
 put(_full["kp"]["ruling_planets"]["note_hi"], _full["kp"]["ruling_planets"]["note_en"])
+from jyotish import muhurta_find as _mf  # noqa: E402
+_mr = _mf.find("general", 23.18, 79.99, "Asia/Kolkata", "2026-01-01", 1)
+put(_mr["note_hi"], _mr["note_en"])
+for _a in _mf.ACTIVITIES.values():
+    put(_a["hi"], _a["en"])
 from jyotish import jaimini as _jm  # noqa: E402
 for _k, _hi in _jm.KARAKA_HI.items():
     put(_hi, _k)
@@ -208,7 +213,13 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "चर दशा": "Chara dasha", "सभी दशाएँ": "All dashas", "वार-स्वामी": "Day lord", "लग्न राशि/नक्षत्र/उप": "Lagna sign/star/sub",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "मुहूर्त": "Muhurta", "मुहूर्त खोज": "Muhurta finder", "कार्य": "Activity", "कब से": "From", "कितने दिन": "How many days", "स्थान": "Place",
+ "शहर (ख़ाली = कुंडली वाला)": "City (blank = the chart's)", "खोजिए": "Search", "सबसे अच्छे दिन": "Best days", "सभी दिन": "All days", "तारीख़": "Date", "स्कोर": "Score", "पंचांग": "Panchang",
+ "शुभ समय": "Good times", "सामान्य शुभ कार्य": "General auspicious work", "यात्रा": "Travel", "व्यापार / नया काम": "Business / new venture", "गृह प्रवेश": "House-warming",
+ "वाहन ख़रीद": "Buying a vehicle", "विद्यारंभ / पढ़ाई": "Starting studies", "(ताराबल-चंद्रबल सहित)": "(with tarabala and chandrabala)", "अमावस्या": "amavasya",
+ "सूर्योदय पर विष्टि (भद्रा) करण": "Vishti (Bhadra) karana at sunrise", "इस कार्य के लिए वर्जित वार": "weekday avoided for this", "ताराबल अनुकूल": "tarabala favourable", "चंद्रबल अनुकूल": "chandrabala favourable",
+ "किस काम के लिए, कहाँ, और कब से: अगले दिनों में पंचांग के आधार पर अच्छे दिन और उनके शुभ चौघड़िया। कुंडली बनी हो तो ताराबल-चंद्रबल भी जुड़ते हैं।":
+ "For which work, where and from when: good days in the coming period from the panchang, with their good choghadiya windows. With a chart made, tarabala and chandrabala are added.", "चर दशा": "Chara dasha", "सभी दशाएँ": "All dashas", "वार-स्वामी": "Day lord", "लग्न राशि/नक्षत्र/उप": "Lagna sign/star/sub",
  "चंद्र राशि/नक्षत्र/उप": "Moon sign/star/sub", "रूलिंग प्लैनेट्स (अभी)": "Ruling planets (now)", "जन्म से 120 वर्ष के बाहर।": "Outside 120 years from birth.", "अभी:": "Now:", "ज्योतिषी प्रोफ़ाइल (रिपोर्ट पर आपका नाम)": "Astrologer profile (your name on reports)", "यह जानकारी आपकी हर PDF रिपोर्ट के ऊपर छपेगी।": "This is printed at the top of every PDF report you make.",
  "नाम / संस्था": "Name / organisation", "फ़ोन": "Phone", "वेबसाइट": "Website", "पता": "Address", "एक पंक्ति (जैसे: \"परामर्श के लिए संपर्क करें\")": "One line (e.g. \"Contact for consultation\")",
  "प्रोफ़ाइल सेव करें": "Save profile", "सेव हो गया।": "Saved.", "नोट": "Note", "नोट सेव करें": "Save note", "ऐप इंस्टॉल करें": "Install app",
@@ -408,7 +419,9 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
-EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("अभी: {1} महादशा ({2} → {3}), अंतर्दशा {4} ({5} → {6})", "Now: {1} mahadasha ({2} → {3}), antardasha {4} ({5} → {6})"),
+EXTRA_PATTERNS += [("{1} (KP अयनांश {2}°)", "{1} (KP ayanamsa {2}°)"), ("{1}: {2} से {3} दिन", "{1}: {3} days from {2}"), (": {1} से {2} दिन", ": {2} days from {1}"), (": {1} से {2} दिन (ताराबल-चंद्रबल सहित)", ": {2} days from {1} (with tarabala and chandrabala)"), ("{1}: {2} से {3} दिन (ताराबल-चंद्रबल सहित)", "{1}: {3} days from {2} (with tarabala and chandrabala)"),
+                   ("रिक्ता तिथि ({1})", "rikta tithi ({1})"), ("अशुभ योग ({1})", "inauspicious yoga ({1})"), ("अनुकूल नक्षत्र ({1})", "favourable nakshatra ({1})"), ("इस कार्य के लिए वर्जित नक्षत्र ({1})", "nakshatra avoided for this ({1})"),
+                   ("ताराबल प्रतिकूल ({1}वाँ तारा)", "tarabala unfavourable ({1}th tara)"), ("चंद्रबल प्रतिकूल ({1}वाँ)", "chandrabala unfavourable ({1}th)"), ("अभिजित {1}–{2}", "Abhijit {1}–{2}"), ("राहु काल {1}–{2}", "Rahu kaal {1}–{2}"), ("अभी: {1} महादशा ({2} → {3}), अंतर्दशा {4} ({5} → {6})", "Now: {1} mahadasha ({2} → {3}), antardasha {4} ({5} → {6})"),
                    ("अभी: {1} ({2} → {3})", "Now: {1} ({2} → {3})"), ("महादशा ({1} → {2}), अंतर्दशा", "mahadasha ({1} → {2}), antardasha"), ("महादशा ({1} → {2})", "mahadasha ({1} → {2})"), ("अभी: {1} महादशा ({2} → {3})", "Now: {1} mahadasha ({2} → {3})"), ("{1} (अपवाद)", "{1} (exception)"), ("{1} कारकांश: {2}।", "{1} Karakamsa: {2}."), ("{1} मिनट", "{1} min"), ("(चंद्र से {1}, लग्न से {2})", "(from Moon {1}, from Lagna {2})"),
                    ("⚠ {1} जन्म-समय से केवल {2} मिनट {3} बदल जाती है। अगर जन्म-समय पक्का नहीं है तो इस पर आधारित फल सावधानी से पढ़ें।",
                     "⚠ The {1} changes only {2} minutes {3} than the given birth time. If the time is not exact, read results based on it with care."), ("{1}: {2} {3} → {4} (चंद्र से {5}, लग्न से {6})", "{1}: {2} {3} → {4} (from Moon {5}, from Lagna {6})"),

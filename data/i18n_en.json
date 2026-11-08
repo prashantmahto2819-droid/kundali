@@ -470,6 +470,31 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"मुहूर्त": "Muhurta",
+"मुहूर्त खोज": "Muhurta finder",
+"कार्य": "Activity",
+"कब से": "From",
+"कितने दिन": "How many days",
+"शहर (ख़ाली = कुंडली वाला)": "City (blank = the chart's)",
+"खोजिए": "Search",
+"सबसे अच्छे दिन": "Best days",
+"सभी दिन": "All days",
+"तारीख़": "Date",
+"स्कोर": "Score",
+"शुभ समय": "Good times",
+"सामान्य शुभ कार्य": "General auspicious work",
+"यात्रा": "Travel",
+"व्यापार / नया काम": "Business / new venture",
+"गृह प्रवेश": "House-warming",
+"वाहन ख़रीद": "Buying a vehicle",
+"विद्यारंभ / पढ़ाई": "Starting studies",
+"(ताराबल-चंद्रबल सहित)": "(with tarabala and chandrabala)",
+"अमावस्या": "amavasya",
+"सूर्योदय पर विष्टि (भद्रा) करण": "Vishti (Bhadra) karana at sunrise",
+"इस कार्य के लिए वर्जित वार": "weekday avoided for this",
+"ताराबल अनुकूल": "tarabala favourable",
+"चंद्रबल अनुकूल": "chandrabala favourable",
+"किस काम के लिए, कहाँ, और कब से: अगले दिनों में पंचांग के आधार पर अच्छे दिन और उनके शुभ चौघड़िया। कुंडली बनी हो तो ताराबल-चंद्रबल भी जुड़ते हैं।": "For which work, where and from when: good days in the coming period from the panchang, with their good choghadiya windows. With a chart made, tarabala and chandrabala are added.",
 "चर दशा": "Chara dasha",
 "सभी दशाएँ": "All dashas",
 "वार-स्वामी": "Day lord",
@@ -1711,6 +1736,13 @@
 "जैमिनी व्यवस्था v1: चर कारक (7-कारक मुख्य, 8-कारक राहु सहित भी दिए), आरूढ़ पद (एक ही भाव या सप्तम में पड़ने पर दशम लिया), कारकांश। ड्राफ़्ट; जैमिनी के जानकार की समीक्षा चाहिए।": "Jaimini v1: chara karakas (7-karaka main, 8-karaka with Rahu also given), arudha padas (10th taken when the pada falls in the same house or its 7th), karakamsa. Draft; needs review by a Jaimini practitioner.",
 "चर दशा (के. एन. राव की प्रचलित विधि, v1): विषम-पाद लग्न से सीधा क्रम, सम-पाद से उल्टा; वर्ष = राशि से उसके स्वामी तक की गिनती (स्वराशि में 12), उच्च +1, नीच −1। वृश्चिक/कुंभ के दो स्वामियों का नियम सरल किया गया है (मंगल/शनि)। अंतर्दशाएँ अगली राशि से बराबर भागों में।": "Chara dasha (K. N. Rao's common method, v1): direct order from odd-footed Lagnas, reverse from even-footed; years = count from sign to its lord (12 in own sign), +1 exalted, -1 debilitated. The dual-lord rule for Vrishchika/Kumbha is simplified (Mars/Saturn). Antardashas in equal parts from the next sign.",
 "रूलिंग प्लैनेट्स प्रश्न के समय और स्थान के हैं (वार-स्वामी, चंद्र और लग्न के राशि/नक्षत्र/उप-स्वामी)। वार सूर्योदय से माना गया है (लगभग)।": "Ruling planets are for the time and place of the query (day lord; sign/star/sub lords of the Moon and the Lagna). Weekday taken from sunrise (approx.).",
+"पंचांग-स्तर का मुहूर्त (सूर्योदय की तिथि-नक्षत्र-योग-करण, वार, चौघड़िया)। जन्म-कुंडली दी हो तो ताराबल और चंद्रबल भी। यह मार्गदर्शन है; विवाह, उपनयन जैसे बड़े संस्कारों के लिए पंडित से मुहूर्त निकलवाएँ।": "Almanac-level muhurta (tithi, nakshatra, yoga, karana at sunrise; weekday; choghadiya). With a birth chart, tarabala and chandrabala are added. Guidance only; for major samskaras such as marriage, have a pandit fix the muhurta.",
+"यात्रा": "Travel",
+"व्यापार / नया काम": "Business / new venture",
+"गृह प्रवेश": "House-warming",
+"वाहन ख़रीद": "Buying a vehicle",
+"विद्यारंभ / पढ़ाई": "Starting studies",
+"सामान्य शुभ कार्य": "General auspicious work",
 "आत्मकारक": "Atmakaraka",
 "अमात्यकारक": "Amatyakaraka",
 "भ्रातृकारक": "Bhratrikaraka",
@@ -2098,6 +2130,54 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"{1}: {2} से {3} दिन",
+"{1}: {3} days from {2}"
+],
+[
+": {1} से {2} दिन",
+": {2} days from {1}"
+],
+[
+": {1} से {2} दिन (ताराबल-चंद्रबल सहित)",
+": {2} days from {1} (with tarabala and chandrabala)"
+],
+[
+"{1}: {2} से {3} दिन (ताराबल-चंद्रबल सहित)",
+"{1}: {3} days from {2} (with tarabala and chandrabala)"
+],
+[
+"रिक्ता तिथि ({1})",
+"rikta tithi ({1})"
+],
+[
+"अशुभ योग ({1})",
+"inauspicious yoga ({1})"
+],
+[
+"अनुकूल नक्षत्र ({1})",
+"favourable nakshatra ({1})"
+],
+[
+"इस कार्य के लिए वर्जित नक्षत्र ({1})",
+"nakshatra avoided for this ({1})"
+],
+[
+"ताराबल प्रतिकूल ({1}वाँ तारा)",
+"tarabala unfavourable ({1}th tara)"
+],
+[
+"चंद्रबल प्रतिकूल ({1}वाँ)",
+"chandrabala unfavourable ({1}th)"
+],
+[
+"अभिजित {1}–{2}",
+"Abhijit {1}–{2}"
+],
+[
+"राहु काल {1}–{2}",
+"Rahu kaal {1}–{2}"
 ],
 [
 "अभी: {1} महादशा ({2} → {3}), अंतर्दशा {4} ({5} → {6})",

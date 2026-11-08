@@ -62,6 +62,7 @@
   <button type="button" data-tab="t-tarot">टैरो</button>
   <button type="button" data-tab="t-vastu">वास्तु</button>
   <button type="button" data-tab="t-palm">हस्तरेखा</button>
+  <button type="button" data-tab="t-muhurta">मुहूर्त</button>
   <button type="button" data-tab="t-ask">पूछिए</button>
   <button type="button" data-tab="t-mine" id="tab-mine" style="display:none">मेरी कुंडलियाँ</button>
 </nav>
@@ -240,6 +241,21 @@
     <div style="margin-top:8px"><button type="button" id="pgo">पढ़िए</button></div>
     <div id="perr" style="color:#c62828;margin-top:6px"></div>
     <div id="pout"></div>
+  </div>
+  </section>
+  <section class="tab" id="t-muhurta">
+  <div class="card" id="muhurtacard">
+    <b>मुहूर्त खोज</b>
+    <div class="muted" style="font-size:.85rem">किस काम के लिए, कहाँ, और कब से: अगले दिनों में पंचांग के आधार पर अच्छे दिन और उनके शुभ चौघड़िया। कुंडली बनी हो तो ताराबल-चंद्रबल भी जुड़ते हैं।</div>
+    <form id="muf" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <div><label>कार्य</label><select id="mu_act"><option value="general">सामान्य शुभ कार्य</option><option value="travel">यात्रा</option><option value="business">व्यापार / नया काम</option><option value="griha_pravesh">गृह प्रवेश</option><option value="vehicle">वाहन ख़रीद</option><option value="education">विद्यारंभ / पढ़ाई</option></select></div>
+      <div><label>कब से</label><input id="mu_start" type="date"></div>
+      <div><label>कितने दिन</label><input id="mu_days" type="number" min="1" max="60" value="30" style="width:90px"></div>
+      <div><label>स्थान</label><input id="mu_city" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)"></div>
+      <div><button type="submit">खोजिए</button></div>
+    </form>
+    <div id="muerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="muout"></div>
   </div>
   </section>
   <section class="tab" id="t-ask">
@@ -873,6 +889,28 @@ $('vgo2').addEventListener('click', async () => {
     } catch (err) { $('lperr').textContent = 'त्रुटि: ' + err.message; }
   };
   refresh();
+})();
+
+// ---- Muhurta finder
+(function muhurtaUI() {
+  $('mu_start').value = new Date().toISOString().slice(0, 10);
+  $('muf').addEventListener('submit', async e => {
+    e.preventDefault(); $('muerr').textContent = ''; $('muout').innerHTML = '<div class="muted">खोज रहा हूँ…</div>';
+    try {
+      let lat = +$('lat').value, lon = +$('lon').value, tz = $('tz').value.trim();
+      const q = $('mu_city').value.trim();
+      if (q) { const r = await apiFetch('/v1/places?q=' + encodeURIComponent(q) + '&limit=1'); const d = await r.json(); if (d.results && d.results[0]) { lat = d.results[0].lat; lon = d.results[0].lon; tz = d.results[0].tz || tz; } }
+      const body = {activity: $('mu_act').value, lat, lon, tz, start: $('mu_start').value, days: +$('mu_days').value};
+      if (window.lastBody) body.chart = window.lastBody;
+      const r = await apiFetch('/v1/muhurta', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span></td></tr>`;
+      $('muout').innerHTML = `<p><b>${esc(d.activity_hi)}</b>: ${esc(d.from)} से ${d.days} दिन${body.chart ? ' (ताराबल-चंद्रबल सहित)' : ''}</p>
+        <p><b>सबसे अच्छे दिन</b></p><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.best.map(row).join('')}</table>
+        <details><summary>सभी दिन</summary><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.all.map(row).join('')}</table></details>
+        <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
+    } catch (err) { $('muout').innerHTML = ''; $('muerr').textContent = 'त्रुटि: ' + err.message; }
+  });
 })();
 
 // ---- Ask (RAG chat over the app's own content)

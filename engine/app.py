@@ -155,6 +155,24 @@ def report(req: ChartRequest, request: Request):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+class MuhurtaRequest(BaseModel):
+    activity: str = "general"
+    lat: float
+    lon: float
+    tz: str = "Asia/Kolkata"
+    start: str | None = None
+    days: int = Field(30, ge=1, le=60)
+    chart: ChartRequest | None = None
+
+
+@app.post("/v1/muhurta")
+def muhurta(req: MuhurtaRequest):
+    try:
+        return handlers.muhurta_from_payload(req.model_dump(exclude_none=True))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 class VastuItem(BaseModel):
     room: str
     direction: str | None = None

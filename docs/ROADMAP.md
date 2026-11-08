@@ -23,6 +23,9 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [ ] Decide and verify Lahiri ayanamsa constant against a published reference (`core.LAHIRI_J2000`)
 - [ ] Run `engine/tools/compare_backends.py` on the VPS to quantify dev-backend error
 
+## Muhurta
+- [x] Muhurta finder v1 (6 activity types, panchang rules at sunrise, tarabala/chandrabala with a chart, choghadiya windows). Pending: scholar review of nakshatra lists, hora/lagna-level muhurta.
+
 ## Operations
 - [x] Relay server: backup-relay.sh (SQLite online backup, 30-day retention, optional R2), restore-relay.sh, healthwatch.sh (webhook alert on state change); steps in OPS-relay.md §10.
 

@@ -22,6 +22,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | 11 | Nakshatra/sign/house/planet teaching texts | `data/knowledge/*.json` | — | learn panel; Hindi and English |
 | 13 | KP layer: ayanamsa constant, Placidus cusps vs a KP program, sub-lord table, significator levels | `engine/jyotish/kp.py` | — | draft; compare one chart with a KP software |
 | 14 | Jaimini: karaka scheme (7 vs 8), arudha exception rule, karakamsa | `engine/jyotish/jaimini.py` | — | draft |
+| 15 | Muhurta finder: activity nakshatra/weekday lists, scoring weights | `engine/jyotish/muhurta_find.py` (`ACTIVITIES`) | 6 | draft |
 | 12 | Name syllables per pada | `engine/jyotish/patri.py` (`SYLLABLES`) | 108 | standard almanac table; verify spelling |
 
 ## B. Calculations — compare against trusted software (JHora / AstroSage, Lahiri, mean node, whole sign)

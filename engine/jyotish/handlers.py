@@ -213,6 +213,31 @@ def ask_from_payload(payload: dict) -> dict:
         raise BadRequest(str(exc)) from exc
 
 
+def muhurta_from_payload(payload: dict) -> dict:
+    """POST /v1/muhurta  {activity, lat, lon, tz, start?: YYYY-MM-DD, days?: 1-60, chart?: birth payload (adds tarabala/chandrabala)}"""
+    from . import muhurta_find
+    try:
+        lat, lon = float(payload.get("lat")), float(payload.get("lon"))
+    except (TypeError, ValueError):
+        raise BadRequest("lat and lon are required numbers")
+    tz = str(payload.get("tz") or "Asia/Kolkata")
+    try:
+        ZoneInfo(tz)
+    except ZoneInfoNotFoundError:
+        raise BadRequest(f"unknown time zone '{tz}'")
+    moon = None
+    if payload.get("chart"):
+        ch = chart_from_payload(payload["chart"])
+        moon = next(p for p in ch["planets"] if p["name"] == "Moon")["longitude"]
+    start = payload.get("start")
+    if start is not None and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(start)):
+        raise BadRequest("start must be YYYY-MM-DD")
+    try:
+        return muhurta_find.find(str(payload.get("activity", "general")), lat, lon, tz, start, int(payload.get("days", 30)), moon)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
 # ---- JSON safety net ------------------------------------------------------------------
 def plain(obj):
     """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""
