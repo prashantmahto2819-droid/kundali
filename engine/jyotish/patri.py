@@ -59,17 +59,22 @@ def _elong(backend, jd_tt: float) -> float:
 
 
 def _amavasya_before(backend, jd_tt: float) -> float:
-    """JD (TT) of the last new moon at or before jd_tt, by bisection on Moon-Sun elongation."""
-    e = _elong(backend, jd_tt)
-    lo = jd_tt - e / 12.19 - 1.5             # mean elongation rate ~12.19 deg/day
-    hi = lo + 3.0
-    while hi - lo > 1e-4:
+    """JD (TT) of the last new moon at or before jd_tt: step back day by day until the elongation wraps, then bisect."""
+    hi = jd_tt
+    e_hi = _elong(backend, hi)
+    lo = hi - 1.0
+    while True:                                   # elongation decreases going back in time; a jump up means we crossed 0
+        e_lo = _elong(backend, lo)
+        if e_lo > e_hi:
+            break
+        hi, e_hi = lo, e_lo
+        lo -= 1.0
+    for _ in range(40):
         mid = (lo + hi) / 2
-        em = _elong(backend, mid)
-        if em < 180:                            # already past the new moon (elongation small)
-            hi = mid
-        else:
+        if _elong(backend, mid) > 180:            # still before the new moon
             lo = mid
+        else:
+            hi = mid
     return (lo + hi) / 2
 
 
