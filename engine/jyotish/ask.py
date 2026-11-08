@@ -88,7 +88,14 @@ def _walk(obj, label, src, out):
 def corpus() -> tuple[dict, ...]:
     out: list[dict] = []
     for f in sorted((DATA / "knowledge").glob("*.json")):
+        if f.stem == "numbers":
+            continue                                        # labelled below so "Moolank 5" is findable
         _walk(json.loads(f.read_text(encoding="utf-8")), "", f"knowledge/{f.stem}", out)
+    for num, d in json.loads((DATA / "knowledge" / "numbers.json").read_text(encoding="utf-8"))["numbers"].items():
+        out.append({"id": f"numbers/{num}", "lang": "en",
+                    "text": f"Number {num} (Moolank / Bhagyank / root number {num}, ruling planet {d['planet']}): {d['traits_en']}"})
+        out.append({"id": f"numbers/{num}_hi", "lang": "hi",
+                    "text": f"अंक {num} (मूलांक / भाग्यांक {num}, स्वामी ग्रह {d['planet_hi']}): {d['traits_hi']}"})
     for f in sorted((DATA / "rules").glob("*.json")):
         for r in json.loads(f.read_text(encoding="utf-8")).get("rules", []):
             for lg, key in (("hi", "text_hi"), ("en", "text_en")):
@@ -101,6 +108,30 @@ def corpus() -> tuple[dict, ...]:
             seen.add(p["text"])
             uniq.append(p)
     return tuple(uniq)
+
+
+def numerology_passages(birth_date: str, name: str | None = None) -> list[dict]:
+    """Moolank / bhagyank / personal year / name number of this person (boosted like chart facts)."""
+    from datetime import date
+    from . import numerology
+    y, m, d = (int(x) for x in birth_date[:10].split("-"))
+    r = numerology.analyse(date(y, m, d), name)
+    mo, bh, py = r["moolank"], r["bhagyank"], r["personal_year"]
+    nums = json.loads((DATA / "knowledge" / "numbers.json").read_text(encoding="utf-8"))["numbers"]
+    tr = lambda n, lg: nums.get(str(n), {}).get(f"traits_{lg}", "")
+    out = [
+        {"id": "chart/moolank", "lang": "en", "text": f"Your Moolank (root number, from the birth day) is {mo['number']}, ruled by {mo['planet']}. {tr(mo['number'], 'en')}"},
+        {"id": "chart/moolank_hi", "lang": "hi", "text": f"आपका मूलांक (जन्म-दिन से) {mo['number']} है, स्वामी ग्रह {mo['planet']}। {tr(mo['number'], 'hi')}"},
+        {"id": "chart/bhagyank", "lang": "en", "text": f"Your Bhagyank (destiny number, from the full birth date) is {bh['number']}, ruled by {bh['planet']}. {tr(bh['number'], 'en')}"},
+        {"id": "chart/bhagyank_hi", "lang": "hi", "text": f"आपका भाग्यांक (पूरी जन्म-तारीख़ से) {bh['number']} है, स्वामी ग्रह {bh['planet']}। {tr(bh['number'], 'hi')}"},
+        {"id": "chart/personal_year", "lang": "en", "text": f"Your personal year number for {py['year']} is {py['number']} ({py['planet']})."},
+        {"id": "chart/personal_year_hi", "lang": "hi", "text": f"{py['year']} के लिए आपका वैयक्तिक वर्ष अंक {py['number']} ({py['planet']}) है।"},
+    ]
+    if name and r.get("namank"):
+        c = r["namank"]["chaldean"]
+        out.append({"id": "chart/namank", "lang": "en", "text": f"Your name number (Chaldean) is {c['number']} (compound {c['compound']}), ruled by {c['planet']}."})
+        out.append({"id": "chart/namank_hi", "lang": "hi", "text": f"आपका नामांक (कैल्डियन) {c['number']} है (योग {c['compound']}), स्वामी ग्रह {c['planet']}।"})
+    return out
 
 
 def chart_passages(chart: dict) -> list[dict]:
@@ -197,7 +228,10 @@ def ask(question: str, lang: str | None = None, chart: dict | None = None, llm=N
         return {"answer": SAFE[lang], "sources": [], "mode": "refused", "topic": topic, "lang": lang, "disclaimer": DISCLAIMER[lang]}
     passages = [p for p in corpus() if p["lang"] == lang]
     if chart:
-        passages = [p for p in chart_passages(chart) if p["lang"] == lang] + passages
+        mine = chart_passages(chart)
+        if chart.get("input", {}).get("date"):
+            mine += numerology_passages(chart["input"]["date"], chart["input"].get("name"))
+        passages = [p for p in mine if p["lang"] == lang] + passages
     personal = bool(re.search(r"\b(my|mine|me|i)\b|मेरा|मेरी|मेरे|मुझे|मैं", question.lower()))
     yoga_q = bool(re.search(r"yoga|dosha|dosh|combination|योग|दोष", question.lower()))
     hits = rank(question, passages, k, boost={"chart": 3.0 if personal else 1.6, "yoga": 1.0 if yoga_q else 0.35})

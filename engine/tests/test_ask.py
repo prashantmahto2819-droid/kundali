@@ -106,3 +106,14 @@ def test_plain_converts_numpy():
     assert out == {"a": True, "b": [1.5, 2], "c": [1, 2]}
     assert type(out["a"]) is bool
     json.dumps(out)
+
+
+def test_numerology_is_retrievable():
+    assert top("Moolank 5")[0] == "numbers/5"
+    assert top("मूलांक 8 का स्वभाव")[0] == "numbers/8_hi"
+    ch = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99, name="Prashant")
+    r = ask.ask("What is my moolank?", chart=ch)
+    assert r["sources"][0]["id"] == "chart/moolank" and " 8" in r["answer"] and "Saturn" in r["answer"]
+    assert top("मेरा भाग्यांक क्या है", chart=ch)[0] == "chart/bhagyank_hi"
+    assert top("my name number", chart=ch)[0] == "chart/namank"
+    assert not any(s.startswith("knowledge/numbers") for s in top("number 3 traits"))
