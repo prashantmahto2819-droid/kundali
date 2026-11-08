@@ -390,3 +390,57 @@ table {{ border-collapse:collapse; width:100%; margin:6px 0; }} th,td {{ border:
 <p class="small">{e(m.get("parihara_note_hi", ""))}</p>
 <p class="small">बनाया गया: {e(generated)} · बैकएंड: {e(m.get("backend", ""))}। यह रिपोर्ट शिक्षा और मार्गदर्शन के लिए है; विवाह जैसे निर्णय में पूरी कुंडली और विशेषज्ञ की सलाह देखें।</p>
 </body></html>"""
+
+
+# ---- Muhurta and Prashna printable pages ---------------------------------------------------------------
+_PAGE_CSS = """
+@page { size: A4; margin: 14mm; }
+body { font-family: 'Noto Sans Devanagari','Noto Serif Devanagari','FreeSans','Mangal',sans-serif; color:#2b2118; font-size:12.5px; line-height:1.55; }
+h1 { font-size:20px; margin:0 0 2px; color:#7a4a12; } h2 { font-size:15px; margin:16px 0 6px; color:#7a4a12; border-bottom:1px solid #d8c8a8; padding-bottom:2px; }
+table { border-collapse:collapse; width:100%; margin:6px 0; } th,td { border:1px solid #d8c8a8; padding:3px 6px; text-align:left; vertical-align:top; } th { background:#f6ecd6; }
+.small { font-size:11px; color:#6b5a44; } .banner { border-left:4px solid #b26a00; background:#fbf1dc; padding:6px 10px; border-radius:4px; font-size:11.5px; }
+.big { font-size:17px; } .ok { color:#2e7d32; font-weight:700; }
+"""
+
+
+def render_muhurta(m: dict) -> str:
+    rows = []
+    for d in m["best"]:
+        win = "<br>".join(f'{e(w["name"])} {e(w["start"])}–{e(w["end"])}' for w in d["good_windows"])
+        if d.get("abhijit"):
+            win += f'<br>अभिजित {e(d["abhijit"]["start"])}–{e(d["abhijit"]["end"])}'
+        rows.append([f'<b>{e(d["date"])}</b><br><span class="small">{e(d["vara_hi"])}</span>', f'<b class="{"ok" if d["score"] >= 60 else ""}">{d["score"]}</b>',
+                     f'{e(d["tithi_hi"])}<br>{e(d["nakshatra_hi"])} · {e(d["yoga_hi"])}', e("; ".join(d["reasons_hi"])), win,
+                     f'{e(d["rahu_kaal"]["start"])}–{e(d["rahu_kaal"]["end"])}' if d.get("rahu_kaal") else "—"])
+    allrows = [[e(d["date"]), e(d["vara_hi"]), str(d["score"]), e(d["tithi_hi"]), e(d["nakshatra_hi"]), e(d["yoga_hi"])] for d in m["all"]]
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    return f"""<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>मुहूर्त — {e(m["activity_hi"])}</title><style>{_PAGE_CSS}</style></head><body>
+<h1>मुहूर्त खोज: {e(m["activity_hi"])}</h1>
+<p class="small">{e(m["from"])} से {m["days"]} दिन{" (ताराबल-चंद्रबल सहित)" if any("ताराबल" in " ".join(d["reasons_hi"]) for d in m["all"]) else ""} · बनाया गया: {e(generated)}</p>
+<h2>सबसे अच्छे दिन</h2>
+{_table(["तारीख़", "स्कोर", "पंचांग", "कारण", "शुभ समय", "राहु काल"], rows)}
+<h2>सभी दिन</h2>
+{_table(["तारीख़", "वार", "स्कोर", "तिथि", "नक्षत्र", "योग"], allrows)}
+<div class="banner">{e(m["note_hi"])}</div>
+</body></html>"""
+
+
+def render_prashna(r: dict) -> str:
+    H = lambda n: PLANETS_HI.get(n, n)
+    cusps = [[str(c["house"]), e(c["sign_name_hi"]), e(H(c["sign_lord"])), e(H(c["star_lord"])), f'<b>{e(H(c["sub_lord"]))}</b>'] for c in r["cusps"]]
+    planets = [[e(H(n)), e(v["sign_name_hi"]), str(v["house"]), e(H(v["star_lord"])), f'<b>{e(H(v["sub_lord"]))}</b>'] for n, v in r["planets"].items()]
+    rp = r["ruling_planets"]
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    return f"""<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>प्रश्न कुंडली — {e(r["topic_hi"])}</title><style>{_PAGE_CSS}</style></head><body>
+<h1>प्रश्न कुंडली (KP): {e(r["topic_hi"])}</h1>
+<p class="big"><b>{e(r["verdict_hi"])}</b></p>
+<ul>{"".join(f"<li>{e(x)}</li>" for x in r["reasons_hi"])}</ul>
+<p class="small">प्रश्न लग्न: {e(r["lagna"]["sign_name_hi"])} {r["lagna"]["degree_in_sign"]}°{f' (KP अंक {r["kp_number"]})' if r.get("kp_number") else ""} · समय: {e(r["at"])} · KP अयनांश {r["ayanamsa"]:.4f}°</p>
+<p><b>रूलिंग प्लैनेट्स:</b> {e(", ".join(H(n) for n in rp["ranked"]))}{(" (+ " + e(", ".join(H(n) for n in rp["agents"])) + ")") if rp["agents"] else ""}</p>
+<h2>भाव-स्पष्ट</h2>
+{_table(["भाव", "राशि", "राशि-स्वामी", "नक्षत्र-स्वामी", "उप-स्वामी"], cusps)}
+<h2>ग्रह</h2>
+{_table(["ग्रह", "राशि", "भाव", "नक्षत्र-स्वामी", "उप-स्वामी"], planets)}
+<div class="banner">{e(r["disclaimer_hi"])}</div>
+<p class="small">बनाया गया: {e(generated)}</p>
+</body></html>"""

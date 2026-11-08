@@ -300,6 +300,22 @@ def lalkitab_varshphal_from_payload(payload: dict) -> dict:
         raise BadRequest(str(exc)) from exc
 
 
+def muhurta_report_from_payload(payload: dict) -> str:
+    from . import i18n, report
+    html = report.render_muhurta(muhurta_from_payload(payload))
+    if str(payload.get("lang", "hi")).lower() == "en":
+        html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
+    return html
+
+
+def prashna_report_from_payload(payload: dict) -> str:
+    from . import i18n, report
+    html = report.render_prashna(prashna_from_payload(payload))
+    if str(payload.get("lang", "hi")).lower() == "en":
+        html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
+    return html
+
+
 # ---- JSON safety net ------------------------------------------------------------------
 def plain(obj):
     """Recursively turn numpy scalars/arrays (e.g. numpy.bool_ from the JPL backend) into plain Python."""

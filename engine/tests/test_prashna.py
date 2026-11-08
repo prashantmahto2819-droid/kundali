@@ -34,3 +34,19 @@ def test_handler_validation():
     for bad in ({"topic": "x", "lat": 1, "lon": 1}, {"topic": "job", "lat": 1, "lon": 1, "kp_number": 300}, {"topic": "job", "lat": 1, "lon": 1, "when": "yesterday"}):
         with pytest.raises(handlers.BadRequest):
             handlers.prashna_from_payload(bad)
+
+
+def test_prashna_and_muhurta_reports_render():
+    import re
+    from jyotish import i18n
+    base = {"lat": 23.18, "lon": 79.99, "tz": "Asia/Kolkata"}
+    h = handlers.prashna_report_from_payload({"topic": "job", "when": "2026-11-08 18:29", **base})
+    assert "प्रश्न कुंडली" in h and "<table" in h
+    en = handlers.prashna_report_from_payload({"topic": "job", "when": "2026-11-08 18:29", "lang": "en", **base})
+    left = [t for t in re.findall(r">([^<>]+)<", en) if re.search(r"[ऀ-ॿ]", t)]
+    assert '<html lang="en">' in en and left == [], left
+    m = handlers.muhurta_report_from_payload({"activity": "travel", "start": "2026-11-08", "days": 7, **base})
+    assert "मुहूर्त खोज" in m and m.count("<table") == 2
+    men = handlers.muhurta_report_from_payload({"activity": "travel", "start": "2026-11-08", "days": 7, "lang": "en", **base})
+    left = [t for t in re.findall(r">([^<>]+)<", men) if re.search(r"[ऀ-ॿ]", t)]
+    assert left == [], left

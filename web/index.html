@@ -1049,6 +1049,11 @@ $('vgo2').addEventListener('click', async () => {
   refresh();
 })();
 
+async function openReport(path, body) {
+  const r = await apiFetch(path, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...body, lang: window.getLang ? window.getLang() : 'hi'})});
+  const html = await r.text(); if (!r.ok) throw new Error('रिपोर्ट नहीं बनी');
+  const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close();
+}
 // ---- Muhurta finder
 (function muhurtaUI() {
   $('mu_start').value = new Date().toISOString().slice(0, 10);
@@ -1063,7 +1068,9 @@ $('vgo2').addEventListener('click', async () => {
       const r = await apiFetch('/v1/muhurta', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span></td></tr>`;
+      window._lastMuhurta = body;
       $('muout').innerHTML = `<p><b>${esc(d.activity_hi)}</b>: ${esc(d.from)} से ${d.days} दिन${body.chart ? ' (ताराबल-चंद्रबल सहित)' : ''}</p>
+        <div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/muhurta/report', window._lastMuhurta).catch(e => { document.getElementById('muerr').textContent = 'त्रुटि: ' + e.message; })">मुहूर्त PDF (प्रिंट)</button></div>
         <p><b>सबसे अच्छे दिन</b></p><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.best.map(row).join('')}</table>
         <details><summary>सभी दिन</summary><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.all.map(row).join('')}</table></details>
         <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
@@ -1086,7 +1093,9 @@ $('vgo2').addEventListener('click', async () => {
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const H = n => ({Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'})[n] || n;
       const rp = d.ruling_planets;
+      window._lastPrashna = {...body, when: body.when || d.at.replace('T', ' ').slice(0, 16), tz: 'UTC'};
       $('prout').innerHTML = `<p style="font-size:1.1rem"><b>${esc(d.topic_hi)}:</b> <b class="${d.verdict === 'favourable' ? 'yes' : ''}">${esc(d.verdict_hi)}</b></p>
+        <div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/prashna/report', window._lastPrashna).catch(e => { document.getElementById('prerr').textContent = 'त्रुटि: ' + e.message; })">प्रश्न PDF (प्रिंट)</button></div>
         <ul>${d.reasons_hi.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
         <p class="muted">प्रश्न लग्न: ${esc(d.lagna.sign_name_hi)} ${d.lagna.degree_in_sign}°${d.kp_number ? ` (KP अंक ${d.kp_number})` : ''} · समय: ${esc(d.at)}</p>
         <p><b>रूलिंग प्लैनेट्स:</b> ${rp.ranked.map(H).map(esc).join(', ')}${rp.agents.length ? ' (+ ' + rp.agents.map(H).map(esc).join(', ') + ')' : ''}</p>

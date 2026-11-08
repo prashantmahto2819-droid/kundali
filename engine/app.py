@@ -194,6 +194,18 @@ def lalkitab_varshphal(req: LalVarshRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+class MuhurtaReportRequest(MuhurtaRequest):
+    lang: str = "hi"
+
+
+@app.post("/v1/muhurta/report", response_class=HTMLResponse)
+def muhurta_report(req: MuhurtaReportRequest):
+    try:
+        return HTMLResponse(handlers.muhurta_report_from_payload(req.model_dump(exclude_none=True)))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 class PrashnaRequest(BaseModel):
     topic: str = "general"
     lat: float
@@ -201,6 +213,18 @@ class PrashnaRequest(BaseModel):
     tz: str = "Asia/Kolkata"
     when: str | None = None
     kp_number: int | None = Field(None, ge=1, le=249)
+
+
+class PrashnaReportRequest(PrashnaRequest):
+    lang: str = "hi"
+
+
+@app.post("/v1/prashna/report", response_class=HTMLResponse)
+def prashna_report(req: PrashnaReportRequest):
+    try:
+        return HTMLResponse(handlers.prashna_report_from_payload(req.model_dump(exclude_none=True)))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
 
 @app.post("/v1/prashna")

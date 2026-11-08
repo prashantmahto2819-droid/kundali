@@ -287,7 +287,7 @@
 "सीखिए": "Learn",
 "किसी खाने या ग्रह पर क्लिक कीजिए।": "Click a house or a planet.",
 "ग्रह स्थिति": "Planet positions",
-"ग्रह": "Planet",
+"ग्रह": "Planets",
 "राशि": "Sign",
 "अंश": "Degree",
 "भाव": "house",
@@ -470,6 +470,10 @@
 "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
 "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)",
 "जैमिनी": "Jaimini",
+"मुहूर्त PDF (प्रिंट)": "Muhurta PDF (print)",
+"प्रश्न PDF (प्रिंट)": "Prashna PDF (print)",
+"राहु काल": "Rahu kaal",
+"भाव-स्पष्ट": "Cusp",
 "सेव की गई कुंडली से भरें…": "Fill from a saved chart…",
 "मिलान:": "Match:",
 "(वर)": "(groom)",
@@ -597,7 +601,6 @@
 "अपवाद": "exception",
 "(अपवाद)": "(exception)",
 "कारकांश:": "Karakamsa:",
-"भाव-स्पष्ट": "Cusp",
 "राशि-स्वामी": "Sign lord",
 "नक्षत्र-स्वामी": "Star lord",
 "उप-स्वामी": "Sub lord",
@@ -2322,6 +2325,42 @@
 [
 "{1} (KP अयनांश {2}°)",
 "{1} (KP ayanamsa {2}°)"
+],
+[
+"मुहूर्त खोज: {1}",
+"Muhurta finder: {1}"
+],
+[
+"प्रश्न कुंडली (KP): {1}",
+"Prashna chart (KP): {1}"
+],
+[
+"मुहूर्त — {1}",
+"Muhurta — {1}"
+],
+[
+"प्रश्न कुंडली — {1}",
+"Prashna chart — {1}"
+],
+[
+"{1} से {2} दिन · बनाया गया: {3}",
+"{2} days from {1} · generated: {3}"
+],
+[
+"{1} से {2} दिन (ताराबल-चंद्रबल सहित) · बनाया गया: {3}",
+"{2} days from {1} (with tarabala and chandrabala) · generated: {3}"
+],
+[
+"प्रश्न लग्न: {1} {2}° · समय: {3} · KP अयनांश {4}°",
+"Prashna Lagna: {1} {2}° · time: {3} · KP ayanamsa {4}°"
+],
+[
+"प्रश्न लग्न: {1} {2}° (KP अंक {3}) · समय: {4} · KP अयनांश {5}°",
+"Prashna Lagna: {1} {2}° (KP number {3}) · time: {4} · KP ayanamsa {5}°"
+],
+[
+"बनाया गया: {1}",
+"Generated: {1}"
 ],
 [
 "कुंडली मिलान — {1} / {2}",
