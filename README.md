@@ -2,7 +2,7 @@
 
 A commercial-grade Vedic astrology platform: birth chart (kundali), dasha, panchang, numerology, tarot, palmistry and vastu, with a learning layer that explains the *what, why and how* of every result.
 
-Status: **Phase 0/1**: calculation engine v0.2 (chart, dasha, panchang, sunrise-based muhurta, vargas D2-D12, numerology) + dev web page. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Status: **Phase 0/1**: calculation engine v0.2 (chart, dasha, panchang, sunrise-based muhurta, vargas D2-D12, numerology, ashtakoota matching) + dev web page. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Principles
 - **Calculation is astronomy; interpretation is tradition.** Every interpretation carries a source and a review status; the UI says "according to the śāstra", never "will happen".
@@ -35,12 +35,14 @@ returns lagna, planets (sign, degree, house, nakshatra, pada, retrograde, dignit
 Vimshottari dasha (to antardasha) with the running period, yogas with their *why*, and matched rules with their sources.
 `POST /v1/numerology` with `{"date":"1990-05-17","name":"Prashant Mahto"}` returns moolank, bhagyank, namank (Chaldean and Pythagorean), Lo Shu grid and personal year.
 The chart response also carries `day` (sunrise/sunset, Vedic vara, Rahu Kaal, Yamaganda, Gulika, Abhijit, Choghadiya) and `vargas` (D1, D2, D3, D4, D7, D9, D10, D12).
+`POST /v1/match` with `{"boy": {...}, "girl": {...}}` (same birth fields as `/v1/chart`) returns the 36-point ashtakoota score with per-koota detail and confidence, plus a manglik comparison.
 `GET /health` reports the active backend and whether it is production-ready.
 
 ## Known limitations (v0.1)
 - Lahiri ayanamsa only; the constant is a development value to be verified against a reference.
 - Whole-sign houses only; mean node for Rahu/Ketu. Sunrise/sunset use the NOAA equations (about +-1 minute, no altitude correction).
 - Vargas implemented: D1, D2, D3, D4, D7, D9, D10, D12 (Parashari rules); D16-D60 later. Numerology takes Latin-script names only.
+- Matching: Varna, Tara, Graha Maitri, Bhakoot and Nadi follow widely agreed rules; **Vashya, Yoni and Gana tables are drafts** (sources differ) and are flagged in the output. Parihara (cancellation) is not applied automatically.
 - Rule library is a tiny **sample**; all rules are `draft` until a scholar reviews them.
 - The JPL backend code path is written but was not run in the build environment (no network); run `engine/tools/compare_backends.py` on a connected machine.
 

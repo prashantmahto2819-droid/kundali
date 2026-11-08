@@ -68,6 +68,13 @@
     </form>
     <div id="err"></div>
   </div>
+  <div class="card" id="matchcard">
+    <b>कुंडली मिलान (अष्टकूट, 36 गुण)</b>
+    <div class="muted" style="font-size:.85rem">वर और वधू का जन्म विवरण भरिए। यह एक पारंपरिक पैमाना है, पूरी कुंडली का विश्लेषण नहीं।</div>
+    <form id="mf" style="margin-top:10px"></form>
+    <div id="merr" style="color:#c62828;margin-top:6px"></div>
+    <div id="mout"></div>
+  </div>
   <div id="out" hidden>
     <div class="banner" id="note"></div>
     <div class="card" id="summary"></div>
@@ -277,8 +284,51 @@ $('f').addEventListener('submit', async e => {
     renderNumerology(body);
   } catch (err) { $('err').textContent = 'त्रुटि: ' + err.message; }
 });
+// ---- Kundali matching
+const MPEOPLE = [['b','वर (Groom)','1990-05-17','06:45','0'], ['g','वधू (Bride)','1992-11-03','14:20','5']];
+(function buildMatchForm() {
+  const opts = $('city').innerHTML;
+  $('mf').style.display = 'grid';
+  $('mf').innerHTML = MPEOPLE.map(([k, lbl, d, t, ci]) => `
+    <div style="grid-column:1/-1;font-weight:600;color:var(--accent)">${lbl}</div>
+    <div><label>नाम</label><input id="${k}_name"></div>
+    <div><label>जन्म तारीख</label><input id="${k}_date" type="date" required value="${d}"></div>
+    <div><label>जन्म समय</label><input id="${k}_time" type="time" required value="${t}"></div>
+    <div><label>शहर</label><select id="${k}_city">${opts}</select></div>
+    <div><label>अक्षांश</label><input id="${k}_lat" type="number" step="0.0001"></div>
+    <div><label>देशांतर</label><input id="${k}_lon" type="number" step="0.0001"></div>
+    <div><label>समय-क्षेत्र</label><input id="${k}_tz" value="Asia/Kolkata"></div>`).join('') +
+    `<div style="grid-column:1/-1"><button type="submit">मिलान देखिए</button></div>`;
+  MPEOPLE.forEach(([k,,,, ci]) => {
+    const sel = $(k + '_city'); sel.selectedIndex = +ci;
+    const apply = () => { if (!sel.value) return; const [la, lo] = sel.value.split(','); $(k+'_lat').value = la; $(k+'_lon').value = lo; };
+    sel.addEventListener('change', apply); apply();
+  });
+})();
+const personBody = k => ({name:$(k+'_name').value || null, date:$(k+'_date').value, time:$(k+'_time').value,
+                          tz:$(k+'_tz').value.trim(), lat:+$(k+'_lat').value, lon:+$(k+'_lon').value});
+const CONF = {firm:'पक्का नियम', draft:'ड्राफ़्ट (समीक्षा बाकी)'};
+$('mf').addEventListener('submit', async e => {
+  e.preventDefault(); $('merr').textContent = ''; $('mout').innerHTML = '';
+  try {
+    const r = await fetch(API + '/v1/match', {method:'POST', headers:{'Content-Type':'application/json'},
+                          body:JSON.stringify({boy:personBody('b'), girl:personBody('g')})});
+    const m = await r.json(); if (!r.ok) throw new Error(m.detail || 'त्रुटि');
+    const rows = m.kootas.map(k => `<tr><td>${esc(k.name_hi)} <span class="muted">(${esc(k.name)})</span></td>
+      <td><b>${k.score}</b> / ${k.max}</td><td class="muted">${esc(k.detail)}</td>
+      <td><span class="chip ${k.confidence==='firm'?'yes':'muted'}">${CONF[k.confidence]}</span></td></tr>`).join('');
+    const mg = m.manglik;
+    const mtxt = x => `लग्न से भाव ${x.mars_house_from_lagna} · चंद्र से भाव ${x.mars_house_from_moon} → ${(x.from_lagna||x.from_moon)?'मांगलिक':'मांगलिक नहीं'}`;
+    $('mout').innerHTML = `<p style="font-size:1.1rem;margin:12px 0 4px"><b>कुल: ${m.total} / 36</b> — ${esc(m.band_hi)}</p>
+      <div class="muted" style="font-size:.85rem">वर: ${esc(m.groom.moon_sign)} राशि, ${esc(m.groom.nakshatra_hi)} पाद ${m.groom.pada} · वधू: ${esc(m.bride.moon_sign)} राशि, ${esc(m.bride.nakshatra_hi)} पाद ${m.bride.pada}</div>
+      <table style="margin-top:8px"><tr><th>कूट</th><th>अंक</th><th>कारण</th><th>भरोसा</th></tr>${rows}</table>
+      <p><b>मंगल दोष तुलना:</b> ${mg.level==='balanced' ? 'दोनों की स्थिति समान है (दोनों मांगलिक या दोनों नहीं)।' : 'केवल एक साथी मांगलिक है; परंपरा में परिहार (काट) देखना ज़रूरी माना जाता है।'}<br><span class="muted">वर: ${mtxt(mg.boy)}<br>वधू: ${mtxt(mg.girl)}</span></p>
+      <div class="banner">यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, और परिहार अपने आप लागू नहीं होते। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।</div>`;
+  } catch (err) { $('merr').textContent = 'त्रुटि: ' + err.message; }
+});
+
 // ?auto=1 runs the form once on load (handy for demos and screenshots)
-if (new URLSearchParams(location.search).get('auto')) $('f').requestSubmit();
+if (new URLSearchParams(location.search).get('auto')) { $('f').requestSubmit(); $('mf').requestSubmit(); }
 </script>
 </body>
 </html>

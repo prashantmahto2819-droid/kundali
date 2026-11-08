@@ -56,3 +56,25 @@ def numerology(req: NumerologyRequest):
         return handlers.numerology_from_payload(req.model_dump())
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+class Person(BaseModel):
+    name: str | None = None
+    date: str
+    time: str
+    tz: str
+    lat: float
+    lon: float
+
+
+class MatchRequest(BaseModel):
+    boy: Person
+    girl: Person
+
+
+@app.post("/v1/match")
+def match(req: MatchRequest):
+    try:
+        return handlers.match_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))

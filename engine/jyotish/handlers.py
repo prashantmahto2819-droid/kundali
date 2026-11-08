@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from . import ENGINE_VERSION, compute_chart
-from . import numerology
+from . import matching, numerology
 from .ephemeris import get_backend
 
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -82,3 +82,27 @@ def numerology_from_payload(payload: dict) -> dict:
     if name is not None and (not isinstance(name, str) or len(name) > 120):
         raise BadRequest("name must be text up to 120 characters")
     return numerology.analyse(birth, name, as_of)
+
+
+def match_from_payload(payload: dict) -> dict:
+    """payload = {"boy": {date,time,tz,lat,lon,name?}, "girl": {...}}"""
+    people = {}
+    for role in ("boy", "girl"):
+        data = payload.get(role)
+        if not isinstance(data, dict):
+            raise BadRequest(f"'{role}' birth details are required")
+        try:
+            chart = chart_from_payload({**data, "dasha_level": 1})
+        except BadRequest as exc:
+            raise BadRequest(f"{role}: {exc}") from exc
+        planets = {p["name"]: p for p in chart["planets"]}
+        people[role] = {"chart": chart, "moon": planets["Moon"]["longitude"],
+                        "manglik": matching.manglik_from(planets["Mars"]["house"], planets["Mars"]["sign"],
+                                                         planets["Moon"]["sign"])}
+    result = matching.ashtakoota(people["boy"]["moon"], people["girl"]["moon"])
+    result["manglik"] = matching.compare_manglik(people["boy"]["manglik"], people["girl"]["manglik"])
+    result["backend"] = people["boy"]["chart"]["backend"]
+    result["backend_note"] = people["boy"]["chart"]["backend_note"]
+    for role in ("boy", "girl"):
+        result[role + "_name"] = people[role]["chart"]["input"].get("name")
+    return result
