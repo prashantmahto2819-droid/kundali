@@ -467,6 +467,9 @@
 "नक्षत्र स्वामी": "Nakshatra lord",
 "तत्व": "Element (tattva)",
 "नाम अक्षर": "Name syllable",
+"भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)",
+"भाव-मध्य (12)": "House middles (12)",
+"सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
 "चेष्टा": "Cheshta",
 "रूप": "Rupas",
 "मिलान": "Matching",
@@ -1625,6 +1628,7 @@
 "दू थ झ ञ": "Du Tha Jha Nya",
 "दे दो चा ची": "De Do Cha Chi",
 "मास असली अमावस्याओं से, अधिक मास सहित (अमांत और पूर्णिमांत दोनों नाम); संवत् चैत्र शुक्ल से। घात चक्र ड्राफ़्ट है। सूर्योदय: पहला समय ऊपरी किनारा (सामान्य), कोष्ठक में सूर्य-केंद्र (पंचांग सॉफ़्टवेयर की परंपरा); इष्टकाल केंद्र वाले से।": "Masa from the actual new moons incl. adhika masa (amanta and purnimanta names); samvat from Chaitra Shukla. Ghata chakra is a draft. Sunrise: first time is upper limb (usual), in brackets the disc centre (Indian panchang-software convention); ishta kaal uses the centre one.",
+"भाव-चलित (श्रीपति): लग्न और दशम (MC) के बीच के चतुर्थांशों को तीन भागों में बाँटकर भाव-मध्य निकाले गए हैं। जो ग्रह राशि-भाव से अलग भाव में दिखें, वे भाव-संधि के पास हैं; फलादेश में दोनों देखे जाते हैं।": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both.",
 "विष्कम्भ": "Vishkambha",
 "शिव": "Shiva",
 "व्याघात": "Vyaghata",
@@ -1980,6 +1984,18 @@
 [
 "{1} ({2} पाद {3}) · चंद्र राशि:",
 "{1} ({2} pada {3}) · Moon sign:"
+],
+[
+"{1}: राशि-भाव {2} → चलित भाव {3}",
+"{1}: rasi house {2} → chalit house {3}"
+],
+[
+"दशम भाव-मध्य (MC): {1} {2}",
+"Tenth house middle (MC): {1} {2}"
+],
+[
+"दशम भाव-मध्य (MC):",
+"Tenth house middle (MC):"
 ],
 [
 "स्रोत ({1})",

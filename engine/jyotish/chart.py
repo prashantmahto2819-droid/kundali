@@ -7,8 +7,8 @@ from . import ENGINE_VERSION
 from .constants import (ASPECTS, PLANETS, PLANETS_HI, PLANETS_SHORT_HI, SIGN_LORDS,
                         SIGNS, SIGNS_HI)
 from .ashtakavarga import ashtakavarga
-from .core import (ascendant_tropical, ayanamsa, dignity, navamsa_sign, nakshatra_of,
-                   obliquity_deg, sign_of)
+from .core import (ascendant_tropical, ayanamsa, chalit_house, dignity, midheaven_tropical, navamsa_sign,
+                   nakshatra_of, obliquity_deg, sign_of, sripati_cusps)
 from .dasha import current_periods, vimshottari
 from .ephemeris import get_backend, mean_node, norm360
 from .panchang import panchang
@@ -85,6 +85,8 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
 
     asc_trop = ascendant_tropical(jd_ut, jd_tt, lat, lon)
     asc = norm360(asc_trop - ayan)
+    mc = norm360(midheaven_tropical(jd_ut, jd_tt, lon) - ayan)
+    cusps = sripati_cusps(asc, mc)
     lagna_sign = sign_of(asc)
     lagna_nak = nakshatra_of(asc)
 
@@ -99,6 +101,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
             "longitude": lon_p, "sign": s, "sign_name": SIGNS[s], "sign_name_hi": SIGNS_HI[s],
             "degree_in_sign": lon_p - s * 30, "dms": dms(lon_p - s * 30),
             "house": house,
+            "house_chalit": chalit_house(lon_p, cusps),
             "nakshatra": nak["name"], "nakshatra_hi": nak["name_hi"], "pada": nak["pada"],
             "nakshatra_lord": nak["lord"],
             "retrograde": _retro(backend, jd_tt, p),
@@ -142,6 +145,16 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
                   "nakshatra_hi": lagna_nak["name_hi"], "pada": lagna_nak["pada"],
                   "lord": SIGN_LORDS[lagna_sign]},
         "planets": planets, "houses": houses, "navamsa": navamsa,
+        "chalit": {"system": "sripati", "mc": mc, "mc_dms": dms(mc - sign_of(mc) * 30), "mc_sign": sign_of(mc),
+                   "mc_sign_name": SIGNS[sign_of(mc)], "mc_sign_name_hi": SIGNS_HI[sign_of(mc)],
+                   "cusps": [{"house": i + 1, "longitude": c, "sign": sign_of(c), "sign_name_hi": SIGNS_HI[sign_of(c)],
+                              "dms": dms(c - sign_of(c) * 30)} for i, c in enumerate(cusps)],
+                   "moved": [{"planet": q["name"], "planet_hi": q["name_hi"], "rasi_house": q["house"], "chalit_house": q["house_chalit"]}
+                             for q in planets if q["house"] != q["house_chalit"]],
+                   "note_hi": "भाव-चलित (श्रीपति): लग्न और दशम (MC) के बीच के चतुर्थांशों को तीन भागों में बाँटकर भाव-मध्य निकाले गए हैं। "
+                              "जो ग्रह राशि-भाव से अलग भाव में दिखें, वे भाव-संधि के पास हैं; फलादेश में दोनों देखे जाते हैं।",
+                   "note_en": "Bhava chalit (Sripati): the quadrants between Lagna and MC are trisected to give house middles. "
+                              "A planet whose chalit house differs from its rasi house is near a house boundary; tradition weighs both."},
         "panchang": panchang(sid["Sun"], sid["Moon"], local_date),
         "dasha": dasha, "dasha_running": running, "as_of": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
     }

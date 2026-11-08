@@ -130,6 +130,7 @@
     <div class="card" id="learn"><h3>सीखिए</h3><div class="muted">किसी खाने या ग्रह पर क्लिक कीजिए।</div></div>
     </section>
     <section class="sub" id="s-planets">
+    <div class="card"><b>भाव-चलित (श्रीपति)</b><div class="muted" style="font-size:.85rem" id="chwhy"></div><div id="chalit"></div></div>
     <div class="card"><b>ग्रह स्थिति</b><div id="ptable"></div></div>
     <div class="card"><b>ग्रह-बल (षड्बल)</b>
       <div class="muted" style="font-size:.85rem" id="stwhy"></div>
@@ -469,6 +470,13 @@ function render(c) {
   $('summary').innerHTML = `<b>${esc(c.input.name || 'कुंडली')}</b> — लग्न: <b>${esc(c.lagna.sign_name_hi)}</b> ${esc(c.lagna.dms)} (${esc(c.lagna.nakshatra_hi)} पाद ${c.lagna.pada}) ·
     चंद्र राशि: <b>${esc(m.sign_name_hi)}</b> · जन्म नक्षत्र: <b>${esc(m.nakshatra_hi)}</b> पाद ${m.pada} · अयनांश (लाहिरी): ${esc(c.ayanamsa_dms)} · भाव पद्धति: राशि-भाव (whole sign)`;
   renderPatri(c);
+  if (c.chalit) {
+    const ch = c.chalit;
+    $('chwhy').textContent = ch.note_hi;
+    const moved = ch.moved.length ? ch.moved.map(m => `<li>${esc(m.planet_hi)}: राशि-भाव ${m.rasi_house} → चलित भाव ${m.chalit_house}</li>`).join('') : '<li>सभी ग्रह राशि-भाव वाले भाव में ही हैं।</li>';
+    $('chalit').innerHTML = `<p>दशम भाव-मध्य (MC): <b>${esc(ch.mc_sign_name_hi)} ${esc(ch.mc_dms)}</b></p><ul>${moved}</ul>` +
+      `<details><summary>भाव-मध्य (12)</summary><table><tr><th>भाव</th><th>राशि</th><th>अंश</th></tr>${ch.cusps.map(x => `<tr><td>${x.house}</td><td>${esc(x.sign_name_hi)}</td><td>${esc(x.dms)}</td></tr>`).join('')}</table></details>`;
+  }
   const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
   const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde}))}));
   drawChart($('d1'), d1, 'd1'); renderVarga($('vsel').value);

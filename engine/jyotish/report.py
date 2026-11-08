@@ -153,6 +153,12 @@ def render(chart: dict) -> str:
                          ["घात प्रहर", str(g["prahar"])], ["घात चंद्र", e(g["chandra_hi"])], ["स्त्री घात चंद्र", e(g["stri_chandra_hi"])]]
         patri_html = (f'<h2>जन्म विवरण</h2><div class="two">{_table(["", ""], birth_rows)}{_table(["", ""], ava_rows)}</div>'
                       f'<p class="small">{e(P["note_hi"])}</p>')
+    ch = chart.get("chalit")
+    chalit_html = ""
+    if ch:
+        mv = "".join(f'<li>{e(m["planet_hi"])}: राशि-भाव {m["rasi_house"]} → चलित भाव {m["chalit_house"]}</li>' for m in ch["moved"]) or "<li>सभी ग्रह राशि-भाव वाले भाव में ही हैं।</li>"
+        chalit_html = (f'<h2>भाव-चलित (श्रीपति)</h2><p>दशम भाव-मध्य (MC): <b>{e(ch["mc_sign_name_hi"])} {e(ch["mc_dms"])}</b></p><ul>{mv}</ul>'
+                       f'<p class="small">{e(ch["note_hi"])}</p>')
     day = chart.get("day", {})
     day_html = ""
     if day.get("available"):
@@ -197,6 +203,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>ग्रह स्थिति</h2>
 {_table(["ग्रह", "राशि", "अंश", "भाव", "नक्षत्र (पाद)", "स्थिति"], planets_rows)}
 
+{chalit_html}
 <h2>पंचांग</h2>
 <table class="sum">
 <tr><td>वार</td><td>{e(pc["vara"]["name_hi"])}</td></tr>

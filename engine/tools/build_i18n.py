@@ -83,6 +83,9 @@ for _i, _hi in enumerate(_patri.SYLLABLES):
     for _a, _b in zip(_hi.split(), _patri.SYLLABLES_EN[_i].split()):
         put(_a, _b)
 put(_patri.NOTE_HI, _patri.NOTE_EN)
+from jyotish import compute_chart as _cc  # noqa: E402
+_ch = _cc("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)["chalit"]
+put(_ch["note_hi"], _ch["note_en"])
 for _en, _hi in _patri.GHATA_HI.items():
     put(_hi, _en)
 put("अधिक", "Adhika")
@@ -191,6 +194,7 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "भाव-मध्य (12)": "House middles (12)", "सभी ग्रह राशि-भाव वाले भाव में ही हैं।": "Every planet stays in its rasi house.",
  "चेष्टा": "Cheshta", "रूप": "Rupas", "स्थान": "Sthana", "काल": "Kala", "दृग्": "Drik",
  # tabs
  "मिलान": "Matching", "वास्तु": "Vastu", "हस्तरेखा": "Palmistry", "मेरी कुंडलियाँ": "My charts", "सारांश": "Summary", "ग्रह व बल": "Planets & strength",
@@ -374,6 +378,7 @@ REPORT.update({
  "अपनी हथेली देखकर जो दिखे वह चुनिए; जो समझ न आए उसे \"—\" रहने दीजिए। यह परंपरागत कला है, भविष्यवाणी नहीं।":
    "Look at your palm and choose what you see; leave \"—\" for anything you cannot tell. This is a traditional art, not a prediction.",
 })
+EXTRA_PATTERNS += [("{1}: राशि-भाव {2} → चलित भाव {3}", "{1}: rasi house {2} → chalit house {3}"), ("दशम भाव-मध्य (MC): {1} {2}", "Tenth house middle (MC): {1} {2}"), ("दशम भाव-मध्य (MC):", "Tenth house middle (MC):")]
 EXTRA_PATTERNS += [("स्रोत ({1})", "Sources ({1})"), ("{1}-{2} (स्वामी {3})", "{1}-{2} (lord {3})")]
 EXTRA_PATTERNS += [("{1} (गणना: {2})", "{1} (as of {2})"), ("{1} की प्रधानता ({2} कार्ड): {3} पर ज़ोर।", "Dominance of {1} ({2} cards): emphasis on {3}.")]
 REPORT.update({"स्वराशि/उच्च में": "in own/exalted sign", "उच्च राशि में": "in exalted sign", "नीच राशि में": "in debilitated sign",

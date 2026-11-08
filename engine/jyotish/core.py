@@ -44,6 +44,38 @@ def ascendant_tropical(jd_ut: float, jd_tt: float, lat: float, lon_east: float) 
     return norm360(math.degrees(math.atan2(y, x)))
 
 
+def midheaven_tropical(jd_ut: float, jd_tt: float, lon_east: float) -> float:
+    """Tropical MC longitude (degrees): the ecliptic point on the meridian."""
+    ramc = (gmst_deg(jd_ut) + lon_east) * DEG
+    eps = obliquity_deg(jd_tt) * DEG
+    return norm360(math.degrees(math.atan2(math.sin(ramc), math.cos(ramc) * math.cos(eps))))
+
+
+def sripati_cusps(asc: float, mc: float) -> list[float]:
+    """Bhava-chalit (Sripati / Porphyry) cusps, 12 values, cusp 1 = Lagna degree, cusp 10 = MC degree.
+
+    Each quadrant between the angles is trisected; the cusp is the *middle* (bhava madhya) of the house,
+    so a planet belongs to the house whose span (midpoint to midpoint, i.e. sandhi to sandhi) contains it."""
+    arc = lambda a, b: (b - a) % 360.0
+    ic, dsc = norm360(mc + 180.0), norm360(asc + 180.0)
+    q1 = arc(asc, ic) / 3.0            # houses 1-3: Lagna -> IC
+    q2 = arc(ic, dsc) / 3.0            # houses 4-6: IC -> Descendant
+    c = [asc, asc + q1, asc + 2 * q1, ic, ic + q2, ic + 2 * q2]
+    c += [x + 180.0 for x in c]        # 7-12 opposite
+    return [norm360(x) for x in c]
+
+
+def chalit_house(lon: float, cusps: list[float]) -> int:
+    """House number 1-12 whose span (from the sandhi before its madhya to the sandhi after) contains lon."""
+    arc = lambda a, b: (b - a) % 360.0
+    for i in range(12):
+        start = norm360(cusps[i] - arc(cusps[i - 1], cusps[i]) / 2.0)   # sandhi before house i+1
+        end = norm360(cusps[i] + arc(cusps[i], cusps[(i + 1) % 12]) / 2.0)
+        if arc(start, lon) < arc(start, end):
+            return i + 1
+    return 1
+
+
 def sign_of(lon: float) -> int:
     return int(lon // 30) % 12
 
