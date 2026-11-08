@@ -629,7 +629,8 @@ function render(c) {
     : (go.sade_sati.ashtama ? '<p><span class="chip">अष्टम शनि</span> शनि जन्म-चंद्र से आठवें भाव में है (परंपरा में सावधानी का समय माना जाता है)।</p>' : '<p class="muted">अभी साढ़ेसाती नहीं है।</p>');
   $('gotable').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>चंद्र से भाव</th><th>लग्न से भाव</th><th>बिंदु</th><th>संकेत</th></tr>` +
     go.planets.map(r => `<tr><td>${esc(r.name_hi)}${r.retrograde ? ' (व)' : ''}</td><td>${esc(r.sign_name_hi)} ${Math.floor(r.degree_in_sign)}°</td><td>${r.house_from_moon}</td><td>${r.house_from_lagna}</td>
-      <td>${r.bindus ?? '–'}</td><td>${r.verdict ? `<span class="chip ${r.verdict==='supportive'?'yes':'muted'}">${GOV[r.verdict]}</span>` : '<span class="muted">–</span>'}</td></tr>`).join('') + '</table>';
+      <td>${r.bindus ?? '–'}</td><td>${r.verdict ? `<span class="chip ${r.verdict==='supportive'?'yes':'muted'}">${GOV[r.verdict]}</span>` : '<span class="muted">–</span>'}</td></tr>`).join('') + '</table>' +
+    `<div style="margin-top:8px"><b>गोचर-फल (ड्राफ़्ट)</b><ul style="font-size:.92rem">${go.planets.filter(r => r.text_hi).map(r => `<li>${esc(r.text_hi)}</li>`).join('')}</ul></div>`;
 
   // Partial strength
   const stg = c.strength;

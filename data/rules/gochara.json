@@ -1,0 +1,1841 @@
+{
+ "_comment": "Transit (gochara) tendencies from the Moon sign, 9 planets x 12 houses. Own wording, tendency language; draft. Vedha not applied in the text.",
+ "rules": [
+  {
+   "id": "gochara_sun_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 1st house from the Moon (self, body and mood): calls for patience with authority figures and care of health routines, especially in matters of self, body and mood.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 2nd house from the Moon (family, speech and savings): calls for patience with authority figures and care of health routines, especially in matters of family, speech and savings.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "The Sun's transit (vitality, authority) in the 3rd house from the Moon (effort, siblings and courage): tends to bring energy, recognition and a push to act, especially in matters of effort, siblings and courage.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): ऊर्जा, पहचान और काम करने की प्रेरणा देने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 4th house from the Moon (home, mother and peace of mind): calls for patience with authority figures and care of health routines, especially in matters of home, mother and peace of mind.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 4वें भाव में (घर, माता और मन की शांति): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 5th house from the Moon (children, study and creativity): calls for patience with authority figures and care of health routines, especially in matters of children, study and creativity.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "The Sun's transit (vitality, authority) in the 6th house from the Moon (work, rivals and routine): tends to bring energy, recognition and a push to act, especially in matters of work, rivals and routine.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): ऊर्जा, पहचान और काम करने की प्रेरणा देने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 7th house from the Moon (partner and dealings with others): calls for patience with authority figures and care of health routines, especially in matters of partner and dealings with others.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 8th house from the Moon (sudden change and hidden matters): calls for patience with authority figures and care of health routines, especially in matters of sudden change and hidden matters.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 9th house from the Moon (fortune, travel and guidance): calls for patience with authority figures and care of health routines, especially in matters of fortune, travel and guidance.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 10
+   },
+   "favourable": true,
+   "text_en": "The Sun's transit (vitality, authority) in the 10th house from the Moon (career and public standing): tends to bring energy, recognition and a push to act, especially in matters of career and public standing.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): ऊर्जा, पहचान और काम करने की प्रेरणा देने की प्रवृत्ति, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "The Sun's transit (vitality, authority) in the 11th house from the Moon (gains, friends and wishes): tends to bring energy, recognition and a push to act, especially in matters of gains, friends and wishes.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): ऊर्जा, पहचान और काम करने की प्रेरणा देने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_sun_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Sun",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "The Sun's transit (vitality, authority) in the 12th house from the Moon (expense, rest and distant places): calls for patience with authority figures and care of health routines, especially in matters of expense, rest and distant places.",
+   "text_hi": "सूर्य का गोचर (ऊर्जा, अधिकार) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): अधिकारियों से धैर्य और स्वास्थ्य-दिनचर्या की देखभाल माँगता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 1
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 1st house from the Moon (self, body and mood): tends to keep the mind light and days flowing, especially in matters of self, body and mood.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 2nd house from the Moon (family, speech and savings): asks for a little extra care with mood and sleep, especially in matters of family, speech and savings.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 3rd house from the Moon (effort, siblings and courage): tends to keep the mind light and days flowing, especially in matters of effort, siblings and courage.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 4th house from the Moon (home, mother and peace of mind): asks for a little extra care with mood and sleep, especially in matters of home, mother and peace of mind.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 4वें भाव में (घर, माता और मन की शांति): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 5th house from the Moon (children, study and creativity): asks for a little extra care with mood and sleep, especially in matters of children, study and creativity.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 6th house from the Moon (work, rivals and routine): tends to keep the mind light and days flowing, especially in matters of work, rivals and routine.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 7
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 7th house from the Moon (partner and dealings with others): tends to keep the mind light and days flowing, especially in matters of partner and dealings with others.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 8th house from the Moon (sudden change and hidden matters): asks for a little extra care with mood and sleep, especially in matters of sudden change and hidden matters.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 9th house from the Moon (fortune, travel and guidance): asks for a little extra care with mood and sleep, especially in matters of fortune, travel and guidance.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 10
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 10th house from the Moon (career and public standing): tends to keep the mind light and days flowing, especially in matters of career and public standing.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "The Moon's transit (mood, flow of days) in the 11th house from the Moon (gains, friends and wishes): tends to keep the mind light and days flowing, especially in matters of gains, friends and wishes.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): मन को हल्का और दिनों को सहज रखने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_moon_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Moon",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "The Moon's transit (mood, flow of days) in the 12th house from the Moon (expense, rest and distant places): asks for a little extra care with mood and sleep, especially in matters of expense, rest and distant places.",
+   "text_hi": "चंद्र का गोचर (मन, दिनों का प्रवाह) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): मन और नींद की थोड़ी अतिरिक्त देखभाल माँगता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 1st house from the Moon (self, body and mood): calls for restraint in anger, haste and arguments, especially in matters of self, body and mood.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 2nd house from the Moon (family, speech and savings): calls for restraint in anger, haste and arguments, especially in matters of family, speech and savings.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "Mars's transit (drive, friction) in the 3rd house from the Moon (effort, siblings and courage): tends to give courage, initiative and the will to compete, especially in matters of effort, siblings and courage.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): साहस, पहल और प्रतिस्पर्धा की इच्छा देने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 4th house from the Moon (home, mother and peace of mind): calls for restraint in anger, haste and arguments, especially in matters of home, mother and peace of mind.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 4वें भाव में (घर, माता और मन की शांति): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 5th house from the Moon (children, study and creativity): calls for restraint in anger, haste and arguments, especially in matters of children, study and creativity.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "Mars's transit (drive, friction) in the 6th house from the Moon (work, rivals and routine): tends to give courage, initiative and the will to compete, especially in matters of work, rivals and routine.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): साहस, पहल और प्रतिस्पर्धा की इच्छा देने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 7th house from the Moon (partner and dealings with others): calls for restraint in anger, haste and arguments, especially in matters of partner and dealings with others.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 8th house from the Moon (sudden change and hidden matters): calls for restraint in anger, haste and arguments, especially in matters of sudden change and hidden matters.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 9th house from the Moon (fortune, travel and guidance): calls for restraint in anger, haste and arguments, especially in matters of fortune, travel and guidance.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 10th house from the Moon (career and public standing): calls for restraint in anger, haste and arguments, especially in matters of career and public standing.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Mars's transit (drive, friction) in the 11th house from the Moon (gains, friends and wishes): tends to give courage, initiative and the will to compete, especially in matters of gains, friends and wishes.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): साहस, पहल और प्रतिस्पर्धा की इच्छा देने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mars_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Mars",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Mars's transit (drive, friction) in the 12th house from the Moon (expense, rest and distant places): calls for restraint in anger, haste and arguments, especially in matters of expense, rest and distant places.",
+   "text_hi": "मंगल का गोचर (ऊर्जा, टकराव) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): क्रोध, जल्दबाज़ी और बहस में संयम माँगता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 1st house from the Moon (self, body and mood): asks for double-checking words, figures and documents, especially in matters of self, body and mood.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 2
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 2nd house from the Moon (family, speech and savings): tends to help talks, deals, learning and paperwork, especially in matters of family, speech and savings.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 3
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 3rd house from the Moon (effort, siblings and courage): asks for double-checking words, figures and documents, especially in matters of effort, siblings and courage.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 4
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 4th house from the Moon (home, mother and peace of mind): tends to help talks, deals, learning and paperwork, especially in matters of home, mother and peace of mind.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 4वें भाव में (घर, माता और मन की शांति): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 5th house from the Moon (children, study and creativity): asks for double-checking words, figures and documents, especially in matters of children, study and creativity.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 6th house from the Moon (work, rivals and routine): tends to help talks, deals, learning and paperwork, especially in matters of work, rivals and routine.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 7th house from the Moon (partner and dealings with others): asks for double-checking words, figures and documents, especially in matters of partner and dealings with others.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 8
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 8th house from the Moon (sudden change and hidden matters): tends to help talks, deals, learning and paperwork, especially in matters of sudden change and hidden matters.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 9th house from the Moon (fortune, travel and guidance): asks for double-checking words, figures and documents, especially in matters of fortune, travel and guidance.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 10
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 10th house from the Moon (career and public standing): tends to help talks, deals, learning and paperwork, especially in matters of career and public standing.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Mercury's transit (talk, trade, study) in the 11th house from the Moon (gains, friends and wishes): tends to help talks, deals, learning and paperwork, especially in matters of gains, friends and wishes.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): बातचीत, सौदे, पढ़ाई और काग़ज़ी काम में मदद की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_mercury_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Mercury",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Mercury's transit (talk, trade, study) in the 12th house from the Moon (expense, rest and distant places): asks for double-checking words, figures and documents, especially in matters of expense, rest and distant places.",
+   "text_hi": "बुध का गोचर (बात, व्यापार, पढ़ाई) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): शब्द, आँकड़े और काग़ज़ दोबारा जाँचने को कहता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 1st house from the Moon (self, body and mood): asks not to over-expand or over-trust; growth comes slower here, especially in matters of self, body and mood.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 2
+   },
+   "favourable": true,
+   "text_en": "Jupiter's transit (growth, grace) in the 2nd house from the Moon (family, speech and savings): tends to open doors, bring support and a sense of growth, especially in matters of family, speech and savings.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): रास्ते खोलने, सहारा और वृद्धि का भाव देने की प्रवृत्ति, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 3
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 3rd house from the Moon (effort, siblings and courage): asks not to over-expand or over-trust; growth comes slower here, especially in matters of effort, siblings and courage.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 4th house from the Moon (home, mother and peace of mind): asks not to over-expand or over-trust; growth comes slower here, especially in matters of home, mother and peace of mind.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 4वें भाव में (घर, माता और मन की शांति): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 5
+   },
+   "favourable": true,
+   "text_en": "Jupiter's transit (growth, grace) in the 5th house from the Moon (children, study and creativity): tends to open doors, bring support and a sense of growth, especially in matters of children, study and creativity.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): रास्ते खोलने, सहारा और वृद्धि का भाव देने की प्रवृत्ति, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 6
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 6th house from the Moon (work, rivals and routine): asks not to over-expand or over-trust; growth comes slower here, especially in matters of work, rivals and routine.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 7
+   },
+   "favourable": true,
+   "text_en": "Jupiter's transit (growth, grace) in the 7th house from the Moon (partner and dealings with others): tends to open doors, bring support and a sense of growth, especially in matters of partner and dealings with others.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): रास्ते खोलने, सहारा और वृद्धि का भाव देने की प्रवृत्ति, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 8th house from the Moon (sudden change and hidden matters): asks not to over-expand or over-trust; growth comes slower here, especially in matters of sudden change and hidden matters.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 9
+   },
+   "favourable": true,
+   "text_en": "Jupiter's transit (growth, grace) in the 9th house from the Moon (fortune, travel and guidance): tends to open doors, bring support and a sense of growth, especially in matters of fortune, travel and guidance.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): रास्ते खोलने, सहारा और वृद्धि का भाव देने की प्रवृत्ति, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 10th house from the Moon (career and public standing): asks not to over-expand or over-trust; growth comes slower here, especially in matters of career and public standing.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Jupiter's transit (growth, grace) in the 11th house from the Moon (gains, friends and wishes): tends to open doors, bring support and a sense of growth, especially in matters of gains, friends and wishes.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): रास्ते खोलने, सहारा और वृद्धि का भाव देने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_jupiter_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Jupiter",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Jupiter's transit (growth, grace) in the 12th house from the Moon (expense, rest and distant places): asks not to over-expand or over-trust; growth comes slower here, especially in matters of expense, rest and distant places.",
+   "text_hi": "गुरु का गोचर (वृद्धि, कृपा) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): अति-विस्तार और अति-विश्वास से बचने को कहता है; यहाँ वृद्धि धीमी होती है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 1
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 1st house from the Moon (self, body and mood): tends to add comfort, charm and ease in relationships, especially in matters of self, body and mood.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 2
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 2nd house from the Moon (family, speech and savings): tends to add comfort, charm and ease in relationships, especially in matters of family, speech and savings.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 3rd house from the Moon (effort, siblings and courage): tends to add comfort, charm and ease in relationships, especially in matters of effort, siblings and courage.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 4
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 4th house from the Moon (home, mother and peace of mind): tends to add comfort, charm and ease in relationships, especially in matters of home, mother and peace of mind.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 4वें भाव में (घर, माता और मन की शांति): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 5
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 5th house from the Moon (children, study and creativity): tends to add comfort, charm and ease in relationships, especially in matters of children, study and creativity.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 6
+   },
+   "favourable": false,
+   "text_en": "Venus's transit (comfort, relationships) in the 6th house from the Moon (work, rivals and routine): asks for moderation in spending and indulgence, especially in matters of work, rivals and routine.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): ख़र्च और भोग में संयम माँगता है, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Venus's transit (comfort, relationships) in the 7th house from the Moon (partner and dealings with others): asks for moderation in spending and indulgence, especially in matters of partner and dealings with others.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): ख़र्च और भोग में संयम माँगता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 8
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 8th house from the Moon (sudden change and hidden matters): tends to add comfort, charm and ease in relationships, especially in matters of sudden change and hidden matters.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 9
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 9th house from the Moon (fortune, travel and guidance): tends to add comfort, charm and ease in relationships, especially in matters of fortune, travel and guidance.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Venus's transit (comfort, relationships) in the 10th house from the Moon (career and public standing): asks for moderation in spending and indulgence, especially in matters of career and public standing.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): ख़र्च और भोग में संयम माँगता है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 11th house from the Moon (gains, friends and wishes): tends to add comfort, charm and ease in relationships, especially in matters of gains, friends and wishes.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_venus_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Venus",
+    "house_from_moon": 12
+   },
+   "favourable": true,
+   "text_en": "Venus's transit (comfort, relationships) in the 12th house from the Moon (expense, rest and distant places): tends to add comfort, charm and ease in relationships, especially in matters of expense, rest and distant places.",
+   "text_hi": "शुक्र का गोचर (सुख, संबंध) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): सुख, आकर्षण और संबंधों में सहजता बढ़ाने की प्रवृत्ति, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 1st house from the Moon (self, body and mood): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of self, body and mood.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 2nd house from the Moon (family, speech and savings): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of family, speech and savings.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "Saturn's transit (discipline, delay) in the 3rd house from the Moon (effort, siblings and courage): tends to reward steady work with slow, solid gains, especially in matters of effort, siblings and courage.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): लगातार मेहनत को धीमे पर पक्के लाभ से सींचने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 4th house from the Moon (home, mother and peace of mind): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of home, mother and peace of mind.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 4वें भाव में (घर, माता और मन की शांति): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 5th house from the Moon (children, study and creativity): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of children, study and creativity.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "Saturn's transit (discipline, delay) in the 6th house from the Moon (work, rivals and routine): tends to reward steady work with slow, solid gains, especially in matters of work, rivals and routine.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): लगातार मेहनत को धीमे पर पक्के लाभ से सींचने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 7th house from the Moon (partner and dealings with others): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of partner and dealings with others.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 8th house from the Moon (sudden change and hidden matters): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of sudden change and hidden matters.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 9th house from the Moon (fortune, travel and guidance): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of fortune, travel and guidance.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 10th house from the Moon (career and public standing): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of career and public standing.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Saturn's transit (discipline, delay) in the 11th house from the Moon (gains, friends and wishes): tends to reward steady work with slow, solid gains, especially in matters of gains, friends and wishes.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): लगातार मेहनत को धीमे पर पक्के लाभ से सींचने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_saturn_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Saturn",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Saturn's transit (discipline, delay) in the 12th house from the Moon (expense, rest and distant places): asks for patience: delays, extra duties and tests of endurance are the classical caution, especially in matters of expense, rest and distant places.",
+   "text_hi": "शनि का गोचर (अनुशासन, विलंब) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): धैर्य माँगता है: विलंब, अतिरिक्त ज़िम्मेदारी और सहनशक्ति की परीक्षा शास्त्रीय सावधानी है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 1st house from the Moon (self, body and mood): asks for caution against confusion, shortcuts and over-reach, especially in matters of self, body and mood.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 2nd house from the Moon (family, speech and savings): asks for caution against confusion, shortcuts and over-reach, especially in matters of family, speech and savings.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 3rd house from the Moon (effort, siblings and courage): tends to feed ambition and unconventional gains, especially in matters of effort, siblings and courage.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): महत्वाकांक्षा और अनूठे लाभ बढ़ाने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 4th house from the Moon (home, mother and peace of mind): asks for caution against confusion, shortcuts and over-reach, especially in matters of home, mother and peace of mind.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 4वें भाव में (घर, माता और मन की शांति): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 5th house from the Moon (children, study and creativity): asks for caution against confusion, shortcuts and over-reach, especially in matters of children, study and creativity.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 6th house from the Moon (work, rivals and routine): tends to feed ambition and unconventional gains, especially in matters of work, rivals and routine.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): महत्वाकांक्षा और अनूठे लाभ बढ़ाने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 7th house from the Moon (partner and dealings with others): asks for caution against confusion, shortcuts and over-reach, especially in matters of partner and dealings with others.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 8th house from the Moon (sudden change and hidden matters): asks for caution against confusion, shortcuts and over-reach, especially in matters of sudden change and hidden matters.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 9th house from the Moon (fortune, travel and guidance): asks for caution against confusion, shortcuts and over-reach, especially in matters of fortune, travel and guidance.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 10th house from the Moon (career and public standing): asks for caution against confusion, shortcuts and over-reach, especially in matters of career and public standing.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 11th house from the Moon (gains, friends and wishes): tends to feed ambition and unconventional gains, especially in matters of gains, friends and wishes.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): महत्वाकांक्षा और अनूठे लाभ बढ़ाने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_rahu_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Rahu",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Rahu's transit (ambition, restlessness) in the 12th house from the Moon (expense, rest and distant places): asks for caution against confusion, shortcuts and over-reach, especially in matters of expense, rest and distant places.",
+   "text_hi": "राहु का गोचर (महत्वाकांक्षा, बेचैनी) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): भ्रम, शॉर्टकट और अति से सावधानी माँगता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_1",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 1
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 1st house from the Moon (self, body and mood): asks for care with detachment turning into neglect, especially in matters of self, body and mood.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 1वें भाव में (स्वयं, शरीर और मन): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर स्वयं, शरीर और मन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_2",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 2
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 2nd house from the Moon (family, speech and savings): asks for care with detachment turning into neglect, especially in matters of family, speech and savings.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 2वें भाव में (कुटुंब, वाणी और बचत): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर कुटुंब, वाणी और बचत के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_3",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 3
+   },
+   "favourable": true,
+   "text_en": "Ketu's transit (detachment, insight) in the 3rd house from the Moon (effort, siblings and courage): tends to sharpen insight and loosen attachments helpfully, especially in matters of effort, siblings and courage.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 3वें भाव में (प्रयास, भाई-बहन और साहस): अंतर्दृष्टि तेज़ करने और मोह ढीला करने की प्रवृत्ति, ख़ासकर प्रयास, भाई-बहन और साहस के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_4",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 4
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 4th house from the Moon (home, mother and peace of mind): asks for care with detachment turning into neglect, especially in matters of home, mother and peace of mind.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 4वें भाव में (घर, माता और मन की शांति): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर घर, माता और मन की शांति के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_5",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 5
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 5th house from the Moon (children, study and creativity): asks for care with detachment turning into neglect, especially in matters of children, study and creativity.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 5वें भाव में (संतान, विद्या और सृजन): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर संतान, विद्या और सृजन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_6",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 6
+   },
+   "favourable": true,
+   "text_en": "Ketu's transit (detachment, insight) in the 6th house from the Moon (work, rivals and routine): tends to sharpen insight and loosen attachments helpfully, especially in matters of work, rivals and routine.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 6वें भाव में (काम, प्रतिद्वंद्वी और दिनचर्या): अंतर्दृष्टि तेज़ करने और मोह ढीला करने की प्रवृत्ति, ख़ासकर काम, प्रतिद्वंद्वी और दिनचर्या के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_7",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 7
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 7th house from the Moon (partner and dealings with others): asks for care with detachment turning into neglect, especially in matters of partner and dealings with others.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 7वें भाव में (जीवनसाथी और व्यवहार): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर जीवनसाथी और व्यवहार के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_8",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 8
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 8th house from the Moon (sudden change and hidden matters): asks for care with detachment turning into neglect, especially in matters of sudden change and hidden matters.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 8वें भाव में (अचानक बदलाव और छिपी बातें): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर अचानक बदलाव और छिपी बातें के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_9",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 9
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 9th house from the Moon (fortune, travel and guidance): asks for care with detachment turning into neglect, especially in matters of fortune, travel and guidance.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 9वें भाव में (भाग्य, यात्रा और मार्गदर्शन): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर भाग्य, यात्रा और मार्गदर्शन के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_10",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 10
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 10th house from the Moon (career and public standing): asks for care with detachment turning into neglect, especially in matters of career and public standing.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 10वें भाव में (कर्म और प्रतिष्ठा): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर कर्म और प्रतिष्ठा के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_11",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 11
+   },
+   "favourable": true,
+   "text_en": "Ketu's transit (detachment, insight) in the 11th house from the Moon (gains, friends and wishes): tends to sharpen insight and loosen attachments helpfully, especially in matters of gains, friends and wishes.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 11वें भाव में (लाभ, मित्र और इच्छाएँ): अंतर्दृष्टि तेज़ करने और मोह ढीला करने की प्रवृत्ति, ख़ासकर लाभ, मित्र और इच्छाएँ के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  },
+  {
+   "id": "gochara_ketu_12",
+   "category": "gochara",
+   "when": {
+    "planet": "Ketu",
+    "house_from_moon": 12
+   },
+   "favourable": false,
+   "text_en": "Ketu's transit (detachment, insight) in the 12th house from the Moon (expense, rest and distant places): asks for care with detachment turning into neglect, especially in matters of expense, rest and distant places.",
+   "text_hi": "केतु का गोचर (वैराग्य, अंतर्दृष्टि) चंद्र से 12वें भाव में (व्यय, विश्राम और दूर के स्थान): वैराग्य के उपेक्षा में बदलने से सावधानी माँगता है, ख़ासकर व्यय, विश्राम और दूर के स्थान के मामलों में।",
+   "source": {
+    "text": "Common gochara favourable-house lists (Phaladeepika / Brihat Samhita tradition); wording original",
+    "chapter": null,
+    "verse": null
+   },
+   "review_status": "draft"
+  }
+ ]
+}

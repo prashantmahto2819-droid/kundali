@@ -65,6 +65,10 @@ def gochara(chart: dict, now_pos: dict[str, dict], when: datetime) -> dict:
                "sign": s, "sign_name": SIGNS[s], "sign_name_hi": SIGNS_HI[s],
                "degree_in_sign": pos["longitude"] - s * 30, "retrograde": pos["retrograde"],
                "house_from_moon": (s - moon_sign) % 12 + 1, "house_from_lagna": (s - lagna_sign) % 12 + 1}
+        from .rules import gochara_text
+        txt = gochara_text(name, row["house_from_moon"])
+        if txt:
+            row.update({"text_hi": txt["text_hi"], "text_en": txt["text_en"], "rule_id": txt["rule_id"]})
         if name in FAVOURABLE_FROM_MOON:
             fav = row["house_from_moon"] in FAVOURABLE_FROM_MOON[name]
             pts = bav[name]["by_sign"][s]

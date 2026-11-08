@@ -33,7 +33,12 @@ def load_rules() -> list[dict]:
     return rules
 
 
+_NATAL_KEYS = {"planet", "house", "sign", "dignity", "retrograde"}
+
+
 def _matches(when: dict, planet: dict) -> bool:
+    if set(when) - _NATAL_KEYS:                       # e.g. gochara rules (house_from_moon) are not natal rules
+        return False
     if "planet" in when and when["planet"] != planet["name"]:
         return False
     if "house" in when and when["house"] != planet["house"]:
@@ -45,6 +50,14 @@ def _matches(when: dict, planet: dict) -> bool:
     if "retrograde" in when and when["retrograde"] != planet["retrograde"]:
         return False
     return True
+
+
+def gochara_text(planet: str, house_from_moon: int) -> dict | None:
+    for rule in load_rules():
+        w = rule.get("when", {})
+        if w.get("planet") == planet and w.get("house_from_moon") == house_from_moon:
+            return {"rule_id": rule["id"], "text_hi": rule.get("text_hi"), "text_en": rule.get("text_en"), "favourable": rule.get("favourable")}
+    return None
 
 
 def match_rules(chart: dict) -> list[dict]:

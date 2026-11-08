@@ -219,7 +219,7 @@ UI = {
  "सूर्य राशि (पाश्चात्य)": "Sun sign (tropical)", "अयनांश (लाहिरी)": "Ayanamsa (Lahiri)", "लग्न-लग्नेश": "Lagna & lord",
  "राशि-राशि स्वामी": "Moon sign & lord", "नक्षत्र स्वामी": "Nakshatra lord", "वर्ण": "Varna", "वश्य": "Vashya", "योनि": "Yoni",
  "गण": "Gana", "नाड़ी": "Nadi", "तत्व": "Element (tattva)", "नाम अक्षर": "Name syllable",
- "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "प्रश्न": "Prashna", "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)", "विषय": "Topic", "KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
+ "भाव-चलित (श्रीपति)": "Bhava chalit (Sripati)", "कृष्णमूर्ति पद्धति (KP)": "Krishnamurti Paddhati (KP)", "जैमिनी": "Jaimini", "गोचर-फल (ड्राफ़्ट)": "Transit results (draft)", "प्रश्न": "Prashna", "प्रश्न कुंडली (KP होरारी)": "Prashna chart (KP horary)", "विषय": "Topic", "KP अंक (1-249, वैकल्पिक)": "KP number (1-249, optional)",
  "समय (ख़ाली = अभी)": "Time (blank = now)", "प्रश्न पूछिए": "Ask the question", "गणना…": "Computing…", "रूलिंग प्लैनेट्स:": "Ruling planets:", "भाव-स्पष्ट और ग्रह": "Cusps and planets",
  "अनुकूल": "favourable", "प्रतिकूल": "unfavourable", "मिश्रित (देरी या शर्तों के साथ)": "mixed (with delay or conditions)", "अस्पष्ट": "unclear",
  "प्रश्न का विषय चुनिए। कुंडली इसी क्षण (या दिए समय) और स्थान की बनती है; चाहें तो 1 से 249 के बीच कोई अंक मन से कहिए (KP पद्धति)। स्वास्थ्य, क़ानून और आयु के प्रश्न यहाँ नहीं लिए जाते।":

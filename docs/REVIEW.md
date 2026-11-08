@@ -10,6 +10,7 @@ When an item is approved, change its `review_status` to `reviewed` and add `revi
 | # | What | File | Count | Notes |
 |---|------|------|-------|-------|
 | 1 | Planet-in-house readings (Hindi + English) | `data/rules/planet_in_house.json` | 108 | tendency language; cite BPHS/Phaladeepika chapter where possible |
+| 2a | Gochara (transit) texts 9 x 12 from the Moon | `data/rules/gochara.json` | 108 | favourable lists per Phaladeepika tradition; vedha not applied |
 | 2 | Dignity / retrograde readings | `data/rules/dignity_retrograde.json` | 26 | neecha-bhanga conditions are computed; text needs check |
 | 3 | Yoga definitions and texts | `engine/jyotish/yogas.py` | — | which yogas count, cancellation rules |
 | 4 | Ghata chakra table (11 of 12 rows unverified) | `engine/jyotish/patri.py` (`GHATA`) | 12 rows | Dhanu row matches a printed patri; check the rest against Muhurta Chintamani |

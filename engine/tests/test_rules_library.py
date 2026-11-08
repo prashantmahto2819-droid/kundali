@@ -25,7 +25,7 @@ def test_every_planet_gets_exactly_one_reading():
     c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
     house = [r for r in c["readings"] if r["category"] == "planet_in_house"]
     assert sorted(r["planet"] for r in house) == sorted(p["name"] for p in c["planets"])
-    assert len(load_rules()) == 108 + 7 + 7 + 7 + 5
+    assert len(load_rules()) == 108 + 7 + 7 + 7 + 5 + 108
 
 
 def test_dignity_and_retrograde_rules_fire_correctly():
@@ -44,7 +44,7 @@ def test_dignity_and_retrograde_rules_fire_correctly():
 def test_every_rule_has_english_text_in_tendency_language():
     from jyotish.rules import load_rules
     rules = load_rules()
-    assert len(rules) == 134
+    assert len(rules) == 134 + 108
     banned = ("death", "die ", "disease", "illness", "accident", "doom", "curse", "will lose", "will die")
     for r in rules:
         t = r["text_en"]
@@ -66,3 +66,13 @@ def test_knowledge_files_have_english_for_learn_panel():
     assert len(s) == 12 and all(x["element_en"] in ("Fire", "Earth", "Air", "Water") and x["modality_en"] in ("movable", "fixed", "dual") and x["traits_en"] for x in s)
     from jyotish import vargas
     assert set(vargas.MEANING_EN) == set(vargas.MEANING_HI)
+
+
+def test_gochara_rules_do_not_leak_into_natal_readings_and_are_attached_to_transits():
+    from jyotish import compute_chart, rules
+    assert len([r for r in rules.load_rules() if r["category"] == "gochara"]) == 108
+    c = compute_chart("1990-05-17", "06:45", "Asia/Kolkata", 23.18, 79.99)
+    assert not any(r["category"] == "gochara" for r in c["readings"])
+    for r in c["gochara"]["planets"]:
+        assert r["rule_id"] == f"gochara_{r['name'].lower()}_{r['house_from_moon']}" and r["text_hi"] and r["text_en"]
+    assert rules.gochara_text("Saturn", 11)["favourable"] and not rules.gochara_text("Saturn", 12)["favourable"]

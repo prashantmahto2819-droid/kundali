@@ -275,6 +275,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 <h2>गोचर ({e(go["as_of"][:10])})</h2>
 <p class="small">{e(go["why_hi"])}</p>
 {_table(["ग्रह", "राशि", "चंद्र से भाव", "लग्न से भाव", "बिंदु", "संकेत"], go_rows)}
+<p><b>गोचर-फल (ड्राफ़्ट)</b></p><ul>{"".join(f'<li>{e(r["text_hi"])}</li>' for r in go["planets"] if r.get("text_hi"))}</ul>
 
 <h2>ग्रह-संबंध: नीच-भंग, युति, अस्त, दृष्टि</h2>
 <p class="small">{e(rl["neecha_bhanga"][0]["why_hi"]) if rl["neecha_bhanga"] else ""}</p>

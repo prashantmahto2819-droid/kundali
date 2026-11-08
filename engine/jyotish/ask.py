@@ -74,7 +74,7 @@ def _walk(obj, label, src, out):
     if isinstance(obj, dict):
         name = next((obj[k] for k in ("name_en", "name", "en", "hi", "name_hi") if isinstance(obj.get(k), str)), label)
         for k, v in obj.items():
-            if k in ("source", "review_status", "when") or k.startswith("_"):
+            if k in ("source", "review_status", "when", "minors") or k.startswith("_"):   # minors: added with card names below
                 continue
             _walk(v, name if isinstance(name, str) else label, f"{src}.{k}", out)
     elif isinstance(obj, list):
@@ -96,6 +96,13 @@ def corpus() -> tuple[dict, ...]:
                     "text": f"Number {num} (Moolank / Bhagyank / root number {num}, ruling planet {d['planet']}): {d['traits_en']}"})
         out.append({"id": f"numbers/{num}_hi", "lang": "hi",
                     "text": f"अंक {num} (मूलांक / भाग्यांक {num}, स्वामी ग्रह {d['planet_hi']}): {d['traits_hi']}"})
+    from . import tarot as _tarot
+    for c in _tarot.deck():
+        if c["arcana"] == "minor":
+            out.append({"id": f"knowledge/tarot.{c['id']}.up", "lang": "en", "text": f"{c['name']} (upright): {c['upright']}"})
+            out.append({"id": f"knowledge/tarot.{c['id']}.rev", "lang": "en", "text": f"{c['name']} (reversed): {c['reversed']}"})
+            out.append({"id": f"knowledge/tarot.{c['id']}.up_hi", "lang": "hi", "text": f"{c['name_hi']} (सीधा): {c['upright_hi']}"})
+            out.append({"id": f"knowledge/tarot.{c['id']}.rev_hi", "lang": "hi", "text": f"{c['name_hi']} (उलटा): {c['reversed_hi']}"})
     for f in sorted((DATA / "rules").glob("*.json")):
         for r in json.loads(f.read_text(encoding="utf-8")).get("rules", []):
             for lg, key in (("hi", "text_hi"), ("en", "text_en")):
