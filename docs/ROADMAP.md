@@ -34,7 +34,7 @@ Full blueprint (in Hindi) lives in the Claude doc "कुंडली Super-App 
 - [x] Palmistry v1 (guided checklist, 16 features). Pending: photo analysis with consent, line-crossing/marks, scholar review.
 - [x] Rule library v1: 9 planets x 12 houses (Hindi, draft, tendency language). Pending: English text, sign/dignity/aspect rules, classical citations, scholar sign-off.
 - [x] Dignity (exalted/debilitated/own) and retrograde rules v1 (26, Hindi, draft). Pending: neecha-bhanga, sign/aspect/conjunction rules, English text.
-- [x] Partial planetary strength v1 (uccha, dig, kendradi, naisargika; NOT full Shadbala). Pending: kala, cheshta, drik, saptavargaja, ojayugma, true bhava cusps.
+- [x] Shadbala v2 (sthana, dig, kala except abda/masa/yuddha, naisargika, drik; cheshta for Sun/Moon only; draft). Pending: cheshta of Mars..Saturn (needs planetary motion), abda, masa, yuddha, true bhava cusps, check against a reference program.
 - [x] Learning layer: 27 nakshatras + 12 rashis (lord, deity, symbol, traits) in the click-to-learn panel; Hindi planet explanations. Pending: house x sign lessons, glossary, quizzes.
 - [x] Life timeline v1: every Vimshottari period read via the dasha lord (placement, lordship, dignity, ashtakavarga) with a transparent strength tag; past/running/future; themes only, no event predictions. Pending: transit overlay, yoga/aspect effects, scholar review.
 - [x] Varshaphal v1: solar-return chart (solved numerically, error under 1 arc-second against the same backend) + muntha. Pending: varshesha, sahams, muddha dasha, Tajika aspects.

@@ -106,8 +106,8 @@ def render(chart: dict) -> str:
                 f'{e(r["sign_name_hi"])} {int(r["degree_in_sign"])}°', str(r["house_from_moon"]),
                 str(r["house_from_lagna"]), str(r.get("bindus", "–")),
                 e(VERDICT_HI.get(r.get("verdict"), "–"))] for r in go["planets"]]
-    strength_rows = [[e(r["name_hi"]), str(r["uccha"]), str(r["dig"]), str(r["kendradi"]), str(r["naisargika"]),
-                      f'<b>{r["total"]}</b>', str(r["rank"])] for r in chart["strength"]["planets"]]
+    strength_rows = [[e(r["name_hi"]), str(r["sthana"]), str(r["dig"]), str(r["kala"]), str(r["drik"]),
+                      str(r["naisargika"]), f'<b>{r["comparable"]}</b>', str(r["rank"])] for r in chart["strength"]["planets"]]
     timeline_rows = [[e(m["lord_hi"]) + (" ◀ अभी" if m["phase"] == "running" else ""),
                       f'{m["age_start"]}–{m["age_end"]}', f'{m["start"][:4]}–{m["end"][:4]}', e(m["profile"]["tag_hi"]),
                       e("; ".join(f'{t["house"]}वाँ: {", ".join(t["themes_hi"][:2])}' for t in m["profile"]["themes"]))]
@@ -181,7 +181,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 
 <h2>ग्रह-बल (आंशिक षड्बल)</h2>
 <p class="small">{e(chart["strength"]["missing_hi"])}</p>
-{_table(["ग्रह", "उच्च", "दिक्", "केंद्रादि", "नैसर्गिक", "कुल", "क्रम"], strength_rows)}
+{_table(["ग्रह", "स्थान", "दिक्", "काल", "दृग्", "नैसर्गिक", "कुल (चेष्टा के बिना)", "क्रम"], strength_rows)}
 
 <h2>गोचर ({e(go["as_of"][:10])})</h2>
 <p class="small">{e(go["why_hi"])}</p>
