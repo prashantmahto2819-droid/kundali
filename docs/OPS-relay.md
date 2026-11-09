@@ -191,6 +191,24 @@ answers free-text questions through the same chain when a provider is configured
 Ollama on the Z440: `curl -fsSL https://ollama.com/install.sh | sh`, `ollama pull qwen2.5:7b`, run with `OLLAMA_HOST=0.0.0.0`, reach it from
 Hetzner over Tailscale (do not expose port 11434 publicly). CPU-only 7B is slow (30–60 s per answer) — keep Gemini/Groq first and Ollama last.
 
+### 14a. OpenAI as the primary provider (what the owner chose) + Groq
+1. https://platform.openai.com/api-keys → Create new secret key (billing must be enabled; gpt-4o-mini costs about ₹0.02–0.05 per answer).
+2. https://console.groq.com/keys → Create API Key (free tier; fast fallback).
+3. `/srv/kundali/deploy/.env`:
+   ```
+   OPENAI_API_KEY=sk-...
+   GROQ_API_KEY=gsk_...
+   AI_PROVIDERS=openai,groq
+   OPENAI_MODEL=gpt-4o-mini            # or gpt-4.1-mini / gpt-4o for better Hindi
+   EMBED_PROVIDER=openai               # semantic search for पूछिए / AI chat (text-embedding-3-small)
+   AI_WA_SUMMARY=1                     # one AI line in each subscriber's daily WhatsApp (one call per subscriber per day)
+   ```
+4. Semantic search index (once, and after editing knowledge/rules): `docker exec -e OPENAI_API_KEY=sk-... kundali-api python tools/build_embeddings.py` (≈ ₹1–2),
+   then `docker cp kundali-api:/srv/data/embeddings.json /srv/kundali/data/` and rebuild — or run it on your PC inside the repo and commit `data/embeddings.json`.
+5. UI in another language (draft, AI-translated; review by a speaker): `python3 tools/ai_translate.py te` (te kn mr gu bn ta ml …) → `data/i18n_te.json`;
+   commit and rebuild — a language dropdown appears beside the English button when any pack exists.
+6. Admin rule extraction from a text passage: `POST /v1/ai/extract_rules` with `X-Admin-Key`, `{"text": "...", "source": "BPHS 24.3", "save": true}` → `data/rules/drafts/`.
+
 ## 15. Astrologer consultation and wallet
 
 `KUNDALI_PAID=0` (default) keeps everything free: seekers send requests, astrologers get a WhatsApp ping (Relay) and answer in the thread.

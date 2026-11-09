@@ -90,6 +90,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(200, handlers.eclipse_from_query({k: v[0] for k, v in parse_qs(query).items()}))
             except handlers.BadRequest as exc:
                 return self._json(422, {"detail": str(exc)})
+        if path == "/v1/i18n/languages":
+            return self._json(200, handlers.i18n_languages())
         if path == "/v1/consult/astrologers":
             return self._json(200, handlers.consult_astrologers_from_query())
         if path == "/v1/palm/trace/catalog":
@@ -174,11 +176,15 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/ai/chat": handlers.ai_chat_from_payload,
                   "/v1/ai/palm": handlers.ai_palm_from_payload,
                   "/v1/ai/status": handlers.ai_status_from_payload,
+                  "/v1/ai/summary": handlers.ai_summary_from_payload,
+                  "/v1/ai/calendar_text": handlers.ai_calendar_text_from_payload,
+                  "/v1/ai/quiz": handlers.ai_quiz_from_payload,
                   "/v1/consult/request": handlers.consult_request_from_payload,
                   "/v1/consult/mine": handlers.consult_mine_from_payload,
                   "/v1/wallet": handlers.wallet_from_payload}
         header_routes = {"/v1/consult/get": handlers.consult_get_from_payload, "/v1/consult/message": handlers.consult_message_from_payload,
-                         "/v1/consult/close": handlers.consult_close_from_payload, "/v1/consult/admin": handlers.consult_admin_from_payload}
+                         "/v1/consult/close": handlers.consult_close_from_payload, "/v1/consult/admin": handlers.consult_admin_from_payload,
+                         "/v1/consult/draft": handlers.consult_draft_from_payload, "/v1/ai/extract_rules": handlers.ai_extract_rules_from_payload}
         if self.path in header_routes:
             try:
                 length = int(self.headers.get("Content-Length", 0))

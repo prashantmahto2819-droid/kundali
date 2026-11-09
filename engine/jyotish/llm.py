@@ -1,7 +1,7 @@
 """Model providers for the AI features (chat, palm photo reading), with a fallback chain and per-user daily quota.
 
 Configuration (deploy/.env). Any number of providers, tried in order until one answers:
-  AI_PROVIDERS=gemini,groq,openrouter,ollama,anthropic        # order of preference; names below
+  AI_PROVIDERS=openai,groq,gemini,openrouter,ollama           # order of preference (default: openai first, then groq); names below
   GEMINI_API_KEY=...        GEMINI_MODEL=gemini-2.0-flash          (free tier)
   GROQ_API_KEY=...          GROQ_MODEL=llama-3.3-70b-versatile     (free tier; vision: llama-3.2-11b-vision-preview)
   OPENROUTER_API_KEY=...    OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free
@@ -40,7 +40,7 @@ class ProviderError(Exception):
 
 def configured() -> list[dict]:
     """Providers that have what they need, in AI_PROVIDERS order (default order: free tiers first)."""
-    order = [x.strip().lower() for x in os.environ.get("AI_PROVIDERS", "gemini,groq,openrouter,ollama,deepseek,openai,anthropic,custom").split(",") if x.strip()]
+    order = [x.strip().lower() for x in os.environ.get("AI_PROVIDERS", "openai,groq,gemini,openrouter,deepseek,anthropic,ollama,custom").split(",") if x.strip()]
     out = []
     for name in order:
         if name == "gemini" and os.environ.get("GEMINI_API_KEY"):
@@ -172,3 +172,49 @@ def quota_check(store, who: str, cost: int = 1) -> dict:
         store._db.execute("INSERT INTO ai_usage(who, day, used) VALUES (?,?,?) ON CONFLICT(who, day) DO UPDATE SET used=used+excluded.used", (who, day, cost))
         store._db.commit()
     return {"ok": True, "used": used + cost, "limit": limit}
+
+
+# ---------------------------------------------------------------- embeddings (semantic search)
+EMBED_MODELS = {"openai": "text-embedding-3-small", "ollama": "nomic-embed-text", "gemini": "text-embedding-004", "custom": ""}
+
+
+def embed_provider() -> dict | None:
+    """First configured provider that offers embeddings (EMBED_PROVIDER forces one). OpenAI-style: /embeddings; Gemini: embedContent."""
+    want = os.environ.get("EMBED_PROVIDER", "").lower()
+    for p in configured():
+        if want and p["name"] != want:
+            continue
+        if p["name"] in ("openai", "ollama", "gemini") or (p["name"] == "custom" and os.environ.get("AI_EMBED_MODEL")):
+            model = os.environ.get("EMBED_MODEL") or os.environ.get("AI_EMBED_MODEL") or EMBED_MODELS.get(p["name"], "")
+            return {**p, "embed_model": model}
+    return None
+
+
+def embed(texts: list[str]) -> list[list[float]]:
+    p = embed_provider()
+    if p is None:
+        raise ProviderError("no embedding provider configured")
+    timeout = float(os.environ.get("AI_TIMEOUT", "45"))
+    if p["name"] == "gemini":
+        key = os.environ["GEMINI_API_KEY"]
+        out = []
+        for t in texts:
+            data = _post(f"https://generativelanguage.googleapis.com/v1beta/models/{p['embed_model']}:embedContent?key={key}",
+                         {"model": f"models/{p['embed_model']}", "content": {"parts": [{"text": t[:6000]}]}}, {}, timeout)
+            out.append(data["embedding"]["values"])
+        return out
+    out = []
+    for i in range(0, len(texts), 64):
+        chunk = [t[:6000] for t in texts[i:i + 64]]
+        data = _post(f"{p['base']}/embeddings", {"model": p["embed_model"], "input": chunk}, {"Authorization": f"Bearer {p['key']}"}, timeout)
+        rows = sorted(data["data"], key=lambda r: r.get("index", 0))
+        out += [r["embedding"] for r in rows]
+    return out
+
+
+def cosine(a: list[float], b: list[float]) -> float:
+    import math
+    dot = sum(x * y for x, y in zip(a, b))
+    na = math.sqrt(sum(x * x for x in a)) or 1.0
+    nb = math.sqrt(sum(x * x for x in b)) or 1.0
+    return dot / (na * nb)

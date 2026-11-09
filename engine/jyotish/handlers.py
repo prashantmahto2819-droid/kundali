@@ -830,3 +830,85 @@ def eclipse_from_query(q: dict) -> dict:
     return {"year": year, "lat": lat, "lon": lon, "tz": tz, "eclipses": [px.eclipse_local(e, lat, lon, tz) for e in ecs],
             "note_hi": "स्थानीय स्पर्श-मध्य-मोक्ष, दृश्यता और सूतक इस स्थान के लिए (चंद्र ग्रहण ±2 मिनट, सूर्य ग्रहण ±15 मिनट); परंपरा: सूर्य ग्रहण का सूतक 12 घंटे, चंद्र का 9 घंटे पहले; उपच्छाया ग्रहण का सूतक नहीं।",
             "note_en": "Local contacts, visibility and sutak for this place (lunar ±2 min, solar ±15 min); tradition: sutak 12 h before a solar, 9 h before a lunar eclipse; none for penumbral eclipses."}
+
+
+def ai_summary_from_payload(payload: dict) -> dict:
+    """POST /v1/ai/summary {kind: chart|match|varshaphal, body: {...}, lang?}"""
+    from . import ai, access
+    if not isinstance(payload.get("body"), dict) and not isinstance(payload.get("chart"), dict):
+        raise BadRequest("body (the request used for the chart/match/varshaphal) is required")
+    try:
+        return ai.summary(payload, store=access.default_store(), who=_ai_who(payload))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def ai_calendar_text_from_payload(payload: dict) -> dict:
+    from . import ai, access
+    try:
+        return ai.calendar_text(payload, store=access.default_store(), who=_ai_who(payload))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def ai_quiz_from_payload(payload: dict) -> dict:
+    from . import ai, access
+    try:
+        return ai.quiz(payload, store=access.default_store(), who=_ai_who(payload))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def consult_draft_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    """POST /v1/consult/draft {id, phone (astrologer's)} — AI first draft for the assigned astrologer or admin."""
+    from . import ai, consult, access, notify
+    rid = str(payload.get("id") or "")
+    admin = consult.is_admin(headers or {})
+    req = _consult_call("get_request", rid, None, admin=True)
+    if not admin:
+        a = next((x for x in consult.list_astrologers(include_inactive=True) if x["id"] == req["astrologer_id"]), None)
+        row = consult._rows("SELECT phone FROM astrologers WHERE id=?", (req["astrologer_id"],))
+        if not (payload.get("phone") and row and row[0]["phone"] and notify.normalize_phone(payload["phone"]) == row[0]["phone"]):
+            raise BadRequest("only the assigned astrologer (or admin) can request a draft")
+    try:
+        return ai.consult_draft(req, store=access.default_store(), who="astro:" + rid)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def ai_extract_rules_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    """POST /v1/ai/extract_rules {text, source, save?: true} — admin only; drafts land in data/rules/drafts/."""
+    from . import ai, consult
+    if not consult.is_admin(headers or {}):
+        raise BadRequest("admin key required (X-Admin-Key)")
+    try:
+        out = ai.extract_rules(str(payload.get("text") or ""), str(payload.get("source") or "unknown"), payload.get("lang") or "hi")
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+    if payload.get("save") and out["rules"]:
+        import json as _json, re as _re
+        from pathlib import Path
+        d = Path(__file__).resolve().parents[2] / "data" / "rules" / "drafts"
+        d.mkdir(parents=True, exist_ok=True)
+        name = _re.sub(r"[^a-z0-9_-]", "_", str(payload.get("source") or "draft").lower())[:40] + "_" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S") + ".json"
+        (d / name).write_text(_json.dumps({"source": payload.get("source"), "review_status": "draft", "rules": out["rules"]}, ensure_ascii=False, indent=1), "utf-8")
+        out["saved_as"] = f"data/rules/drafts/{name}"
+    return out
+
+
+def i18n_languages() -> dict:
+    """GET /v1/i18n/languages — UI language packs present as data/i18n_<code>.json."""
+    import json as _json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2] / "data"
+    out = []
+    for f in sorted(root.glob("i18n_*.json")):
+        code = f.stem.split("_", 1)[1]
+        name = {"en": "English", "te": "తెలుగు", "kn": "ಕನ್ನಡ", "mr": "मराठी", "gu": "ગુજરાતી", "bn": "বাংলা", "ta": "தமிழ்", "ml": "മലയാളം", "pa": "ਪੰਜਾਬੀ", "or": "ଓଡ଼ିଆ", "ne": "नेपाली"}.get(code)
+        if not name:
+            try:
+                name = _json.loads(f.read_text("utf-8")).get("name", code)
+            except ValueError:
+                name = code
+        out.append({"code": code, "name": name})
+    return {"languages": out}

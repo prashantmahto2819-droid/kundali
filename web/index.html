@@ -196,7 +196,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div class="err" id="wa_err"></div><pre id="wa_out" class="muted" style="white-space:pre-wrap;font-size:.85rem;margin:6px 0 0"></pre>
     </div>
     <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaypanchang" class="muted" style="font-size:.9rem;margin:4px 0 6px"></div><div id="todaylist"></div></div>
-    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
+    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="aisumbtn">AI सार</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
       <button type="button" data-sub="s-planets">ग्रह व बल</button>
@@ -288,7 +288,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <section class="sub" id="s-varsha">
     <div class="card"><b>वर्षफल (सौर-वापसी कुंडली)</b>
       <div class="muted" style="font-size:.85rem">जिस क्षण सूर्य जन्म के अंश पर लौटता है, उस क्षण की कुंडली। वर्ष चुनिए:</div>
-      <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button></div>
+      <div style="display:flex;gap:8px;align-items:end;margin-top:6px"><input id="vyear" type="number" min="1901" max="2100" style="max-width:110px"><button type="button" id="vgo2">वर्षफल देखिए</button><button type="button" class="ghost" id="vaisum" style="width:auto">AI सार</button></div><div id="vaisumout"></div>
       <div id="verr2" style="color:#c62828;margin-top:6px"></div><div id="vout2"></div>
     </div>
     </section>
@@ -560,6 +560,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
             <div><label>पता / फ़ोन</label><input id="cbizline" placeholder="शहर · फ़ोन"></div>
             <div><label>वेबसाइट</label><input id="cbizweb" placeholder="www.example.com"></div>
             <div><label>टैगलाइन</label><input id="cbiztag" placeholder="शुभकामनाओं सहित"></div>
+            <div><label>&nbsp;</label><button type="button" class="ghost" id="caitext" style="width:auto">AI से माह-संदेश व टैगलाइन</button></div>
             <div><label>स्थान का नाम (कैलेंडर पर)</label><input id="cplace" placeholder="कोरबा"></div>
             <div><label>कवर शीर्षक</label><input id="ccovertitle" placeholder="ख़ाली = व्यवसाय का नाम"></div>
             <div><label>कवर उप-शीर्षक</label><input id="ccoversub" placeholder="ख़ाली = टैगलाइन"></div>
@@ -631,7 +632,8 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <button type="button" id="ln-lessons" style="width:auto">पाठ</button>
       <button type="button" class="ghost" id="ln-glossary" style="width:auto">शब्दकोश</button>
       <button type="button" class="ghost" id="ln-quiz" style="width:auto">मिश्रित प्रश्नोत्तरी</button>
-    </div>
+      <input id="ln-aitopic" placeholder="AI प्रश्नोत्तरी का विषय (जैसे: साढ़ेसाती)" style="max-width:260px"><button type="button" class="ghost" id="ln-aiquiz" style="width:auto">AI से 5 प्रश्न</button>
+    </div><div id="ln-aiout"></div>
     <div id="lnbody" style="margin-top:10px"></div>
   </div>
   </section>
@@ -1413,7 +1415,7 @@ $('mf').addEventListener('submit', async e => {
       return `<div class="card" style="margin:0;flex:1 1 300px"><b>${label}: ${esc(m[role + '_name'] || label)}</b><div class="muted" style="font-size:.85rem">लग्न ${esc(ch.lagna.sign_name_hi)} ${esc(ch.lagna.dms)} · चंद्र ${esc(moon.sign_name_hi)}, ${esc(moon.nakshatra_hi)} पाद ${moon.pada}</div><svg id="m_${role}" viewBox="-4 -4 408 408" width="100%"></svg></div>`; };
     const chartsHtml = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin:10px 0">${chartBox('boy', 'वर')}${chartBox('girl', 'वधू')}</div>`;
     $('mout').innerHTML = `<p style="font-size:1.1rem;margin:12px 0 4px"><b>कुल: ${m.total} / 36</b> — ${esc(m.band_hi)}</p>${chartsHtml}
-      <div class="actions"><button type="button" id="mrep">मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button></div>
+      <div class="actions"><button type="button" id="mrep">मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="maisum">AI सार</button></div><div id="maisumout"></div>
       <div class="muted" style="font-size:.85rem">वर: ${esc(m.groom.moon_sign)} राशि, ${esc(m.groom.nakshatra_hi)} पाद ${m.groom.pada} · वधू: ${esc(m.bride.moon_sign)} राशि, ${esc(m.bride.nakshatra_hi)} पाद ${m.bride.pada}</div>
       <table style="margin-top:8px"><tr><th>कूट</th><th>अंक</th><th>कारण</th><th>भरोसा</th></tr>${rows}</table>
       ${dosh}
@@ -1421,6 +1423,7 @@ $('mf').addEventListener('submit', async e => {
       <div class="banner">यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, भकूट-नाड़ी परिहार की प्रचलित शर्तें जाँची जाती हैं (ड्राफ़्ट)। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।</div>`;
     for (const role of ['boy', 'girl']) { const ch = m[role + '_chart']; if (!ch) continue; const pm = Object.fromEntries(ch.planets.map(p => [p.name, p]));
       drawChart($('m_' + role), ch.houses.map(h => ({sign: h.sign, planets: h.planets.map(n => ({name: n, short: pm[n].short_hi, retro: pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms}`}))})), 'match'); }
+    $('maisum').onclick = () => window.aiSummary('match', {boy: personBody('b'), girl: personBody('g')}, 'maisumout');
     $('mrep').onclick = async () => {
       try { const r = await apiFetch('/v1/match/report', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({boy: personBody('b'), girl: personBody('g'), lang: window.getLang ? window.getLang() : 'hi', chart_style: window.chartStyle})});
         const html = await r.text(); if (!r.ok) throw new Error('रिपोर्ट नहीं बनी'); const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close(); }
@@ -1689,8 +1692,10 @@ $('repbtn').addEventListener('click', async () => {
       const d = await post('/v1/consult/get', {id, phone: $('cs_myphone').value.trim()});
       $('cs_thread').innerHTML = `<div class="card" style="margin:0"><b>#${esc(d.id)}</b> — ${esc(d.astrologer ? (d.astrologer.name_hi || d.astrologer.name) : '')} · <span>${esc(modes[d.mode]?.hi || d.mode)}</span> · <span class="chip">${esc(d.status)}</span>
         <div style="display:flex;flex-direction:column;gap:6px;margin:8px 0">${d.messages.map(m => `<div style="max-width:85%;padding:6px 10px;border-radius:10px;white-space:pre-wrap;${m.sender === 'seeker' ? 'align-self:flex-end;background:color-mix(in srgb,var(--accent) 14%,transparent)' : 'align-self:flex-start;background:color-mix(in srgb,var(--line) 30%,transparent)'}">${esc(m.text)}<div class="muted" style="font-size:.7rem">${esc(m.at.slice(0, 16).replace('T', ' '))}</div></div>`).join('')}</div>
-        ${d.status !== 'closed' ? `<div style="display:flex;gap:8px"><input id="cs_reply" placeholder="संदेश…" style="flex:1"><button type="button" id="cs_replygo" style="width:auto">भेजिए</button><button type="button" class="ghost" id="cs_close" style="width:auto">बंद करें (रेटिंग ★5)</button></div>` : ''}</div>`;
-      const go = $('cs_replygo'); if (go) go.onclick = async () => { try { await post('/v1/consult/message', {id, phone: $('cs_myphone').value.trim(), sender: 'seeker', text: $('cs_reply').value}); thread(id); } catch (e) { $('cs_thread').insertAdjacentHTML('beforeend', `<div class="err">${esc(e.message)}</div>`); } };
+        ${d.role === 'astrologer' ? `<div class="muted" style="font-size:.85rem"><span>आप ज्योतिषी के रूप में देख रहे हैं</span> · ${esc(d.phone)}${d.birth ? ` · <span>जन्म</span> ${esc(d.birth.date)} ${esc(d.birth.time || '')}` : ''}</div>` : ''}
+        ${d.status !== 'closed' ? `<div style="display:flex;gap:8px;flex-wrap:wrap"><textarea id="cs_reply" placeholder="संदेश…" rows="2" style="flex:1 1 240px"></textarea><button type="button" id="cs_replygo" style="width:auto">भेजिए</button>${d.role === 'astrologer' ? `<button type="button" class="ghost" id="cs_draft" style="width:auto">AI मसौदा</button>` : `<button type="button" class="ghost" id="cs_close" style="width:auto">बंद करें (रेटिंग ★5)</button>`}</div>` : ''}</div>`;
+      const go = $('cs_replygo'); if (go) go.onclick = async () => { try { await post('/v1/consult/message', {id, phone: $('cs_myphone').value.trim(), sender: d.role === 'astrologer' ? 'astrologer' : 'seeker', text: $('cs_reply').value}); thread(id); } catch (e) { $('cs_thread').insertAdjacentHTML('beforeend', `<div class="err">${esc(e.message)}</div>`); } };
+      const dr = $('cs_draft'); if (dr) dr.onclick = async () => { dr.disabled = true; dr.textContent = 'बन रहा है…'; try { const x = await post('/v1/consult/draft', {id, phone: $('cs_myphone').value.trim()}); $('cs_reply').value = x.draft; } catch (e) { $('cs_thread').insertAdjacentHTML('beforeend', `<div class="err">${esc(e.message)}</div>`); } finally { dr.disabled = false; dr.textContent = 'AI मसौदा'; } };
       const cl = $('cs_close'); if (cl) cl.onclick = async () => { try { await post('/v1/consult/close', {id, phone: $('cs_myphone').value.trim(), rating: 5}); thread(id); $('cs_mine').click(); } catch (e) {} };
     } catch (e) { $('cs_thread').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
   };
@@ -1706,6 +1711,19 @@ $('repbtn').addEventListener('click', async () => {
   const q = new URLSearchParams(location.search).get('consult');
   load().then(() => { if (q) { showTab('t-consult'); if ($('cs_myphone').value) thread(q); } });
 })();
+
+// ---- AI summaries (chart / match / varshaphal) — plain-language digest of the app's own computed facts
+window.aiSummary = async function (kind, body, target) {
+  const el = typeof target === 'string' ? $(target) : target; el.innerHTML = '<div class="muted" style="margin-top:8px"><span>AI सार बन रहा है…</span></div>';
+  try {
+    const r = await apiFetch('/v1/ai/summary', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({kind, body, lang: window.getLang ? window.getLang() : 'hi', client_id: (() => { try { return localStorage.getItem('kundali_client') || 'anon'; } catch (e) { return 'anon'; } })()})});
+    const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+    if (!d.summary) { el.innerHTML = `<div class="banner" style="margin-top:8px"><span>${d.mode === 'quota' ? 'आज की AI सीमा पूरी हो गई।' : 'AI सेट नहीं है — सर्वर पर provider key जोड़ने के बाद यह बटन काम करेगा।'}</span></div>`; return; }
+    el.innerHTML = `<div class="banner" style="margin-top:8px;white-space:pre-wrap"><b>${esc(d.title)}</b>\n${esc(d.summary)}<div class="muted" style="font-size:.75rem;margin-top:4px">🤖 ${esc(d.provider)} · ${esc(d.disclaimer || '')}</div></div>`;
+  } catch (e) { el.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+};
+$('vaisum').onclick = () => { if (window._lastVarshaBody) window.aiSummary('varshaphal', window._lastVarshaBody, 'vaisumout'); };
+$('aisumbtn').onclick = () => { if (!window.lastBody) return; let box = $('aisumout'); if (!box) { box = document.createElement('div'); box.id = 'aisumout'; $('summary').insertAdjacentElement('afterend', box); } window.aiSummary('chart', window.lastBody, box); };
 
 // ---- AI chat (multi-provider on the server; retrieval fallback when no provider)
 (function aiChatUI() {
@@ -1818,6 +1836,21 @@ loadTodayPanchang();
   // ---- notes
   function renderNotes() { $('cnlist').innerHTML = [...D.notes.map(n => ({d: n.date, t: n.text})), ...D.holidays.map(h => ({d: h.date, t: null}))].sort((a, b) => a.d.localeCompare(b.d)).map(x => `<span class="chip" style="margin:2px">${x.d}${x.t ? ': ' + esc(x.t) : ' (छुट्टी)'} <a href="#" data-del="${x.d}|${x.t === null ? 'h' : 'n'}" style="text-decoration:none">✕</a></span>`).join('') || '<span class="muted">कोई नहीं</span>';
     $('cnlist').querySelectorAll('[data-del]').forEach(a => a.onclick = ev => { ev.preventDefault(); const [d, k] = a.dataset.del.split('|'); if (k === 'h') D.holidays = D.holidays.filter(h => h.date !== d); else D.notes = D.notes.filter(n => n.date !== d); renderNotes(); preview(); }); }
+  $('caitext').onclick = async () => {
+    $('cerr').textContent = ''; $('caitext').disabled = true; $('caitext').textContent = 'बन रहा है…';
+    try {
+      const b = await body();
+      const fr = await apiFetch(`/v1/festivals?year=${b.year}&lat=${b.lat}&lon=${b.lon}&tz=${encodeURIComponent(b.tz)}`); const fd = await fr.json();
+      const fests = {}; (fd.events || []).filter(e => e.kind === 'festival').forEach(e => { const m = +e.date.slice(5, 7); (fests[m] = fests[m] || []).push(e.name_hi); });
+      const r = await apiFetch('/v1/ai/calendar_text', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({lang: b.lang === 'en' ? 'en' : 'hi', business: D.business?.name || '', festivals: Object.fromEntries(Object.entries(fests).map(([m, v]) => [m, v.slice(0, 4)])), client_id: (() => { try { return localStorage.getItem('kundali_client') || 'anon'; } catch (e) { return 'anon'; } })()})});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      if (d.tagline && !$('cbiztag').value) $('cbiztag').value = d.tagline;
+      D.month_lines = Object.fromEntries(Object.entries(d.months || {}).map(([m, v]) => [m, v.line]));
+      Object.entries(d.months || {}).forEach(([m, v]) => { if (v.note) { const dt = `${$('cyear').value}-${String(m).padStart(2, '0')}-01`; if (!D.notes.some(n => n.date === dt)) D.notes.push({date: dt, text: v.note}); } });
+      renderNotes(); preview();
+    } catch (e) { $('cerr').textContent = 'त्रुटि: ' + e.message; }
+    finally { $('caitext').disabled = false; $('caitext').textContent = 'AI से माह-संदेश व टैगलाइन'; }
+  };
   $('cnadd').onclick = () => { const d = $('cndate').value, t = $('cntext').value.trim(); if (!d) return; if (t) { D.notes = D.notes.filter(n => n.date !== d); D.notes.push({date: d, text: t}); } else if (!D.holidays.some(h => h.date === d)) D.holidays.push({date: d}); $('cntext').value = ''; renderNotes(); preview(); };
   // ---- fields ↔ D
   const F = {cbg: 'background', cfontp: 'font', csize: 'size', cfont: 'font_scale', cheropos: 'hero_position', cplace: 'place', ccovertitle: 'cover_title', ccoversub: 'cover_subtitle'};
@@ -1947,6 +1980,15 @@ loadTodayPanchang();
   $('ln-lessons').onclick = () => { view = 'lessons'; render(); };
   $('ln-glossary').onclick = () => { view = 'glossary'; render(); };
   $('ln-quiz').onclick = () => { view = 'quiz'; render(); };
+  $('ln-aiquiz').onclick = async () => {
+    const topic = $('ln-aitopic').value.trim(); if (!topic) return; $('ln-aiout').innerHTML = '<div class="muted"><span>प्रश्न बन रहे हैं…</span></div>';
+    try {
+      const r = await apiFetch('/v1/ai/quiz', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topic, lang: window.getLang ? window.getLang() : 'hi', client_id: (() => { try { return localStorage.getItem('kundali_client') || 'anon'; } catch (e) { return 'anon'; } })()})});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      $('ln-aiout').innerHTML = `<div class="card" style="margin-top:8px"><b>${esc(d.topic)}</b> <span class="muted" style="font-size:.8rem">🤖 ${esc(d.provider)}</span>` + d.questions.map((q, i) => `<div style="margin:10px 0"><b>${i + 1}. ${esc(q.q)}</b>${q.options.map((o, j) => `<div><label><input type="radio" name="aq${i}" value="${j}"> ${esc(o)}</label></div>`).join('')}<div class="muted" data-ans="${i}" hidden>${esc(q.why)} <code>${esc(q.source)}</code></div></div>`).join('') + `<button type="button" class="ghost" id="ln-aicheck" style="width:auto">जाँचिए</button><div id="ln-aiscore"></div></div>`;
+      $('ln-aicheck').onclick = () => { let ok = 0; d.questions.forEach((q, i) => { const v = document.querySelector(`input[name=aq${i}]:checked`); const el = document.querySelector(`[data-ans="${i}"]`); el.hidden = false; const right = v && +v.value === q.answer; if (right) ok++; el.innerHTML = (right ? '✅ ' : `❌ <span>सही</span>: ${esc(q.options[q.answer])} — `) + el.innerHTML; }); $('ln-aiscore').innerHTML = `<b>${ok}/${d.questions.length}</b>`; };
+    } catch (e) { $('ln-aiout').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  };
   const prev = window.rerenderLearn; window.rerenderLearn = () => { if (prev) prev(); render(); };
   render();
 })();
@@ -2035,6 +2077,7 @@ $('vgo2').addEventListener('click', async () => {
   try {
     const r = await apiFetch('/v1/varshaphal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, year:+$('vyear').value})});
     const v = await r.json(); if (!r.ok) throw new Error(Array.isArray(v.detail) ? 'वर्ष जाँचिए' : (v.detail || 'त्रुटि'));
+    window._lastVarshaBody = {...window.lastBody, year: +$('vyear').value};
     const hi = {}; chart.planets.forEach(p => hi[p.name] = p.name_hi);
     $('vout2').innerHTML = `<p><b>${v.year}</b> (आयु ${v.age}): सूर्य-वापसी <b>${esc(v.return_local)}</b> (${esc(v.tz)}) · वर्ष-लग्न <b>${esc(v.lagna.sign_name_hi)}</b> ${esc(v.lagna.dms)}</p>
       <p>मुन्था: <b>${esc(v.muntha.sign_hi)}</b> राशि, वर्ष-कुंडली के भाव <b>${v.muntha.house}</b> में। <span class="muted">${esc(v.muntha.rule_hi)}</span></p>
@@ -2357,21 +2400,34 @@ async function openReport(path, body) {
     document.querySelectorAll('[placeholder],[title]').forEach(el => { const m = attrOrig.get(el); if (m) for (const a in m) el.setAttribute(a, m[a]); });
     mo.takeRecords(); busy = false;
   }
+  const packs = {};                                   // one dictionary per language: data/i18n_<lang>.json (en built, others from tools/ai_translate.py)
   async function set(l) {
     lang = l; try { localStorage.setItem('kundali_lang', l); } catch (e) {}
-    document.documentElement.lang = l; $('langbtn').textContent = l === 'en' ? 'हिन्दी' : 'English';
-    if (l === 'en') {
-      if (!D) { try { D = await (await fetch(API + '/data/i18n_en.json')).json(); build(); } catch (e) { lang = 'hi'; return; } }
+    document.documentElement.lang = l; $('langbtn').textContent = l === 'hi' ? 'English' : 'हिन्दी';
+    const sel = $('langsel'); if (sel && sel.value !== l) sel.value = l;
+    if (l !== 'hi') {
+      if (!packs[l]) { try { const d = await (await fetch(API + `/data/i18n_${l}.json`)).json(); d.phrases = d.phrases || {}; d.exact = d.exact || {}; packs[l] = d; } catch (e) { lang = 'hi'; $('langbtn').textContent = 'English'; return; } }
+      if (D !== packs[l]) { restore(); D = packs[l]; build(); }
       apply(document.body);
     } else restore();
     if (window.rerenderLearn) window.rerenderLearn();      // the learn panel is written directly in the chosen language
     if (window.renderAskSuggestions) window.renderAskSuggestions((typeof chart !== "undefined" && chart) || null);
   }
-  const mo = new MutationObserver(muts => { if (lang !== 'en' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
+  const mo = new MutationObserver(muts => { if (lang === 'hi' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
   mo.observe(document.body, {childList: true, subtree: true, characterData: true});
-  $('langbtn').onclick = () => { set(lang === 'en' ? 'hi' : 'en'); if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); };
-  if (lang === 'en') set('en');
+  const after = () => { if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); };
+  $('langbtn').onclick = () => { set(lang === 'hi' ? 'en' : 'hi'); after(); };
+  // more languages when translation packs exist (data/i18n_<code>.json)
+  apiFetch('/v1/i18n/languages').then(r => r.json()).then(d => {
+    const list = (d.languages || []).filter(x => x.code !== 'en');
+    if (!list.length) return;
+    const sel = document.createElement('select'); sel.id = 'langsel'; sel.style.cssText = 'width:auto;margin-left:6px;padding:4px 6px;font-size:.85rem';
+    sel.innerHTML = `<option value="hi">हिन्दी</option><option value="en">English</option>` + list.map(x => `<option value="${x.code}">${x.name}</option>`).join('');
+    sel.value = lang; sel.onchange = () => { set(sel.value); after(); };
+    $('langbtn').insertAdjacentElement('afterend', sel);
+  }).catch(() => {});
+  if (lang !== 'hi') set(lang);
 })();
 
 // ?auto=1 runs the form once on load (handy for demos and screenshots)

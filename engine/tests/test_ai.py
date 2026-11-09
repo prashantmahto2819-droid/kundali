@@ -97,3 +97,49 @@ def test_palm_scan_parses_choices_and_reads(env, tmp_path):
     assert r["reading"]["traits"] and r["notes"] == ["clear life line", "square palm"]
     sent = _Fake.calls[-1][2]
     assert sent["model"] == "fake-vision" and isinstance(sent["messages"][-1]["content"], list) and sent["messages"][-1]["content"][1]["image_url"]["url"].startswith("data:image/jpeg;base64,")
+
+
+def test_summary_quiz_calendar_draft_with_fake(env, tmp_path, monkeypatch):
+    from jyotish import access, consult, notify
+    store = access.Store(str(tmp_path / "c.db"))
+    monkeypatch.setattr(access, "default_store", lambda: store)
+    body = {"date": "1990-05-15", "time": "10:30", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2}
+    _Fake.reply = "• लग्न कर्क है।\n• यह परंपरागत मार्गदर्शन है, भविष्यवाणी नहीं।"
+    s = ai.summary({"kind": "chart", "body": body, "lang": "hi"}, store=store, who="s1")
+    assert s["mode"] == "ai" and "लग्न" in s["facts"] and "चल रही दशा" in s["facts"] and s["title"] == "कुंडली का सार"
+    m = ai.summary({"kind": "match", "body": {"boy": body, "girl": {"date": "1992-08-20", "time": "06:15", "tz": "Asia/Kolkata", "lat": 19.07, "lon": 72.87}}, "lang": "en"}, store=store, who="s1")
+    assert m["mode"] == "ai" and "Ashtakoota" in m["facts"]
+    v = ai.summary({"kind": "varshaphal", "body": {**body, "year": 2026}}, store=store, who="s1")
+    assert v["mode"] == "ai" and "वर्ष-लग्न" in v["facts"]
+    _Fake.reply = json.dumps({"questions": [{"q": "साढ़ेसाती में शनि चंद्र से किन भावों में होता है?", "options": ["12,1,2", "6,7,8", "3,4,5", "9,10,11"], "answer": 0, "why": "…", "source": "glossary/sade_sati"}] * 5}, ensure_ascii=False)
+    q = ai.quiz({"topic": "साढ़ेसाती", "lang": "hi"}, store=store, who="q1")
+    assert len(q["questions"]) == 5 and q["questions"][0]["answer"] == 0 and q["sources"]
+    _Fake.reply = json.dumps({"tagline": "शुभकामनाएँ", "months": {"1": {"line": "नव वर्ष मंगलमय", "note": "मकर संक्रांति"}}}, ensure_ascii=False)
+    c = ai.calendar_text({"business": "श्री ज्योतिष", "festivals": {"1": ["मकर संक्रांति"]}}, store=store, who="c1")
+    assert c["tagline"] == "शुभकामनाएँ" and c["months"]["1"]["line"] == "नव वर्ष मंगलमय"
+    # consult draft through the request record
+    consult._store = None
+    notify._subs = notify.Subs(store)
+    monkeypatch.setattr(notify, "send_whatsapp", lambda p, t: {"ok": True, "detail": ""})
+    a = consult.upsert_astrologer({"id": "g1", "name": "Guru", "phone": "9000000009"})
+    r = consult.create_request({"astrologer_id": "g1", "phone": "9876543210", "mode": "chat", "question": "नौकरी कब बदलेगी?", "birth": body})
+    req = consult.get_request(r["id"], phone="9000000009")
+    assert req["role"] == "astrologer" and req["phone"] == "919876543210"
+    _Fake.reply = "आदरणीय, आपकी कुंडली में…"
+    d = ai.consult_draft(req, store=store, who="a1")
+    assert d["draft"].startswith("आदरणीय") and "लग्न" in d["facts"]
+    _Fake.reply = json.dumps({"rules": [{"id": "sun_in_10_test", "planet": "Sun", "house": 10, "text_hi": "अधिकार की प्रवृत्ति", "text_en": "authority", "confidence": "high"}]}, ensure_ascii=False)
+    ex = ai.extract_rules("सूर्य दशम भावे राजमान्यः… " * 5, "test")
+    assert ex["count"] == 1 and ex["rules"][0]["review_status"] == "draft"
+    consult._store = None; notify._subs = None
+
+
+def test_embeddings_hybrid_rank(env, monkeypatch):
+    from jyotish import ask
+    import json as _json
+    vecs = {"rules/saturn_in_10": [1.0, 0.0], "rules/saturn_in_11": [0.0, 1.0]}
+    monkeypatch.setattr(ask, "_EMB", {"loaded": True, "vectors": vecs, "model": "fake"})
+    monkeypatch.setattr(llm, "embed", lambda texts: [[1.0, 0.0]])
+    passages = [p for p in ask.corpus() if p["id"] in vecs and p["lang"] == "hi"]
+    out = ask.rank("शनि का फल", passages, 2)
+    assert out[0]["id"] == "rules/saturn_in_10" and out[0].get("semantic") is True

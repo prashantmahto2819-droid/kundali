@@ -236,6 +236,14 @@ def compose_daily(sub: dict, d: date) -> str:
                 L.append(personal)
         except Exception:
             pass
+        if os.environ.get("AI_WA_SUMMARY", "0") in ("1", "true", "yes"):
+            try:
+                line = compose_ai_line(sub, d)
+                if line:
+                    L.append("")
+                    L.append(("💡 *आज के लिए एक बात*: " if hi else "💡 *One thought for today*: ") + line)
+            except Exception:
+                pass
     if sub.get("vrat_alert", 1):
         alert = compose_alert(sub, d + timedelta(days=1), prefix=True)
         if alert:
@@ -245,6 +253,24 @@ def compose_daily(sub: dict, d: date) -> str:
     L.append("_" + ("पंचांग: लाहिड़ी अयनांश, सूर्योदय-कालीन तिथि; राशिफल प्रवृत्ति-संकेत है। बंद करने के लिए STOP लिखें।" if hi else
                     "Panchang: Lahiri ayanamsa, tithi at sunrise; the rashifal is a tendency pointer. Reply STOP to unsubscribe.") + "_")
     return "\n".join(L)
+
+
+def compose_ai_line(sub: dict, d: date) -> str:
+    """One warm, non-predictive sentence for the day from the subscriber's rashifal + alerts (AI_WA_SUMMARY=1; costs one model call)."""
+    from . import llm, rashifal as rf
+    if not llm.available() or sub.get("moon_sign") is None:
+        return ""
+    hi = sub.get("lang", "hi") != "en"
+    r = rf.rashifal(d.isoformat(), sub["tz"], "daily")["signs"][int(sub["moon_sign"])]
+    facts = (r["summary_hi"] if hi else r["summary_en"]) + " " + " ".join((p["text_hi"] if hi else p["text_en"]) for p in r["planets"][:4])
+    try:
+        alerts_txt = compose_personal_alerts(sub, d)
+    except Exception:
+        alerts_txt = ""
+    system = ("एक ज्योतिष ऐप के WhatsApp संदेश के लिए सिर्फ़ एक वाक्य (≤ 25 शब्द) हिंदी में लिखिए: आज की प्रवृत्ति से एक व्यावहारिक, सकारात्मक सुझाव। कोई भविष्यवाणी, कोई डर, कोई ग्रह-नाम दोहराव नहीं। केवल वाक्य।" if hi else
+              "Write ONE sentence (≤ 25 words) in English for an astrology app's WhatsApp message: a practical, positive suggestion drawn from today's tendencies. No prediction, no fear, no planet names. Only the sentence.")
+    res = llm.complete(system, [{"role": "user", "content": facts + "\n" + alerts_txt}], max_tokens=80)
+    return res["text"].strip().strip('"')
 
 
 def compose_personal_alerts(sub: dict, d: date) -> str:

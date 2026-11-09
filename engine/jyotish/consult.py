@@ -175,12 +175,20 @@ def get_request(rid: str, phone: str | None = None, admin: bool = False) -> dict
     if not r:
         raise ValueError("request not found")
     r = r[0]
-    if not admin and phone and notify.normalize_phone(phone) != r["phone"]:
-        raise ValueError("this request belongs to another number")
-    msgs = _rows("SELECT sender, text, at FROM consult_messages WHERE request_id=? ORDER BY id", (rid,))
     a = _rows("SELECT * FROM astrologers WHERE id=?", (r["astrologer_id"],))
+    role = "admin" if admin else None
+    if not admin and phone:
+        ph = notify.normalize_phone(phone)
+        if ph == r["phone"]:
+            role = "seeker"
+        elif a and a[0].get("phone") == ph:
+            role = "astrologer"
+        else:
+            raise ValueError("this request belongs to another number")
+    msgs = _rows("SELECT sender, text, at FROM consult_messages WHERE request_id=? ORDER BY id", (rid,))
     out = {k: r[k] for k in ("id", "astrologer_id", "mode", "status", "price", "paid", "rating", "created", "updated", "lang", "name")}
-    out["phone"] = r["phone"] if admin else r["phone"][:4] + "…" + r["phone"][-2:]
+    out["role"] = role
+    out["phone"] = r["phone"] if role in ("admin", "astrologer") else r["phone"][:4] + "…" + r["phone"][-2:]
     out["birth"] = json.loads(r["birth"]) if r["birth"] else None
     out["messages"] = msgs
     out["astrologer"] = _pub(a[0]) if a else None

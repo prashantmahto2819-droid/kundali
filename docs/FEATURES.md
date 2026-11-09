@@ -26,6 +26,9 @@ Ashtakoota 36 points with nadi/bhakoot/gana parihara, Mangal dosha with cancella
 ## AI (optional, multi-provider)
 Chat grounded in the asker's chart, the rule/glossary corpus and today's panchang; providers Gemini / Groq / OpenRouter (DeepSeek etc.) / Ollama / DeepSeek / OpenAI / Anthropic / any OpenAI-compatible, tried in order with fallback; per-user daily quota; retrieval answer when no provider. Palm photo → the model fills the 16-feature checklist, the app interprets. The WhatsApp bot answers free-text questions through the same chain.
 
+## AI tools (on the same provider chain)
+AI summary of a chart / match / varshaphal (from computed facts only); calendar-studio month lines, festival notes and tagline; AI quiz on any topic grounded in the glossary/rules; astrologer's first-draft reply in a consultation thread; admin rule extraction from classical text to draft JSON; one daily AI line in the WhatsApp message (opt-in); semantic (embedding) search blended into keyword ranking when `data/embeddings.json` exists; UI translation packs via `tools/ai_translate.py` with a language dropdown.
+
 ## Consultation with astrologers
 Astrologer profiles (admin), request → WhatsApp ping → in-app thread (+ WhatsApp copy of replies) → close & rate; wallet ledger with manual UPI top-ups; free by default (`KUNDALI_PAID`).
 

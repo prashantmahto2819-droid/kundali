@@ -398,6 +398,11 @@ def panchang_eclipse(request: Request):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/i18n/languages")
+def i18n_languages():
+    return handlers.i18n_languages()
+
+
 @app.get("/v1/consult/astrologers")
 def consult_astrologers():
     return handlers.consult_astrologers_from_query()
@@ -445,6 +450,31 @@ def consult_admin(req: NotifyRequest, request: Request):
     return _consult_route(handlers.consult_admin_from_payload, req, request)
 
 
+@app.post("/v1/ai/summary")
+def ai_summary(req: NotifyRequest):
+    return _consult_route(handlers.ai_summary_from_payload, req)
+
+
+@app.post("/v1/ai/calendar_text")
+def ai_calendar_text(req: NotifyRequest):
+    return _consult_route(handlers.ai_calendar_text_from_payload, req)
+
+
+@app.post("/v1/ai/quiz")
+def ai_quiz(req: NotifyRequest):
+    return _consult_route(handlers.ai_quiz_from_payload, req)
+
+
+@app.post("/v1/consult/draft")
+def consult_draft(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.consult_draft_from_payload, req, request)
+
+
+@app.post("/v1/ai/extract_rules")
+def ai_extract_rules(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.ai_extract_rules_from_payload, req, request)
+
+
 @app.post("/v1/notify/webhook")
 async def notify_webhook(request: Request):
     try:
@@ -458,7 +488,7 @@ async def _no_stale_shell(request: Request, call_next):
     """HTML, the service worker and i18n must never be served stale (browsers and Cloudflare otherwise keep the old app shell)."""
     resp = await call_next(request)
     p = request.url.path
-    if p in ("/", "/index.html", "/sw.js", "/config.js", "/data/i18n_en.json") or p.endswith(".html"):
+    if p in ("/", "/index.html", "/sw.js", "/config.js") or p.endswith(".html") or (p.startswith("/data/i18n_") and p.endswith(".json")):
         resp.headers["Cache-Control"] = "no-cache, must-revalidate"
     return resp
 

@@ -52,7 +52,15 @@ DISCLAIMER = {"hi": "यह परंपरागत मार्गदर्श
 _ORD = re.compile(r"(\d+)(?:st|nd|rd|th|वाँ|वें|वीं|वा)(?![A-Za-z0-9\u0900-\u097f])", re.I)
 
 
+_WORD_NUM = {"पहले": "1", "पहला": "1", "प्रथम": "1", "दूसरे": "2", "द्वितीय": "2", "तीसरे": "3", "तृतीय": "3", "चौथे": "4", "चतुर्थ": "4", "पाँचवें": "5", "पांचवें": "5", "पंचम": "5",
+             "छठे": "6", "छठवें": "6", "षष्ठ": "6", "सातवें": "7", "सप्तम": "7", "आठवें": "8", "अष्टम": "8", "नौवें": "9", "नवम": "9", "दसवें": "10", "दशम": "10",
+             "ग्यारहवें": "11", "एकादश": "11", "बारहवें": "12", "द्वादश": "12", "first": "1", "second": "2", "third": "3", "fourth": "4", "fifth": "5", "sixth": "6",
+             "seventh": "7", "eighth": "8", "ninth": "9", "tenth": "10", "eleventh": "11", "twelfth": "12"}
+_WORD_NUM_RE = re.compile("|".join(sorted(map(re.escape, _WORD_NUM), key=len, reverse=True)))
+
+
 def tokens(text: str) -> list[str]:
+    text = _WORD_NUM_RE.sub(lambda m: " " + _WORD_NUM[m.group(0)] + " ", text)   # 'दसवें', 'tenth' -> '10'
     text = _ORD.sub(r"\1 ", text)                      # '10th', '10वें' -> '10'
     return [t for t in (w.lower() for w in _TOKEN.findall(text)) if t not in STOP and (len(t) > 1 or t.isdigit())]
 
@@ -204,7 +212,55 @@ def chart_passages(chart: dict) -> list[dict]:
 
 
 # ---- BM25 -----------------------------------------------------------------------------
+_EMB = {"loaded": False, "vectors": {}, "model": None}
+
+
+def embeddings_index() -> dict:
+    """Vectors for corpus passages from data/embeddings.json (built by tools/build_embeddings.py); empty when absent."""
+    if not _EMB["loaded"]:
+        _EMB["loaded"] = True
+        f = DATA / "embeddings.json"
+        if f.exists():
+            try:
+                d = json.loads(f.read_text(encoding="utf-8"))
+                _EMB["vectors"] = d.get("vectors", {}); _EMB["model"] = d.get("model")
+            except ValueError:
+                pass
+    return _EMB
+
+
 def rank(query: str, passages: list[dict], k: int = 5, boost: dict | None = None) -> list[dict]:
+    """Keyword (BM25-style) ranking; when an embeddings index exists and a provider is configured, blends in semantic similarity."""
+    kw = rank_keyword(query, passages, max(k * 3, 12), boost)
+    idx = embeddings_index()
+    if idx["vectors"]:
+        try:
+            from . import llm
+            qv = llm.embed([query])[0]
+            sem = []
+            for p in passages:
+                v = idx["vectors"].get(p["id"] if p["lang"] == "hi" or not p["id"].endswith("_en") else p["id"])
+                v = v or idx["vectors"].get(p["id"] + ("_en" if p["lang"] == "en" else ""))
+                if v is not None:
+                    sem.append((llm.cosine(qv, v), p))
+            if sem:
+                sem.sort(key=lambda x: -x[0])
+                kmax = kw[0]["score"] if kw else 1.0
+                merged = {}
+                for h in kw:
+                    merged[h["id"] + h["lang"]] = {**h, "score": 0.5 * h["score"] / (kmax or 1.0)}
+                for sc, p in sem[:k * 3]:
+                    key = p["id"] + p["lang"]
+                    w = (boost or {}).get(p["id"].split("/")[0], 1.0)
+                    merged.setdefault(key, {**p, "score": 0.0})["score"] += 0.5 * max(0.0, sc) * w
+                out = sorted(merged.values(), key=lambda x: -x["score"])[:k]
+                return [{**p, "score": round(p["score"], 3), "semantic": True} for p in out]
+        except Exception:
+            pass
+    return kw[:k]
+
+
+def rank_keyword(query: str, passages: list[dict], k: int = 5, boost: dict | None = None) -> list[dict]:
     q = tokens(query)
     if not q or not passages:
         return []

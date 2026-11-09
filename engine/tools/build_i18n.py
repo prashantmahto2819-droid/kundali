@@ -426,6 +426,13 @@ _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v 
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
 
+# AI tools (summary, calendar text, quiz, consult draft), language packs
+for hi, en in [("AI सार", "AI summary"), ("AI सार बन रहा है…", "Preparing the AI summary…"), ("आज की AI सीमा पूरी हो गई।", "Today's AI quota is used up."),
+               ("AI सेट नहीं है — सर्वर पर provider key जोड़ने के बाद यह बटन काम करेगा।", "AI is not configured — this button works once a provider key is added on the server."),
+               ("AI से माह-संदेश व टैगलाइन", "AI month lines & tagline"), ("बन रहा है…", "working…"), ("AI प्रश्नोत्तरी का विषय (जैसे: साढ़ेसाती)", "AI quiz topic (e.g. Sade Sati)"), ("AI से 5 प्रश्न", "5 questions from AI"),
+               ("प्रश्न बन रहे हैं…", "Making questions…"), ("सही", "correct"), ("AI मसौदा", "AI draft"), ("आप ज्योतिषी के रूप में देख रहे हैं", "You are viewing as the astrologer"), ("जन्म", "birth")]:
+    put(hi, en)
+
 # AI chat / palm scan, consultation, nadi, outer planets, eclipse, regional
 for hi, en in [("AI से बातचीत", "Chat with AI"), ("जाँच रहा हूँ…", "checking…"), ("AI चालू", "AI on"), ("AI सेट नहीं — उत्तर ऐप की सामग्री से", "AI not configured — answers from the app's material"), ("vision AI सेट नहीं", "vision AI not configured"),
                ("लगातार सवाल-जवाब; उत्तर आपकी कुंडली (बनाई हो तो), ऐप के नियम-ग्रंथ और आज के पंचांग से बँधे रहते हैं। यह प्रवृत्ति-मार्गदर्शन है, भविष्यवाणी नहीं।", "A running conversation; answers stay grounded in your chart (if made), the app's rule texts and today's panchang. Tendency guidance, not prediction."),

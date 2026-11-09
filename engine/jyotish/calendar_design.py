@@ -115,12 +115,15 @@ def _bits(d: dict, hi: bool, sv) -> dict:
     return {"tithi": tithi, "t_end": t_end, "nak": nak, "n_end": n_end, "extra": extra}
 
 
-def _sub(m: dict, hi: bool, regional: bool = False) -> str:
+def _sub(m: dict, hi: bool, regional: bool = False, design: dict | None = None) -> str:
+    line = ((design or {}).get("month_lines") or {}).get(str(m.get("month")))
+    prefix = f'<span class="mline">{e(line)}</span> · ' if line else ""
     masas = sorted({d["masa_purnimanta_hi"] if hi else d["masa_purnimanta"] for d in m["days"]})
     amanta = sorted({d["masa_amanta_hi"] if hi else d["masa_amanta"] for d in m["days"]})
     samvats = sorted({d["vikram_samvat"] for d in m["days"]})
     out = (f"विक्रम संवत {'–'.join(map(str, samvats))} · पूर्णिमांत {' / '.join(masas)} · अमांत {' / '.join(amanta)}" if hi else
            f"Vikram samvat {'–'.join(map(str, samvats))} · Purnimanta {' / '.join(masas)} · Amanta {' / '.join(amanta)}")
+    out = prefix + out
     if regional:
         shaka = sorted({d["shaka_samvat"] for d in m["days"]}); guj = sorted({d["gujarati_samvat"] for d in m["days"]})
         ta = " / ".join(dict.fromkeys(d["tamil_month"] for d in m["days"])); bn = " / ".join(dict.fromkeys(d["bengali_month"] for d in m["days"])); ml = " / ".join(dict.fromkeys(d["malayalam_month"] for d in m["days"]))
@@ -214,14 +217,14 @@ def _boxes(m: dict, hi: bool, sv, design: dict, which=("festivals", "muhurta", "
 def tpl_classic(m, design, hi, sv) -> str:
     grid, fl = _grid(m, design, hi, sv)
     title = (f'<div class="title classic">{_logo(design)}<div class="mt"><span class="m">{_mname(m["month"], hi, design.get("bilingual", False))}</span> <span class="y">{m["year"]}</span></div>'
-             f'<div class="sub">{_sub(m, hi, sv("regional", False))}</div></div>')
+             f'<div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div>')
     return _page(design, f'{title}<div class="body">{grid}{_side_list(fl, design, hi, sv)}</div>{_foot(design, hi)}')
 
 
 def tpl_modern(m, design, hi, sv) -> str:
     grid, fl = _grid(m, design, hi, sv)
     title = (f'<div class="title modern">{_hero(design, m["month"])}<div class="overlay"><div class="num">{m["month"]:02d}</div><div><div class="m">{_mname(m["month"], hi, design.get("bilingual", False))}</div>'
-             f'<div class="y">{m["year"]}</div><div class="sub">{_sub(m, hi, sv("regional", False))}</div></div>{_logo(design)}</div></div>')
+             f'<div class="y">{m["year"]}</div><div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div>{_logo(design)}</div></div>')
     return _page(design, f'{title}<div class="body">{grid}{_side_list(fl, design, hi, sv)}</div>{_foot(design, hi)}')
 
 
@@ -255,7 +258,7 @@ def _list_rows(m, design, hi, sv, full: bool) -> str:
 
 def tpl_poster(m, design, hi, sv) -> str:
     head = (f'<div class="title poster">{_hero(design, m["month"], "hero")}<div class="overlay"><div><div class="m">{_mname(m["month"], hi, design.get("bilingual", False))} <span class="y">{m["year"]}</span></div>'
-            f'<div class="sub">{_sub(m, hi, sv("regional", False))}</div></div>{_logo(design)}</div></div>')
+            f'<div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div>{_logo(design)}</div></div>')
     th = ["दिन", "वार", "तिथि", "नक्षत्र", "सूर्योदय / अस्त", "पर्व / नोट"] if hi else ["Day", "Vara", "Tithi", "Nakshatra", "Sunrise / set", "Festival / note"]
     table = f'<table class="list"><thead><tr>{"".join(f"<th>{x}</th>" for x in th)}</tr></thead><tbody>{_list_rows(m, design, hi, sv, False)}</tbody></table>'
     return _page(design, f'{head}<div class="body col2">{table}</div>{_foot(design, hi)}')
@@ -263,7 +266,7 @@ def tpl_poster(m, design, hi, sv) -> str:
 
 def tpl_panchang(m, design, hi, sv) -> str:
     head = (f'<div class="title panchang"><div class="pl">{_logo(design)}</div><div class="pc"><div class="m">{_mname(m["month"], hi, design.get("bilingual", False))} <span class="y">{m["year"]}</span></div>'
-            f'<div class="sub">{_sub(m, hi, sv("regional", False))}</div></div><div class="pr">{e((design.get("business") or {}).get("name") or "")}<br><span class="legend">{e(design.get("place") or "")}</span></div></div>')
+            f'<div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div><div class="pr">{e((design.get("business") or {}).get("name") or "")}<br><span class="legend">{e(design.get("place") or "")}</span></div></div>')
     th = (["दिन", "वार", "तिथि", "नक्षत्र", "योग", "करण", "सूर्योदय / अस्त", "चंद्रोदय / अस्त", "राहु काल", "चंद्र राशि", "पर्व · विशेष"] if hi else
           ["Day", "Vara", "Tithi", "Nakshatra", "Yoga", "Karana", "Sunrise / set", "Moonrise / set", "Rahu kaal", "Moon sign", "Festival · special"])
     table = f'<table class="list full"><thead><tr>{"".join(f"<th>{x}</th>" for x in th)}</tr></thead><tbody>{_list_rows(m, design, hi, sv, True)}</tbody></table>'
@@ -279,7 +282,7 @@ def tpl_compact_pair(m1, m2, design, hi, sv) -> str:
         grid, fl = _grid(m, design, hi, sv, compact=True)
         fest = "".join(f'<li><b class="dt">{d}</b> {e(n)}</li>' for d, n, k in fl[:14])
         return (f'<div class="half"><div class="title compact"><div class="m">{_mname(m["month"], hi, design.get("bilingual", False))} <span class="y">{m["year"]}</span></div>'
-                f'<div class="sub">{_sub(m, hi, sv("regional", False))}</div></div>{grid}<ul class="minilist">{fest}</ul></div>')
+                f'<div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div>{grid}<ul class="minilist">{fest}</ul></div>')
     return _page(design, f'<div class="pair">{half(m1)}{half(m2)}</div>{_foot(design, hi)}')
 
 
@@ -289,7 +292,7 @@ def tpl_quarter(ms, design, hi, sv) -> str:
             return '<div class="third"></div>'
         grid, fl = _grid(m, design, hi, sv, compact=True)
         return (f'<div class="third"><div class="title compact"><div class="m">{_mname(m["month"], hi, design.get("bilingual", False))} <span class="y">{m["year"]}</span></div>'
-                f'<div class="sub">{_sub(m, hi, sv("regional", False))}</div></div>{grid}<ul class="minilist">{"".join(f"<li><b class=dt>{d}</b> {e(n)}</li>" for d, n, k in fl[:9])}</ul></div>')
+                f'<div class="sub">{_sub(m, hi, sv("regional", False), design)}</div></div>{grid}<ul class="minilist">{"".join(f"<li><b class=dt>{d}</b> {e(n)}</li>" for d, n, k in fl[:9])}</ul></div>')
     ms = list(ms) + [None] * (3 - len(ms))
     return _page(design, f'<div class="trio">{"".join(third(m) for m in ms)}</div>{_foot(design, hi)}')
 
