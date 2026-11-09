@@ -109,3 +109,16 @@ The only state on the server is the access database (orgs, API keys, usage, save
 cd /srv/kundali/deploy && docker compose -f docker-compose.relay.yml down
 ```
 and remove the Caddy block. Relay is unaffected.
+
+
+## 11. Build fails with "Temporary failure in name resolution" (pip inside docker build)
+The build container could not resolve PyPI. `deploy/docker-compose.relay.yml` now builds with `network: host`
+(the build shares the host's network and DNS). If a plain `docker build` still fails, give Docker public DNS:
+
+```bash
+cat > /etc/docker/daemon.json <<'EOF2'
+{ "dns": ["1.1.1.1", "8.8.8.8"] }
+EOF2
+systemctl restart docker
+```
+`smoke.sh` needs curl on the host: `apt-get install -y curl`.

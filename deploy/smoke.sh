@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+if ! command -v curl >/dev/null 2>&1; then echo "curl not installed: run  apt-get install -y curl"; exit 2; fi
 # Smoke test a running instance:  deploy/smoke.sh https://kundali.example.com
 set -euo pipefail
 BASE="${1:?usage: smoke.sh BASE_URL}"
