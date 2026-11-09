@@ -98,3 +98,21 @@ def test_preview_without_relay(monkeypatch):
     r = notify.preview({"date": "2025-10-19", "lang": "en"})
     assert r["relay_ready"] is False and "Today's panchang" in r["daily"] and "This week" in r["weekly"]
     assert notify.send_whatsapp("919876543210", "x")["ok"] is False
+
+
+def test_daily_card_png_and_image_send(fresh_store, monkeypatch):
+    from jyotish import card
+    from jyotish.handlers import panchang_card_from_query
+    png = panchang_card_from_query({"date": "2026-11-09", "lat": "28.61", "lon": "77.2", "tz": "Asia/Kolkata", "place": "दिल्ली", "name": "परीक्षण"})
+    assert png[:8] == b"\x89PNG\r\n\x1a\n" and len(png) > 20000
+    sent = []
+    def fake(phone, text, image_png=None):
+        sent.append((phone, text, image_png)); return {"ok": True, "detail": "{}"}
+    monkeypatch.setattr(notify, "send_whatsapp", fake)
+    notify.start_subscription({"phone": "9876543211", "lat": 28.61, "lon": 77.2, "daily_time": "06:30"})
+    code = re.search(r"\*(\d{6})\*", sent[-1][1]).group(1)
+    notify.verify({"phone": "9876543211", "code": code})
+    assert sent[-1][2] is not None and sent[-1][2][:4] == b"\x89PNG"            # welcome message carries the card
+    notify.subs().set("919876543211", want_image=0)
+    assert notify.daily_card(notify.subs().get("919876543211"), date(2026, 11, 9)) is None
+    assert card.font_available()

@@ -84,6 +84,13 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, palm.catalog())
         if path == "/v1/ai/status":
             return self._json(200, handlers.ai_status_from_payload())
+        if path == "/v1/panchang/card.png":
+            from urllib.parse import parse_qs
+            try:
+                png = handlers.panchang_card_from_query({k: v[0] for k, v in parse_qs(query).items()})
+            except handlers.BadRequest as exc:
+                return self._json(422, {"detail": str(exc)})
+            self.send_response(200); self.send_header("Content-Type", "image/png"); self.send_header("Content-Length", str(len(png))); self.send_header("Cache-Control", "public, max-age=600"); self.end_headers(); self.wfile.write(png); return
         if path == "/v1/panchang/eclipse":
             from urllib.parse import parse_qs
             try:

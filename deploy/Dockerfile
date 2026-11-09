@@ -1,6 +1,8 @@
 FROM python:3.12-slim
 WORKDIR /srv
 COPY engine/requirements.txt engine/requirements.txt
+# Devanagari fonts for the shareable panchang image card (Pillow + raqm shaping)
+RUN apt-get update && apt-get install -y --no-install-recommends fonts-noto-core fonts-freefont-ttf && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir -r engine/requirements.txt
 COPY engine engine
 COPY data data

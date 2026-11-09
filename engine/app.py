@@ -390,6 +390,16 @@ def ai_palm(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/panchang/card.png")
+def panchang_card(request: Request):
+    from fastapi.responses import Response
+    try:
+        png = handlers.panchang_card_from_query(dict(request.query_params))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return Response(content=png, media_type="image/png", headers={"Cache-Control": "public, max-age=600"})
+
+
 @app.get("/v1/panchang/eclipse")
 def panchang_eclipse(request: Request):
     try:

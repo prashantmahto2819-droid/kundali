@@ -122,7 +122,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 </nav>
 <main>
   <section class="tab" id="t-today">
-    <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
+    <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><button type="button" class="ghost" id="tdshare" style="width:auto;padding:4px 12px">कार्ड साझा करें</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
     <div id="todaygrid">
       <div class="card"><b>आज और कल के व्रत-पर्व</b><div id="tdevents" class="muted">—</div></div>
       <div class="card"><b>आज के शुभ-अशुभ समय</b><div id="tdkaal" class="muted">—</div></div>
@@ -187,6 +187,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
         <label><input type="checkbox" id="wa_rashifal" checked> मेरा राशिफल</label>
         <label><input type="checkbox" id="wa_alert" checked> कल के व्रत-पर्व की सूचना</label>
         <label><input type="checkbox" id="wa_weekly" checked> साप्ताहिक सूची (रविवार)</label>
+        <label><input type="checkbox" id="wa_image" checked> पंचांग का चित्र-कार्ड</label>
         <label><span>भाषा</span> <select id="wa_lang" style="width:auto"><option value="hi">हिंदी</option><option value="en">English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></label>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:.85rem" id="wa_kinds">
@@ -734,6 +735,17 @@ window.loadTodayTab = (function () {
     if (d.results && d.results[0]) { own = {lat: d.results[0].lat, lon: d.results[0].lon, tz: d.results[0].tz || 'Asia/Kolkata', name: d.results[0].hi || d.results[0].name}; try { localStorage.setItem('kundali_today_place', JSON.stringify(own)); } catch (e) {} }
   };
   $('tdgo').onclick = async () => { await pick(); loaded = ''; window.loadTodayTab(); };
+  $('tdshare').onclick = async () => {
+    const lat = own ? own.lat : +($('lat').value || 28.61), lon = own ? own.lon : +($('lon').value || 77.2), tz = own ? own.tz : (($('tz').value || '').trim() || 'Asia/Kolkata');
+    const place = own ? (own.name || '') : ($('city') && $('city').selectedOptions[0] ? $('city').selectedOptions[0].textContent : '');
+    const today = new Date(); const iso = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    const url = `${API}/v1/panchang/card.png?date=${iso}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}&lang=${(window.getLang ? window.getLang() : 'hi') === 'en' ? 'en' : 'hi'}&place=${encodeURIComponent(place)}`;
+    try {
+      const blob = await (await fetch(url)).blob(); const file = new File([blob], `panchang-${iso}.png`, {type: 'image/png'});
+      if (navigator.canShare && navigator.canShare({files: [file]})) { await navigator.share({files: [file], title: 'आज का पंचांग'}); }
+      else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click(); }
+    } catch (e) { window.open(url, '_blank'); }
+  };
   $('tdlang').onchange = () => { try { localStorage.setItem('kundali_today_lang', $('tdlang').value); } catch (e) {} loaded = ''; window.loadTodayTab(); };
   try { $('tdlang').value = localStorage.getItem('kundali_today_lang') || ''; } catch (e) {}
   $('tdcity').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('tdgo').click(); } });
@@ -1341,7 +1353,7 @@ $('f').addEventListener('submit', async e => {
     const kinds = [...document.querySelectorAll('#wa_kinds input:checked')].map(x => x.value).join(',');
     return {phone: $('wa_phone').value.trim(), name: b.name || null, lang: $('wa_lang').value, tz: b.tz || 'Asia/Kolkata', lat: b.lat ?? 28.61, lon: b.lon ?? 77.2,
             place: ($('city') && $('city').selectedOptions[0]?.textContent) || '', daily_time: $('wa_time').value || '06:30', want_panchang: $('wa_panchang').checked,
-            want_rashifal: $('wa_rashifal').checked, vrat_alert: $('wa_alert').checked, vrat_kinds: kinds, weekly: $('wa_weekly').checked, weekly_day: 0,
+            want_rashifal: $('wa_rashifal').checked, vrat_alert: $('wa_alert').checked, vrat_kinds: kinds, weekly: $('wa_weekly').checked, weekly_day: 0, want_image: $('wa_image').checked,
             birth: b.date ? {date: b.date, time: b.time, tz: b.tz, lat: b.lat, lon: b.lon} : null};
   };
   const call = async (path, body) => {

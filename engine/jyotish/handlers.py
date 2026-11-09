@@ -940,3 +940,22 @@ def year_ahead_from_payload(payload: dict) -> dict:
             raise BadRequest("from must be YYYY-MM-DD")
     months = max(1, min(24, int(payload.get("months", 12))))
     return alerts.year_ahead(chart, start, tz, months)
+
+
+def panchang_card_from_query(q: dict) -> bytes:
+    """GET /v1/panchang/card.png?date&lat&lon&tz&lang&place&theme&name&tagline → PNG."""
+    from . import card, panchang_month
+    try:
+        d = datetime.fromisoformat(str(q.get("date") or datetime.now(timezone.utc).date().isoformat())).date()
+        lat = float(q.get("lat") or 28.61); lon = float(q.get("lon") or 77.2)
+    except (TypeError, ValueError):
+        raise BadRequest("date must be YYYY-MM-DD and lat/lon numbers")
+    tz = str(q.get("tz") or "Asia/Kolkata")
+    if not _tz_ok(tz):
+        raise BadRequest("unknown tz")
+    m = panchang_month.month(d.year, d.month, lat, lon, tz, only_day=d.day)
+    if not m["days"]:
+        raise BadRequest("no sunrise on that date at this latitude")
+    biz = {"name": str(q.get("name") or os.environ.get("KUNDALI_BRAND_NAME", ""))[:60], "tagline": str(q.get("tagline") or os.environ.get("KUNDALI_BRAND_TAGLINE", ""))[:80],
+           "website": str(q.get("website") or os.environ.get("KUNDALI_SITE_URL", "https://kundali.vividbrandify.com").replace("https://", ""))[:60]}
+    return card.render_panchang_card(m["days"][0], d, str(q.get("place") or "")[:40], "en" if q.get("lang") == "en" else "hi", biz, str(q.get("theme") or "saffron"))

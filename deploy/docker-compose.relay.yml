@@ -44,6 +44,8 @@ services:
       EMBED_PROVIDER: ${EMBED_PROVIDER:-}
       EMBED_MODEL: ${EMBED_MODEL:-}
       AI_WA_SUMMARY: ${AI_WA_SUMMARY:-0}
+      KUNDALI_BRAND_NAME: ${KUNDALI_BRAND_NAME:-}        # footer of the daily panchang image card
+      KUNDALI_BRAND_TAGLINE: ${KUNDALI_BRAND_TAGLINE:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       AI_BASE_URL: ${AI_BASE_URL:-}
       AI_API_KEY: ${AI_API_KEY:-}

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS wa_subs(
   birth TEXT, moon_sign INTEGER, moon_sign_name TEXT,
   daily_time TEXT NOT NULL DEFAULT '06:30', want_panchang INTEGER NOT NULL DEFAULT 1, want_rashifal INTEGER NOT NULL DEFAULT 1,
   vrat_alert INTEGER NOT NULL DEFAULT 1, vrat_kinds TEXT NOT NULL DEFAULT 'festival,ekadashi,purnima,amavasya,pradosh',
-  weekly INTEGER NOT NULL DEFAULT 1, weekly_day INTEGER NOT NULL DEFAULT 0,
+  weekly INTEGER NOT NULL DEFAULT 1, weekly_day INTEGER NOT NULL DEFAULT 0, want_image INTEGER NOT NULL DEFAULT 1,
   verified INTEGER NOT NULL DEFAULT 0, code TEXT, code_expires TEXT, status TEXT NOT NULL DEFAULT 'active',
   user_id TEXT, created TEXT NOT NULL, last_daily TEXT, last_weekly TEXT, last_error TEXT
 );
@@ -59,6 +59,10 @@ class Subs:
         self._lock = store._lock
         with self._lock:
             self._db.executescript(SCHEMA)
+            cols = {r[1] for r in self._db.execute("PRAGMA table_info(wa_subs)").fetchall()}
+            if "want_image" not in cols:
+                self._db.execute("ALTER TABLE wa_subs ADD COLUMN want_image INTEGER NOT NULL DEFAULT 1")
+                self._db.commit()
 
     def upsert(self, sub: dict) -> dict:
         now = datetime.now(timezone.utc).isoformat()
@@ -70,7 +74,7 @@ class Subs:
                 row["verified"] = 1
             row.pop("force_reverify", None)
             cols = ["phone", "name", "lang", "tz", "lat", "lon", "place", "birth", "moon_sign", "moon_sign_name", "daily_time", "want_panchang", "want_rashifal",
-                    "vrat_alert", "vrat_kinds", "weekly", "weekly_day", "verified", "code", "code_expires", "status", "user_id", "created", "last_daily", "last_weekly", "last_error"]
+                    "vrat_alert", "vrat_kinds", "weekly", "weekly_day", "want_image", "verified", "code", "code_expires", "status", "user_id", "created", "last_daily", "last_weekly", "last_error"]
             vals = {c: row.get(c) for c in cols}
             self._db.execute(f"INSERT OR REPLACE INTO wa_subs({','.join(cols)}) VALUES ({','.join(':' + c for c in cols)})", vals)
             self._db.commit()
@@ -122,12 +126,16 @@ def relay_ready() -> bool:
     return bool(c["url"] and c["key"] and c["session"])
 
 
-def send_whatsapp(phone: str, text: str) -> dict:
-    """POST to Vivid Relay. Returns {ok, detail}. Never raises."""
+def send_whatsapp(phone: str, text: str, image_png: bytes | None = None) -> dict:
+    """POST to Vivid Relay (text, or an image with the text as caption). Returns {ok, detail}. Never raises."""
+    import base64
     c = relay_config()
     if not relay_ready():
         return {"ok": False, "detail": "relay not configured (RELAY_URL, RELAY_API_KEY, RELAY_SESSION)"}
-    body = json.dumps({"to": phone, "text": text, "preview": False}).encode("utf-8")
+    payload = {"to": phone, "text": text, "preview": False}
+    if image_png:
+        payload["media"] = {"type": "image", "base64": base64.b64encode(image_png).decode(), "mimetype": "image/png", "filename": "panchang.png"}
+    body = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(f"{c['url']}/api/sessions/{c['session']}/send", data=body, method="POST",
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {c['key']}"})
     try:
@@ -191,6 +199,23 @@ def compose_daily_regional(sub: dict, d: date, day: dict) -> str:
     L.append("")
     L.append("_STOP_")
     return "\n".join(L)
+
+
+def daily_card(sub: dict, d: date) -> bytes | None:
+    """PNG panchang card for the subscriber's day (None when images are off or no font)."""
+    if not sub.get("want_image", 1):
+        return None
+    try:
+        from . import card
+        if not card.font_available():
+            return None
+        day = _day(sub, d)
+        if not day:
+            return None
+        biz = {"name": os.environ.get("KUNDALI_BRAND_NAME", ""), "tagline": os.environ.get("KUNDALI_BRAND_TAGLINE", ""), "website": os.environ.get("KUNDALI_SITE_URL", "https://kundali.vividbrandify.com").replace("https://", "")}
+        return card.render_panchang_card(day, d, sub.get("place") or "", "en" if sub.get("lang") == "en" else "hi", biz)
+    except Exception:
+        return None
 
 
 def compose_daily(sub: dict, d: date) -> str:
@@ -369,6 +394,7 @@ def start_subscription(payload: dict) -> dict:
            "place": str(payload.get("place") or "")[:80], "birth": json.dumps(birth, ensure_ascii=False) if birth else None, "moon_sign": moon_sign, "moon_sign_name": moon_name,
            "daily_time": daily_time, "want_panchang": int(bool(payload.get("want_panchang", True))), "want_rashifal": int(bool(payload.get("want_rashifal", True)) and moon_sign is not None),
            "vrat_alert": int(bool(payload.get("vrat_alert", True))), "vrat_kinds": ",".join(kinds), "weekly": int(bool(payload.get("weekly", True))), "weekly_day": int(payload.get("weekly_day", 0)) % 7,
+           "want_image": int(bool(payload.get("want_image", True))),
            "code": code, "code_expires": (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat(), "status": "active", "user_id": payload.get("user_id"), "force_reverify": True, "verified": 0}
     saved = subs().upsert(sub)
     hi = saved["lang"] != "en"
@@ -392,7 +418,13 @@ def verify(payload: dict) -> dict:
     sub = subs().get(phone)
     today = datetime.now(ZoneInfo(sub["tz"])).date()
     text = compose_daily(sub, today)
-    sent = send_whatsapp(phone, text)
+    img = daily_card(sub, today)
+    try:
+        sent = send_whatsapp(phone, text, img) if img else send_whatsapp(phone, text)
+    except TypeError:
+        sent = send_whatsapp(phone, text)
+    if img and not sent["ok"]:
+        sent = send_whatsapp(phone, text)
     subs().log(phone, "welcome", sent["ok"], sent["detail"])
     if sent["ok"]:
         subs().set(phone, last_daily=today.isoformat())
@@ -449,7 +481,13 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
         for kind in due_now(sub, now_utc):
             local_day = now_utc.astimezone(ZoneInfo(sub["tz"])).date()
             text = compose_daily(sub, local_day) if kind == "daily" else compose_weekly(sub, local_day)
-            res = sender(sub["phone"], text) if text else {"ok": False, "detail": "empty message"}
+            img = daily_card(sub, local_day) if kind == "daily" else None
+            try:
+                res = sender(sub["phone"], text, img) if (text and img) else (sender(sub["phone"], text) if text else {"ok": False, "detail": "empty message"})
+            except TypeError:                          # senders that take (phone, text) only
+                res = sender(sub["phone"], text)
+            if img and not res["ok"]:                  # media failed (size/relay) → fall back to text only
+                res = sender(sub["phone"], text)
             subs().log(sub["phone"], kind, res["ok"], res["detail"])
             if res["ok"]:
                 subs().set(sub["phone"], **{("last_daily" if kind == "daily" else "last_weekly"): local_day.isoformat()}, last_error=None)
