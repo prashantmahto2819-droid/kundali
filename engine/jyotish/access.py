@@ -211,6 +211,46 @@ def resolve(headers, store, verifier=None):
     return None, None
 
 
+# ---------------------------------------------------------------- simple per-IP rate limits for the costly / abusable public routes
+import threading as _th
+import time as _time
+_RL: dict = {}
+_RL_LOCK = _th.Lock()
+RATE_LIMITS = {                                     # path prefix → (requests, seconds)
+    "/v1/notify/subscribe": (5, 3600), "/v1/notify/verify": (20, 3600), "/v1/ai/palm": (10, 3600), "/v1/ai/": (60, 3600),
+    "/v1/consult/request": (10, 3600), "/v1/consult/": (120, 3600), "/v1/notify/": (60, 3600), "/v1/chart/card.png": (60, 3600), "/v1/report": (120, 3600), "/v1/": (600, 60),
+}
+
+
+def client_ip(headers) -> str:
+    h = {k.lower(): v for k, v in dict(headers).items()}
+    fwd = h.get("x-forwarded-for") or h.get("x-real-ip") or ""
+    return (fwd.split(",")[0].strip() or h.get("remote-addr") or "local")[:64]
+
+
+def rate_limited(ip: str, path: str, now: float | None = None) -> tuple[bool, int]:
+    """Sliding-window limit on the most specific matching prefix. Returns (limited, retry_after_seconds)."""
+    if os.environ.get("KUNDALI_RATE_LIMIT", "1") in ("0", "off"):
+        return False, 0
+    now = now or _time.time()
+    match = max((k for k in RATE_LIMITS if path.startswith(k)), key=len, default=None)
+    if not match:
+        return False, 0
+    n, window = RATE_LIMITS[match]
+    key = (ip, match)
+    with _RL_LOCK:
+        q = [t for t in _RL.get(key, []) if now - t < window]
+        if len(q) >= n:
+            _RL[key] = q
+            return True, int(window - (now - q[0])) + 1
+        q.append(now)
+        _RL[key] = q
+        if len(_RL) > 50000:                            # keep the table bounded
+            for k in list(_RL)[:10000]:
+                _RL.pop(k, None)
+    return False, 0
+
+
 def guard(headers, path: str, store: Store | None = None, mode: str | None = None,
           now: datetime | None = None) -> tuple[int, dict, dict, dict | None]:
     """-> (status, body, response_headers, org). status 200 means 'go ahead'.
@@ -220,6 +260,14 @@ def guard(headers, path: str, store: Store | None = None, mode: str | None = Non
     required : a valid key is mandatory for every /v1 call.
     """
     mode = mode or auth_mode()
+    if path.startswith("/v1/") and path != "/v1/notify/webhook":
+        limited, retry = rate_limited(client_ip(headers), path)
+        if limited:
+            return 429, {"detail": "too many requests; try again later", "retry_after": retry}, {"Retry-After": str(retry)}, None
+    if path.startswith("/v1/") and path != "/v1/notify/webhook":
+        limited, retry = rate_limited(client_ip(headers), path)
+        if limited:
+            return 429, {"detail": "too many requests; try again later", "retry_after": retry}, {"Retry-After": str(retry)}, None
     if mode == "off" or not path.startswith("/v1/") or path == "/v1/notify/webhook":   # the webhook is verified by its own HMAC signature
         return 200, {}, {}, None
     store = store or default_store()

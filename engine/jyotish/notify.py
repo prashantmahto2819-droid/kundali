@@ -484,6 +484,9 @@ def moon_sign_from_birth(birth: dict) -> tuple[int | None, str | None]:
 
 def start_subscription(payload: dict) -> dict:
     phone = normalize_phone(payload.get("phone"))
+    recent = [l for l in subs().recent_log(phone, 10) if l["kind"] == "code" and l["at"] > (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()]
+    if len(recent) >= 3:
+        raise ValueError("too many codes sent to this number in the last hour; try later")
     tz = str(payload.get("tz") or "Asia/Kolkata"); ZoneInfo(tz)
     lat, lon = float(payload.get("lat", 28.61)), float(payload.get("lon", 77.2))
     daily_time = str(payload.get("daily_time") or "06:30")

@@ -228,3 +228,16 @@ Tabs: summary KPIs + test WhatsApp send; subscribers (stop/start, mark verified,
 (add/edit) + open consultations (read, reply as the astrologer, close); wallet top-ups; AI providers and usage, rule extraction from a
 text passage; festival overrides per year (add / move / remove). Owner edits are written next to the SQLite file
 (`/srv/data/overrides/`, `/srv/data/rules_drafts/`) so they survive rebuilds; the repo's `data/overrides/` stays the default.
+
+
+## 17. Backups and rate limits
+
+Nightly backup of the data volume (subscribers, consultations, wallet, overrides, rule drafts):
+```
+(crontab -l 2>/dev/null; echo "20 3 * * * /srv/kundali/deploy/backup.sh >> /var/log/kundali-backup.log 2>&1") | crontab -
+/srv/kundali/deploy/backup.sh      # run once now; files land in /srv/backups/kundali/, last 30 kept
+```
+Restore: `docker run --rm -v kundali-data:/data -v /srv/backups/kundali:/b alpine sh -c "cd /data && tar xzf /b/kundali-YYYY-MM-DD.tar.gz && mv access.backup.sqlite access.sqlite"` then `docker compose … restart kundali-api`.
+
+Rate limits (per client IP, from Caddy's X-Forwarded-For): subscribe 5/h, verify 20/h, AI palm 10/h, AI 60/h, consult requests 10/h,
+all /v1 600/min; OTP codes 3 per phone per hour. `KUNDALI_RATE_LIMIT=0` disables them (tests/dev).

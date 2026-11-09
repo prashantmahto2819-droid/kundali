@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# Daily Postgres backup to Cloudflare R2 (via rclone). Run from cron, e.g.:
-#   30 2 * * *  /opt/kundali/deploy/backup.sh >> /var/log/kundali-backup.log 2>&1
-# Needs: DATABASE_URL (Supabase connection string), an rclone remote named "r2"
-# pointing to your R2 account, and R2_BUCKET.
+# Nightly backup of the kundali data volume (SQLite + owner overrides + rule drafts) to /srv/backups/kundali/<date>.tar.gz
+# Keeps the last 30. Install:  (crontab -l; echo "20 3 * * * /srv/kundali/deploy/backup.sh >> /var/log/kundali-backup.log 2>&1") | crontab -
 set -euo pipefail
-: "${DATABASE_URL:?set DATABASE_URL}" "${R2_BUCKET:?set R2_BUCKET}"
-stamp=$(date -u +%Y%m%dT%H%M%SZ)
-pg_dump --no-owner --format=custom "$DATABASE_URL" | rclone rcat "r2:${R2_BUCKET}/db/kundali-${stamp}.dump"
-# keep 30 days
-rclone delete "r2:${R2_BUCKET}/db" --min-age 30d
-echo "backup ok: kundali-${stamp}.dump"
+OUT=${1:-/srv/backups/kundali}
+mkdir -p "$OUT"
+STAMP=$(date +%F)
+# consistent SQLite copy via the container's python (sqlite backup API), then the rest of the volume
+docker exec kundali-api python - <<'PY'
+import sqlite3, os
+src = sqlite3.connect(os.environ.get("KUNDALI_DB", "/srv/data/access.sqlite"))
+dst = sqlite3.connect("/srv/data/access.backup.sqlite")
+src.backup(dst); dst.close(); src.close()
+PY
+docker run --rm -v kundali-data:/data -v "$OUT":/out alpine sh -c "cd /data && tar czf /out/kundali-$STAMP.tar.gz access.backup.sqlite overrides rules_drafts 2>/dev/null || tar czf /out/kundali-$STAMP.tar.gz access.backup.sqlite"
+ls -1t "$OUT"/kundali-*.tar.gz | tail -n +31 | xargs -r rm -f
+echo "$(date -Is) backup ok: $OUT/kundali-$STAMP.tar.gz ($(du -h "$OUT/kundali-$STAMP.tar.gz" | cut -f1))"
