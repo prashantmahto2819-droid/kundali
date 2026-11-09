@@ -108,7 +108,7 @@ def parse(text: str) -> tuple[str, list[str]]:
         if first in keys:
             return cmd, words[1:]
     # "मेष राशिफल" or "15-05-1990 10:30 jabalpur" without a keyword
-    if any(w in CMD["rashifal"] for w in words):
+    if any(w in CMD["rashifal"] for w in words) or (any(w in PERIOD_WORDS for w in words) and any(w in SIGN_WORDS for w in words)):
         return "rashifal", [w for w in words if w not in CMD["rashifal"]]
     if _DATE.search(text) and _TIME.search(text):
         return "kundali", words
@@ -151,23 +151,29 @@ def reply_panchang(sub: dict | None, words: list[str], hi: bool) -> str:
     return txt.replace("बंद करने के लिए STOP लिखें।", "रोज़ पाने के लिए *शुरू* लिखें।").replace("Reply STOP to unsubscribe.", "Send *start* to get this daily.")
 
 
+PERIOD_WORDS = {"साप्ताहिक": "weekly", "सप्ताह": "weekly", "weekly": "weekly", "week": "weekly", "hafta": "weekly", "मासिक": "monthly", "महीना": "monthly", "महीने": "monthly", "monthly": "monthly", "month": "monthly", "mahina": "monthly"}
+
+
 def reply_rashifal(sub: dict | None, words: list[str], hi: bool) -> str:
     from . import rashifal as rf
     sign = next((SIGN_WORDS[w] for w in words if w in SIGN_WORDS), None)
     if sign is None and sub and sub.get("moon_sign") is not None:
         sign = int(sub["moon_sign"])
+    period = next((PERIOD_WORDS[w] for w in words if w in PERIOD_WORDS), "daily")
     tz = (sub or {}).get("tz") or "Asia/Kolkata"
     today = datetime.now(ZoneInfo(tz)).date()
-    r = rf.rashifal(today.isoformat(), tz, "daily")
+    r = rf.rashifal(today.isoformat(), tz, period)
+    plabel = {"daily": ("आज का", "today's"), "weekly": ("साप्ताहिक", "weekly"), "monthly": ("मासिक", "monthly")}[period]
+    span = f'{r["span"]["from"][8:10]}-{r["span"]["from"][5:7]} – {r["span"]["to"][8:10]}-{r["span"]["to"][5:7]}' if period != "daily" else today.strftime("%d-%m-%Y")
     if sign is None:
-        lines = [("🔮 *आज का राशिफल* " if hi else "🔮 *Today's rashifal* ") + today.strftime("%d-%m-%Y")]
+        lines = [(f"🔮 *{plabel[0]} राशिफल* " if hi else f"🔮 *{plabel[1].capitalize()} rashifal* ") + span]
         for s in r["signs"]:
             lines.append(f'• {s["sign_name_hi"] if hi else s["sign_name"]}: {s["grade_hi"] if hi else s["grade_en"]} ({s["score"]})')
         lines.append(("\nअपनी राशि का विस्तार: नीचे राशि चुनिए या *राशिफल मेष* लिखिए।" if hi else "\nFor one sign in detail pick below or send *rashifal mesh*."))
         _LAST_EXTRA.update(sign_list(hi))
         return "\n".join(lines)
     s = r["signs"][sign]
-    lines = [(f'🔮 *{s["sign_name_hi"]} — आज का राशिफल* ({today.strftime("%d-%m-%Y")})' if hi else f'🔮 *{s["sign_name"]} — today\'s rashifal* ({today.strftime("%d-%m-%Y")})'),
+    lines = [(f'🔮 *{s["sign_name_hi"]} — {plabel[0]} राशिफल* ({span})' if hi else f'🔮 *{s["sign_name"]} — {plabel[1]} rashifal* ({span})'),
              f'{s["grade_hi"] if hi else s["grade_en"]} {s["score"]}/100 — {s["summary_hi"] if hi else s["summary_en"]}', ""]
     for p in s["planets"]:
         if p["planet"] in ("Moon", "Sun", "Mars", "Jupiter", "Saturn"):
@@ -276,10 +282,35 @@ def reply_muhurta(sub: dict | None, words: list[str], hi: bool) -> str:
         common = max(set(reasons), key=reasons.count) if reasons else ""
         return head + "\n" + ("इस अवधि में कोई शुद्ध दिन नहीं मिला" if hi else "No clear day found in this period") + (f" ({common})" if common else "") + "."
     lines = [head]
+    personal = None
+    if sub and sub.get("birth") and sub.get("moon_sign") is not None:
+        try:
+            from . import muhurta_lagna
+            b = json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]
+            from .handlers import chart_from_payload
+            ch = chart_from_payload(b)
+            moon = next(x for x in ch["planets"] if x["name"] == "Moon")
+            from .constants import NAKSHATRAS
+            personal = (int(sub["moon_sign"]), NAKSHATRAS.index(moon["nakshatra"]), muhurta_lagna)
+        except Exception:
+            personal = None
     for b in best:
         dd = date.fromisoformat(b["date"]).strftime("%d-%m")
         wins = ", ".join(f'{w["start"]}–{w["end"]}' for w in (b.get("good_windows") or [])[:2])
-        lines.append(f'• {dd} {b["vara_hi"] if hi else VARA_EN[b["vara"]]}: {b["tithi_hi"] if hi else b["tithi"]}, {b["nakshatra_hi"] if hi else b["nakshatra"]} · {"स्कोर" if hi else "score"} {b["score"]}' + (f' · {"शुभ समय" if hi else "good hours"} {wins}' if wins else ""))
+        line = f'• {dd} {b["vara_hi"] if hi else VARA_EN[b["vara"]]}: {b["tithi_hi"] if hi else b["tithi"]}, {b["nakshatra_hi"] if hi else b["nakshatra"]} · {"स्कोर" if hi else "score"} {b["score"]}' + (f' · {"शुभ समय" if hi else "good hours"} {wins}' if wins else "")
+        if personal:
+            try:
+                r = personal[2].lagna_muhurta(b["date"], pl["lat"], pl["lon"], pl["tz"], act if act in ("marriage", "griha_pravesh", "business", "travel", "vehicle", "education") else "general", personal[0], None, personal[1], None)
+                cb, tb = r["chandrabala"]["groom"]["ok"], r["tarabala"]["groom"]["ok"]
+                bl = (r.get("best") or [{}])[0]
+                line += (f'\n   {"आपके लिए" if hi else "for you"}: {"चंद्रबल ✓" if cb else "चंद्रबल ✗"} {"ताराबल ✓" if tb else "ताराबल ✗"}' if hi else f'\n   for you: chandrabala {"✓" if cb else "✗"} tarabala {"✓" if tb else "✗"}') + \
+                        (f' · {"उत्तम लग्न" if hi else "best lagna"} {bl.get("sign_name_hi") if hi else bl.get("sign_name")} {bl.get("start")}–{bl.get("end")}' if bl.get("start") else "")
+            except Exception:
+                pass
+        lines.append(line)
+    if personal:
+        lines.append("")
+        lines.append("_" + ("चंद्रबल/ताराबल आपकी जन्म-चंद्र राशि व नक्षत्र से; दोनों ✓ वाली तारीख़ें अपने लिए बेहतर।" if hi else "Chandrabala/tarabala from your natal Moon sign and nakshatra; dates with both ✓ suit you better.") + "_")
     lines.append("")
     lines.append(("सटीक लग्न-समय और व्यक्तिगत (चंद्रबल/ताराबल) जाँच ऐप के मुहूर्त टैब में: " if hi else "Exact lagna timing and personal (chandrabala/tarabala) checks in the app's muhurta tab: ") + SITE)
     return "\n".join(lines)

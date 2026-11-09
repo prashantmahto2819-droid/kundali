@@ -135,3 +135,12 @@ def test_birthday_and_broadcast(fresh_store, monkeypatch):
     with pytest.raises(ValueError):
         fresh_store.upsert_broadcast({"target": "bad target"})
     fresh_store.delete_broadcast(b["target"]); assert fresh_store.broadcasts() == []
+
+
+def test_monthly_digest_due_on_first(fresh_store):
+    sub = {"lang": "en", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2, "place": "Delhi", "vrat_kinds": "festival,ekadashi,purnima,amavasya,pradosh"}
+    txt = notify.compose_monthly(sub, date(2026, 12, 1))
+    assert "This month's vrats" in txt and "Ekadashi" in txt and "sankranti" in txt
+    s = {"tz": "Asia/Kolkata", "daily_time": "06:30", "weekly": 1, "weekly_day": 0, "last_daily": "2026-12-01", "last_weekly": None, "last_monthly": None}
+    assert notify.due_now(s, datetime(2026, 12, 1, 1, 1, tzinfo=timezone.utc)) == ["monthly"]              # 1 Dec 06:31 IST (Tuesday)
+    assert notify.due_now({**s, "last_monthly": "2026-12-01"}, datetime(2026, 12, 1, 1, 1, tzinfo=timezone.utc)) == []

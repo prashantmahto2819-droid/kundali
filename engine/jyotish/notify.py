@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS wa_subs(
   birth TEXT, moon_sign INTEGER, moon_sign_name TEXT,
   daily_time TEXT NOT NULL DEFAULT '06:30', want_panchang INTEGER NOT NULL DEFAULT 1, want_rashifal INTEGER NOT NULL DEFAULT 1,
   vrat_alert INTEGER NOT NULL DEFAULT 1, vrat_kinds TEXT NOT NULL DEFAULT 'festival,ekadashi,purnima,amavasya,pradosh',
-  weekly INTEGER NOT NULL DEFAULT 1, weekly_day INTEGER NOT NULL DEFAULT 0, want_image INTEGER NOT NULL DEFAULT 1,
+  weekly INTEGER NOT NULL DEFAULT 1, weekly_day INTEGER NOT NULL DEFAULT 0, want_image INTEGER NOT NULL DEFAULT 1, last_monthly TEXT,
   verified INTEGER NOT NULL DEFAULT 0, code TEXT, code_expires TEXT, status TEXT NOT NULL DEFAULT 'active',
   user_id TEXT, created TEXT NOT NULL, last_daily TEXT, last_weekly TEXT, last_error TEXT
 );
@@ -64,7 +64,9 @@ class Subs:
             cols = {r[1] for r in self._db.execute("PRAGMA table_info(wa_subs)").fetchall()}
             if "want_image" not in cols:
                 self._db.execute("ALTER TABLE wa_subs ADD COLUMN want_image INTEGER NOT NULL DEFAULT 1")
-                self._db.commit()
+            if "last_monthly" not in cols:
+                self._db.execute("ALTER TABLE wa_subs ADD COLUMN last_monthly TEXT")
+            self._db.commit()
 
     def upsert(self, sub: dict) -> dict:
         now = datetime.now(timezone.utc).isoformat()
@@ -76,7 +78,7 @@ class Subs:
                 row["verified"] = 1
             row.pop("force_reverify", None)
             cols = ["phone", "name", "lang", "tz", "lat", "lon", "place", "birth", "moon_sign", "moon_sign_name", "daily_time", "want_panchang", "want_rashifal",
-                    "vrat_alert", "vrat_kinds", "weekly", "weekly_day", "want_image", "verified", "code", "code_expires", "status", "user_id", "created", "last_daily", "last_weekly", "last_error"]
+                    "vrat_alert", "vrat_kinds", "weekly", "weekly_day", "want_image", "last_monthly", "verified", "code", "code_expires", "status", "user_id", "created", "last_daily", "last_weekly", "last_error"]
             vals = {c: row.get(c) for c in cols}
             self._db.execute(f"INSERT OR REPLACE INTO wa_subs({','.join(cols)}) VALUES ({','.join(':' + c for c in cols)})", vals)
             self._db.commit()
@@ -422,6 +424,31 @@ def compose_alert(sub: dict, d: date, prefix: bool = False) -> str:
     return "\n".join(lines)
 
 
+def compose_monthly(sub: dict, d: date) -> str:
+    """Month digest sent on the 1st: all vrats/festivals/eclipses of the month, the month's ekadashis, and sankranti."""
+    hi = sub.get("lang", "hi") != "en"
+    kinds = set((sub.get("vrat_kinds") or "festival,ekadashi,purnima,amavasya,pradosh").split(",")) | {"festival", "national", "grahan"}
+    m = panchang_month.month(d.year, d.month, sub["lat"], sub["lon"], sub["tz"])
+    MON = ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"] if hi else ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    L = [("📆 *इस महीने के व्रत-पर्व* — " if hi else "📆 *This month's vrats and festivals* — ") + f"{MON[d.month - 1]} {d.year}" + (f' ({sub["place"]})' if sub.get("place") else "")]
+    for row in m["days"]:
+        ev = [e for e in row["events"] if e["kind"] in kinds]
+        if ev:
+            L.append(f'• {row["date"][8:10]} {row["vara_hi"][:2] if hi else row["vara"][:3]}: ' + ", ".join(e["name_hi"] if hi else e["name_en"] for e in ev))
+        if row.get("sankranti"):
+            L.append(f'• {row["date"][8:10]}: ' + (f'{row["sun_sign_hi"]} संक्रांति' if hi else f'{row["sun_sign"]} sankranti'))
+    if m.get("muhurta"):
+        good = [x for x in m["muhurta"] if x.get("activity") in ("marriage", "griha_pravesh", "vehicle")]
+        if good:
+            L.append("")
+            L.append("✅ " + ("इस माह के मुहूर्त (संक्षेप): " if hi else "Muhurtas this month (brief): "))
+            for x in good[:3]:
+                L.append(f'  {x["activity_hi"] if hi else x["activity_en"]}: ' + ", ".join(str(dd["day"]) for dd in x["dates"][:8]))
+    L.append("")
+    L.append("_" + ("पूरा मासिक पंचांग और मुहूर्त ऐप के कैलेंडर में। बंद करने के लिए STOP लिखें।" if hi else "Full monthly panchang and muhurtas in the app's calendar. Reply STOP to unsubscribe.") + "_")
+    return "\n".join(L)
+
+
 def compose_weekly(sub: dict, d: date) -> str:
     hi = sub.get("lang", "hi") != "en"
     kinds = set((sub.get("vrat_kinds") or "festival,ekadashi,purnima,amavasya,pradosh").split(",")) | {"festival", "national", "grahan"}
@@ -547,6 +574,8 @@ def due_now(sub: dict, now_utc: datetime) -> list[str]:
         due.append("daily")
     if sub.get("weekly") and local.weekday() == (int(sub.get("weekly_day", 0)) - 1) % 7 and (local.hour, local.minute) >= (hh, mm) and sub.get("last_weekly") != local.date().isoformat():
         due.append("weekly")
+    if sub.get("weekly") and local.day == 1 and (local.hour, local.minute) >= (hh, mm) and (sub.get("last_monthly") or "") != local.date().isoformat():
+        due.append("monthly")
     return due
 
 
@@ -556,7 +585,7 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
     for sub in subs().active():
         for kind in due_now(sub, now_utc):
             local_day = now_utc.astimezone(ZoneInfo(sub["tz"])).date()
-            text = compose_daily(sub, local_day) if kind == "daily" else compose_weekly(sub, local_day)
+            text = compose_daily(sub, local_day) if kind == "daily" else compose_weekly(sub, local_day) if kind == "weekly" else compose_monthly(sub, local_day)
             img = daily_card(sub, local_day) if kind == "daily" else None
             try:
                 res = sender(sub["phone"], text, img) if (text and img) else (sender(sub["phone"], text) if text else {"ok": False, "detail": "empty message"})
@@ -566,7 +595,7 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
                 res = sender(sub["phone"], text)
             subs().log(sub["phone"], kind, res["ok"], res["detail"])
             if res["ok"]:
-                subs().set(sub["phone"], **{("last_daily" if kind == "daily" else "last_weekly"): local_day.isoformat()}, last_error=None)
+                subs().set(sub["phone"], **{{"daily": "last_daily", "weekly": "last_weekly", "monthly": "last_monthly"}[kind]: local_day.isoformat()}, last_error=None)
             else:
                 subs().set(sub["phone"], last_error=res["detail"])
             results.append({"phone": sub["phone"], "kind": kind, **res})
@@ -575,7 +604,7 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
         pseudo = {**b, "phone": b["target"], "want_panchang": 1, "want_rashifal": 0, "vrat_alert": 1, "vrat_kinds": "grahan,festival,ekadashi,purnima,amavasya,pradosh", "moon_sign": None, "birth": None, "weekly_day": 0, "verified": 1, "status": "active"}
         for kind in due_now(pseudo, now_utc):
             local_day = now_utc.astimezone(ZoneInfo(b["tz"])).date()
-            text = (compose_daily(pseudo, local_day) if kind == "daily" else compose_weekly(pseudo, local_day)).replace("बंद करने के लिए STOP लिखें।", "").replace("Reply STOP to unsubscribe.", "").replace("_STOP_", "").rstrip()
+            text = (compose_daily(pseudo, local_day) if kind == "daily" else compose_weekly(pseudo, local_day) if kind == "weekly" else compose_monthly(pseudo, local_day)).replace("बंद करने के लिए STOP लिखें।", "").replace("Reply STOP to unsubscribe.", "").replace("_STOP_", "").rstrip()
             img = daily_card(pseudo, local_day) if kind == "daily" else None
             try:
                 res = sender(b["target"], text, img) if (text and img) else (sender(b["target"], text) if text else {"ok": False, "detail": "empty message"})
@@ -584,7 +613,10 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
             if img and not res["ok"]:
                 res = sender(b["target"], text)
             subs().log(b["target"], "broadcast_" + kind, res["ok"], res["detail"])
-            subs().set_broadcast(b["target"], **({("last_daily" if kind == "daily" else "last_weekly"): local_day.isoformat(), "last_error": None} if res["ok"] else {"last_error": res["detail"]}))
+            if kind != "monthly":
+                subs().set_broadcast(b["target"], **({("last_daily" if kind == "daily" else "last_weekly"): local_day.isoformat(), "last_error": None} if res["ok"] else {"last_error": res["detail"]}))
+            else:
+                subs().set_broadcast(b["target"], last_weekly=local_day.isoformat())
             results.append({"phone": b["target"], "kind": "broadcast_" + kind, **res})
     return results
 

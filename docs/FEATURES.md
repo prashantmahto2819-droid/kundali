@@ -92,6 +92,9 @@ Five sections — **आज** (home: today's panchang tiles, today's and tomorrow
 ## WhatsApp daily updates (Vivid Relay)
 Free subscription from the Kundali tab: a 6-digit code over WhatsApp verifies the number; then every day at the chosen time (subscriber's own time zone and place) a message with the panchang — weekday, month, **the tithi window** (from when to when, and which tithi follows, so two-tithi days are explicit), nakshatra end, sunrise/sunset/moonrise, Rahu kaal, Abhijit, disha shool, special yogas, today's vrats/festivals — the subscriber's own daily rashifal (Moon sign from the chart), and a **day-before alert** for tomorrow's vrat/festival with its tithi start/end, sunrise/sunset, Ekadashi parana and Pradosha window; a **weekly list** on the chosen weekday. Kinds are selectable (festival, Ekadashi, Purnima, Amavasya, Pradosh, Chaturthi, Masik Shivaratri, regional, national). Hindi or English. Sending goes through the owner's Vivid Relay gateway (`RELAY_URL`, `RELAY_API_KEY`, `RELAY_SESSION`, `KUNDALI_NOTIFY=1`); Relay's STOP keyword and the card's "बंद करें" both opt out.
 
+## Monthly digest and richer bot commands
+On the 1st of each month subscribers (and broadcast targets) get the month's vrats/festivals/eclipses, sankranti and brief muhurta dates. Bot: *साप्ताहिक/मासिक राशिफल [राशि]*; *मुहूर्त विवाह* marks each date with the sender's own chandrabala/tarabala and best lagna window when birth details are saved.
+
 ## Birthday messages and group/channel broadcasts
 Subscribers with birth details get a birthday greeting with the new varshaphal's headline, and a tithi-birthday note on the natal lunar month + tithi. Admin-configured broadcast targets (WhatsApp group `…@g.us`, channel `…@newsletter`, or a number) receive the plain daily panchang (+ image card) and the weekly list at their own time/place/language.
 

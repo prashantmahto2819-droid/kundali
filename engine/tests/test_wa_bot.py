@@ -151,3 +151,13 @@ def test_settings_over_whatsapp(store, monkeypatch):
     assert "पहचाना नहीं" in wa_bot.answer("919876543210", "शहर xyzville")
     # settings on a number that never subscribed → auto-subscribes first
     assert "✅" in wa_bot.answer("919111111111", "शहर भोपाल") and store.get("919111111111")["place"] == "भोपाल"
+
+
+def test_weekly_rashifal_and_personal_muhurta(store, monkeypatch):
+    monkeypatch.setattr(notify, "send_whatsapp", lambda *a, **k: {"ok": True, "detail": ""})
+    w = wa_bot.answer("919876543210", "साप्ताहिक राशिफल मेष")
+    assert "साप्ताहिक राशिफल" in w and "–" in w
+    assert "monthly rashifal" in wa_bot.answer("919876543210", "monthly rashifal").lower()
+    wa_bot.answer("919876543210", "शुरू"); wa_bot.answer("919876543210", "जन्म 15-05-1990 10:30 दिल्ली")
+    m = wa_bot.answer("919876543210", "मुहूर्त विवाह")
+    assert "आपके लिए" in m and "चंद्रबल" in m and "उत्तम लग्न" in m
