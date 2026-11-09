@@ -123,3 +123,29 @@ systemctl restart docker
 ```
 (BuildKit does not allow `network: host` in compose without an entitlement, so the daemon DNS setting is the fix; the build then resolves PyPI through the daemon's resolver.)
 `smoke.sh` needs curl on the host: `apt-get install -y curl`.
+
+
+## 12. WhatsApp daily updates (panchang / rashifal / vrat alerts) through Vivid Relay
+
+The app sends through Relay's HTTP API: `POST http://gateway:8080/api/sessions/<session>/send` with `Authorization: Bearer <key>` and
+`{"to": "91xxxxxxxxxx", "text": "..."}`. Both containers are on `wa-gateway_default`, so the service name `gateway` resolves without
+exposing anything. Subscribers verify their number with a 6-digit code sent over WhatsApp; Relay's own STOP keyword also opts them out.
+
+1. In Relay, note the **session name** that is linked to the business WhatsApp number (Sessions page; e.g. `main`).
+2. Create an API key: Relay → Developer → API keys → New key (a `vr_…` key); or use the master `API_KEY` from `/root/wa-gateway/.env`.
+   Never paste the key into chat or commit it.
+3. Add to `/srv/kundali/deploy/.env` (one line each, no quotes):
+   ```
+   RELAY_URL=http://gateway:8080
+   RELAY_SESSION=main
+   RELAY_API_KEY=vr_xxxxxxxxxxxxxxxxx
+   KUNDALI_NOTIFY=1
+   ```
+4. Restart: `cd /srv/kundali/deploy && docker compose -f docker-compose.relay.yml up -d` (no rebuild needed for env changes).
+5. Check: `docker compose -f docker-compose.relay.yml logs --tail 5 kundali-api` should show `WhatsApp notify worker running`.
+   Test from the site: Kundali tab → "WhatsApp पर रोज़ का अपडेट" → your number → "कोड भेजिए"; the code must arrive within a few seconds.
+   If it does not: `docker exec kundali-api python -c "import urllib.request;print(urllib.request.urlopen('http://gateway:8080/health').read())"`
+   shows whether the gateway is reachable; a 401 in the card means the key is wrong, a 404 means the session name is wrong.
+6. Subscribers live in the same SQLite file as the access store (`/srv/data/access.sqlite`, tables `wa_subs`, `wa_log`), so the
+   existing backup covers them. The worker checks every minute, sends once per subscriber per local day (and the weekly list on the
+   chosen weekday), retries next minute on a failed send, and records the last error on the row.

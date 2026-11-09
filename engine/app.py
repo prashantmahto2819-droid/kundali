@@ -324,6 +324,56 @@ def muhurta_lagna(req: MuhurtaLagnaRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+class NotifyRequest(BaseModel):
+    model_config = {"extra": "allow"}
+    phone: str | None = None
+
+
+@app.post("/v1/notify/subscribe")
+def notify_subscribe(req: NotifyRequest):
+    try:
+        return handlers.notify_subscribe_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/notify/verify")
+def notify_verify(req: NotifyRequest):
+    try:
+        return handlers.notify_verify_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/notify/unsubscribe")
+def notify_unsubscribe(req: NotifyRequest):
+    try:
+        return handlers.notify_unsubscribe_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/notify/status")
+def notify_status(req: NotifyRequest):
+    try:
+        return handlers.notify_status_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/notify/preview")
+def notify_preview(req: NotifyRequest):
+    try:
+        return handlers.notify_preview_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.on_event("startup")
+def _start_notify_worker():
+    handlers.start_notify_worker_if_enabled()
+
+
 @app.get("/v1/panchang/day")
 def panchang_day(date: str | None = None, lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata"):
     try:

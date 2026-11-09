@@ -425,6 +425,19 @@ _tj_sample = _tj.tajika.__doc__  # noqa
 _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v in {"Sun": 10.0, "Moon": 100.0, "Mars": 200.0, "Mercury": 20.0, "Jupiter": 300.0, "Venus": 40.0, "Saturn": 250.0}.items()], "lagna": {"longitude": 5.0}},
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
+
+# WhatsApp (Vivid Relay) daily-update card
+for hi, en in [("WhatsApp पर रोज़ का अपडेट", "Daily update on WhatsApp"),
+               ("(पंचांग, आपका राशिफल, कल के व्रत-पर्व की सूचना, साप्ताहिक सूची — निःशुल्क)", "(panchang, your rashifal, tomorrow's vrat/festival alert, weekly list — free)"),
+               ("WhatsApp नंबर", "WhatsApp number"), ("रोज़ का समय", "Daily time"), ("मेरा राशिफल", "My rashifal"), ("कल के व्रत-पर्व की सूचना", "Tomorrow's vrat/festival alert"),
+               ("साप्ताहिक सूची (रविवार)", "Weekly list (Sunday)"), ("क्षेत्रीय पर्व", "Regional festivals"), ("राष्ट्रीय दिवस", "National days"), ("मासिक शिवरात्रि", "Masik Shivaratri"), ("प्रदोष", "Pradosh"),
+               ("संदेश का नमूना देखिए", "Preview the message"), ("कोड भेजिए", "Send code"), ("6 अंकों का कोड", "6-digit code"), ("सत्यापित करें", "Verify"), ("बंद करें", "Stop updates"),
+               ("WhatsApp पर कोड भेजा गया", "Code sent on WhatsApp"), ("नीचे कोड डालकर सत्यापित करें।", "Enter the code below to verify."), ("कोड भेजा नहीं जा सका:", "The code could not be sent:"),
+               ("सत्यापित! पहला संदेश भेज दिया गया; अब रोज़ चुने हुए समय पर आएगा।", "Verified! The first message has been sent; it will now arrive daily at the chosen time."),
+               ("सत्यापित, पर पहला संदेश नहीं गया:", "Verified, but the first message did not go:"), ("अपडेट बंद कर दिए गए।", "Updates stopped."),
+               ("(सर्वर पर Relay अभी सेट नहीं है — संदेश भेजे नहीं जाएँगे)", "(Relay is not configured on the server yet — messages will not be sent)")]:
+    put(hi, en)
+
 put("ताजिक परत (वर्षेश, सहम, मुद्दा दशा, इत्थशाल) ड्राफ़्ट है; पाठ केवल दिशा-संकेत हैं।", "The Tajika layer (year lord, sahams, mudda dasha, ithasala) is a draft; texts are only pointers.")
 
 UI = {

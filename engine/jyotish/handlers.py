@@ -1,6 +1,7 @@
 """Framework-independent request handling (shared by FastAPI app and dev server)."""
 from __future__ import annotations
 
+import os
 import re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -649,3 +650,46 @@ def _tz_ok(tz) -> bool:
         ZoneInfo(str(tz or "Asia/Kolkata")); return True
     except (ZoneInfoNotFoundError, ValueError):
         return False
+
+
+# ---------------------------------------------------------------- WhatsApp updates (Vivid Relay)
+def _notify_call(fn, payload: dict) -> dict:
+    from . import notify
+    try:
+        return getattr(notify, fn)(payload if isinstance(payload, dict) else {})
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def notify_subscribe_from_payload(payload: dict) -> dict:
+    """POST /v1/notify/subscribe — save the subscription and send a one-time code over WhatsApp."""
+    return _notify_call("start_subscription", payload)
+
+
+def notify_verify_from_payload(payload: dict) -> dict:
+    return _notify_call("verify", payload)
+
+
+def notify_unsubscribe_from_payload(payload: dict) -> dict:
+    return _notify_call("unsubscribe", payload)
+
+
+def notify_status_from_payload(payload: dict) -> dict:
+    return _notify_call("status", payload)
+
+
+def notify_preview_from_payload(payload: dict) -> dict:
+    """POST /v1/notify/preview — today's daily and weekly texts for these settings, nothing sent."""
+    return _notify_call("preview", payload)
+
+
+def start_notify_worker_if_enabled() -> bool:
+    """Start the once-a-minute sender thread when KUNDALI_NOTIFY=1 (and only once per process)."""
+    if os.environ.get("KUNDALI_NOTIFY", "") not in ("1", "true", "yes"):
+        return False
+    from . import notify
+    if getattr(notify, "_worker_started", False):
+        return True
+    notify.start_worker()
+    notify._worker_started = True
+    return True

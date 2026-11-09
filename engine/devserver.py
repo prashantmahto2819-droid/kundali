@@ -155,7 +155,12 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/rectify": handlers.rectify_from_payload,
                   "/v1/lalkitab/varshphal": handlers.lalkitab_varshphal_from_payload,
                   "/v1/varshaphal": handlers.varshaphal_from_payload,
-                  "/v1/ask": handlers.ask_from_payload}
+                  "/v1/ask": handlers.ask_from_payload,
+                  "/v1/notify/subscribe": handlers.notify_subscribe_from_payload,
+                  "/v1/notify/verify": handlers.notify_verify_from_payload,
+                  "/v1/notify/unsubscribe": handlers.notify_unsubscribe_from_payload,
+                  "/v1/notify/status": handlers.notify_status_from_payload,
+                  "/v1/notify/preview": handlers.notify_preview_from_payload}
         if self.path.split("?")[0] in handlers.REPORT_ROUTES:
             try:
                 length = int(self.headers.get("Content-Length", 0))
@@ -188,4 +193,6 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     print(f"Kundali dev server on http://127.0.0.1:{port}  (backend: {handlers.backend().name})")
+    if handlers.start_notify_worker_if_enabled():
+        print("WhatsApp notify worker running (KUNDALI_NOTIFY=1)")
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

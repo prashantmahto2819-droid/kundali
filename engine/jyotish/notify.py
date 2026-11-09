@@ -150,11 +150,11 @@ def _day(sub: dict, d: date) -> dict | None:
 
 
 def _next_tithi_name(t_number: int, hi: bool) -> str:
-    from .panchang import TITHI_NAMES, TITHI_NAMES_HI
-    n = t_number % 30 + 1
-    name = (TITHI_NAMES_HI if hi else TITHI_NAMES)[(n - 1) % 15] if n not in (15, 30) else ("पूर्णिमा" if hi else "Purnima") if n == 15 else ("अमावस्या" if hi else "Amavasya")
+    from .constants import TITHI_HI, TITHI_NAMES
+    n = t_number % 30 + 1                         # 1..30, the tithi after t_number
+    name = "Purnima" if n == 15 else "Amavasya" if n == 30 else TITHI_NAMES[(n - 1) % 15]
     paksha = ("शुक्ल" if hi else "Shukla") if n <= 15 else ("कृष्ण" if hi else "Krishna")
-    return f"{paksha} {name}"
+    return f"{paksha} {TITHI_HI[name] if hi else name}"
 
 
 def _tithi_window(sub: dict, d: date, hi: bool) -> str:
@@ -162,8 +162,9 @@ def _tithi_window(sub: dict, d: date, hi: bool) -> str:
     today = _day(sub, d); yday = _day(sub, d - timedelta(days=1))
     if not today:
         return ""
-    start = (yday["tithi_ends"] + (" (" + ("कल" if hi else "yesterday") + ")" if not yday["tithi_ends_next_day"] else "")) if yday and yday["tithi_ends"] else ("सूर्योदय से पहले" if hi else "before sunrise")
-    end = (today["tithi_ends"] or "—") + ((" (" + ("अगले दिन" if hi else "next day") + ")") if today["tithi_ends_next_day"] else "")
+    prev_lbl = (d - timedelta(days=1)).strftime("%d-%m"); next_lbl = (d + timedelta(days=1)).strftime("%d-%m")
+    start = (yday["tithi_ends"] + ("" if yday["tithi_ends_next_day"] else f" ({prev_lbl})")) if yday and yday["tithi_ends"] else ("सूर्योदय से पहले" if hi else "before sunrise")
+    end = (today["tithi_ends"] or "—") + (f" ({next_lbl})" if today["tithi_ends_next_day"] else "")
     cur = f'{today["paksha_hi"]} {today["tithi_hi"]}' if hi else f'{today["paksha"]} {today["tithi"]}'
     nxt = _next_tithi_name(today["tithi_number"], hi)
     return (f"{cur}: {start} से {end} तक, फिर {nxt}" if hi else f"{cur}: from {start} to {end}, then {nxt}")
@@ -179,7 +180,7 @@ def compose_daily(sub: dict, d: date) -> str:
     if sub.get("want_panchang", 1):
         L.append(f'{"मास" if hi else "Month"}: {day["masa_purnimanta_hi"] if hi else day["masa_purnimanta"]} ({"पूर्णिमांत" if hi else "purnimanta"}) · {"वि.सं." if hi else "V.S."} {day["vikram_samvat"]}')
         L.append(("तिथि: " if hi else "Tithi: ") + _tithi_window(sub, d, hi))
-        L.append(f'{"नक्षत्र" if hi else "Nakshatra"}: {day["nakshatra_hi"] if hi else day["nakshatra"]} ({day["nakshatra_ends"] or "—"}{"+" if day["nakshatra_ends_next_day"] else ""} {"तक" if hi else "until"}) · {"योग" if hi else "Yoga"}: {day["yoga_hi"] if hi else day["yoga"]} · {"करण" if hi else "Karana"}: {day["karana_hi"] if hi else day["karana"]}')
+        L.append(f'{"नक्षत्र" if hi else "Nakshatra"}: {day["nakshatra_hi"] if hi else day["nakshatra"]} ({("" if hi else "until ") + (day["nakshatra_ends"] or "—") + ("+" if day["nakshatra_ends_next_day"] else "") + (" तक" if hi else "")}) · {"योग" if hi else "Yoga"}: {day["yoga_hi"] if hi else day["yoga"]} · {"करण" if hi else "Karana"}: {day["karana_hi"] if hi else day["karana"]}')
         L.append(f'☀️ {day["sunrise"]} – {day["sunset"]} · 🌙 {"चंद्रोदय" if hi else "moonrise"} {day["moonrise"] or "—"} · {"चंद्र राशि" if hi else "Moon sign"} {day["moon_sign_hi"] if hi else day["moon_sign"]}')
         rk = day.get("rahu_kaal"); ab = day.get("abhijit")
         L.append(f'⏳ {"राहु काल" if hi else "Rahu kaal"} {rk["start"] + "–" + rk["end"] if rk else "—"} · {"अभिजित" if hi else "Abhijit"} {ab["start"] + "–" + ab["end"] if ab else "—"} · {"दिशाशूल" if hi else "Disha shool"} {day["disha_shool_hi"] if hi else day["disha_shool"]}')
@@ -224,7 +225,7 @@ def compose_alert(sub: dict, d: date, prefix: bool = False) -> str:
     if not ev:
         return ""
     names = ", ".join(x["name_hi"] if hi else x["name_en"] for x in ev)
-    head = ("📿 *कल* " if prefix else "📿 ") + f'({d.strftime("%d-%m-%Y")}, {day["vara_hi"] if hi else day["vara"]}): ' + names
+    head = (("📿 *कल* " if hi else "📿 *Tomorrow* ") if prefix else "📿 ") + f'({d.strftime("%d-%m-%Y")}, {day["vara_hi"] if hi else day["vara"]}): ' + names
     window = _tithi_window(sub, d, hi)
     lines = [head, ("तिथि " if hi else "Tithi ") + window, f'☀️ {"सूर्योदय" if hi else "sunrise"} {day["sunrise"]} · {"सूर्यास्त" if hi else "sunset"} {day["sunset"]} · 🌙 {"चंद्रोदय" if hi else "moonrise"} {day["moonrise"] or "—"}']
     if any(x["kind"] == "ekadashi" for x in ev):
@@ -251,7 +252,7 @@ def compose_weekly(sub: dict, d: date) -> str:
         if ev:
             any_ev = True
             L.append(f'• {x.strftime("%d-%m")} {day["vara_hi"] if hi else day["vara"]}: ' + ", ".join(e["name_hi"] if hi else e["name_en"] for e in ev)
-                     + f' ({day["paksha_hi"] if hi else day["paksha"]} {day["tithi_hi"] if hi else day["tithi"]} {day["tithi_ends"] or ""}{"+" if day["tithi_ends_next_day"] else ""} {"तक" if hi else "until"})')
+                     + f' ({day["paksha_hi"] if hi else day["paksha"]} {day["tithi_hi"] if hi else day["tithi"]} {("" if hi else "until ") + (day["tithi_ends"] or "") + ("+" if day["tithi_ends_next_day"] else "") + (" तक" if hi else "")})')
     if not any_ev:
         L.append("इस सप्ताह कोई चुना हुआ व्रत-पर्व नहीं।" if hi else "No selected vrat or festival this week.")
     L.append("")

@@ -138,6 +138,24 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <div class="banner danger" id="warns" hidden></div>
     <div class="tiles" id="tiles"></div>
     <div class="card" id="summary"></div>
+    <div class="card" id="wacard"><b>WhatsApp पर रोज़ का अपडेट</b> <span class="muted" style="font-size:.85rem">(पंचांग, आपका राशिफल, कल के व्रत-पर्व की सूचना, साप्ताहिक सूची — निःशुल्क)</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:6px">
+        <label>WhatsApp नंबर <input id="wa_phone" placeholder="91XXXXXXXXXX" inputmode="tel"></label>
+        <label>रोज़ का समय <input id="wa_time" type="time" value="06:30"></label>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin:6px 0;font-size:.9rem">
+        <label><input type="checkbox" id="wa_panchang" checked> पंचांग</label>
+        <label><input type="checkbox" id="wa_rashifal" checked> मेरा राशिफल</label>
+        <label><input type="checkbox" id="wa_alert" checked> कल के व्रत-पर्व की सूचना</label>
+        <label><input type="checkbox" id="wa_weekly" checked> साप्ताहिक सूची (रविवार)</label>
+        <label><input type="checkbox" id="wa_en"> English</label>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:.85rem" id="wa_kinds">
+        <label><input type="checkbox" value="festival" checked> त्योहार</label><label><input type="checkbox" value="ekadashi" checked> एकादशी</label><label><input type="checkbox" value="purnima" checked> पूर्णिमा</label><label><input type="checkbox" value="amavasya" checked> अमावस्या</label><label><input type="checkbox" value="pradosh" checked> प्रदोष</label><label><input type="checkbox" value="chaturthi"> चतुर्थी</label><label><input type="checkbox" value="shivaratri"> मासिक शिवरात्रि</label><label><input type="checkbox" value="regional"> क्षेत्रीय पर्व</label><label><input type="checkbox" value="national"> राष्ट्रीय दिवस</label>
+      </div>
+      <div class="actions"><button type="button" class="ghost" id="wa_preview">संदेश का नमूना देखिए</button><button type="button" id="wa_sub">कोड भेजिए</button><span id="wa_verify_wrap" hidden><input id="wa_code" placeholder="6 अंकों का कोड" style="width:9em" inputmode="numeric"> <button type="button" id="wa_verify">सत्यापित करें</button></span><button type="button" class="ghost" id="wa_stop">बंद करें</button></div>
+      <div class="err" id="wa_err"></div><pre id="wa_out" class="muted" style="white-space:pre-wrap;font-size:.85rem;margin:6px 0 0"></pre>
+    </div>
     <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaypanchang" class="muted" style="font-size:.9rem;margin:4px 0 6px"></div><div id="todaylist"></div></div>
     <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
@@ -1073,6 +1091,29 @@ $('f').addEventListener('submit', async e => {
     renderNumerology(body);
   } catch (err) { $('err').textContent = 'त्रुटि: ' + err.message; }
 });
+
+// ---- WhatsApp daily updates (Vivid Relay)
+(function waCard() {
+  const waBody = () => {
+    const b = window.lastBody || {};
+    const kinds = [...document.querySelectorAll('#wa_kinds input:checked')].map(x => x.value).join(',');
+    return {phone: $('wa_phone').value.trim(), name: b.name || null, lang: $('wa_en').checked ? 'en' : 'hi', tz: b.tz || 'Asia/Kolkata', lat: b.lat ?? 28.61, lon: b.lon ?? 77.2,
+            place: ($('city') && $('city').selectedOptions[0]?.textContent) || '', daily_time: $('wa_time').value || '06:30', want_panchang: $('wa_panchang').checked,
+            want_rashifal: $('wa_rashifal').checked, vrat_alert: $('wa_alert').checked, vrat_kinds: kinds, weekly: $('wa_weekly').checked, weekly_day: 0,
+            birth: b.date ? {date: b.date, time: b.time, tz: b.tz, lat: b.lat, lon: b.lon} : null};
+  };
+  const call = async (path, body) => {
+    $('wa_err').textContent = '';
+    const r = await apiFetch(path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+    const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि'); return d;
+  };
+  $('wa_preview').onclick = async () => { try { const d = await call('/v1/notify/preview', waBody()); $('wa_out').textContent = d.daily + '\n\n' + d.weekly + (d.relay_ready ? '' : '\n\n(सर्वर पर Relay अभी सेट नहीं है — संदेश भेजे नहीं जाएँगे)'); } catch (e) { $('wa_err').textContent = e.message; } };
+  $('wa_sub').onclick = async () => { try { const d = await call('/v1/notify/subscribe', waBody()); $('wa_verify_wrap').hidden = false;
+      $('wa_out').textContent = d.sent ? `WhatsApp पर कोड भेजा गया (${d.phone})। नीचे कोड डालकर सत्यापित करें।` : `कोड भेजा नहीं जा सका: ${d.detail || ''}`; } catch (e) { $('wa_err').textContent = e.message; } };
+  $('wa_verify').onclick = async () => { try { const d = await call('/v1/notify/verify', {phone: $('wa_phone').value.trim(), code: $('wa_code').value.trim()});
+      $('wa_out').textContent = d.welcome_sent ? 'सत्यापित! पहला संदेश भेज दिया गया; अब रोज़ चुने हुए समय पर आएगा।' : `सत्यापित, पर पहला संदेश नहीं गया: ${d.detail || ''}`; $('wa_verify_wrap').hidden = true; } catch (e) { $('wa_err').textContent = e.message; } };
+  $('wa_stop').onclick = async () => { try { await call('/v1/notify/unsubscribe', {phone: $('wa_phone').value.trim()}); $('wa_out').textContent = 'अपडेट बंद कर दिए गए।'; } catch (e) { $('wa_err').textContent = e.message; } };
+})();
 // ---- Kundali matching
 const MPEOPLE = [['b','वर (Groom)','1990-05-17','06:45','0'], ['g','वधू (Bride)','1992-11-03','14:20','5']];
 (function buildMatchForm() {

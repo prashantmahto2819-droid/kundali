@@ -153,3 +153,9 @@ The web page has a language button; the report accepts `"lang": "en"` (`POST /v1
 
 ## Install as an app (PWA)
 The web page is a Progressive Web App: `web/manifest.webmanifest`, `web/sw.js` (app shell and knowledge files cached, API always live) and icons in `web/icons/`. On HTTPS, Chrome/Edge (Android, desktop) show an "ऐप इंस्टॉल करें" button; on iPhone use Share → "Add to Home Screen". The service-worker cache version is the git commit (set at Docker build via `GIT_SHA`), so each deploy refreshes the shell. Making a chart still needs the server; the learning material opens offline.
+
+## WhatsApp daily updates (Vivid Relay)
+`engine/jyotish/notify.py` — subscriptions (`wa_subs` in the access SQLite), message composers (daily panchang with tithi windows,
+personal rashifal, day-before vrat alert, weekly list), sender (`POST {RELAY_URL}/api/sessions/{RELAY_SESSION}/send`, Bearer
+`RELAY_API_KEY`) and a once-a-minute worker (`KUNDALI_NOTIFY=1`). Routes: `POST /v1/notify/{subscribe,verify,unsubscribe,status,preview}`.
+Setup: `docs/OPS-relay.md` §12.

@@ -17,6 +17,11 @@ services:
       KUNDALI_AUTH: ${KUNDALI_AUTH:-optional}     # anonymous web use allowed; API keys / logins are metered
       KUNDALI_DB: /srv/data/access.sqlite
       SUPABASE_URL: ${SUPABASE_URL:-}
+      # WhatsApp daily updates through Vivid Relay (same docker network, so the gateway's service name works)
+      RELAY_URL: ${RELAY_URL:-http://gateway:8080}
+      RELAY_API_KEY: ${RELAY_API_KEY:-}
+      RELAY_SESSION: ${RELAY_SESSION:-}
+      KUNDALI_NOTIFY: ${KUNDALI_NOTIFY:-0}            # 1 = run the once-a-minute sender inside this container
     volumes:
       - kundali-data:/srv/data
     mem_limit: 768m
