@@ -356,6 +356,8 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div><label>कितने दिन</label><input id="mu_days" type="number" min="1" max="60" value="30" style="width:90px"></div>
       <div><label>वर की चंद्र राशि</label><select id="mu_groom" style="width:auto"><option value="">—</option></select></div>
       <div><label>वधू की चंद्र राशि</label><select id="mu_bride" style="width:auto"><option value="">—</option></select></div>
+      <div><label>वर का नक्षत्र</label><select id="mu_groom_nak" style="width:auto"><option value="">—</option></select></div>
+      <div><label>वधू का नक्षत्र</label><select id="mu_bride_nak" style="width:auto"><option value="">—</option></select></div>
       <div><label>स्थान</label><input id="mu_city" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)"></div>
       <div><button type="submit">खोजिए</button></div>
     </form>
@@ -367,7 +369,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <div class="muted" style="font-size:.85rem">इस ऐप के अपने पंचांग से: 32 प्रमुख त्योहार, 24 एकादशी (नाम सहित), पूर्णिमा-अमावस्या, अधिक मास। स्थान कुंडली वाला या ऊपर चुना शहर।</div>
     <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
       <div><label>वर्ष</label><input id="fyear" type="number" min="1950" max="2099" style="max-width:110px"></div>
-      <div><label>दिखाइए</label><select id="fkind" style="width:auto"><option value="festival">त्योहार</option><option value="ekadashi">एकादशी</option><option value="purnima">पूर्णिमा / अमावस्या</option><option value="all">सब</option></select></div>
+      <div><label>दिखाइए</label><select id="fkind" style="width:auto"><option value="festival">त्योहार</option><option value="regional">क्षेत्रीय पर्व</option><option value="national">राष्ट्रीय दिवस</option><option value="other">अन्य धर्म (ईद, क्रिसमस…)</option><option value="ekadashi">एकादशी</option><option value="vrat">प्रदोष / चतुर्थी / शिवरात्रि</option><option value="purnima">पूर्णिमा / अमावस्या</option><option value="all">सब</option></select></div>
       <button type="button" id="fgo" style="width:auto">देखिए</button>
     </div>
     <div id="ferr" style="color:#c62828;margin-top:6px"></div>
@@ -483,6 +485,9 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
             <label class="ck"><input type="checkbox" data-show="yoga_karana"> योग-करण</label>
             <label class="ck"><input type="checkbox" data-show="festival_list" checked> पर्व-सूची (दाएँ)</label>
             <label class="ck"><input type="checkbox" data-show="vrat_extra"> प्रदोष, चतुर्थी, मासिक शिवरात्रि</label>
+            <label class="ck"><input type="checkbox" data-show="national" checked> राष्ट्रीय दिवस</label>
+            <label class="ck"><input type="checkbox" data-show="regional_festivals"> क्षेत्रीय पर्व (पोंगल, ओणम, दुर्गा पूजा…)</label>
+            <label class="ck"><input type="checkbox" data-show="other_faiths"> ईद, क्रिसमस आदि</label>
             <label class="ck"><input type="checkbox" data-show="regional"> शक संवत + तमिल/बंगाली/मलयालम मास</label>
           </div></details>
         <details><summary><b>9. अपनी तिथियाँ और छुट्टियाँ</b></summary>
@@ -1711,7 +1716,7 @@ async function openReport(path, body) {
       const r = await apiFetch(`/v1/festivals?year=${+$('fyear').value}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`);
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const kind = $('fkind').value;
-      const ev = d.events.filter(e => kind === 'all' ? true : kind === 'purnima' ? (e.kind === 'purnima' || e.kind === 'amavasya') : e.kind === kind);
+      const ev = d.events.filter(e => kind === 'all' ? true : kind === 'purnima' ? (e.kind === 'purnima' || e.kind === 'amavasya') : kind === 'other' ? (e.kind === 'christian' || e.kind === 'islamic') : kind === 'vrat' ? ['pradosh', 'chaturthi', 'shivaratri'].includes(e.kind) : e.kind === kind);
       const today = new Date().toISOString().slice(0, 10);
       const byMonth = {}; ev.forEach(e => (byMonth[+e.date.slice(5, 7) - 1] = byMonth[+e.date.slice(5, 7) - 1] || []).push(e));
       $('fout').innerHTML = (d.adhika_masa.length ? `<div class="banner">अधिक मास: ${d.adhika_masa.map(a => `${esc(a.masa_hi)} (${a.start} → ${a.end || '…'})`).join(', ')} — इस मास में त्योहार नहीं गिने गए।</div>` : '') +
@@ -1741,15 +1746,17 @@ async function openReport(path, body) {
   });
   const RASHI_HI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
   RASHI_HI.forEach((r, i) => { for (const id of ['mu_groom', 'mu_bride']) { const o = document.createElement('option'); o.value = i; o.textContent = r; $(id).appendChild(o); } });
+  const NAK_HI = ['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्वा फाल्गुनी','उत्तरा फाल्गुनी','हस्त','चित्रा','स्वाति','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्वाभाद्रपद','उत्तराभाद्रपद','रेवती'];
+  NAK_HI.forEach((r, i) => { for (const id of ['mu_groom_nak', 'mu_bride_nak']) { const o = document.createElement('option'); o.value = i; o.textContent = r; $(id).appendChild(o); } });
   async function showLagna(date, base) {
     const host = $('mulagnaout'); host.innerHTML = '<div class="muted">लग्न-सारणी बन रही है…</div>';
     try {
-      const b = {date, lat: base.lat, lon: base.lon, tz: base.tz, activity: base.activity === 'marriage' ? 'marriage' : 'general', groom_moon_sign: $('mu_groom').value || null, bride_moon_sign: $('mu_bride').value || null};
+      const b = {date, lat: base.lat, lon: base.lon, tz: base.tz, activity: base.activity === 'marriage' ? 'marriage' : 'general', groom_moon_sign: $('mu_groom').value || null, bride_moon_sign: $('mu_bride').value || null, groom_nakshatra: $('mu_groom_nak').value || null, bride_nakshatra: $('mu_bride_nak').value || null};
       const r = await apiFetch('/v1/muhurta/lagna', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(b)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const V = {shubh: 'yes', madhyam: '', varjit: 'muted'};
       host.innerHTML = `<h4 style="margin:12px 0 4px">${esc(date)} — लग्न-सारणी और लग्न-शुद्धि</h4>
-        ${Object.keys(d.chandrabala || {}).length ? `<p>${Object.entries(d.chandrabala).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: चंद्रबल ${c.count}वाँ (${esc(c.day_moon_sign_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')}</p>` : ''}
+        ${Object.keys(d.chandrabala || {}).length || Object.keys(d.tarabala || {}).length ? `<p>${Object.entries(d.chandrabala || {}).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: चंद्रबल ${c.count}वाँ (${esc(c.day_moon_sign_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')} ${Object.entries(d.tarabala || {}).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: ताराबल <span>${esc(c.tara_hi)}</span> (${c.count}वाँ, ${esc(c.day_nakshatra_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')}</p>` : ''}
         <p class="muted" style="font-size:.85rem">अभिजित ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'} · राहु काल ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · शुभ चौघड़िया: ${d.good_choghadiya.map(c => `${esc(c.name)} ${esc(c.start)}–${esc(c.end)}`).join(', ')}</p>
         <table><tr><th>समय</th><th>लग्न</th><th>स्कोर</th><th>निर्णय</th><th>दोष</th><th>बल</th></tr>${d.lagnas.map(l => `<tr${l.night ? ' class="muted"' : ''}><td>${esc(l.start)}–${esc(l.end)}${l.night ? ' <span class="muted">(रात्रि)</span>' : ''}</td><td><b>${esc(l.sign_name_hi)}</b></td><td><b>${l.score}</b></td><td><span class="chip ${V[l.verdict]}">${esc(l.verdict_hi)}</span></td><td class="muted" style="font-size:.85rem">${l.doshas.map(x => esc(x.hi)).join('; ') || '—'}</td><td class="muted" style="font-size:.85rem">${l.strengths.map(x => esc(x.hi)).join('; ') || '—'}</td></tr>`).join('')}</table>
         <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;

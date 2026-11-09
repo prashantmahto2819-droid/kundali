@@ -311,6 +311,8 @@ class MuhurtaLagnaRequest(BaseModel):
     activity: str = "marriage"
     groom_moon_sign: int | None = Field(None, ge=0, le=11)
     bride_moon_sign: int | None = Field(None, ge=0, le=11)
+    groom_nakshatra: int | None = Field(None, ge=0, le=26)
+    bride_nakshatra: int | None = Field(None, ge=0, le=26)
 
 
 @app.post("/v1/muhurta/lagna")

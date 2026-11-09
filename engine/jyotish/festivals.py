@@ -69,6 +69,12 @@ def _jd(dt: datetime) -> float:
     return jd_ut + delta_t(year_fraction(u)) / 86400.0
 
 
+def _sid(jd_tt: float) -> tuple[float, float]:
+    pos = _B.positions(jd_tt)
+    a = ayanamsa(jd_tt)
+    return norm360(pos["Sun"] - a), norm360(pos["Moon"] - a)
+
+
 def _tithi_at(jd_tt: float) -> dict:
     pos = _B.positions(jd_tt)
     ayan = ayanamsa(jd_tt)
@@ -93,6 +99,103 @@ def lunations(year: int) -> tuple:
 
 def _month_of(jd_tt: float, luns: tuple) -> dict | None:
     return next((m for m in luns if m["start"] <= jd_tt < m["end"]), None)
+
+
+def _sankranti_date(year: int, tz: str, sign: int, month_guess: int) -> str:
+    """Local date of the Sun's sidereal ingress into `sign` (0 = Mesha) near the given Gregorian month."""
+    zone = ZoneInfo(tz)
+    lo = datetime(year, month_guess, 1, tzinfo=timezone.utc) - timedelta(days=5); hi = lo + timedelta(days=40)
+    f = lambda d: norm360(_B.positions(_jd(d))["Sun"] - ayanamsa(_jd(d)))
+    target = sign * 30.0
+    for _ in range(45):
+        mid = lo + (hi - lo) / 2
+        if (f(mid) - target) % 360.0 > 180.0:
+            lo = mid
+        else:
+            hi = mid
+    return lo.astimezone(zone).strftime("%Y-%m-%d")
+
+
+def _easter(year: int) -> date:
+    a = year % 19; b, c = divmod(year, 100); d, e = divmod(b, 4); f = (b + 8) // 25; g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30; i, k = divmod(c, 4); l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451; month = (h + l - 7 * m + 114) // 31; day = ((h + l - 7 * m + 114) % 31) + 1
+    return date(year, month, day)
+
+
+def _hijri_to_gregorian(hy: int, hm: int, hd: int) -> date:
+    """Tabular (arithmetic) Islamic calendar, civil epoch 16 July 622; actual dates depend on moon sighting (±1 day)."""
+    jd = (hd + (29.5 * (hm - 1)).__ceil__() + (hy - 1) * 354 + (3 + 11 * hy) // 30 + 1948439.5) - 1
+    jd = int(jd + 0.5)
+    # JD → Gregorian (Fliegel–Van Flandern)
+    l = jd + 68569; n = 4 * l // 146097; l = l - (146097 * n + 3) // 4; i = 4000 * (l + 1) // 1461001; l = l - 1461 * i // 4 + 31
+    j = 80 * l // 2447; dd = l - 2447 * j // 80; l = j // 11; mm = j + 2 - 12 * l; yy = 100 * (n - 49) + i + l
+    return date(yy, mm, dd)
+
+
+def other_calendars(year: int, tz: str) -> list[dict]:
+    """National days, Christian feasts (computus) and the main Islamic observances (tabular calendar, approximate)."""
+    out = []
+    def add(key, hi, en, d, kind, note_hi="", note_en=""):
+        out.append({"key": key, "name_hi": hi, "name_en": en, "date": d.isoformat() if isinstance(d, date) else d, "kind": kind, "masa": None, "masa_hi": None,
+                    "tithi": None, "tithi_hi": None, "rule": "civil", "note_hi": note_hi, "note_en": note_en})
+    add("republic_day", "गणतंत्र दिवस", "Republic Day", date(year, 1, 26), "national")
+    add("independence_day", "स्वतंत्रता दिवस", "Independence Day", date(year, 8, 15), "national")
+    add("gandhi_jayanti", "गांधी जयंती", "Gandhi Jayanti", date(year, 10, 2), "national")
+    add("ambedkar_jayanti", "अम्बेडकर जयंती", "Ambedkar Jayanti", date(year, 4, 14), "national")
+    e = _easter(year)
+    add("good_friday", "गुड फ़्राइडे", "Good Friday", e - timedelta(days=2), "christian")
+    add("easter", "ईस्टर", "Easter Sunday", e, "christian")
+    add("christmas", "क्रिसमस", "Christmas", date(year, 12, 25), "christian")
+    hn, hen = "चाँद दिखने पर एक दिन आगे-पीछे संभव (सारणीबद्ध हिजरी गणना)।", "May shift by a day with the moon sighting (tabular Hijri calendar)."
+    for hy in range(year - 580, year - 577):
+        for key, hi, en, hm, hd in (("eid_ul_fitr", "ईद-उल-फ़ित्र", "Eid ul-Fitr", 10, 1), ("eid_ul_adha", "ईद-उल-अज़हा (बक़रीद)", "Eid ul-Adha (Bakrid)", 12, 10),
+                                   ("muharram", "मुहर्रम (आशूरा)", "Muharram (Ashura)", 1, 10), ("milad", "ईद-ए-मिलाद", "Eid-e-Milad", 3, 12), ("ramadan_start", "रमज़ान आरंभ", "Ramadan begins", 9, 1)):
+            d = _hijri_to_gregorian(hy, hm, hd)
+            if d.year == year:
+                add(f"{key}_{hy}", hi, en, d, "islamic", hn, hen)
+    return out
+
+
+def regional_festivals(year: int, lat: float, lon: float, tz: str, days: list, luns: tuple) -> list[dict]:
+    """Regional festivals fixed by solar ingress or by month + tithi in a region's own convention."""
+    out = []
+    def add(key, hi, en, d, note_hi="", note_en="", region=""):
+        out.append({"key": key, "name_hi": hi, "name_en": en, "date": d, "kind": "regional", "masa": None, "masa_hi": None, "tithi": None, "tithi_hi": None,
+                    "rule": "regional", "note_hi": note_hi, "note_en": note_en, "region": region})
+    mk = _sankranti_date(year, tz, 9, 1); mesha = _sankranti_date(year, tz, 0, 4)
+    add("pongal", "पोंगल (थाई 1)", "Pongal (Thai 1)", mk, region="Tamil Nadu")
+    add("lohri", "लोहड़ी", "Lohri", (date.fromisoformat(mk) - timedelta(days=1)).isoformat(), region="Punjab")
+    add("tamil_new_year", "तमिल नववर्ष (चित्तिरै 1) / विशु / बिहू / पोइला बोइशाख", "Tamil New Year (Chithirai 1) / Vishu / Bihu / Poila Boishakh", mesha,
+        "मेष संक्रांति; बंगाली नववर्ष प्रायः अगले दिन।", "Mesha sankranti; the Bengali new year usually falls the next day.", "Tamil Nadu, Kerala, Assam, Bengal")
+    # tithi-based regional days (amanta masa index, tithi number)
+    T = [("gangaur", "गणगौर", "Gangaur", 11, 3, "Rajasthan"), ("mahavir_jayanti", "महावीर जयंती", "Mahavir Jayanti", 11, 13, "Jain"),
+         ("rath_yatra", "रथ यात्रा", "Rath Yatra", 2, 2, "Odisha"), ("ganga_dussehra", "गंगा दशहरा", "Ganga Dussehra", 1, 10, "North India"),
+         ("vat_savitri", "वट सावित्री व्रत", "Vat Savitri vrat", 1, 30, "North India (amanta Jyeshtha Amavasya)"), ("hariyali_teej", "हरियाली तीज", "Hariyali Teej", 3, 3, "North India"),
+         ("kajari_teej", "कजरी तीज", "Kajari Teej", 3, 18, "Bihar, UP, MP"), ("durga_puja_shashthi", "दुर्गा पूजा आरंभ (षष्ठी)", "Durga Puja begins (Shashthi)", 5, 6, "Bengal"),
+         ("maha_navami", "महानवमी", "Maha Navami", 5, 9, ""),
+         ("lakshmi_puja_kojagari", "कोजागरी लक्ष्मी पूजा", "Kojagari Lakshmi Puja", 5, 15, "Bengal"), ("bhishma_ashtami", "भीष्म अष्टमी", "Bhishma Ashtami", 9, 8, ""),
+         ("saraswati_puja", "सरस्वती पूजा", "Saraswati Puja", 9, 5, "Bengal (Vasant Panchami)"), ("guru_nanak_jayanti", "गुरु नानक जयंती", "Guru Nanak Jayanti", 6, 15, "Sikh")]
+    for key, hi, en, masa, tnum, region in T:
+        cands = [x for x in days if x["masa"] == masa and not x["adhika"]]
+        hit = next((x for x in cands if x["tithi"]["number"] == tnum), None) or next((x for x in cands if x["tithi"]["number"] == (tnum % 30) + 1), None)
+        if hit:
+            add(key, hi, en, hit["date"].isoformat(), region=region)
+    # Onam: Thiruvonam (Shravana) nakshatra day in Chingam (Sun in Simha); Karthigai Deepam: Krittika day in Karthigai (Sun in Vrischika) near the full moon
+    for key, hi, en, sun_sign, nak_idx, region in (("onam", "ओणम (तिरुवोणम)", "Onam (Thiruvonam)", 4, 21, "Kerala"), ("karthigai_deepam", "कार्तिगै दीपम", "Karthigai Deepam", 7, 2, "Tamil Nadu")):
+        best = None
+        for x in days:
+            sun, moon = _sid(x["jd_rise"]) if "jd_rise" in x else (None, None)
+            if sun is None:
+                continue
+            if int(sun // 30) == sun_sign and nakshatra_of(moon)["index"] == nak_idx:
+                t = x["tithi"]["number"]
+                if key == "karthigai_deepam" and not (12 <= t <= 17):
+                    continue
+                best = x; break
+        if best:
+            add(key, hi, en, best["date"].isoformat(), region=region)
+    return out
 
 
 def _makara_sankranti(year: int, tz: str) -> str:
@@ -208,7 +311,13 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
             events.append({"key": f"{kind}_{x['date'].isoformat()}", "name_hi": hi, "name_en": en, "date": x["date"].isoformat(), "kind": kind,
                            "masa": MASA[x["masa"]], "masa_hi": MASA_HI[x["masa"]], "tithi": x["tithi"]["name"], "tithi_hi": f'{x["tithi"]["paksha_hi"]} {x["tithi"]["name_hi"]}',
                            "rule": "sunrise" if not kshaya else "kshaya", "note_hi": "क्षय तिथि: अगले सूर्योदय वाले दिन।" if kshaya else "", "note_en": "Kshaya tithi: taken on the following sunrise day." if kshaya else ""})
-    events.sort(key=lambda e: (e["date"], 0 if e["kind"] == "festival" else 1))
+    events += regional_festivals(year, lat, lon, tz, days, luns)
+    diwali = next((e for e in events if e["key"] == "diwali"), None)
+    if diwali:
+        events.append({**diwali, "key": "kali_puja", "name_hi": "काली पूजा", "name_en": "Kali Puja", "kind": "regional", "rule": "regional", "note_hi": "", "note_en": "", "region": "Bengal"})
+    events += other_calendars(year, tz)
+    order = {"festival": 0, "regional": 1, "national": 2, "ekadashi": 3, "purnima": 4, "amavasya": 4, "pradosh": 5, "chaturthi": 5, "shivaratri": 5, "christian": 6, "islamic": 6}
+    events.sort(key=lambda e: (e["date"], order.get(e["kind"], 9)))
     adh = []
     for m in luns:
         if m["adhika"]:

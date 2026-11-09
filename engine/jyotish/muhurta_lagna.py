@@ -17,14 +17,15 @@ from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from .constants import PLANETS_HI, SIGN_LORDS, SIGNS, SIGNS_HI
-from .core import ascendant_tropical, ayanamsa, sign_of
+from .core import ascendant_tropical, ayanamsa, nakshatra_of, sign_of
+from .constants import NAKSHATRAS_HI
 from .ephemeris import AnalyticBackend, mean_node, norm360
 from .muhurta import day_table
 from .timeutil import delta_t, julian_day, year_fraction
 
 _B = AnalyticBackend()
-BENEFIC = {"Jupiter", "Venus", "Mercury"}
-MALEFIC = {"Sun", "Mars", "Saturn", "Rahu", "Ketu"}
+BENEFIC = ("Jupiter", "Venus", "Mercury")
+MALEFIC = ("Sun", "Mars", "Saturn", "Rahu", "Ketu")
 KENDRA_TRIKONA = {1, 4, 5, 7, 9, 10}
 FIXED = {1, 4, 7, 10}
 DUAL = {2, 5, 8, 11}
@@ -125,7 +126,8 @@ def judge(ch: dict, activity: str = "marriage", groom_moon_sign: int | None = No
 
 
 def lagna_muhurta(day_iso: str, lat: float, lon: float, tz: str, activity: str = "marriage",
-                  groom_moon_sign: int | None = None, bride_moon_sign: int | None = None) -> dict:
+                  groom_moon_sign: int | None = None, bride_moon_sign: int | None = None,
+                  groom_nakshatra: int | None = None, bride_nakshatra: int | None = None) -> dict:
     day = date.fromisoformat(day_iso)
     zone = ZoneInfo(tz)
     wins = lagna_table(day, lat, lon, tz)
@@ -147,8 +149,19 @@ def lagna_muhurta(day_iso: str, lat: float, lon: float, tz: str, activity: str =
         if sgn is not None:
             cnt = (day_moon - sgn) % 12 + 1
             chandrabala[who] = {"count": cnt, "ok": cnt not in (6, 8, 12), "day_moon_sign_hi": SIGNS_HI[day_moon], "day_moon_sign": SIGNS[day_moon]}
+    # tarabala: the day's nakshatra (at noon) counted from the birth star; taras 3 (vipat), 5 (pratyak), 7 (naidhana) unfavourable
+    day_nak = nakshatra_of(noon_ch["lons"]["Moon"])["index"]
+    TARA_HI = ["जन्म", "संपत्", "विपत्", "क्षेम", "प्रत्यरि", "साधक", "वध", "मित्र", "अति-मित्र"]
+    TARA_EN = ["Janma", "Sampat", "Vipat", "Kshema", "Pratyari", "Sadhaka", "Vadha", "Mitra", "Ati-mitra"]
+    tarabala = {}
+    for who, nk in (("groom", groom_nakshatra), ("bride", bride_nakshatra)):
+        if nk is not None:
+            cnt = (day_nak - nk) % 27 + 1
+            tara = (cnt - 1) % 9
+            tarabala[who] = {"count": cnt, "tara": tara + 1, "tara_hi": TARA_HI[tara], "tara_en": TARA_EN[tara], "ok": (tara + 1) not in (3, 5, 7),
+                             "day_nakshatra_hi": NAKSHATRAS_HI[day_nak]}
     best = sorted([r for r in rows if r["verdict"] != "varjit"], key=lambda r: -r["score"])[:3]
-    return {"date": day_iso, "activity": activity, "lagnas": rows, "best": best, "abhijit": dt.get("abhijit"), "rahu_kaal": dt.get("rahu_kaal"), "chandrabala": chandrabala,
+    return {"date": day_iso, "activity": activity, "lagnas": rows, "best": best, "abhijit": dt.get("abhijit"), "rahu_kaal": dt.get("rahu_kaal"), "chandrabala": chandrabala, "tarabala": tarabala,
             "good_choghadiya": [{"name": c["name"], "start": c["start"], "end": c["end"]} for c in dt.get("choghadiya_day", []) + dt.get("choghadiya_night", []) if c.get("nature") == "good"],
             "review_status": "draft",
             "note_hi": "लग्न-शुद्धि (पंचांग-स्तर): सप्तम-अष्टम रिक्त, द्वादश में पाप ग्रह नहीं, लग्नेश 6/8/12 में नहीं, चंद्र 1/6/8/12 में नहीं; विवाह में मंगल अष्टम व शुक्र षष्ठ वर्जित, स्थिर/द्विस्वभाव लग्न वांछित, वर-वधू की राशि से 6/8/12 लग्न वर्जित। "

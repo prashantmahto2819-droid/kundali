@@ -582,16 +582,16 @@ def muhurta_lagna_from_payload(payload: dict) -> dict:
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
         raise BadRequest("date must be YYYY-MM-DD")
     signs = {}
-    for k in ("groom_moon_sign", "bride_moon_sign"):
+    for k, top in (("groom_moon_sign", 11), ("bride_moon_sign", 11), ("groom_nakshatra", 26), ("bride_nakshatra", 26)):
         v = payload.get(k)
         if v in (None, ""):
             signs[k] = None; continue
         try:
             v = int(v)
         except (TypeError, ValueError):
-            raise BadRequest(f"{k} must be 0-11")
-        if not 0 <= v <= 11:
-            raise BadRequest(f"{k} must be 0-11")
+            raise BadRequest(f"{k} must be 0-{top}")
+        if not 0 <= v <= top:
+            raise BadRequest(f"{k} must be 0-{top}")
         signs[k] = v
     activity = str(payload.get("activity") or "marriage")
     try:

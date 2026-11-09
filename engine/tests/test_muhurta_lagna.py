@@ -27,7 +27,8 @@ def test_judge_rules():
 
 
 def test_lagna_muhurta_and_handler():
-    r = ml.lagna_muhurta("2026-11-26", 22.35, 82.68, "Asia/Kolkata", "marriage", groom_moon_sign=3)
+    r = ml.lagna_muhurta("2026-11-26", 22.35, 82.68, "Asia/Kolkata", "marriage", groom_moon_sign=3, groom_nakshatra=7)
+    assert r["tarabala"]["groom"]["tara"] in range(1, 10) and r["tarabala"]["groom"]["tara_hi"]
     assert len(r["lagnas"]) >= 12 and all(0 <= l["score"] <= 100 for l in r["lagnas"]) and r["abhijit"] and r["note_hi"]
     assert all(l["verdict"] != "varjit" for l in r["best"])
     assert r["chandrabala"]["groom"]["count"] in range(1, 13) and "bride" not in r["chandrabala"]

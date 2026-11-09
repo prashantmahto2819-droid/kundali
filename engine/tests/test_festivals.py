@@ -21,7 +21,11 @@ def test_known_dates_2025_and_2026():
 def test_structure_and_vrat_days():
     c, _ = _fest(2026)
     kinds = {e["kind"] for e in c["events"]}
-    assert kinds == {"festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri"}
+    assert kinds == {"festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri", "regional", "national", "christian", "islamic"}
+    by = {e["key"]: e["date"] for e in c["events"]}
+    assert by["pongal"] == "2026-01-14" and by["lohri"] == "2026-01-13" and by["tamil_new_year"] == "2026-04-14" and by["easter"] == "2026-04-05"
+    assert by["eid_ul_fitr_1447"] == "2026-03-20" and by["eid_ul_adha_1447"] == "2026-05-27" and by["kali_puja"] == by["diwali"] and by["republic_day"] == "2026-01-26"
+    assert by["onam"].startswith("2026-08") and by["durga_puja_shashthi"] == "2026-10-16" and by["guru_nanak_jayanti"] == by["kartika_purnima"]
     assert 22 <= sum(1 for e in c["events"] if e["kind"] == "pradosh") <= 27 and 10 <= sum(1 for e in c["events"] if e["kind"] == "shivaratri") <= 13
     ek = [e for e in c["events"] if e["kind"] == "ekadashi"]
     assert 24 <= len(ek) <= 27 and any("अधिक" in e["name_hi"] for e in ek)           # adhika Jyeshtha adds two

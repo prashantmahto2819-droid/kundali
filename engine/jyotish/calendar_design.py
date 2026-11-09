@@ -92,7 +92,8 @@ def _logo(design: dict) -> str:
 
 def _events_for(d: dict, sv) -> list:
     return [x for x in d["events"] if x["kind"] == "festival" or (sv("ekadashi") and x["kind"] == "ekadashi") or (sv("purnima_amavasya", False) and x["kind"] in ("purnima", "amavasya"))
-            or (sv("vrat_extra", False) and x["kind"] in ("pradosh", "chaturthi", "shivaratri"))]
+            or (sv("vrat_extra", False) and x["kind"] in ("pradosh", "chaturthi", "shivaratri")) or (sv("national", True) and x["kind"] == "national")
+            or (sv("regional_festivals", False) and x["kind"] == "regional") or (sv("other_faiths", False) and x["kind"] in ("christian", "islamic"))]
 
 
 def _bits(d: dict, hi: bool, sv) -> dict:
@@ -407,6 +408,7 @@ table.list tbody tr:nth-child(even) {{ background:color-mix(in srgb, var(--accen
 .trio {{ flex:1 1 auto; display:grid; grid-template-rows:repeat(3,1fr); gap:3mm; min-height:0; }}
 .third {{ display:flex; flex-direction:column; gap:1.5mm; min-height:0; }} .third .grid {{ gap:.6mm; }} .third .cell {{ padding:.6mm .8mm; }} .third .cell .d {{ font-size:{fs(10)}; }} .third .cell .t {{ font-size:{fs(6.4)}; }} .third .pill {{ font-size:{fs(6)}; }} .third .minilist {{ columns:3; font-size:{fs(6.8)}; }}
 .pill.pradosh, .pill.chaturthi, .pill.shivaratri {{ background:transparent; border:0.25mm dashed var(--line); color:var(--ink); }}
+.pill.national {{ background:var(--sun); color:#fff; }} .pill.regional {{ background:var(--accent); color:var(--head); }} .pill.christian, .pill.islamic {{ background:color-mix(in srgb, var(--ink) 70%, white); color:#fff; }}
 .half {{ display:flex; flex-direction:column; gap:2mm; min-height:0; }} .half .grid {{ gap:.8mm; }} .half .cell {{ padding:.8mm 1mm; }} .half .cell .d {{ font-size:{fs(12)}; }} .half .cell .t {{ font-size:{fs(7)}; }}
 .minilist {{ margin:0; padding:0; columns:3; font-size:{fs(7.6)}; }} .minilist li {{ list-style:none; }} .minilist b.dt {{ min-width:5mm; }}
 .cover {{ flex:1 1 auto; display:flex; flex-direction:column; gap:4mm; min-height:0; }}

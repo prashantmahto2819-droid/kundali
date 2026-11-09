@@ -229,7 +229,14 @@ for _l in _mlr["lagnas"]:
 for _hi, _en in (("वर की चंद्र राशि", "Groom's Moon sign"), ("वधू की चंद्र राशि", "Bride's Moon sign"), ("लग्न-शुद्धि", "Lagna shuddhi"), ("लग्न-सारणी बन रही है…", "Building the lagna table…"), ("निर्णय", "Verdict"), ("दोष", "Doshas"),
                  ("शुभ", "good"), ("मध्यम", "middling"), ("वर्जित", "avoid"), ("(रात्रि)", "(night)"), ("मंगल अष्टम में", "Mars in the 8th"), ("शुक्र षष्ठ में", "Venus in the 6th"), ("स्थिर/द्विस्वभाव लग्न", "Fixed or dual lagna"), ("चर लग्न (विवाह में कम वांछित)", "Movable lagna (less preferred for marriage)")):
     EXACT.setdefault(_hi, _en)
-LAGNA_PATTERNS = [("वर: चंद्रबल {1}वाँ ({2}) ✓", "Groom: chandrabala {1}th ({2}) ✓"), ("वर: चंद्रबल {1}वाँ ({2}) ✗", "Groom: chandrabala {1}th ({2}) ✗"), ("वधू: चंद्रबल {1}वाँ ({2}) ✓", "Bride: chandrabala {1}th ({2}) ✓"), ("वधू: चंद्रबल {1}वाँ ({2}) ✗", "Bride: chandrabala {1}th ({2}) ✗"),("{1} — लग्न-सारणी और लग्न-शुद्धि", "{1} — lagna table and lagna shuddhi"), ("सप्तम भाव में ग्रह ({1}) — जामित्र दोष", "Planet(s) in the 7th ({1}) — Jamitra dosha"), ("अष्टम भाव में ग्रह ({1})", "Planet(s) in the 8th ({1})"),
+_fc2 = _fe.calendar(2026, 22.35, 82.68, "Asia/Kolkata")
+for _e in _fc2["events"]:
+    if _e["kind"] in ("regional", "national", "christian", "islamic"):
+        put(_e["name_hi"], _e["name_en"])
+        if _e["note_hi"]: put(_e["note_hi"], _e["note_en"])
+for _hi, _en in zip(["जन्म", "संपत्", "विपत्", "क्षेम", "प्रत्यरि", "साधक", "वध", "मित्र", "अति-मित्र"], ["Janma", "Sampat", "Vipat", "Kshema", "Pratyari", "Sadhaka", "Vadha", "Mitra", "Ati-mitra"]):
+    EXACT.setdefault(_hi, _en)
+LAGNA_PATTERNS = [("वर: ताराबल", "Groom: tarabala"), ("वधू: ताराबल", "Bride: tarabala"), ("({1}वाँ, {2}) ✓", "({1}th, {2}) ✓"), ("({1}वाँ, {2}) ✗", "({1}th, {2}) ✗"),("वर: चंद्रबल {1}वाँ ({2}) ✓", "Groom: chandrabala {1}th ({2}) ✓"), ("वर: चंद्रबल {1}वाँ ({2}) ✗", "Groom: chandrabala {1}th ({2}) ✗"), ("वधू: चंद्रबल {1}वाँ ({2}) ✓", "Bride: chandrabala {1}th ({2}) ✓"), ("वधू: चंद्रबल {1}वाँ ({2}) ✗", "Bride: chandrabala {1}th ({2}) ✗"),("{1} — लग्न-सारणी और लग्न-शुद्धि", "{1} — lagna table and lagna shuddhi"), ("सप्तम भाव में ग्रह ({1}) — जामित्र दोष", "Planet(s) in the 7th ({1}) — Jamitra dosha"), ("अष्टम भाव में ग्रह ({1})", "Planet(s) in the 8th ({1})"),
                   ("द्वादश में पाप ग्रह ({1})", "Malefic in the 12th ({1})"), ("लग्नेश {1} {2}वें भाव में", "Lagna lord {1} in house {2}"), ("चंद्र {1}वें भाव में", "Moon in house {1}"), ("लग्न में पाप ग्रह ({1})", "Malefic in the lagna ({1})"),
                   ("शुभ ग्रह केंद्र/त्रिकोण में ({1})", "Benefic in kendra/trikona ({1})"), ("लग्न वर की चंद्र राशि से {1}वाँ", "Lagna is the {1}th from the groom's Moon sign"), ("लग्न वधू की चंद्र राशि से {1}वाँ", "Lagna is the {1}th from the bride's Moon sign"),
                   ("अभिजित {1} · राहु काल {2} · शुभ चौघड़िया: {3}", "Abhijit {1} · Rahu kaal {2} · good choghadiya: {3}")]
@@ -249,7 +256,9 @@ UI_CAL = {"कैलेंडर": "Calendar", "कैलेंडर डिज�
           "तारीख़": "Date", "नोट": "Note", "पाठ (ख़ाली = सिर्फ़ छुट्टी)": "Text (empty = holiday only)", "जोड़िए": "Add", "झलक ताज़ा कीजिए": "Refresh preview", "प्रिंट / PDF": "Print / PDF", "डिज़ाइन सहेजिए": "Save design", "रीसेट": "Reset",
           "प्रिंट संवाद में \"Save as PDF\" चुनिए, कागज़ वही आकार, मार्जिन \"None/Default\", \"Background graphics\" चालू।": "In the print dialog choose \"Save as PDF\", the same paper size, margins \"None/Default\", \"Background graphics\" on.",
           "डिज़ाइन इस डिवाइस पर सहेजा गया।": "Design saved on this device.", "शहर": "City", "हिंदी": "Hindi", "विज्ञापन के लिए स्थान": "Space for an advertisement", "(छुट्टी)": "(holiday)"}
-UI_CAL.update({"प्रदोष, चतुर्थी, मासिक शिवरात्रि": "Pradosh, Chaturthi, monthly Shivaratri", "शक संवत + तमिल/बंगाली/मलयालम मास": "Shaka samvat + Tamil/Bengali/Malayalam months", "तीन माह / पृष्ठ": "Three months / page", "तिमाही; पूरे वर्ष के 4 पृष्ठ": "Quarterly; 4 pages for a year",
+UI_CAL.update({"राष्ट्रीय दिवस": "National days", "क्षेत्रीय पर्व (पोंगल, ओणम, दुर्गा पूजा…)": "Regional festivals (Pongal, Onam, Durga Puja…)", "ईद, क्रिसमस आदि": "Eid, Christmas etc.", "क्षेत्रीय पर्व": "Regional festivals", "अन्य धर्म (ईद, क्रिसमस…)": "Other faiths (Eid, Christmas…)", "प्रदोष / चतुर्थी / शिवरात्रि": "Pradosh / Chaturthi / Shivaratri",
+               "वर का नक्षत्र": "Groom's nakshatra", "वधू का नक्षत्र": "Bride's nakshatra",
+               "प्रदोष, चतुर्थी, मासिक शिवरात्रि": "Pradosh, Chaturthi, monthly Shivaratri", "शक संवत + तमिल/बंगाली/मलयालम मास": "Shaka samvat + Tamil/Bengali/Malayalam months", "तीन माह / पृष्ठ": "Three months / page", "तिमाही; पूरे वर्ष के 4 पृष्ठ": "Quarterly; 4 pages for a year",
                "होरा (ग्रह-घंटे, 24)": "Hora (planetary hours, 24)", "प्रदोष व्रत": "Pradosh vrat", "विनायक चतुर्थी": "Vinayaka Chaturthi", "संकष्टी चतुर्थी": "Sankashti Chaturthi", "मासिक शिवरात्रि": "Masik Shivaratri",
                "वार्षिक शुभ-मुहूर्त पृष्ठ": "Yearly auspicious-dates page", "वार्षिक शुभ मुहूर्त": "Auspicious dates of the year",
                "पंचांग-स्तर: तिथि, नक्षत्र, वार, योग, भद्रा; संस्कारों में खरमास, चातुर्मास, होलाष्टक, अधिक मास, पितृ पक्ष, गुरु-शुक्र अस्त वर्जित": "Almanac level: tithi, nakshatra, weekday, yoga, Bhadra; samskaras exclude Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha, Jupiter/Venus combust",
