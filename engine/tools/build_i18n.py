@@ -256,6 +256,20 @@ UI_CAL = {"कैलेंडर": "Calendar", "कैलेंडर डिज�
           "तारीख़": "Date", "नोट": "Note", "पाठ (ख़ाली = सिर्फ़ छुट्टी)": "Text (empty = holiday only)", "जोड़िए": "Add", "झलक ताज़ा कीजिए": "Refresh preview", "प्रिंट / PDF": "Print / PDF", "डिज़ाइन सहेजिए": "Save design", "रीसेट": "Reset",
           "प्रिंट संवाद में \"Save as PDF\" चुनिए, कागज़ वही आकार, मार्जिन \"None/Default\", \"Background graphics\" चालू।": "In the print dialog choose \"Save as PDF\", the same paper size, margins \"None/Default\", \"Background graphics\" on.",
           "डिज़ाइन इस डिवाइस पर सहेजा गया।": "Design saved on this device.", "शहर": "City", "हिंदी": "Hindi", "विज्ञापन के लिए स्थान": "Space for an advertisement", "(छुट्टी)": "(holiday)"}
+from jyotish import rashifal as _rfm
+_rf = _rfm.rashifal("2026-11-09", "Asia/Kolkata", "daily")
+for _per in ("daily", "weekly", "monthly"):
+    _x = _rfm.rashifal("2026-11-09", "Asia/Kolkata", _per); put(_x["note_hi"], _x["note_en"]); put(_x["period_hi"], _x["period_en"])
+for _s in _rf["signs"]:
+    put(_s["summary_hi"], _s["summary_en"])
+for _v in _rfm.LUCKY.values():
+    put(_v[0], _v[1])
+for _hi, _en in (("उत्तम", "excellent"), ("अच्छा", "good"), ("संयम", "restraint"), ("राशिफल — दैनिक / साप्ताहिक / मासिक (चंद्र राशि से गोचर)", "Rashifal — daily / weekly / monthly (transits over the Moon sign)"),
+                 ("बारह राशियों के लिए गोचर-आधारित प्रवृत्ति; यह भविष्यवाणी नहीं। अपनी चंद्र राशि कुंडली से देखिए।", "Transit-based tendencies for the twelve signs; not a prediction. Find your Moon sign in the chart."),
+                 ("अवधि", "Period"), ("दैनिक", "Daily"), ("साप्ताहिक", "Weekly"), ("मासिक", "Monthly"), ("वार-स्वामी", "weekday lord"), ("शुभ रंग", "lucky colour"), ("शुभ अंक", "lucky number"), ("अनुकूल", "favourable"), ("हर माह के बाद राशिफल पृष्ठ", "Rashifal page after every month"), ("मासिक राशिफल", "Monthly rashifal"), ("राशिफल", "Rashifal")):
+    EXACT.setdefault(_hi, _en)
+RASHI_PATTERNS = [("{1} ग्रह अनुकूल भावों में ({2}); सावधानी: {3}।", "{1} planet(s) in favourable houses ({2}); care with {3}."), ("{1} ग्रह अनुकूल भावों में ({2})।", "{1} planet(s) in favourable houses ({2})."),
+                  ("{1} ग्रह अनुकूल भावों में; सावधानी: {2}।", "{1} planet(s) in favourable houses; care with {2}."), ("वेध: {1}", "vedha: {1}"), ("· शुभ अंक {1}", "· lucky number {1}"), ("{1} राशिफल", "{1} rashifal")]
 UI_CAL.update({"राष्ट्रीय दिवस": "National days", "क्षेत्रीय पर्व (पोंगल, ओणम, दुर्गा पूजा…)": "Regional festivals (Pongal, Onam, Durga Puja…)", "ईद, क्रिसमस आदि": "Eid, Christmas etc.", "क्षेत्रीय पर्व": "Regional festivals", "अन्य धर्म (ईद, क्रिसमस…)": "Other faiths (Eid, Christmas…)", "प्रदोष / चतुर्थी / शिवरात्रि": "Pradosh / Chaturthi / Shivaratri",
                "वर का नक्षत्र": "Groom's nakshatra", "वधू का नक्षत्र": "Bride's nakshatra",
                "प्रदोष, चतुर्थी, मासिक शिवरात्रि": "Pradosh, Chaturthi, monthly Shivaratri", "शक संवत + तमिल/बंगाली/मलयालम मास": "Shaka samvat + Tamil/Bengali/Malayalam months", "तीन माह / पृष्ठ": "Three months / page", "तिमाही; पूरे वर्ष के 4 पृष्ठ": "Quarterly; 4 pages for a year",
@@ -400,7 +414,7 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + FEST_PATTERNS + LAGNA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + FEST_PATTERNS + LAGNA_PATTERNS + RASHI_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

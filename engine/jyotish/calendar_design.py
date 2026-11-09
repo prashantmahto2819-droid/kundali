@@ -294,6 +294,16 @@ def tpl_quarter(ms, design, hi, sv) -> str:
     return _page(design, f'<div class="trio">{"".join(third(m) for m in ms)}</div>{_foot(design, hi)}')
 
 
+def tpl_rashifal(m, design, hi) -> str:
+    from .rashifal import rashifal as _rf
+    r = _rf(f'{m["year"]}-{m["month"]:02d}-15', m["tz"], "monthly")
+    boxes = "".join(f'<div class="box"><h3>{e(s["sign_name_hi"] if hi else s["sign_name"])} <span class="legend">{s["score"]}/100 · {e(s["grade_hi"] if hi else s["grade_en"])}</span></h3>'
+                    f'<p class="legend" style="opacity:1">{e(s["summary_hi"] if hi else s["summary_en"])}</p><ul>' + "".join(f'<li>{e((p["text_hi"] if hi else p["text_en"]).split(": ", 1)[-1])}</li>' for p in s["planets"] if p["planet"] in ("Jupiter", "Saturn", "Mars", "Sun")) + '</ul></div>' for s in r["signs"])
+    head = (f'<div class="title panchang"><div class="pl">{_logo(design)}</div><div class="pc"><div class="m">{"मासिक राशिफल" if hi else "Monthly rashifal"} — {_mname(m["month"], hi, False)} <span class="y">{m["year"]}</span></div>'
+            f'<div class="sub">{e(r["note_hi"] if hi else r["note_en"])}</div></div></div>')
+    return _page(design, f'{head}<div class="boxes rashi">{boxes}</div>{_foot(design, hi)}')
+
+
 def tpl_muhurta_year(year, months, design, hi) -> str:
     """Yearly page: auspicious dates per activity for every month (almanac level)."""
     acts: dict[str, dict] = {}
@@ -401,6 +411,7 @@ table.list td.dn {{ font-family:{font['display']}; font-weight:800; font-size:{f
 table.list td.fest {{ color:var(--fest); font-weight:700; }} table.list td.fest i {{ color:var(--accent); font-weight:500; }} table.list td.fest .sp {{ color:var(--ink); font-weight:500; opacity:.8; }}
 table.list tbody tr:nth-child(even) {{ background:color-mix(in srgb, var(--accent) 4%, transparent); }}
 .boxes {{ flex:0 0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:3mm; }}
+.boxes.rashi {{ flex:1 1 auto; grid-template-columns:repeat(3,1fr); grid-auto-rows:1fr; }} .boxes.rashi .box {{ max-height:none; font-size:{fs(7.6)}; }} .boxes.rashi li {{ display:block; margin:0 0 .6mm; }}
 .boxes.year {{ flex:1 1 auto; grid-template-columns:repeat(2,1fr); align-content:start; }} .boxes.year .box {{ max-height:none; font-size:{fs(8.6)}; }} .mlist {{ columns:2; }} .mlist li {{ display:block; break-inside:avoid; }} .mlist b {{ color:var(--accent); display:inline-block; min-width:9mm; }}
 .box {{ border:0.3mm solid var(--line); border-radius:2mm; padding:1.6mm 2.2mm; font-size:{fs(7.2)}; background:color-mix(in srgb, var(--accent) 3%, transparent); max-height:40mm; overflow:hidden; }} .box li {{ margin:0 0 .4mm; }} .box b.dt {{ min-width:5.5mm; font-size:{fs(6.6)}; }}
 .box li b {{ color:var(--accent); }}
@@ -452,7 +463,10 @@ def render_calendar(year: int, months: list[int], lat: float, lon: float, tz: st
             pages.append(tpl_quarter(data[i:i + 3], design, hi, sv))
     else:
         fn = {"classic": tpl_classic, "modern": tpl_modern, "poster": tpl_poster, "panchang": tpl_panchang}[tpl]
-        pages += [fn(m, design, hi, sv) for m in data]
+        for m in data:
+            pages.append(fn(m, design, hi, sv))
+            if design.get("rashifal_page"):
+                pages.append(tpl_rashifal(m, design, hi))
     title = (design.get("business") or {}).get("name") or ("पंचांग कैलेंडर" if hi else "Panchang calendar")
     link = f'<link rel="stylesheet" href="{font["link"]}">' if font["link"] and design.get("web_fonts", True) else ""
     return (f'<!doctype html><html lang="{"hi" if hi else "en"}"><head><meta charset="utf-8"><title>{e(title)} {year}</title>{link}'

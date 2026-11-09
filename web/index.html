@@ -375,6 +375,17 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <div id="ferr" style="color:#c62828;margin-top:6px"></div>
     <div id="fout"></div>
   </div>
+  <div class="card" id="rashicard">
+    <b>राशिफल — दैनिक / साप्ताहिक / मासिक (चंद्र राशि से गोचर)</b>
+    <div class="muted" style="font-size:.85rem">बारह राशियों के लिए गोचर-आधारित प्रवृत्ति; यह भविष्यवाणी नहीं। अपनी चंद्र राशि कुंडली से देखिए।</div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <div><label>तारीख़</label><input id="rdate" type="date" style="max-width:170px"></div>
+      <div><label>अवधि</label><select id="rperiod" style="width:auto"><option value="daily">दैनिक</option><option value="weekly">साप्ताहिक</option><option value="monthly">मासिक</option></select></div>
+      <button type="button" id="rgo" style="width:auto">देखिए</button>
+    </div>
+    <div id="rerr" style="color:#c62828;margin-top:6px"></div>
+    <div id="rout"></div>
+  </div>
   </section>
   <section class="tab" id="t-prashna">
   <div class="card" id="prashnacard">
@@ -422,6 +433,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
           <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">
             <label class="ck"><input type="checkbox" id="ccover"> पूरे वर्ष में कवर पृष्ठ</label>
             <label class="ck"><input type="checkbox" id="cmuhurta"> वार्षिक शुभ-मुहूर्त पृष्ठ</label>
+            <label class="ck"><input type="checkbox" id="crashi"> हर माह के बाद राशिफल पृष्ठ</label>
             <label class="ck"><input type="checkbox" id="cbiling"> माह-नाम दोनों भाषाओं में</label>
             <label class="ck"><input type="checkbox" id="cmonday"> सप्ताह सोमवार से</label>
           </div></details>
@@ -1402,7 +1414,7 @@ $('repbtn').addEventListener('click', async () => {
   $('cnadd').onclick = () => { const d = $('cndate').value, t = $('cntext').value.trim(); if (!d) return; if (t) { D.notes = D.notes.filter(n => n.date !== d); D.notes.push({date: d, text: t}); } else if (!D.holidays.some(h => h.date === d)) D.holidays.push({date: d}); $('cntext').value = ''; renderNotes(); preview(); };
   // ---- fields ↔ D
   const F = {cbg: 'background', cfontp: 'font', csize: 'size', cfont: 'font_scale', cheropos: 'hero_position', cplace: 'place', ccovertitle: 'cover_title', ccoversub: 'cover_subtitle'};
-  const B = {ccover: 'cover', cmuhurta: 'muhurta_page', cbiling: 'bilingual', clogofoot: 'logo_in_footer', cwebfonts: 'web_fonts'};
+  const B = {ccover: 'cover', cmuhurta: 'muhurta_page', crashi: 'rashifal_page', cbiling: 'bilingual', clogofoot: 'logo_in_footer', cwebfonts: 'web_fonts'};
   function fromUI() { Object.entries(F).forEach(([id, k]) => D[k] = id === 'cfont' ? +$(id).value : $(id).value); Object.entries(B).forEach(([id, k]) => D[k] = $(id).checked); D.week_start = $('cmonday').checked ? 'monday' : 'sunday';
     D.business = {name: $('cbizname').value, line: $('cbizline').value, website: $('cbizweb').value, tagline: $('cbiztag').value}; const show = {}; document.querySelectorAll('[data-show]').forEach(c => show[c.dataset.show] = c.checked); D.show = show; }
   function toUI() { Object.entries(F).forEach(([id, k]) => { if (D[k] !== undefined && D[k] !== '') $(id).value = D[k]; }); Object.entries(B).forEach(([id, k]) => $(id).checked = !!D[k]); $('cmonday').checked = D.week_start === 'monday';
@@ -1704,6 +1716,21 @@ async function openReport(path, body) {
 // ---- Muhurta finder
 (function muhurtaUI() {
   $('mu_start').value = new Date().toISOString().slice(0, 10);
+  // rashifal
+  $('rdate').value = new Date().toISOString().slice(0, 10);
+  $('rgo').onclick = async () => {
+    $('rerr').textContent = ''; $('rout').innerHTML = '<div class="muted">गणना हो रही है…</div>';
+    try {
+      const r = await apiFetch(`/v1/rashifal?date=${$('rdate').value}&period=${$('rperiod').value}&tz=${encodeURIComponent(($('tz').value || '').trim() || 'Asia/Kolkata')}`);
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      window._lastRashifal = {date: $('rdate').value, period: $('rperiod').value, tz: ($('tz').value || '').trim() || 'Asia/Kolkata'};
+      const G = {'उत्तम': 'yes', 'अच्छा': 'yes', 'मध्यम': '', 'संयम': 'muted'};
+      $('rout').innerHTML = `<div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/rashifal/report', window._lastRashifal).catch(e => { document.getElementById('rerr').textContent = 'त्रुटि: ' + e.message; })">PDF (प्रिंट)</button></div>
+        <p class="muted" style="font-size:.85rem">${esc(d.span.from)}${d.span.to !== d.span.from ? ' → ' + esc(d.span.to) : ''} · <span>वार-स्वामी</span> <span>${esc(d.day_lord_hi)}</span> · <span>शुभ रंग</span> <span>${esc(d.lucky_colour_hi)}</span> · <span>शुभ अंक</span> ${d.lucky_number}</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px">${d.signs.map(s => `<details style="border:1px solid var(--line);border-radius:8px;padding:8px"><summary><b>${esc(s.sign_name_hi)}</b> <span class="chip ${G[s.grade_hi] || ''}"><span>${esc(s.grade_hi)}</span> ${s.score}</span><div class="muted" style="font-size:.8rem">${esc(s.summary_hi)}</div></summary>${s.planets.map(p => `<p style="margin:6px 0;font-size:.85rem"><b>${esc(p.planet_hi)}</b> (${p.house}) ${p.favourable ? (p.vedha_by.length ? `<span class="chip muted">वेध: ${esc(p.vedha_by_hi.join(', '))}</span>` : '<span class="chip yes">अनुकूल</span>') : ''}<br><span class="muted">${esc(p.text_hi)}</span></p>`).join('')}</details>`).join('')}</div>
+        <div class="muted" style="font-size:.8rem;margin-top:8px">${esc(d.note_hi)}</div>`;
+    } catch (err) { $('rout').innerHTML = ''; $('rerr').textContent = 'त्रुटि: ' + err.message; }
+  };
   // festival calendar
   $('fyear').value = new Date().getFullYear();
   const MON_HI = ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];

@@ -163,6 +163,7 @@ def places(q: str = "", limit: int = 8):
 @app.post("/v1/palm/report", response_class=HTMLResponse)
 @app.post("/v1/palm/trace/report", response_class=HTMLResponse)
 @app.post("/v1/panchang/calendar/report", response_class=HTMLResponse)
+@app.post("/v1/rashifal/report", response_class=HTMLResponse)
 async def small_reports(request: Request):
     """Printable pages for numerology, tarot, vastu and palm (same payload as the JSON route, + lang)."""
     try:
@@ -319,6 +320,14 @@ class MuhurtaLagnaRequest(BaseModel):
 def muhurta_lagna(req: MuhurtaLagnaRequest):
     try:
         return handlers.muhurta_lagna_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/rashifal")
+def rashifal(date: str | None = None, period: str = "daily", tz: str = "Asia/Kolkata"):
+    try:
+        return handlers.rashifal_from_query({"date": date, "period": period, "tz": tz})
     except handlers.BadRequest as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 

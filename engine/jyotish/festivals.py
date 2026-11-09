@@ -133,6 +133,27 @@ def _hijri_to_gregorian(hy: int, hm: int, hd: int) -> date:
     return date(yy, mm, dd)
 
 
+def _month_start_by_sighting(tabular_first: date, tz: str, lat: float = 23.0, lon: float = 78.0) -> date:
+    """Islamic month start for India: the day after the first evening (searched around the tabular date) on which the Moon
+    sets more than 45 minutes after sunset following the conjunction. Falls back to the tabular date."""
+    from .moon import moon_times
+    from .sun import sun_times
+    # conjunction just before the tabular first day
+    conj = _amavasya_before(_B, _jd(datetime(tabular_first.year, tabular_first.month, tabular_first.day, 12, tzinfo=timezone.utc)) + 1.5)
+    conj_dt = datetime(2000, 1, 1, tzinfo=timezone.utc) + timedelta(days=conj - 2451544.5)
+    for k in range(0, 4):
+        ev = (conj_dt.astimezone(ZoneInfo(tz)) + timedelta(days=k)).date()
+        st = sun_times(ev, lat, lon, tz)
+        mt = moon_times(ev, lat, lon, tz)
+        if not st or not mt.get("moonset"):
+            continue
+        age_h = ((datetime(ev.year, ev.month, ev.day, tzinfo=ZoneInfo(tz)).astimezone(timezone.utc) - conj_dt).total_seconds() / 3600) + 18
+        lag = (mt["moonset"] - st["sunset"]).total_seconds() / 60
+        if lag >= 45 and age_h >= 17:
+            return ev + timedelta(days=1)
+    return tabular_first
+
+
 def other_calendars(year: int, tz: str) -> list[dict]:
     """National days, Christian feasts (computus) and the main Islamic observances (tabular calendar, approximate)."""
     out = []
@@ -147,11 +168,14 @@ def other_calendars(year: int, tz: str) -> list[dict]:
     add("good_friday", "गुड फ़्राइडे", "Good Friday", e - timedelta(days=2), "christian")
     add("easter", "ईस्टर", "Easter Sunday", e, "christian")
     add("christmas", "क्रिसमस", "Christmas", date(year, 12, 25), "christian")
-    hn, hen = "चाँद दिखने पर एक दिन आगे-पीछे संभव (सारणीबद्ध हिजरी गणना)।", "May shift by a day with the moon sighting (tabular Hijri calendar)."
+    hn, hen = ("भारत में चाँद दिखने के अनुमान (संयुति के बाद पहली शाम जब चाँद सूर्यास्त के बाद ~45 मिनट से अधिक रहे); वास्तविक घोषणा से एक दिन का अंतर संभव।",
+               "Estimated for moon sighting in India (first evening after conjunction with the Moon up more than ~45 min after sunset); the actual announcement may differ by a day.")
     for hy in range(year - 580, year - 577):
         for key, hi, en, hm, hd in (("eid_ul_fitr", "ईद-उल-फ़ित्र", "Eid ul-Fitr", 10, 1), ("eid_ul_adha", "ईद-उल-अज़हा (बक़रीद)", "Eid ul-Adha (Bakrid)", 12, 10),
                                    ("muharram", "मुहर्रम (आशूरा)", "Muharram (Ashura)", 1, 10), ("milad", "ईद-ए-मिलाद", "Eid-e-Milad", 3, 12), ("ramadan_start", "रमज़ान आरंभ", "Ramadan begins", 9, 1)):
-            d = _hijri_to_gregorian(hy, hm, hd)
+            tab = _hijri_to_gregorian(hy, hm, 1)
+            start = _month_start_by_sighting(tab, tz)
+            d = start + timedelta(days=hd - 1)
             if d.year == year:
                 add(f"{key}_{hy}", hi, en, d, "islamic", hn, hen)
     return out
@@ -175,7 +199,28 @@ def regional_festivals(year: int, lat: float, lon: float, tz: str, days: list, l
          ("kajari_teej", "कजरी तीज", "Kajari Teej", 3, 18, "Bihar, UP, MP"), ("durga_puja_shashthi", "दुर्गा पूजा आरंभ (षष्ठी)", "Durga Puja begins (Shashthi)", 5, 6, "Bengal"),
          ("maha_navami", "महानवमी", "Maha Navami", 5, 9, ""),
          ("lakshmi_puja_kojagari", "कोजागरी लक्ष्मी पूजा", "Kojagari Lakshmi Puja", 5, 15, "Bengal"), ("bhishma_ashtami", "भीष्म अष्टमी", "Bhishma Ashtami", 9, 8, ""),
-         ("saraswati_puja", "सरस्वती पूजा", "Saraswati Puja", 9, 5, "Bengal (Vasant Panchami)"), ("guru_nanak_jayanti", "गुरु नानक जयंती", "Guru Nanak Jayanti", 6, 15, "Sikh")]
+         ("saraswati_puja", "सरस्वती पूजा", "Saraswati Puja", 9, 5, "Bengal (Vasant Panchami)"), ("guru_nanak_jayanti", "गुरु नानक जयंती", "Guru Nanak Jayanti", 6, 15, "Sikh"),
+         ("nuakhai", "नुआखाई", "Nuakhai", 4, 5, "Odisha"), ("kumar_purnima", "कुमार पूर्णिमा", "Kumar Purnima", 5, 15, "Odisha"), ("prathamastami", "प्रथमाष्टमी", "Prathamastami", 7, 23, "Odisha"),
+         ("pola", "पोला / पिठोरी अमावस्या", "Pola / Pithori Amavasya", 3, 30, "Maharashtra, Chhattisgarh"), ("hola_mohalla", "होला मोहल्ला", "Hola Mohalla", 10, 16, "Punjab (day after Holi)"),
+         ("jitiya", "जितिया (जीवित्पुत्रिका)", "Jitiya (Jivitputrika)", 4, 23, "Bihar, Jharkhand, UP"), ("bathukamma", "बतुकम्मा आरंभ", "Bathukamma begins", 4, 30, "Telangana"),
+         ("hartalika_gauri", "ज्येष्ठा गौरी आवाहन", "Jyeshtha Gauri Avahan", 4, 7, "Maharashtra"), ("ugadi_telugu", "उगादि / युगादि", "Ugadi / Yugadi", 11, 1, "Andhra, Telangana, Karnataka"),
+         ("vishwakarma_puja_bengal", "विश्वकर्मा पूजा (कन्या संक्रांति)", "Vishwakarma Puja (Kanya sankranti)", None, None, "Bengal, Bihar, Odisha"),
+         ("herath", "हेरथ (कश्मीरी शिवरात्रि, त्रयोदशी)", "Herath (Kashmiri Shivaratri, Trayodashi)", 9, 28, "Kashmir")]
+    for key, hi, en, masa, tnum, region in list(T):
+        if masa is None:
+            T.remove((key, hi, en, masa, tnum, region))
+    add("vishwakarma_puja_bengal", "विश्वकर्मा पूजा (कन्या संक्रांति)", "Vishwakarma Puja (Kanya sankranti)", _sankranti_date(year, tz, 5, 9), region="Bengal, Bihar, Odisha, Jharkhand")
+    add("baisakhi", "बैसाखी", "Baisakhi", mesha, region="Punjab")
+    add("raja_parba", "रज पर्व (पहिली रज)", "Raja Parba (Pahili Raja)", (date.fromisoformat(_sankranti_date(year, tz, 2, 6)) - timedelta(days=1)).isoformat(), region="Odisha")
+    add("karnataka_rajyotsava", "कर्नाटक राज्योत्सव", "Karnataka Rajyotsava", date(year, 11, 1).isoformat(), region="Karnataka")
+    add("uttarayan", "उत्तरायण (पतंग)", "Uttarayan (kites)", mk, region="Gujarat")
+    # Varalakshmi vratam: the Friday before Shravana Purnima (amanta Shravana Shukla paksha)
+    sp = next((x for x in days if x["masa"] == 3 and not x["adhika"] and x["tithi"]["number"] == 15), None)
+    if sp:
+        fri = sp["date"]
+        while fri.weekday() != 4:
+            fri -= timedelta(days=1)
+        add("varalakshmi", "वरलक्ष्मी व्रत", "Varalakshmi vratam", fri.isoformat(), region="Andhra, Telangana, Karnataka, Tamil Nadu")
     for key, hi, en, masa, tnum, region in T:
         cands = [x for x in days if x["masa"] == masa and not x["adhika"]]
         hit = next((x for x in cands if x["tithi"]["number"] == tnum), None) or next((x for x in cands if x["tithi"]["number"] == (tnum % 30) + 1), None)

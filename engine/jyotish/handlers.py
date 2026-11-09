@@ -349,7 +349,7 @@ def palm_report_from_payload(payload: dict) -> str:
 REPORT_ROUTES = {"/v1/report": None, "/v1/match/report": "match_report_from_payload", "/v1/muhurta/report": "muhurta_report_from_payload",
                  "/v1/prashna/report": "prashna_report_from_payload", "/v1/numerology/report": "numerology_report_from_payload",
                  "/v1/tarot/report": "tarot_report_from_payload", "/v1/vastu/report": "vastu_report_from_payload", "/v1/vastu/plan/report": "vastu_plan_report_from_payload", "/v1/palm/report": "palm_report_from_payload",
-                 "/v1/palm/trace/report": "palm_trace_report_from_payload", "/v1/panchang/calendar/report": "calendar_report_from_payload"}
+                 "/v1/palm/trace/report": "palm_trace_report_from_payload", "/v1/panchang/calendar/report": "calendar_report_from_payload", "/v1/rashifal/report": "rashifal_report_from_payload"}
 
 
 # ---- JSON safety net ------------------------------------------------------------------
@@ -598,3 +598,28 @@ def muhurta_lagna_from_payload(payload: dict) -> dict:
         return muhurta_lagna.lagna_muhurta(day, lat, lon, tz, activity, **signs)
     except ValueError as exc:
         raise BadRequest(str(exc)) from exc
+
+
+def rashifal_from_query(q: dict) -> dict:
+    """GET /v1/rashifal?date=YYYY-MM-DD&period=daily|weekly|monthly&tz=Asia/Kolkata"""
+    from . import rashifal
+    day = str(q.get("date") or datetime.now(timezone.utc).date().isoformat())
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+        raise BadRequest("date must be YYYY-MM-DD")
+    period = str(q.get("period") or "daily")
+    if period not in ("daily", "weekly", "monthly"):
+        raise BadRequest("period must be daily, weekly or monthly")
+    tz = str(q.get("tz") or "Asia/Kolkata")
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise BadRequest(f"unknown time zone '{tz}'")
+    try:
+        return rashifal.rashifal(day, tz, period)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def rashifal_report_from_payload(payload: dict) -> str:
+    from . import report
+    return _localize(report.render_rashifal(rashifal_from_query(payload)), payload)

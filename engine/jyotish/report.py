@@ -489,6 +489,16 @@ def render_vastu(v: dict) -> str:
     return _page("वास्तु जाँच", "वास्तु जाँच", body)
 
 
+def render_rashifal(r: dict) -> str:
+    boxes = []
+    for sg in r["signs"]:
+        rows = "".join(f'<li><b>{e(p["planet_hi"])}</b> ({p["house"]}): {e(p["text_hi"].split(": ", 1)[-1])}</li>' for p in sg["planets"])
+        boxes.append(f'<div class="box"><h2 style="margin:0 0 2mm">{e(sg["sign_name_hi"])} <span class="small">— {sg["score"]}/100 · {e(sg["grade_hi"])}</span></h2><p class="small">{e(sg["summary_hi"])}</p><ul class="small">{rows}</ul></div>')
+    body = (f'<p>{e(r["period_hi"])} राशिफल · {e(r["span"]["from"])}{" → " + e(r["span"]["to"]) if r["span"]["to"] != r["span"]["from"] else ""} · वार-स्वामी {e(r["day_lord_hi"])} · शुभ रंग {e(r["lucky_colour_hi"])} · शुभ अंक {r["lucky_number"]}</p>'
+            f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4mm">{"".join(boxes)}</div><div class="banner">{e(r["note_hi"])}</div>')
+    return _page("राशिफल", f'{r["period_hi"]} राशिफल', body)
+
+
 def render_vastu_plan(v: dict) -> str:
     rows = [[e(r["room_hi"]), f'{r["bearing"]}°', e(r["zone_hi"]), e(r["direction_hi"]), e(r["pada"]["devata_hi"]), f'<b>{e(r["rating_hi"])}</b>',
              e(r.get("why_hi", r["zone_theme_hi"])) + (f'<br><i>{e(r["fix_hi"])}</i>' if r.get("fix_hi") else "")
