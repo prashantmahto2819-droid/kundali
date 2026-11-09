@@ -2,6 +2,7 @@
 import hashlib
 import hmac
 import json
+import re
 import time
 
 import pytest
@@ -161,3 +162,19 @@ def test_weekly_rashifal_and_personal_muhurta(store, monkeypatch):
     wa_bot.answer("919876543210", "शुरू"); wa_bot.answer("919876543210", "जन्म 15-05-1990 10:30 दिल्ली")
     m = wa_bot.answer("919876543210", "मुहूर्त विवाह")
     assert "आपके लिए" in m and "चंद्रबल" in m and "उत्तम लग्न" in m
+
+
+def test_more_commands(store, monkeypatch):
+    monkeypatch.setattr(notify, "send_whatsapp", lambda *a, **k: {"ok": True, "detail": ""})
+    f = wa_bot.answer("919876543210", "दीपावली कब है")
+    assert "दीपावली" in f and re.search(r"\d\d-\d\d-\d{4}", f)
+    assert "Holika" in wa_bot.answer("919876543210", "when is holi")
+    p = wa_bot.answer("919876543210", "पंचांग 25-12-2026 इंदौर")
+    assert "25-12-2026" in p and "(इंदौर)" in p
+    v = wa_bot.answer("919876543210", "वर्षफल 15-05-1990 10:30 जबलपुर")
+    assert "वर्षफल 2026" in v and "वर्ष-लग्न" in v and "मुद्दा दशा" in v
+    n = wa_bot.answer("919876543210", "अंक 15-05-1990 Ram Sharma")
+    assert "मूलांक" in n and "नामांक" in n and "लो-शू" in n
+    m = wa_bot.answer("919876543210", "मिलान 15-05-1990 10:30 दिल्ली | 20-08-1992 06:15 मुंबई")
+    assert "अष्टकूट" in m and "दशकूट" in m and "मंगल दोष" in m
+    assert "ऐसे लिखिए" in wa_bot.answer("919876543210", "मिलान")

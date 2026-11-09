@@ -132,6 +132,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div class="card"><b>आज और कल के व्रत-पर्व</b><div id="tdevents" class="muted">—</div></div>
       <div class="card"><b>आज के शुभ-अशुभ समय</b><div id="tdkaal" class="muted">—</div></div>
     </div>
+    <div class="card"><b>आगामी 30 दिन के व्रत-पर्व</b><div id="tdupcoming" class="muted">—</div></div>
     <div class="card"><b>आज का राशिफल (सभी 12 राशियाँ)</b><div class="signs" id="tdsigns"></div><div class="muted" style="font-size:.8rem;margin-top:6px">चंद्र राशि से गोचर-आधारित प्रवृत्ति-संकेत; अपनी राशि अपनी कुंडली से जानिए।</div></div>
     <div class="card"><b>जल्दी जाइए</b><div class="quick">
       <button type="button" onclick="showTab('t-kundali')">कुंडली बनाइए</button><button type="button" class="ghost" onclick="showTab('t-kundali');document.getElementById('wacard')?.scrollIntoView({behavior:'smooth'})">WhatsApp पर रोज़ का अपडेट</button>
@@ -805,6 +806,14 @@ window.loadTodayTab = (function () {
         <div><span>वर्ज्य</span>: ${(d0.varjyam || []).map(w => `${esc(w.start)}–${esc(w.end)}${w.next_day ? '+' : ''}`).join(', ') || '—'} · <span>अमृत काल</span>: ${d0.amrit_kalam ? `${esc(d0.amrit_kalam.start)}–${esc(d0.amrit_kalam.end)}${d0.amrit_kalam.next_day ? '+' : ''}` : '—'}</div>
         <div><span>दिशाशूल</span>: <span>${esc(d0.disha_shool_hi)}</span>${d0.anandadi_yoga ? ` · <span>आनंदादि योग</span>: <span>${esc((window.getLang ? window.getLang() : 'hi') === 'en' ? d0.anandadi_yoga.name : d0.anandadi_yoga.hi)}</span> ${d0.anandadi_yoga.auspicious ? '✅' : '⚠️'}` : ''}</div>
         ${(d0.good_choghadiya || []).length ? `<div><span>शुभ चौघड़िया</span>: ${d0.good_choghadiya.map(c => `<span>${esc(c.name_hi || c.name)}</span> ${esc(c.start)}–${esc(c.end)}${nowChog === c ? ' ◀' : ''}`).join(' · ')}${status(nowChog)}</div>` : ''}`;
+      apiFetch(`/v1/festivals?year=${iso(today).slice(0, 4)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`).then(r => r.json()).then(async f => {
+        let evs = (f.events || []);
+        if (today.getMonth() === 11) { try { const f2 = await (await apiFetch(`/v1/festivals?year=${today.getFullYear() + 1}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`)).json(); evs = evs.concat(f2.events || []); } catch (e) {} }
+        const en = (window.getLang ? window.getLang() : 'hi') === 'en';
+        const until = new Date(today.getTime() + 30 * 86400000);
+        const up = evs.filter(e => ['grahan', 'festival', 'ekadashi', 'purnima', 'amavasya', 'pradosh', 'national'].includes(e.kind) && e.date >= iso(today) && e.date <= iso(until)).sort((a, b) => a.date.localeCompare(b.date));
+        $('tdupcoming').innerHTML = up.length ? `<table style="font-size:.9rem">${up.map(e => `<tr><td style="white-space:nowrap">${esc(e.date.slice(8, 10))}-${esc(e.date.slice(5, 7))}</td><td>${esc(en ? e.name_en : e.name_hi)}${e.kind === 'grahan' ? ' 🌑' : ''}</td></tr>`).join('')}</table>` : '<span>कोई नहीं</span>';
+      }).catch(() => {});
       $('tdsigns').innerHTML = (rf.signs || []).map(s => `<div><b><span>${esc(s.sign_name_hi)}</span> <span class="chip">${s.score}</span></b><span class="g"><span>${esc(s.grade_hi)}</span> — ${esc(s.summary_hi)}</span></div>`).join('');
     } catch (e) { $('tdhead').textContent = 'पंचांग लोड नहीं हो सका: ' + e.message; }
   };
@@ -1420,6 +1429,12 @@ $('mf').addEventListener('submit', async e => {
     const r = await apiFetch('/v1/match', {method:'POST', headers:{'Content-Type':'application/json'},
                           body:JSON.stringify({boy:personBody('b'), girl:personBody('g')})});
     const m = await r.json(); if (!r.ok) throw new Error(m.detail || 'त्रुटि');
+    window._lastMatch = m; window._rerenderMatch = () => { if (window._lastMatch) renderMatch(window._lastMatch); };
+    renderMatch(m);
+  } catch (err) { $('merr').textContent = err.message; }
+});
+function renderMatch(m) {
+  {
     const rows = m.kootas.map(k => `<tr><td>${esc(k.name_hi)} <span class="muted">(${esc(k.name)})</span></td>
       <td><b>${k.score}</b> / ${k.max}</td><td class="muted">${esc(k.detail)}</td>
       <td><span class="chip ${k.confidence==='firm'?'yes':'muted'}">${CONF[k.confidence]}</span></td></tr>`).join('');
@@ -1451,8 +1466,8 @@ $('mf').addEventListener('submit', async e => {
         const html = await r.text(); if (!r.ok) throw new Error('रिपोर्ट नहीं बनी'); const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close(); }
       catch (e) { $('merr').textContent = 'त्रुटि: ' + e.message; }
     };
-  } catch (err) { $('merr').textContent = 'त्रुटि: ' + err.message; }
-});
+  }
+}
 
 
 $('tf').addEventListener('submit', async e => {
@@ -2462,7 +2477,7 @@ async function openReport(path, body) {
   const mo = new MutationObserver(muts => { if (lang === 'hi' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
   mo.observe(document.body, {childList: true, subtree: true, characterData: true});
-  const after = () => { if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); };
+  const after = () => { if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); if (window._rerenderMatch) setTimeout(window._rerenderMatch, 70); };
   $('langbtn').onclick = () => { set(lang === 'hi' ? 'en' : 'hi'); after(); };
   // more languages when translation packs exist (data/i18n_<code>.json)
   apiFetch('/v1/i18n/languages').then(r => r.json()).then(d => {

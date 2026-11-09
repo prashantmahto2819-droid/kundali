@@ -815,6 +815,16 @@ def consult_admin_from_payload(payload: dict, headers: dict | None = None) -> di
         return _consult_call("admin_set_subscriber", payload.get("phone"), payload.get("fields") or {})
     if action == "override":
         return _consult_call("admin_save_override", int(payload.get("year") or 0), payload.get("data") or {})
+    if action == "export_subscribers":
+        import csv, io
+        from . import notify
+        rows = notify.subs().active() if payload.get("active_only") else [dict(r) for r in consult._rows("SELECT * FROM wa_subs ORDER BY created")]
+        buf = io.StringIO()
+        cols = ["phone", "name", "lang", "tz", "place", "lat", "lon", "daily_time", "want_panchang", "want_rashifal", "vrat_alert", "vrat_kinds", "weekly", "want_image", "verified", "status", "moon_sign_name", "created", "last_daily", "last_error"]
+        w = csv.DictWriter(buf, fieldnames=cols, extrasaction="ignore"); w.writeheader()
+        for r in rows:
+            w.writerow(r)
+        return {"csv": buf.getvalue(), "count": len(rows)}
     if action == "broadcast":
         from . import notify
         try:

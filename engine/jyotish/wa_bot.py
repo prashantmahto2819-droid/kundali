@@ -42,7 +42,9 @@ CMD = {"panchang": ("पंचांग", "panchang", "panchaang", "panchag"), "
        "muhurta": ("मुहूर्त", "muhurta", "muhurat", "muhurt"), "start": ("शुरू", "start", "subscribe", "चालू", "सब्सक्राइब"),
        "stop": ("बंद", "stop", "unsubscribe", "रोको"), "help": ("मदद", "help", "menu", "मेनू", "hi", "hello", "नमस्ते", "namaste"),
        "city": ("शहर", "city", "sthan", "स्थान", "place"), "time": ("समय", "time", "samay"), "birth": ("जन्म", "birth", "janm", "dob"),
-       "language": ("भाषा", "language", "bhasha", "lang"), "settings": ("सेटिंग", "settings", "setting", "मेरी", "my")}
+       "language": ("भाषा", "language", "bhasha", "lang"), "settings": ("सेटिंग", "settings", "setting", "मेरी", "my"),
+       "varshaphal": ("वर्षफल", "varshaphal", "varshphal", "varsha"), "numerology": ("अंक", "ank", "numerology", "mulank", "मूलांक"),
+       "festival": ("त्योहार", "tyohar", "festival", "कब", "kab", "when"), "match": ("मिलान", "milan", "match", "gun", "गुण")}
 LANG_WORDS = {"hindi": "hi", "हिंदी": "hi", "हिन्दी": "hi", "english": "en", "अंग्रेज़ी": "en", "angrezi": "en", "telugu": "te", "तेलुगु": "te", "తెలుగు": "te", "kannada": "kn", "कन्नड़": "kn", "ಕನ್ನಡ": "kn",
               "marathi": "mr", "मराठी": "mr", "gujarati": "gu", "गुजराती": "gu", "ગુજરાતી": "gu", "bengali": "bn", "bangla": "bn", "बांग्ला": "bn", "বাংলা": "bn"}
 ACTIVITY_WORDS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "vivah": "marriage",
@@ -110,6 +112,8 @@ def parse(text: str) -> tuple[str, list[str]]:
     # "मेष राशिफल" or "15-05-1990 10:30 jabalpur" without a keyword
     if any(w in CMD["rashifal"] for w in words) or (any(w in PERIOD_WORDS for w in words) and any(w in SIGN_WORDS for w in words)):
         return "rashifal", [w for w in words if w not in CMD["rashifal"]]
+    if any(w in ("कब", "kab", "when") for w in words) and len(words) >= 2:
+        return "festival", words
     if _DATE.search(text) and _TIME.search(text):
         return "kundali", words
     return "help", words
@@ -131,13 +135,15 @@ def reply_help(hi: bool, name: str = "") -> str:
         return greet + ("कुंडली ऐप में आपका स्वागत है। कोई एक शब्द भेजिए:\n\n"
                         "• *पंचांग* [शहर] — आज का पंचांग\n• *राशिफल* [राशि] — आज का राशिफल (जैसे: राशिफल मेष)\n"
                         "• *कुंडली* 15-05-1990 10:30 जबलपुर — संक्षिप्त कुंडली और पूरी रिपोर्ट का लिंक\n"
-                        "• *व्रत* — इस सप्ताह के व्रत-पर्व\n• *मुहूर्त* विवाह — अगले 30 दिन के शुभ दिन (विवाह, गृह प्रवेश, वाहन, यात्रा, व्यापार…)\n"
+                        "• *व्रत* — इस सप्ताह के व्रत-पर्व · *दीपावली कब है* — किसी पर्व की तारीख़\n• *मुहूर्त* विवाह — अगले 30 दिन के शुभ दिन (विवाह, गृह प्रवेश, वाहन, यात्रा, व्यापार…)\n"
+                        "• *वर्षफल* [जन्म-विवरण] · *अंक* 15-05-1990 नाम · *मिलान* वर | वधू\n"
                         "• *शुरू* — रोज़ सुबह पंचांग-राशिफल पाइए · *बंद* — रोकिए\n• *सेटिंग* — शहर, समय, जन्म-विवरण, भाषा बदलिए\n\n"
                         f"पूरा ऐप: {SITE}\n_फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी नहीं।_")
     return greet + ("Welcome to the Kundali app. Send one word:\n\n"
                     "• *panchang* [city] — today's panchang\n• *rashifal* [sign] — today's rashifal (e.g. rashifal mesh)\n"
                     "• *kundali* 15-05-1990 10:30 Jabalpur — a short chart and a link to the full report\n"
-                    "• *vrat* — this week's vrats and festivals\n• *muhurta* marriage — good dates in the next 30 days\n"
+                    "• *vrat* — this week's vrats and festivals · *when is diwali* — a festival's date\n• *muhurta* marriage — good dates in the next 30 days\n"
+                    "• *varshaphal* [birth details] · *ank* 15-05-1990 name · *match* boy | girl\n"
                     "• *start* — daily panchang/rashifal each morning · *stop* — stop it\n• *settings* — change city, time, birth details, language\n\n"
                     f"Full app: {SITE}\n_Readings are traditional guidance, not predictions._")
 
@@ -147,6 +153,15 @@ def reply_panchang(sub: dict | None, words: list[str], hi: bool) -> str:
     s = {"lang": "hi" if hi else "en", "tz": pl["tz"], "lat": pl["lat"], "lon": pl["lon"], "place": pl["place"] if hi else pl["place_en"],
          "want_panchang": 1, "want_rashifal": 0, "vrat_alert": 1, "vrat_kinds": "festival,ekadashi,purnima,amavasya,pradosh", "moon_sign": None}
     today = datetime.now(ZoneInfo(pl["tz"])).date()
+    md = _DATE.search(" ".join(words))
+    if md:                                               # "पंचांग 25-12-2026 इंदौर" → that date
+        d, m, y = (int(x) for x in md.groups())
+        try:
+            today = date(y, m, d)
+        except ValueError:
+            return "तारीख़ समझ नहीं आई (दिन-महीना-साल)।" if hi else "Could not read the date (day-month-year)."
+    elif any(w in ("कल", "kal", "tomorrow") for w in words):
+        today = today + timedelta(days=1)
     txt = notify.compose_daily(s, today)
     return txt.replace("बंद करने के लिए STOP लिखें।", "रोज़ पाने के लिए *शुरू* लिखें।").replace("Reply STOP to unsubscribe.", "Send *start* to get this daily.")
 
@@ -250,6 +265,145 @@ def reply_kundali(text: str, words: list[str], hi: bool) -> str:
             f"Moon sign: {moon['sign_name']} · birth nakshatra: {moon['nakshatra']} (pada {moon['pada']})\n"
             f"Sun sign: {sun['sign_name']}\nRunning dasha: {dasha or '—'}\n\n"
             f"Full chart (planets, houses, dasha, yogas, report): {link}\n\nSend *start* for your daily rashifal.\n_Lahiri ayanamsa; readings are traditional guidance._")
+
+
+def _birth_from(sub: dict | None, text: str, words: list[str]) -> dict | None:
+    md, mt = _DATE.search(text), _TIME.search(text)
+    if md and mt:
+        d, m, y = (int(x) for x in md.groups()); hh, mm, ap = int(mt.group(1)), int(mt.group(2)), (mt.group(3) or "").lower()
+        if ap == "pm" and hh < 12: hh += 12
+        if ap == "am" and hh == 12: hh = 0
+        pl = _place_for(None, words)
+        return {"date": f"{y:04d}-{m:02d}-{d:02d}", "time": f"{hh:02d}:{mm:02d}", "tz": pl["tz"], "lat": pl["lat"], "lon": pl["lon"]}
+    if sub and sub.get("birth"):
+        return json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]
+    return None
+
+
+def reply_varshaphal(sub: dict | None, text: str, words: list[str], hi: bool) -> str:
+    from .handlers import varshaphal_from_payload, BadRequest
+    birth = _birth_from(sub, text, words)
+    if not birth:
+        return ("वर्षफल के लिए जन्म-विवरण चाहिए: *वर्षफल 15-05-1990 10:30 जबलपुर* — या पहले *जन्म …* से सहेज लीजिए।" if hi else "Varshaphal needs birth details: *varshaphal 15-05-1990 10:30 Jabalpur* — or save them first with *birth …*.")
+    yr = next((int(w) for w in words if re.fullmatch(r"20\d\d", w)), datetime.now(ZoneInfo(birth.get("tz", "Asia/Kolkata"))).year)
+    try:
+        v = varshaphal_from_payload({**birth, "year": yr})
+    except (BadRequest, ValueError) as exc:
+        return ("वर्षफल नहीं बना: " if hi else "Could not compute: ") + str(exc)
+    t = v.get("tajika") or {}
+    formed = [h for h in (t.get("yogas") or {}).get("by_house", []) if h.get("yogas")][:4]
+    today_iso = datetime.now(ZoneInfo(birth.get("tz", "Asia/Kolkata"))).date().isoformat()
+    md = next((x for x in (t.get("mudda_dasha") or []) if x["start"] <= today_iso <= x["end"]), {})
+    L = [(f"🗓️ *वर्षफल {v['year']}* (आयु {v['age']}) — सौर वर्ष आरंभ {v['return_local'][:16]}" if hi else f"🗓️ *Varshaphal {v['year']}* (age {v['age']}) — solar return {v['return_local'][:16]}"),
+         (f"वर्ष-लग्न {v['lagna']['sign_name_hi']} · मुंथा {v['muntha']['sign_hi']} में, भाव {v['muntha']['house']} · वर्षेश {t.get('varshesha_hi', '—')}" if hi else f"Year lagna {v['lagna']['sign_name']} · Muntha in {v['muntha']['sign_hi']}, house {v['muntha']['house']} · Varshesha {t.get('varshesha', '—')}")]
+    if t.get("varshesha_why_hi"):
+        L.append((t["varshesha_why_hi"] if hi else t.get("varshesha_why_en", "")))
+    HOUSE_HI = {1: "तन", 2: "धन", 3: "सहज", 4: "सुख", 5: "संतान", 6: "रोग/ऋण", 7: "दांपत्य", 8: "आयु", 9: "भाग्य", 10: "कर्म", 11: "लाभ", 12: "व्यय"}
+    for h in formed:
+        yn = ", ".join(h.get("yogas_hi" if hi else "yogas") or [])
+        L.append("• " + (f"भाव {h['house']} ({HOUSE_HI.get(h['house'], '')}) — {yn}: " if hi else f"House {h['house']} — {yn}: ") + (h["text_hi"] if hi else h["text_en"]))
+    if md:
+        L.append((f"मुद्दा दशा अभी: {md.get('lord_hi', md.get('lord', ''))} ({md.get('start', '')[:10]} → {md.get('end', '')[:10]})" if hi else f"Mudda dasha now: {md.get('lord', '')} ({md.get('start', '')[:10]} → {md.get('end', '')[:10]})"))
+    L.append("")
+    L.append(("पूरा वर्षफल (सहम, पंचवर्गीय बल, मासिक): " if hi else "Full varshaphal (sahams, panchavargiya, monthly): ") + SITE)
+    L.append("_" + ("ताजिक वर्षफल प्रवृत्ति-संकेत है, भविष्यवाणी नहीं।" if hi else "Tajika varshaphal is a tendency pointer, not a prediction.") + "_")
+    return "\n".join(L)
+
+
+def reply_numerology(sub: dict | None, text: str, words: list[str], hi: bool, name: str) -> str:
+    from .handlers import numerology_from_payload
+    from . import ask as ask_mod
+    md = _DATE.search(text)
+    birth = None
+    if md:
+        d, m, y = (int(x) for x in md.groups()); birth = f"{y:04d}-{m:02d}-{d:02d}"
+    elif sub and sub.get("birth"):
+        birth = (json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]).get("date")
+    if not birth:
+        return ("अंक-ज्योतिष के लिए: *अंक 15-05-1990 राम शर्मा* (नाम वैकल्पिक)" if hi else "For numerology: *ank 15-05-1990 Ram Sharma* (name optional)")
+    nm = " ".join(w for w in words if not _DATE.fullmatch(w) and not re.search(r"\d", w) and w not in CMD["numerology"]) or (sub or {}).get("name") or name or None
+    r = numerology_from_payload({"date": birth, "name": nm})
+    passages = {p["id"]: p["text"] for p in ask_mod.numerology_passages(birth, nm)}
+    L = [(f"🔢 *अंक-ज्योतिष* — {birth[8:10]}-{birth[5:7]}-{birth[:4]}" + (f" ({nm})" if nm else "")) if hi else (f"🔢 *Numerology* — {birth[8:10]}-{birth[5:7]}-{birth[:4]}" + (f" ({nm})" if nm else ""))]
+    L.append(passages.get("chart/moolank_hi" if hi else "chart/moolank", ""))
+    L.append(passages.get("chart/bhagyank_hi" if hi else "chart/bhagyank", ""))
+    L.append(passages.get("chart/personal_year_hi" if hi else "chart/personal_year", ""))
+    if nm and r.get("namank") and r["namank"]["chaldean"].get("number"):
+        c = r["namank"]["chaldean"]
+        L.append((f"नामांक (कैल्डियन) {c['compound']} → {c['number']} ({c.get('planet', '')})" if hi else f"Name number (Chaldean) {c['compound']} → {c['number']} ({c.get('planet', '')})"))
+    elif nm:
+        L.append("नामांक के लिए नाम रोमन (English) अक्षरों में लिखिए, जैसे *अंक 15-05-1990 Ram Sharma*।" if hi else "For the name number write the name in Roman letters.")
+    lo = r.get("lo_shu", {}).get("counts", {})
+    missing = [str(k) for k, v in lo.items() if v == 0]
+    if missing:
+        L.append((f"लो-शू ग्रिड में अनुपस्थित अंक: {', '.join(missing)}" if hi else f"Missing numbers in the Lo Shu grid: {', '.join(missing)}"))
+    L.append("")
+    L.append(("पूरा अंक-विश्लेषण ऐप में: " if hi else "Full numerology in the app: ") + SITE)
+    return "\n".join(x for x in L if x is not None)
+
+
+def reply_festival(sub: dict | None, text: str, words: list[str], hi: bool) -> str:
+    """'दीपावली कब है' / 'त्योहार होली' → next occurrence(s) with tithi, from the festival calendar."""
+    from . import festivals as fmod
+    pl = _place_for(sub, [])
+    q = " ".join(w for w in words if w not in CMD["festival"] and w not in ("है", "hai", "h", "kab", "कब", "when", "is", "the")).strip()
+    if len(q) < 2:
+        return "कौन-सा पर्व? जैसे: *दीपावली कब है* या *त्योहार होली*" if hi else "Which festival? e.g. *when is diwali* or *festival holi*"
+    today = datetime.now(ZoneInfo(pl["tz"])).date()
+    found = []
+    for yr in (today.year, today.year + 1):
+        for e in fmod.calendar(yr, pl["lat"], pl["lon"], pl["tz"])["events"]:
+            hay = (e["name_hi"] + " " + e["name_en"] + " " + e["key"]).lower()
+            if all(part in hay for part in q.lower().replace("-", " ").split()) and e["date"] >= today.isoformat():
+                found.append(e)
+    if not found:
+        return (f"'{q}' नाम का पर्व सूची में नहीं मिला। *व्रत* लिखकर इस सप्ताह की सूची देखिए।" if hi else f"No festival matching '{q}' in the list. Send *vrat* for this week's list.")
+    found.sort(key=lambda e: e["date"])
+    L = [("📿 " + (found[0]["name_hi"] if hi else found[0]["name_en"]))]
+    for e in found[:3]:
+        d = date.fromisoformat(e["date"])
+        day = notify._day({"lat": pl["lat"], "lon": pl["lon"], "tz": pl["tz"]}, d)
+        when = f"{d.strftime('%d-%m-%Y')} ({day['vara_hi'] if hi else day['vara']})" if day else d.strftime("%d-%m-%Y")
+        tithi = (f"{day['paksha_hi']} {day['tithi_hi']} ({day['tithi_ends'] or '—'} तक)" if hi else f"{day['paksha']} {day['tithi']} (until {day['tithi_ends'] or '—'})") if day else ""
+        L.append(f"• {when}: {e['name_hi'] if hi else e['name_en']}" + (f" — {tithi}" if tithi else "") + (f"\n  {e['note_hi'] if hi else e.get('note_en', '')}" if e.get("note_hi") else ""))
+    L.append("")
+    L.append(("तारीख़ें " + pl["place"] + " के सूर्योदय-कालीन तिथि से; क्षेत्रीय पंचांग में एक दिन का अंतर संभव।") if hi else (f"Dates by sunrise tithi at {pl['place_en']}; regional almanacs may differ by a day."))
+    return "\n".join(L)
+
+
+def reply_match(text: str, hi: bool) -> str:
+    """'मिलान 15-05-1990 10:30 दिल्ली | 20-08-1992 06:15 मुंबई' → Ashtakoota + Dashakoota + manglik summary."""
+    from .handlers import match_from_payload, BadRequest
+    parts = re.split(r"\s*[|/;,]\s*|\s+(?:और|aur|and|v/s|vs)\s+", text, maxsplit=1)
+    if len(parts) < 2 or not (_DATE.search(parts[0]) and _DATE.search(parts[1])):
+        return ("ऐसे लिखिए: *मिलान 15-05-1990 10:30 दिल्ली | 20-08-1992 06:15 मुंबई* (पहले वर, फिर वधू)" if hi else "Send like: *match 15-05-1990 10:30 Delhi | 20-08-1992 06:15 Mumbai* (boy first, then girl)")
+    def person(seg):
+        w = [_norm(x) for x in re.split(r"\s+", seg) if x.strip()]
+        return _birth_from(None, seg, w)
+    boy, girl = person(parts[0]), person(parts[1])
+    if not boy or not girl:
+        return ("दोनों के लिए तारीख़ और समय चाहिए (दिन-महीना-साल घंटे:मिनट)।" if hi else "Both need a date and a time (day-month-year hh:mm).")
+    try:
+        m = match_from_payload({"boy": boy, "girl": girl})
+    except (BadRequest, ValueError) as exc:
+        return ("मिलान नहीं बना: " if hi else "Could not match: ") + str(exc)
+    L = [(f"💑 *कुंडली मिलान* — अष्टकूट {m['total']}/36 ({m['band_hi']})" if hi else f"💑 *Kundali matching* — Ashtakoota {m['total']}/36 ({m['band_en']})")]
+    L.append("; ".join(f"{k['name_hi' if hi else 'name']} {k['score']}/{k['max']}" for k in m["kootas"]))
+    dk = m.get("dashakoota")
+    if dk:
+        L.append((f"दशकूट (दक्षिण): {dk['total']}/{dk['max']} — {dk['verdict_hi']}" if hi else f"Dashakoota (South): {dk['total']}/{dk['max']} — {dk['verdict_en']}") + (("; " + ", ".join(dk["blockers_hi"])) if dk.get("blockers_hi") else ""))
+    mg = m.get("manglik") or {}
+    if isinstance(mg, dict) and mg.get("level"):
+        lv = mg["level"]
+        L.append(({"balanced": "मंगल दोष: दोनों की स्थिति समान (संतुलित)।", "check": "मंगल दोष: केवल एक पक्ष मांगलिक — परिहार (काट) देखना आवश्यक।"}.get(lv, f"मंगल दोष: {lv}")) if hi else
+                 ({"balanced": "Mangal dosha: both partners in the same state (balanced).", "check": "Mangal dosha: only one partner is manglik — check the cancellations."}.get(lv, f"Mangal dosha: {lv}")))
+    for d in (m.get("doshas") or [])[:3]:
+        if isinstance(d, dict) and d.get("name_hi"):
+            L.append("• " + (f"{d['name_hi']} दोष" if hi else f"{d.get('name', '')} dosha") + ((" — परिहार सहित" if hi else " — cancelled by parihara") if d.get("cancelled") else ""))
+    L.append("")
+    L.append(("पूरा मिलान (दशा-संधि, परिहार, रिपोर्ट): " if hi else "Full matching (dasha sandhi, parihara, report): ") + SITE)
+    L.append("_" + ("गुण-मिलान परंपरागत मार्गदर्शन है; अंतिम निर्णय परिवार और परामर्श से।" if hi else "Koota matching is traditional guidance; the decision rests with the families and counsel.") + "_")
+    return "\n".join(L)
 
 
 def reply_vrat(sub: dict | None, words: list[str], hi: bool) -> str:
@@ -418,6 +572,14 @@ def answer(phone: str, text: str, name: str = "") -> str:
             return reply_stop(phone, hi)
         if cmd in ("city", "time", "birth", "language", "settings"):
             return reply_settings(phone, cmd, text, words, sub, hi, name)
+        if cmd == "varshaphal":
+            return reply_varshaphal(sub, text, words, hi)
+        if cmd == "numerology":
+            return reply_numerology(sub, text, words, hi, name)
+        if cmd == "festival":
+            return reply_festival(sub, text, words, hi)
+        if cmd == "match":
+            return reply_match(text, hi)
     except Exception as exc:                        # never leave a sender without an answer
         return ("क्षमा करें, यह अभी नहीं बन सका (" + type(exc).__name__ + ")। *मदद* लिखकर विकल्प देखिए।" if hi else
                 "Sorry, that could not be prepared (" + type(exc).__name__ + "). Send *help* for the options.")
