@@ -32,6 +32,13 @@ SARVARTHA = {0: {"Hasta", "Mula", "Uttara Ashadha", "Uttara Phalguni", "Uttara B
              5: {"Revati", "Anuradha", "Ashwini", "Punarvasu", "Shravana"}, 6: {"Shravana", "Rohini", "Swati"}}
 AMRITA = {0: "Hasta", 1: "Mrigashira", 2: "Ashwini", 3: "Anuradha", 4: "Pushya", 5: "Revati", 6: "Rohini"}
 GAND_MOOL = {"Ashwini", "Ashlesha", "Magha", "Jyeshtha", "Mula", "Revati"}
+# solar month names by the Sun's sidereal sign (0 = Mesha): Tamil, Bengali, Malayalam; Gujarati/Marathi use the amanta lunar names
+TAMIL = ["சித்திரை", "வைகாசி", "ஆனி", "ஆடி", "ஆவணி", "புரட்டாசி", "ஐப்பசி", "கார்த்திகை", "மார்கழி", "தை", "மாசி", "பங்குனி"]
+TAMIL_LATIN = ["Chithirai", "Vaikasi", "Aani", "Aadi", "Aavani", "Purattasi", "Aippasi", "Karthigai", "Margazhi", "Thai", "Maasi", "Panguni"]
+BENGALI = ["বৈশাখ", "জ্যৈষ্ঠ", "আষাঢ়", "শ্রাবণ", "ভাদ্র", "আশ্বিন", "কার্তিক", "অগ্রহায়ণ", "পৌষ", "মাঘ", "ফাল্গুন", "চৈত্র"]
+BENGALI_LATIN = ["Boishakh", "Joishtho", "Asharh", "Srabon", "Bhadro", "Ashwin", "Kartik", "Ogrohayon", "Poush", "Magh", "Falgun", "Choitro"]
+MALAYALAM = ["മേടം", "ഇടവം", "മിഥുനം", "കർക്കടകം", "ചിങ്ങം", "കന്നി", "തുലാം", "വൃശ്ചികം", "ധനു", "മകരം", "കുംഭം", "മീനം"]
+MALAYALAM_LATIN = ["Medam", "Edavam", "Mithunam", "Karkidakam", "Chingam", "Kanni", "Thulam", "Vrischikam", "Dhanu", "Makaram", "Kumbham", "Meenam"]
 DISHA_SHOOL = {0: ("पश्चिम", "West"), 1: ("पूर्व", "East"), 2: ("उत्तर", "North"), 3: ("उत्तर", "North"), 4: ("दक्षिण", "South"), 5: ("पश्चिम", "West"), 6: ("पूर्व", "East")}
 
 
@@ -86,6 +93,10 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
     # Chaitra Shukla 1 of this Gregorian year (first non-adhika Chaitra lunation that starts in the year)
     chaitra_start = next((m["start"] for m in luns if m["masa"] == 11 and not m["adhika"]
                           and datetime(year, 1, 1, tzinfo=timezone.utc) <= datetime(2000, 1, 1, tzinfo=timezone.utc) + timedelta(days=m["start"] - 2451544.5)), None)
+    def _lun_start(masa_idx):
+        return next((m["start"] for m in luns if m["masa"] == masa_idx and not m["adhika"]
+                     and datetime(year, 1, 1, tzinfo=timezone.utc) <= datetime(2000, 1, 1, tzinfo=timezone.utc) + timedelta(days=m["start"] - 2451544.5)), None)
+    kartika_start = _lun_start(6)
     days = []
     ndays = _cal.monthrange(year, mon)[1]
     for dnum in range(1, ndays + 1):
@@ -154,7 +165,9 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
             "yoga": pc["yoga"]["name"], "yoga_hi": pc["yoga"]["name_hi"], "karana": pc["karana"]["name"], "karana_hi": pc["karana"]["name_hi"],
             "masa_amanta": (("Adhika " if adhika else "") + MASA[masa_i]) if masa_i is not None else None, "masa_amanta_hi": (("अधिक " if adhika else "") + MASA_HI[masa_i]) if masa_i is not None else None,
             "masa_purnimanta": (("Adhika " if adhika else "") + MASA[purn_i]) if purn_i is not None else None, "masa_purnimanta_hi": (("अधिक " if adhika else "") + MASA_HI[purn_i]) if purn_i is not None else None,
-            "vikram_samvat": vik, "sun_sign": SIGNS[sun_sign], "sun_sign_hi": SIGNS_HI[sun_sign], "sankranti": sank,
+            "vikram_samvat": vik, "shaka_samvat": vik - 135, "gujarati_samvat": (year + 57) if (kartika_start is not None and jr >= kartika_start) else year + 56,
+            "tamil_month": TAMIL_LATIN[sun_sign], "tamil_month_ta": TAMIL[sun_sign], "bengali_month": BENGALI_LATIN[sun_sign], "bengali_month_bn": BENGALI[sun_sign], "malayalam_month": MALAYALAM_LATIN[sun_sign], "malayalam_month_ml": MALAYALAM[sun_sign],
+            "sun_sign": SIGNS[sun_sign], "sun_sign_hi": SIGNS_HI[sun_sign], "sankranti": sank,
             "yoga_ends": y_end.astimezone(zone).strftime("%H:%M") if y_end else None, "yoga_ends_next_day": bool(y_end and y_end.astimezone(zone).date() > d),
             "karana_ends": k_end.astimezone(zone).strftime("%H:%M") if k_end else None,
             "moon_sign": SIGNS[sign_of(moon)], "moon_sign_hi": SIGNS_HI[sign_of(moon)], "disha_shool_hi": DISHA_SHOOL[wd][0], "disha_shool": DISHA_SHOOL[wd][1],

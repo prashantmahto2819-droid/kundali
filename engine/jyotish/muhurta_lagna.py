@@ -139,8 +139,16 @@ def lagna_muhurta(day_iso: str, lat: float, lon: float, tz: str, activity: str =
                      "planets_in_houses": {h: [PLANETS_HI[p] for p in ch["houses"] if ch["houses"][p] == h] for h in range(1, 13) if any(v == h for v in ch["houses"].values())},
                      **j})
     dt = day_table(datetime(day.year, day.month, day.day, 12, 0, tzinfo=zone), lat, lon, tz)
+    # chandrabala for bride and groom: the day's Moon sign (at noon) counted from their Moon sign; 6, 8, 12 unfavourable
+    noon_ch = _chart_at(datetime(day.year, day.month, day.day, 12, 0, tzinfo=zone), lat, lon)
+    day_moon = sign_of(noon_ch["lons"]["Moon"])
+    chandrabala = {}
+    for who, sgn in (("groom", groom_moon_sign), ("bride", bride_moon_sign)):
+        if sgn is not None:
+            cnt = (day_moon - sgn) % 12 + 1
+            chandrabala[who] = {"count": cnt, "ok": cnt not in (6, 8, 12), "day_moon_sign_hi": SIGNS_HI[day_moon], "day_moon_sign": SIGNS[day_moon]}
     best = sorted([r for r in rows if r["verdict"] != "varjit"], key=lambda r: -r["score"])[:3]
-    return {"date": day_iso, "activity": activity, "lagnas": rows, "best": best, "abhijit": dt.get("abhijit"), "rahu_kaal": dt.get("rahu_kaal"),
+    return {"date": day_iso, "activity": activity, "lagnas": rows, "best": best, "abhijit": dt.get("abhijit"), "rahu_kaal": dt.get("rahu_kaal"), "chandrabala": chandrabala,
             "good_choghadiya": [{"name": c["name"], "start": c["start"], "end": c["end"]} for c in dt.get("choghadiya_day", []) + dt.get("choghadiya_night", []) if c.get("nature") == "good"],
             "review_status": "draft",
             "note_hi": "लग्न-शुद्धि (पंचांग-स्तर): सप्तम-अष्टम रिक्त, द्वादश में पाप ग्रह नहीं, लग्नेश 6/8/12 में नहीं, चंद्र 1/6/8/12 में नहीं; विवाह में मंगल अष्टम व शुक्र षष्ठ वर्जित, स्थिर/द्विस्वभाव लग्न वांछित, वर-वधू की राशि से 6/8/12 लग्न वर्जित। "

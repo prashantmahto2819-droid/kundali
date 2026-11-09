@@ -30,6 +30,12 @@ def test_lagna_muhurta_and_handler():
     r = ml.lagna_muhurta("2026-11-26", 22.35, 82.68, "Asia/Kolkata", "marriage", groom_moon_sign=3)
     assert len(r["lagnas"]) >= 12 and all(0 <= l["score"] <= 100 for l in r["lagnas"]) and r["abhijit"] and r["note_hi"]
     assert all(l["verdict"] != "varjit" for l in r["best"])
+    assert r["chandrabala"]["groom"]["count"] in range(1, 13) and "bride" not in r["chandrabala"]
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    from jyotish.muhurta import day_table
+    t = day_table(datetime(2026, 11, 9, 12, 0, tzinfo=ZoneInfo("Asia/Kolkata")), 22.35, 82.68, "Asia/Kolkata")
+    assert len(t["hora"]) == 24 and t["hora"][0]["lord"] == "Moon" and t["hora"][0]["start"] == t["sunrise"] and t["hora"][12]["night"]   # Monday starts with the Moon's hora
     out = handlers.muhurta_lagna_from_payload({"date": "2026-11-26", "lat": 22.35, "lon": 82.68, "tz": "Asia/Kolkata", "groom_moon_sign": "3", "bride_moon_sign": ""})
     assert out["date"] == "2026-11-26"
     with pytest.raises(handlers.BadRequest):

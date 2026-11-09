@@ -482,6 +482,8 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
             <label class="ck"><input type="checkbox" data-show="rahu_kaal"> राहु काल</label>
             <label class="ck"><input type="checkbox" data-show="yoga_karana"> योग-करण</label>
             <label class="ck"><input type="checkbox" data-show="festival_list" checked> पर्व-सूची (दाएँ)</label>
+            <label class="ck"><input type="checkbox" data-show="vrat_extra"> प्रदोष, चतुर्थी, मासिक शिवरात्रि</label>
+            <label class="ck"><input type="checkbox" data-show="regional"> शक संवत + तमिल/बंगाली/मलयालम मास</label>
           </div></details>
         <details><summary><b>9. अपनी तिथियाँ और छुट्टियाँ</b></summary>
           <div class="muted" style="font-size:.8rem;margin-top:4px">किसी दिन पर अपना नोट (जैसे "दुकान बंद", "वार्षिकोत्सव") या छुट्टी (लाल अंक)।</div>
@@ -653,6 +655,7 @@ function renderMuhurta(d) {
     <tr><th>अभिजित</th><td>${slot(d.abhijit)}</td></tr></table>
     <details><summary>चौघड़िया (दिन)</summary><table>${d.choghadiya_day.map(c => `<tr><td>${esc(c.name)}</td><td>${slot(c)}</td><td>${nat[c.nature]}</td></tr>`).join('')}</table></details>
     <details><summary>चौघड़िया (रात)</summary><table>${d.choghadiya_night.map(c => `<tr><td>${esc(c.name)}</td><td>${slot(c)}</td><td>${nat[c.nature]}</td></tr>`).join('')}</table></details>
+    ${d.hora ? `<details><summary>होरा (ग्रह-घंटे, 24)</summary><table>${d.hora.map(h => `<tr${h.night ? ' class="muted"' : ''}><td>${esc(h.lord_hi)}</td><td>${slot(h)}</td><td>${nat[h.nature] || ''}</td></tr>`).join('')}</table></details>` : ''}
     <div class="muted" style="font-size:.8rem">${esc(d.note)}</div>`;
 }
 
@@ -1339,7 +1342,7 @@ $('repbtn').addEventListener('click', async () => {
   const MON = ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
   const now = new Date(); $('cyear').value = now.getFullYear();
   MON.forEach((m, i) => { for (const id of ['cmonth', 'cheromon']) { const o = document.createElement('option'); o.value = i + 1; o.textContent = m; $(id).appendChild(o); } }); $('cmonth').value = now.getMonth() + 1;
-  const TPLS = [['classic', 'क्लासिक ग्रिड', 'ग्रिड + दाईं ओर पर्व-सूची'], ['modern', 'मॉडर्न', 'तस्वीर-पट्टी, बड़ा माह, पिल्स'], ['poster', 'पोस्टर सूची', 'दिन-वार खड़ी सूची'], ['panchang', 'पूर्ण पंचांग', 'तिथि-नक्षत्र-योग-करण समय, राहु काल, मुहूर्त, गोचर'], ['compact', 'दो माह / पृष्ठ', 'सघन; पूरे वर्ष के 6 पृष्ठ']];
+  const TPLS = [['classic', 'क्लासिक ग्रिड', 'ग्रिड + दाईं ओर पर्व-सूची'], ['modern', 'मॉडर्न', 'तस्वीर-पट्टी, बड़ा माह, पिल्स'], ['poster', 'पोस्टर सूची', 'दिन-वार खड़ी सूची'], ['panchang', 'पूर्ण पंचांग', 'तिथि-नक्षत्र-योग-करण समय, राहु काल, मुहूर्त, गोचर'], ['compact', 'दो माह / पृष्ठ', 'सघन; पूरे वर्ष के 6 पृष्ठ'], ['quarter', 'तीन माह / पृष्ठ', 'तिमाही; पूरे वर्ष के 4 पृष्ठ']];
   const PAL = {saffron: ['#b4541a', '#7b1fa2', '#c62828', '#fffaf3', '#2b1d12', 'केसरिया'], indigo: ['#283593', '#00695c', '#c62828', '#ffffff', '#1a1f36', 'नील'], forest: ['#2e7d32', '#8d4e00', '#c62828', '#fbfff7', '#1b2a1b', 'हरा'], maroon: ['#7b1f3a', '#283593', '#b71c1c', '#fffafb', '#2b1a20', 'मैरून'], teal: ['#00796b', '#4527a0', '#d84315', '#f7fffd', '#102a27', 'टील'], royal: ['#1a237e', '#b8860b', '#c62828', '#fbfbff', '#121a3a', 'रॉयल'], sunset: ['#e65100', '#283593', '#ad1457', '#fffdf9', '#3e2723', 'सनसेट'], mono: ['#222222', '#000000', '#555555', '#ffffff', '#111111', 'श्वेत-श्याम']};
   const KEY = 'kundali.calendar.designs.v2';
   const blankAd = (t, h) => ({enabled: !!t, title: t || '', text: '', contact: '', height_mm: h, bg: '', fg: '', image: null, fit: 'contain', style: 'rounded', position: 'right'});
@@ -1347,7 +1350,7 @@ $('repbtn').addEventListener('click', async () => {
                       ad_top: blankAd('', 32), ad_bottom: blankAd('विज्ञापन के लिए स्थान', 22), ad_side: {...blankAd('', 24), enabled: false}, notes: [], holidays: [], cover: false, bilingual: false, week_start: 'sunday', web_fonts: true});
   let D = def();
   // ---- templates & palettes
-  $('ctpls').innerHTML = TPLS.map(([k, n, d]) => `<div class="tpl" data-tpl="${k}" style="border:2px solid var(--line);border-radius:8px;padding:8px;cursor:pointer"><div style="height:46px;border-radius:4px;background:${k === 'modern' ? 'linear-gradient(120deg,var(--accent),#333)' : k === 'panchang' ? 'repeating-linear-gradient(0deg,var(--line) 0 2px,transparent 2px 7px)' : k === 'poster' ? 'repeating-linear-gradient(0deg,var(--line) 0 3px,transparent 3px 9px)' : k === 'compact' ? 'linear-gradient(0deg,var(--line) 48%,transparent 48% 52%,var(--line) 52%)' : 'repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 14px),repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 11px)'}"></div><b style="font-size:.85rem">${n}</b><div class="muted" style="font-size:.72rem">${d}</div></div>`).join('');
+  $('ctpls').innerHTML = TPLS.map(([k, n, d]) => `<div class="tpl" data-tpl="${k}" style="border:2px solid var(--line);border-radius:8px;padding:8px;cursor:pointer"><div style="height:46px;border-radius:4px;background:${k === 'modern' ? 'linear-gradient(120deg,var(--accent),#333)' : k === 'panchang' ? 'repeating-linear-gradient(0deg,var(--line) 0 2px,transparent 2px 7px)' : k === 'poster' ? 'repeating-linear-gradient(0deg,var(--line) 0 3px,transparent 3px 9px)' : k === 'compact' ? 'linear-gradient(0deg,var(--line) 48%,transparent 48% 52%,var(--line) 52%)' : k === 'quarter' ? 'linear-gradient(90deg,var(--line) 31%,transparent 31% 34%,var(--line) 34% 65%,transparent 65% 68%,var(--line) 68%)' : 'repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 14px),repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 11px)'}"></div><b style="font-size:.85rem">${n}</b><div class="muted" style="font-size:.72rem">${d}</div></div>`).join('');
   const markTpl = () => document.querySelectorAll('#ctpls .tpl').forEach(t => t.style.borderColor = t.dataset.tpl === D.template ? 'var(--accent)' : 'var(--line)');
   document.querySelectorAll('#ctpls .tpl').forEach(t => t.onclick = () => { D.template = t.dataset.tpl; markTpl(); preview(); });
   $('cpalettes').innerHTML = Object.entries(PAL).map(([k, p]) => `<div class="pal" data-pal="${k}" title="${p[5]}" style="cursor:pointer;border:2px solid var(--line);border-radius:8px;padding:4px;display:flex;gap:3px;align-items:center"><span style="width:18px;height:18px;border-radius:50%;background:${p[0]}"></span><span style="width:14px;height:14px;border-radius:50%;background:${p[1]}"></span><span style="width:14px;height:14px;border-radius:50%;background:${p[2]}"></span><span style="font-size:.75rem;margin-left:4px">${p[5]}</span></div>`).join('');
@@ -1746,6 +1749,7 @@ async function openReport(path, body) {
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const V = {shubh: 'yes', madhyam: '', varjit: 'muted'};
       host.innerHTML = `<h4 style="margin:12px 0 4px">${esc(date)} — लग्न-सारणी और लग्न-शुद्धि</h4>
+        ${Object.keys(d.chandrabala || {}).length ? `<p>${Object.entries(d.chandrabala).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: चंद्रबल ${c.count}वाँ (${esc(c.day_moon_sign_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')}</p>` : ''}
         <p class="muted" style="font-size:.85rem">अभिजित ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'} · राहु काल ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · शुभ चौघड़िया: ${d.good_choghadiya.map(c => `${esc(c.name)} ${esc(c.start)}–${esc(c.end)}`).join(', ')}</p>
         <table><tr><th>समय</th><th>लग्न</th><th>स्कोर</th><th>निर्णय</th><th>दोष</th><th>बल</th></tr>${d.lagnas.map(l => `<tr${l.night ? ' class="muted"' : ''}><td>${esc(l.start)}–${esc(l.end)}${l.night ? ' <span class="muted">(रात्रि)</span>' : ''}</td><td><b>${esc(l.sign_name_hi)}</b></td><td><b>${l.score}</b></td><td><span class="chip ${V[l.verdict]}">${esc(l.verdict_hi)}</span></td><td class="muted" style="font-size:.85rem">${l.doshas.map(x => esc(x.hi)).join('; ') || '—'}</td><td class="muted" style="font-size:.85rem">${l.strengths.map(x => esc(x.hi)).join('; ') || '—'}</td></tr>`).join('')}</table>
         <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;

@@ -16,6 +16,8 @@ def test_month_rows():
     specials = {s["key"] for d in m["days"] for s in d["special"]}
     assert {"sarvartha_siddhi", "gand_mool", "panchak", "bhadra"} <= specials
     assert d8["masa_amanta"] == "Ashwina" and d8["masa_purnimanta"] == "Kartika" and d8["vikram_samvat"] == 2083
+    assert d8["shaka_samvat"] == 1948 and d8["gujarati_samvat"] == 2082 and m["days"][9]["gujarati_samvat"] == 2083      # Gujarati year turns on Kartika Shukla 1 (10 Nov 2026)
+    assert d8["tamil_month"] == "Aippasi" and d8["bengali_month"] == "Kartik" and d8["malayalam_month"] == "Thulam"
     # end times are later than sunrise and the next-day flag agrees with the clock
     for d in m["days"]:
         assert d["tithi_ends"] is None or d["tithi_ends_next_day"] or d["tithi_ends"] > d["sunrise"]
@@ -37,6 +39,8 @@ def test_calendar_pages_and_design_safety():
     for tpl in ("modern", "poster", "panchang", "compact"):
         h = calendar_design.render_calendar(2026, [11, 12], 28.61, 77.2, "Asia/Kolkata", {"template": tpl, "cover": True, "accent": "#0b7285", "background": "dark", "ad_side": {"enabled": True, "title": "Side"}, "web_fonts": False}, "hi")
         assert h.count('class="page ') == (2 if tpl == "compact" else 3) and "--accent:#0b7285" in h and "Side" in h and "fonts.googleapis" not in h
+    q = calendar_design.render_calendar(2026, [1, 2, 3, 4], 28.61, 77.2, "Asia/Kolkata", {"template": "quarter", "show": {"regional": True, "vrat_extra": True}, "web_fonts": False}, "hi")
+    assert q.count('class="page ') == 2 and "शक 1947" in q and "pradosh" in q
     pan = calendar_design.render_calendar(2026, [11], 28.61, 77.2, "Asia/Kolkata", {"template": "panchang"}, "hi")
     assert "शुभ मुहूर्त" in pan and "ग्रह गोचर" in pan and "सर्वार्थ सिद्धि" in pan and pan.count("<tr") >= 31
     en = calendar_design.render_calendar(2026, [1, 2], 28.61, 77.2, "Asia/Kolkata", {}, "en")

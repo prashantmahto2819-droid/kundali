@@ -21,7 +21,8 @@ def test_known_dates_2025_and_2026():
 def test_structure_and_vrat_days():
     c, _ = _fest(2026)
     kinds = {e["kind"] for e in c["events"]}
-    assert kinds == {"festival", "ekadashi", "purnima", "amavasya"}
+    assert kinds == {"festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri"}
+    assert 22 <= sum(1 for e in c["events"] if e["kind"] == "pradosh") <= 27 and 10 <= sum(1 for e in c["events"] if e["kind"] == "shivaratri") <= 13
     ek = [e for e in c["events"] if e["kind"] == "ekadashi"]
     assert 24 <= len(ek) <= 27 and any("अधिक" in e["name_hi"] for e in ek)           # adhika Jyeshtha adds two
     assert all(e["date"].startswith("2026") for e in c["events"])

@@ -165,6 +165,20 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
     events.append({"key": "makar_sankranti", "name_hi": "मकर संक्रांति", "name_en": "Makar Sankranti", "date": sank, "kind": "festival", "masa": None, "masa_hi": None,
                    "tithi": None, "tithi_hi": None, "rule": "solar", "note_hi": "सूर्य का निरयन मकर प्रवेश (लाहिड़ी)।", "note_en": "The Sun's sidereal ingress into Makara (Lahiri)."})
     # vrat days: ekadashi (first sunrise day of the tithi in each paksha), purnima, amavasya; also pradosha (13) could be added later
+    VRAT = {13: ("प्रदोष व्रत", "Pradosh vrat", "pradosh"), 28: ("प्रदोष व्रत", "Pradosh vrat", "pradosh"), 4: ("विनायक चतुर्थी", "Vinayaka Chaturthi", "chaturthi"),
+            19: ("संकष्टी चतुर्थी", "Sankashti Chaturthi", "chaturthi"), 29: ("मासिक शिवरात्रि", "Masik Shivaratri", "shivaratri")}
+    seen_v = set()
+    for x in days:
+        n = x["tithi"]["number"]
+        if n in VRAT and x["masa"] is not None:
+            k = (x["lunation"], n)
+            if k in seen_v:
+                continue
+            seen_v.add(k)
+            hi, en, kind = VRAT[n]
+            events.append({"key": f"{kind}_{x['date'].isoformat()}", "name_hi": hi, "name_en": en, "date": x["date"].isoformat(), "kind": kind,
+                           "masa": MASA[x["masa"]], "masa_hi": MASA_HI[x["masa"]], "tithi": x["tithi"]["name"], "tithi_hi": f'{x["tithi"]["paksha_hi"]} {x["tithi"]["name_hi"]}',
+                           "rule": "sunrise", "note_hi": "", "note_en": ""})
     seen = set()
     for i, x in enumerate(days):
         n = x["tithi"]["number"]

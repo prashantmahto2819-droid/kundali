@@ -65,8 +65,23 @@ def day_table(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
 
     from .moon import moon_times
     moon = moon_times(day, lat, lon, tz)
+    # hora: 24 planetary hours from sunrise (12 day, 12 night), Chaldean order starting with the weekday lord
+    CHALDEAN = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"]
+    HORA_HI = {"Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगल", "Mercury": "बुध", "Jupiter": "गुरु", "Venus": "शुक्र", "Saturn": "शनि"}
+    HORA_NATURE = {"Sun": "mixed", "Moon": "good", "Mars": "bad", "Mercury": "good", "Jupiter": "good", "Venus": "good", "Saturn": "bad"}
+    day_lord = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"][wd]
+    hi0 = CHALDEAN.index(day_lord)
+    horas = []
+    for i in range(24):
+        lord = CHALDEAN[(hi0 + i) % 7]
+        if i < 12:
+            a = sr + day_len * i / 12; b = sr + day_len * (i + 1) / 12
+        else:
+            a = ss + (next_sr - ss) * (i - 12) / 12; b = ss + (next_sr - ss) * (i - 11) / 12
+        horas.append({"lord": lord, "lord_hi": HORA_HI[lord], "start": _fmt(a), "end": _fmt(b), "nature": HORA_NATURE[lord], "night": i >= 12})
     return {
         "available": True,
+        "hora": horas,
         "vedic_vara": {"index": wd, "name": VARA[wd], "name_hi": VARA_HI[wd],
                        "before_sunrise": before_sunrise},
         "sunrise": _fmt(today["sunrise"]), "sunset": _fmt(today["sunset"]),

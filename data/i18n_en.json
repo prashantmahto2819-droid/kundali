@@ -316,6 +316,15 @@
 "हिंदी": "Hindi",
 "विज्ञापन के लिए स्थान": "Space for an advertisement",
 "(छुट्टी)": "(holiday)",
+"प्रदोष, चतुर्थी, मासिक शिवरात्रि": "Pradosh, Chaturthi, monthly Shivaratri",
+"शक संवत + तमिल/बंगाली/मलयालम मास": "Shaka samvat + Tamil/Bengali/Malayalam months",
+"तीन माह / पृष्ठ": "Three months / page",
+"तिमाही; पूरे वर्ष के 4 पृष्ठ": "Quarterly; 4 pages for a year",
+"होरा (ग्रह-घंटे, 24)": "Hora (planetary hours, 24)",
+"प्रदोष व्रत": "Pradosh vrat",
+"विनायक चतुर्थी": "Vinayaka Chaturthi",
+"संकष्टी चतुर्थी": "Sankashti Chaturthi",
+"मासिक शिवरात्रि": "Masik Shivaratri",
 "वार्षिक शुभ-मुहूर्त पृष्ठ": "Yearly auspicious-dates page",
 "वार्षिक शुभ मुहूर्त": "Auspicious dates of the year",
 "पंचांग-स्तर: तिथि, नक्षत्र, वार, योग, भद्रा; संस्कारों में खरमास, चातुर्मास, होलाष्टक, अधिक मास, पितृ पक्ष, गुरु-शुक्र अस्त वर्जित": "Almanac level: tithi, nakshatra, weekday, yoga, Bhadra; samskaras exclude Kharmas, Chaturmas, Holashtak, adhika masa, Pitru paksha, Jupiter/Venus combust",
@@ -2715,9 +2724,13 @@
 "सूर्य का निरयन मकर प्रवेश (लाहिड़ी)।": "The Sun's sidereal ingress into Makara (Lahiri).",
 "क्षय तिथि: उस दिन लिया गया जिसमें तिथि समाप्त हुई।": "Kshaya tithi: the day on which the tithi ended was taken.",
 "तिथियाँ इस ऐप के अपने पंचांग से (लाहिड़ी, अमांत मास, सूर्योदय की तिथि; जन्माष्टमी मध्यरात्रि, दीपावली/धनतेरस सूर्यास्त, शरद पूर्णिमा चंद्रोदय)। क्षेत्रीय परंपराओं में एक दिन का अंतर संभव है; अंतिम निर्णय स्थानीय पंचांग से कीजिए।": "Dates from this app's own panchang (Lahiri, amanta months, tithi at sunrise; Janmashtami at midnight, Diwali/Dhanteras at sunset, Sharad Purnima at moonrise). Regional conventions can differ by a day; confirm with a local almanac.",
+"प्रदोष व्रत": "Pradosh vrat",
 "पौष पूर्णिमा": "Pausha Purnima",
+"संकष्टी चतुर्थी": "Sankashti Chaturthi",
 "षट्तिला एकादशी": "Shattila Ekadashi",
+"मासिक शिवरात्रि": "Masik Shivaratri",
 "पौष अमावस्या": "Pausha Amavasya",
+"विनायक चतुर्थी": "Vinayaka Chaturthi",
 "जया एकादशी": "Jaya Ekadashi",
 "माघ पूर्णिमा": "Magha Purnima",
 "विजया एकादशी": "Vijaya Ekadashi",
@@ -2773,7 +2786,7 @@
 "अष्टम भाव में ग्रह (चंद्र)": "Planet(s) in the 8th (Moon)",
 "चंद्र 8वें भाव में": "Moon in house 8",
 "चर लग्न (विवाह में कम वांछित)": "Movable lagna (less preferred for marriage)",
-"शुभ ग्रह केंद्र/त्रिकोण में (बुध, शुक्र)": "Benefic in kendra/trikona (Mercury, Venus)",
+"शुभ ग्रह केंद्र/त्रिकोण में (शुक्र, बुध)": "Benefic in kendra/trikona (Venus, Mercury)",
 "सप्तम भाव में ग्रह (चंद्र) — जामित्र दोष": "Planet(s) in the 7th (Moon) — Jamitra dosha",
 "लग्न में पाप ग्रह (सूर्य)": "Malefic in the lagna (Sun)",
 "द्वादश में पाप ग्रह (सूर्य)": "Malefic in the 12th (Sun)",
@@ -2785,7 +2798,7 @@
 "लग्न में पाप ग्रह (राहु)": "Malefic in the lagna (Rahu)",
 "लग्न वर की चंद्र राशि से 8वाँ": "Lagna is the 8th from the groom's Moon sign",
 "लग्न वधू की चंद्र राशि से 6वाँ": "Lagna is the 6th from the bride's Moon sign",
-"शुभ ग्रह केंद्र/त्रिकोण में (गुरु, बुध, शुक्र)": "Benefic in kendra/trikona (Jupiter, Mercury, Venus)",
+"शुभ ग्रह केंद्र/त्रिकोण में (शुक्र, गुरु, बुध)": "Benefic in kendra/trikona (Venus, Jupiter, Mercury)",
 "अष्टम भाव में ग्रह (बुध, शुक्र)": "Planet(s) in the 8th (Mercury, Venus)",
 "द्वादश में पाप ग्रह (राहु)": "Malefic in the 12th (Rahu)",
 "लग्नेश गुरु 6वें भाव में": "Lagna lord Jupiter in house 6",
@@ -3773,6 +3786,22 @@
 [
 "अधिक मास: {1} — इस मास में त्योहार नहीं गिने गए।",
 "Adhika masa: {1} — festivals are not counted in this month."
+],
+[
+"वर: चंद्रबल {1}वाँ ({2}) ✓",
+"Groom: chandrabala {1}th ({2}) ✓"
+],
+[
+"वर: चंद्रबल {1}वाँ ({2}) ✗",
+"Groom: chandrabala {1}th ({2}) ✗"
+],
+[
+"वधू: चंद्रबल {1}वाँ ({2}) ✓",
+"Bride: chandrabala {1}th ({2}) ✓"
+],
+[
+"वधू: चंद्रबल {1}वाँ ({2}) ✗",
+"Bride: chandrabala {1}th ({2}) ✗"
 ],
 [
 "{1} — लग्न-सारणी और लग्न-शुद्धि",
