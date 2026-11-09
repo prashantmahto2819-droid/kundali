@@ -264,10 +264,14 @@ def apply_overrides(year: int, events: list[dict]) -> list[dict]:
        "move": [{"key": "...", "date": "YYYY-MM-DD", "note_hi"?, "note_en"?}],
        "remove": ["key", ...]}
     The computed calendar stays the default; the file only patches it, so each year's list is reviewed once by a person."""
-    import json
+    import json, os
     from pathlib import Path
-    f = Path(__file__).resolve().parents[2] / "data" / "overrides" / f"festivals_{year}.json"
-    if not f.exists():
+    candidates = [Path(__file__).resolve().parents[2] / "data" / "overrides" / f"festivals_{year}.json"]
+    db = os.environ.get("KUNDALI_DB")
+    if db:                                             # the deployed container keeps owner edits next to the SQLite file (a volume), not in the image
+        candidates.insert(0, Path(db).resolve().parent / "overrides" / f"festivals_{year}.json")
+    f = next((c for c in candidates if c.exists()), None)
+    if f is None:
         return events
     try:
         ov = json.loads(f.read_text("utf-8"))

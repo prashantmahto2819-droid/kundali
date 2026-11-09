@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>कुंडली — प्रबंधन</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root { --bg:#faf6ef; --card:#fff; --ink:#2b1d12; --muted:#7a6a58; --accent:#b4541a; --line:#c9b8a3; --ok:#2e7d32; --bad:#c62828; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#15110d; --card:#1f1912; --ink:#f3e9dc; --muted:#b9a58e; --accent:#f0a060; --line:#5a4a3a; } }
+  * { box-sizing:border-box } body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, "Noto Sans Devanagari", sans-serif; }
+  header { display:flex; gap:12px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:5; flex-wrap:wrap }
+  header b { font-size:1.1rem } header input { flex:1 1 220px; max-width:360px }
+  main { max-width:1200px; margin:auto; padding:12px 16px 60px }
+  nav.tabs { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 } nav.tabs button { width:auto }
+  .card { background:var(--card); border:1px solid color-mix(in srgb,var(--line) 50%,transparent); border-radius:14px; padding:14px; margin:10px 0 }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px } .kpi { border:1px solid color-mix(in srgb,var(--line) 40%,transparent); border-radius:12px; padding:10px } .kpi b { font-size:1.6rem; display:block }
+  table { width:100%; border-collapse:collapse; font-size:.9rem } th, td { text-align:left; padding:6px 8px; border-bottom:1px solid color-mix(in srgb,var(--line) 35%,transparent); vertical-align:top } th { color:var(--muted); font-weight:600 }
+  .wrap { overflow-x:auto } input, select, textarea, button { font:inherit; padding:7px 10px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink) }
+  button { background:var(--accent); color:#fff; border:0; cursor:pointer } button.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent) } button.sm { padding:3px 10px; font-size:.8rem }
+  .ok { color:var(--ok) } .bad { color:var(--bad) } .muted { color:var(--muted) } .tab { display:none } .tab.on { display:block } .err { color:var(--bad); margin-top:6px }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px } label { display:block; font-size:.85rem; color:var(--muted) } label input, label select, label textarea { width:100%; margin-top:2px }
+  .chip { display:inline-block; padding:1px 8px; border-radius:999px; font-size:.78rem; background:color-mix(in srgb,var(--accent) 12%,transparent) }
+</style>
+</head>
+<body>
+<header><b>🪔 कुंडली — प्रबंधन</b><input id="key" type="password" placeholder="Admin key (KUNDALI_ADMIN_KEY)"><button type="button" id="load">लोड</button><span id="hdr" class="muted"></span></header>
+<main>
+<nav class="tabs" id="tabs">
+  <button type="button" data-t="t-home">सार</button><button type="button" class="ghost" data-t="t-subs">WhatsApp सब्सक्राइबर</button><button type="button" class="ghost" data-t="t-log">संदेश लॉग</button>
+  <button type="button" class="ghost" data-t="t-consult">परामर्श व ज्योतिषी</button><button type="button" class="ghost" data-t="t-wallet">वॉलेट</button><button type="button" class="ghost" data-t="t-ai">AI</button><button type="button" class="ghost" data-t="t-over">त्योहार सुधार</button>
+</nav>
+<div id="err" class="err"></div>
+
+<section class="tab on" id="t-home">
+  <div class="card"><div class="kpis" id="kpis"></div><div class="muted" style="margin-top:8px" id="status"></div></div>
+  <div class="card"><b>परीक्षण संदेश भेजिए</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><input id="t_phone" placeholder="91XXXXXXXXXX"><input id="t_text" value="कुंडली ऐप: परीक्षण संदेश ✅" style="flex:1 1 240px"><button type="button" id="t_send">भेजिए</button></div><div id="t_out" class="muted"></div></div>
+</section>
+
+<section class="tab" id="t-subs"><div class="card"><b>सब्सक्राइबर</b> <span class="muted" id="subcount"></span><div class="wrap"><table id="subs"></table></div></div></section>
+<section class="tab" id="t-log"><div class="card"><b>भेजे गए संदेश (आख़िरी 200)</b><div class="wrap"><table id="log"></table></div></div><div class="card"><b>आए हुए संदेश (बॉट)</b><div class="wrap"><table id="inbox"></table></div></div></section>
+
+<section class="tab" id="t-consult">
+  <div class="card"><b>ज्योतिषी जोड़ें / बदलें</b>
+    <div class="grid" style="margin-top:6px">
+      <label>ID (खाली = नाम से)<input id="a_id"></label><label>नाम (English)<input id="a_name"></label><label>नाम (हिंदी)<input id="a_name_hi"></label><label>WhatsApp नंबर<input id="a_phone"></label>
+      <label>भाषाएँ (कॉमा)<input id="a_lang" value="हिंदी, English"></label><label>विशेषज्ञता (कॉमा)<input id="a_spec" placeholder="विवाह, करियर"></label><label>अनुभव (वर्ष)<input id="a_exp" type="number" value="10"></label><label>फ़ोटो URL<input id="a_photo"></label>
+      <label>चैट ₹<input id="a_pc" type="number" value="0"></label><label>कॉल ₹<input id="a_pcall" type="number" value="0"></label><label>रिपोर्ट ₹<input id="a_pr" type="number" value="0"></label><label>सक्रिय<select id="a_active"><option value="1">हाँ</option><option value="0">नहीं</option></select></label>
+    </div>
+    <label style="margin-top:6px">परिचय (हिंदी)<textarea id="a_bio" rows="2"></textarea></label>
+    <div style="margin-top:8px"><button type="button" id="a_save">सेव</button></div>
+  </div>
+  <div class="card"><b>सूचीबद्ध ज्योतिषी</b><div class="wrap"><table id="astros"></table></div></div>
+  <div class="card"><b>खुले अनुरोध</b><div class="wrap"><table id="reqs"></table></div><div id="thread"></div></div>
+</section>
+
+<section class="tab" id="t-wallet"><div class="card"><b>टॉप-अप दर्ज करें</b> <span class="muted" id="paidflag"></span><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><input id="w_phone" placeholder="91XXXXXXXXXX"><input id="w_amt" type="number" placeholder="राशि ₹" style="max-width:120px"><input id="w_ref" placeholder="UPI संदर्भ"><input id="w_note" placeholder="टिप्पणी" style="flex:1 1 160px"><button type="button" id="w_add">जोड़ें</button></div><div id="w_out" class="muted"></div></div>
+  <div class="card"><b>हाल के टॉप-अप</b><div class="wrap"><table id="topups"></table></div></div></section>
+
+<section class="tab" id="t-ai"><div class="card"><b>AI प्रदाता</b><div id="aiprov" class="muted"></div></div><div class="card"><b>आज/हाल का उपयोग</b><div class="wrap"><table id="aiuse"></table></div></div>
+  <div class="card"><b>ग्रंथ-पाठ से नियम निकालिए (ड्राफ़्ट)</b><label>स्रोत<input id="x_src" placeholder="जैसे: BPHS अध्याय 24"></label><label>पाठ<textarea id="x_text" rows="6"></textarea></label><div style="margin-top:8px"><button type="button" id="x_go">निकालिए और data/rules/drafts में सेव कीजिए</button></div><pre id="x_out" style="white-space:pre-wrap;font-size:.85rem"></pre></div></section>
+
+<section class="tab" id="t-over"><div class="card"><b>त्योहार सुधार (override)</b> <span class="muted">वर्ष चुनिए; add / move / remove — इंजन की गणना डिफ़ॉल्ट रहती है</span>
+  <div style="display:flex;gap:8px;align-items:center;margin:8px 0"><input id="o_year" type="number" style="max-width:110px"><button type="button" class="ghost" id="o_load">खोलिए</button><button type="button" id="o_save">सेव</button></div>
+  <div class="grid"><div><b>जोड़ें (add)</b><div class="muted" style="font-size:.8rem">key | नाम (हिंदी) | नाम (English) | YYYY-MM-DD | kind (national/festival/regional) — एक पंक्ति एक प्रविष्टि</div><textarea id="o_add" rows="6" style="width:100%"></textarea></div>
+  <div><b>तारीख़ बदलें (move)</b><div class="muted" style="font-size:.8rem">key | YYYY-MM-DD</div><textarea id="o_move" rows="6" style="width:100%"></textarea></div>
+  <div><b>हटाएँ (remove)</b><div class="muted" style="font-size:.8rem">एक key प्रति पंक्ति (जैसे holi, ambedkar_jayanti)</div><textarea id="o_rem" rows="6" style="width:100%"></textarea></div></div>
+  <div id="o_out" class="muted"></div></div></section>
+</main>
+<script src="config.js"></script>
+<script>
+const API = (window.KUNDALI_API || '').replace(/\/$/, '');
+const $ = id => document.getElementById(id); const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+try { $('key').value = localStorage.getItem('kundali_admin_key') || ''; } catch (e) {}
+let DATA = null;
+const post = async (path, body) => { const r = await fetch(API + path, {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Admin-Key': $('key').value.trim()}, body: JSON.stringify(body)}); const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि'); return d; };
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs button').forEach(x => x.className = x === b ? '' : 'ghost'); document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === b.dataset.t)); });
+const yn = v => v ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>';
+async function load() {
+  $('err').textContent = ''; try { localStorage.setItem('kundali_admin_key', $('key').value.trim()); } catch (e) {}
+  try { DATA = await post('/v1/consult/admin', {action: 'dashboard'}); } catch (e) { $('err').textContent = e.message; return; }
+  const c = DATA.counts; $('hdr').textContent = new Date().toLocaleString('hi-IN');
+  $('kpis').innerHTML = [['सक्रिय सब्सक्राइबर', c.subscribers], ['आज भेजे', c.sent_today], ['आज असफल', c.failed_today], ['खुले परामर्श', c.open_requests], ['AI कॉल आज', c.ai_today]].map(([k, v]) => `<div class="kpi"><span class="muted">${k}</span><b>${v}</b></div>`).join('');
+  $('status').innerHTML = `Relay: ${DATA.relay_ready ? '<span class="ok">सेट</span>' : '<span class="bad">सेट नहीं (RELAY_URL/RELAY_API_KEY/RELAY_SESSION)</span>'} · AI: ${DATA.ai_providers.length ? DATA.ai_providers.map(p => esc(p.name) + ' (' + esc(p.model) + ')').join(' → ') : '<span class="bad">कोई provider नहीं</span>'} · भुगतान: ${DATA.paid ? 'सशुल्क' : 'निःशुल्क'}`;
+  $('subcount').textContent = `(${DATA.subscribers.length})`;
+  $('subs').innerHTML = `<tr><th>नंबर</th><th>नाम</th><th>भाषा</th><th>स्थान</th><th>समय</th><th>पंचांग</th><th>राशिफल</th><th>व्रत</th><th>साप्ताहिक</th><th>सत्यापित</th><th>स्थिति</th><th>आख़िरी</th><th>त्रुटि</th><th></th></tr>` +
+    DATA.subscribers.map(s => `<tr><td>${esc(s.phone)}</td><td>${esc(s.name || '')}${s.moon_sign_name ? '<br><span class="chip">' + esc(s.moon_sign_name) + '</span>' : ''}</td><td>${esc(s.lang)}</td><td>${esc(s.place || '')}</td><td>${esc(s.daily_time)}</td><td>${yn(s.want_panchang)}</td><td>${yn(s.want_rashifal)}</td><td>${yn(s.vrat_alert)}</td><td>${yn(s.weekly)}</td><td>${yn(s.verified)}</td><td>${esc(s.status)}</td><td class="muted">${esc(s.last_daily || '—')}</td><td class="bad" style="max-width:200px">${esc(s.last_error || '')}</td>
+      <td><button type="button" class="sm ghost" data-sub="${esc(s.phone)}" data-st="${s.status === 'active' ? 'stopped' : 'active'}">${s.status === 'active' ? 'रोकें' : 'चालू'}</button> ${!s.verified ? `<button type="button" class="sm ghost" data-ver="${esc(s.phone)}">सत्यापित मानें</button>` : ''}</td></tr>`).join('');
+  $('subs').onclick = async e => { const b = e.target.closest('button'); if (!b) return; try { if (b.dataset.sub) await post('/v1/consult/admin', {action: 'subscriber', phone: b.dataset.sub, fields: {status: b.dataset.st}}); if (b.dataset.ver) await post('/v1/consult/admin', {action: 'subscriber', phone: b.dataset.ver, fields: {verified: 1}}); load(); } catch (err) { $('err').textContent = err.message; } };
+  $('log').innerHTML = `<tr><th>समय</th><th>नंबर</th><th>प्रकार</th><th>ठीक</th><th>विवरण</th></tr>` + DATA.wa_log.map(l => `<tr><td class="muted">${esc(l.at.slice(0, 16).replace('T', ' '))}</td><td>${esc(l.phone)}</td><td>${esc(l.kind)}</td><td>${yn(l.ok)}</td><td class="muted" style="max-width:420px;word-break:break-all">${esc(l.detail || '')}</td></tr>`).join('');
+  $('inbox').innerHTML = `<tr><th>समय</th><th>नंबर</th><th>संदेश</th><th>उत्तर गया</th></tr>` + DATA.inbox.map(l => `<tr><td class="muted">${esc((l.at || '').slice(0, 16).replace('T', ' '))}</td><td>${esc(l.phone)}</td><td>${esc(l.text)}</td><td>${l.reply_ok === null ? '—' : yn(l.reply_ok)}</td></tr>`).join('');
+  $('astros').innerHTML = `<tr><th>ID</th><th>नाम</th><th>भाषाएँ</th><th>विशेषज्ञता</th><th>अनुभव</th><th>₹ चैट/कॉल/रिपोर्ट</th><th>रेटिंग</th><th>सक्रिय</th><th></th></tr>` + DATA.astrologers.map(a => `<tr><td>${esc(a.id)}</td><td>${esc(a.name_hi || a.name)}</td><td>${esc(a.languages.join(', '))}</td><td>${esc(a.specialities.join(', '))}</td><td>${a.experience_years || ''}</td><td>${a.prices.chat}/${a.prices.call}/${a.prices.report}</td><td>${a.rating ? a.rating + ' (' + a.ratings_count + ')' : '—'}</td><td>${yn(a.active)}</td><td><button type="button" class="sm ghost" data-edit="${esc(a.id)}">बदलें</button></td></tr>`).join('');
+  $('astros').onclick = e => { const b = e.target.closest('button[data-edit]'); if (!b) return; const a = DATA.astrologers.find(x => x.id === b.dataset.edit); $('a_id').value = a.id; $('a_name').value = a.name; $('a_name_hi').value = a.name_hi || ''; $('a_lang').value = a.languages.join(', '); $('a_spec').value = a.specialities.join(', '); $('a_exp').value = a.experience_years || 0; $('a_photo').value = a.photo || ''; $('a_bio').value = a.bio_hi || ''; $('a_active').value = a.active ? '1' : '0'; window.scrollTo({top: 0, behavior: 'smooth'}); };
+  $('reqs').innerHTML = `<tr><th>#</th><th>ज्योतिषी</th><th>नंबर</th><th>माध्यम</th><th>स्थिति</th><th>₹</th><th>समय</th><th></th></tr>` + DATA.open_requests.map(r => `<tr><td>${esc(r.id)}</td><td>${esc(r.astrologer_id)}</td><td>${esc(r.phone)}</td><td>${esc(r.mode)}</td><td>${esc(r.status)}</td><td>${r.price}</td><td class="muted">${esc(r.created.slice(0, 16).replace('T', ' '))}</td><td><button type="button" class="sm ghost" data-open="${esc(r.id)}">खोलें</button></td></tr>`).join('');
+  $('reqs').onclick = async e => { const b = e.target.closest('button[data-open]'); if (!b) return; try { const d = await post('/v1/consult/get', {id: b.dataset.open}); $('thread').innerHTML = `<h4>#${esc(d.id)} — ${esc(d.astrologer?.name_hi || d.astrologer?.name || '')} · ${esc(d.phone)}${d.birth ? ' · जन्म ' + esc(d.birth.date) + ' ' + esc(d.birth.time || '') : ''}</h4>` + d.messages.map(m => `<p><b>${m.sender === 'seeker' ? 'सीकर' : 'ज्योतिषी'}:</b> ${esc(m.text)} <span class="muted">${esc(m.at.slice(0, 16).replace('T', ' '))}</span></p>`).join('') + (d.status !== 'closed' ? `<div style="display:flex;gap:8px"><textarea id="th_text" rows="2" style="flex:1"></textarea><button type="button" id="th_send">ज्योतिषी की ओर से भेजें</button><button type="button" class="ghost" id="th_close">बंद करें</button></div>` : ''); const s = $('th_send'); if (s) s.onclick = async () => { try { await post('/v1/consult/message', {id: d.id, sender: 'astrologer', text: $('th_text').value}); load(); $('thread').innerHTML = '<span class="ok">भेजा गया</span>'; } catch (err) { $('err').textContent = err.message; } }; const c2 = $('th_close'); if (c2) c2.onclick = async () => { try { await post('/v1/consult/close', {id: d.id}); load(); $('thread').innerHTML = ''; } catch (err) { $('err').textContent = err.message; } }; } catch (err) { $('err').textContent = err.message; } };
+  $('paidflag').textContent = DATA.paid ? '(सशुल्क मोड चालू)' : '(निःशुल्क मोड — KUNDALI_PAID=1 से सशुल्क)';
+  $('topups').innerHTML = `<tr><th>समय</th><th>नंबर</th><th>₹</th><th>संदर्भ</th><th>टिप्पणी</th></tr>` + DATA.recent_topups.map(t => `<tr><td class="muted">${esc(t.at.slice(0, 16).replace('T', ' '))}</td><td>${esc(t.phone)}</td><td>${t.amount}</td><td>${esc(t.ref || '')}</td><td>${esc(t.note || '')}</td></tr>`).join('');
+  $('aiprov').innerHTML = DATA.ai_providers.length ? DATA.ai_providers.map(p => `<span class="chip">${esc(p.name)} · ${esc(p.model)}</span>`).join(' → ') : '<span class="bad">कोई provider सेट नहीं — deploy/.env में OPENAI_API_KEY / GROQ_API_KEY डालें</span>';
+  $('aiuse').innerHTML = `<tr><th>दिन</th><th>कौन</th><th>कॉल</th></tr>` + DATA.ai_usage.map(u => `<tr><td>${esc(u.day)}</td><td>${esc(u.who)}</td><td>${u.used}</td></tr>`).join('');
+  if (!$('o_year').value) $('o_year').value = new Date().getFullYear();
+  showOverride();
+}
+function showOverride() { const y = $('o_year').value; const o = (DATA && DATA.overrides[y]) || {add: [], move: [], remove: []}; $('o_add').value = (o.add || []).map(a => [a.key, a.name_hi, a.name_en || '', a.date, a.kind || 'national'].join(' | ')).join('\n'); $('o_move').value = (o.move || []).map(m => m.key + ' | ' + m.date).join('\n'); $('o_rem').value = (o.remove || []).join('\n'); }
+$('o_load').onclick = showOverride;
+$('o_save').onclick = async () => { const sp = l => l.split('|').map(x => x.trim()); try { const d = await post('/v1/consult/admin', {action: 'override', year: +$('o_year').value, data: {add: $('o_add').value.split('\n').filter(l => l.trim()).map(sp).map(([key, name_hi, name_en, date, kind]) => ({key, name_hi, name_en, date, kind})), move: $('o_move').value.split('\n').filter(l => l.trim()).map(sp).map(([key, date]) => ({key, date})), remove: $('o_rem').value.split('\n').map(x => x.trim()).filter(Boolean)}}); $('o_out').innerHTML = `<span class="ok">सेव हुआ: ${d.add.length} जोड़े, ${d.move.length} बदले, ${d.remove.length} हटाए (${d.year})</span>`; load(); } catch (e) { $('o_out').innerHTML = `<span class="bad">${esc(e.message)}</span>`; } };
+$('a_save').onclick = async () => { try { await post('/v1/consult/admin', {action: 'astrologer', astrologer: {id: $('a_id').value.trim() || undefined, name: $('a_name').value.trim(), name_hi: $('a_name_hi').value.trim(), phone: $('a_phone').value.trim() || undefined, languages: $('a_lang').value.split(',').map(x => x.trim()).filter(Boolean), specialities: $('a_spec').value.split(',').map(x => x.trim()).filter(Boolean), experience_years: +$('a_exp').value, photo: $('a_photo').value.trim() || null, bio_hi: $('a_bio').value.trim(), price_chat: +$('a_pc').value, price_call: +$('a_pcall').value, price_report: +$('a_pr').value, active: +$('a_active').value}}); load(); } catch (e) { $('err').textContent = e.message; } };
+$('w_add').onclick = async () => { try { const d = await post('/v1/consult/admin', {action: 'topup', phone: $('w_phone').value, amount: +$('w_amt').value, ref: $('w_ref').value, note: $('w_note').value}); $('w_out').innerHTML = `<span class="ok">शेष ₹${d.balance}</span>`; load(); } catch (e) { $('w_out').innerHTML = `<span class="bad">${esc(e.message)}</span>`; } };
+$('t_send').onclick = async () => { try { const d = await post('/v1/consult/admin', {action: 'send_test', phone: $('t_phone').value, text: $('t_text').value}); $('t_out').innerHTML = d.ok ? '<span class="ok">भेजा गया</span>' : `<span class="bad">${esc(d.detail)}</span>`; } catch (e) { $('t_out').innerHTML = `<span class="bad">${esc(e.message)}</span>`; } };
+$('x_go').onclick = async () => { $('x_out').textContent = '…'; try { const d = await post('/v1/ai/extract_rules', {text: $('x_text').value, source: $('x_src').value, save: true}); $('x_out').textContent = `${d.count} नियम → ${d.saved_as || '(सेव नहीं)'}\n` + JSON.stringify(d.rules, null, 1); } catch (e) { $('x_out').textContent = e.message; } };
+$('load').onclick = load; if ($('key').value) load();
+</script>
+</body>
+</html>

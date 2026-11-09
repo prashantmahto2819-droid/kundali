@@ -219,3 +219,12 @@ curl -s -X POST https://kundali.vividbrandify.com/v1/consult/admin -H "Content-T
 ```
 To charge: `KUNDALI_PAID=1`, `KUNDALI_UPI_ID=yourname@upi`; seekers pay by UPI and send the reference; you credit it:
 `{"action":"topup","phone":"91…","amount":500,"ref":"UPI-ref","note":"verified"}`. Requests debit the wallet on creation. `{"action":"overview"}` lists open requests and top-ups.
+
+
+## 16. Owner admin panel
+
+`https://kundali.vividbrandify.com/admin.html` — enter `KUNDALI_ADMIN_KEY` (from deploy/.env; it stays in that browser's localStorage).
+Tabs: summary KPIs + test WhatsApp send; subscribers (stop/start, mark verified, last error); sent/received message logs; astrologers
+(add/edit) + open consultations (read, reply as the astrologer, close); wallet top-ups; AI providers and usage, rule extraction from a
+text passage; festival overrides per year (add / move / remove). Owner edits are written next to the SQLite file
+(`/srv/data/overrides/`, `/srv/data/rules_drafts/`) so they survive rebuilds; the repo's `data/overrides/` stays the default.

@@ -806,6 +806,16 @@ def consult_admin_from_payload(payload: dict, headers: dict | None = None) -> di
     if not consult.is_admin(headers or {}):
         raise BadRequest("admin key required (X-Admin-Key)")
     action = str(payload.get("action") or "overview")
+    if action == "dashboard":
+        return consult.admin_dashboard()
+    if action == "subscriber":
+        return _consult_call("admin_set_subscriber", payload.get("phone"), payload.get("fields") or {})
+    if action == "override":
+        return _consult_call("admin_save_override", int(payload.get("year") or 0), payload.get("data") or {})
+    if action == "send_test":
+        from . import notify
+        res = notify.send_whatsapp(notify.normalize_phone(payload.get("phone")), str(payload.get("text") or "कुंडली ऐप: परीक्षण संदेश ✅"))
+        return res
     if action == "astrologer":
         return _consult_call("upsert_astrologer", payload.get("astrologer") or {})
     if action == "topup":
@@ -888,11 +898,11 @@ def ai_extract_rules_from_payload(payload: dict, headers: dict | None = None) ->
     if payload.get("save") and out["rules"]:
         import json as _json, re as _re
         from pathlib import Path
-        d = Path(__file__).resolve().parents[2] / "data" / "rules" / "drafts"
+        d = (Path(os.environ["KUNDALI_DB"]).resolve().parent / "rules_drafts") if os.environ.get("KUNDALI_DB") else (Path(__file__).resolve().parents[2] / "data" / "rules" / "drafts")
         d.mkdir(parents=True, exist_ok=True)
         name = _re.sub(r"[^a-z0-9_-]", "_", str(payload.get("source") or "draft").lower())[:40] + "_" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S") + ".json"
         (d / name).write_text(_json.dumps({"source": payload.get("source"), "review_status": "draft", "rules": out["rules"]}, ensure_ascii=False, indent=1), "utf-8")
-        out["saved_as"] = f"data/rules/drafts/{name}"
+        out["saved_as"] = str(d / name)
     return out
 
 

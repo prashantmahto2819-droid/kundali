@@ -261,3 +261,84 @@ def admin_overview() -> dict:
     return {"astrologers": list_astrologers(include_inactive=True),
             "open_requests": _rows("SELECT id, astrologer_id, phone, mode, status, price, created FROM consult_requests WHERE status!='closed' ORDER BY created DESC LIMIT 100"),
             "recent_topups": _rows("SELECT phone, amount, ref, note, at FROM wallet_ledger WHERE kind='topup' ORDER BY id DESC LIMIT 50"), "paid": paid()}
+
+
+# ---------------------------------------------------------------- owner admin panel data
+def admin_dashboard() -> dict:
+    """Everything the owner's panel shows: subscribers, WhatsApp log, inbox, consult, wallet, AI usage, overrides, providers."""
+    from . import llm
+    import json as _json
+    from pathlib import Path
+    s = db()
+    with s._lock:
+        c = s._db
+        subs = [dict(r) for r in c.execute("SELECT phone, name, lang, place, daily_time, want_panchang, want_rashifal, vrat_alert, weekly, verified, status, moon_sign_name, last_daily, last_weekly, last_error, created FROM wa_subs ORDER BY created DESC LIMIT 500").fetchall()]
+        log = [dict(r) for r in c.execute("SELECT phone, kind, at, ok, detail FROM wa_log ORDER BY id DESC LIMIT 200").fetchall()]
+        try:
+            inbox = [dict(r) for r in c.execute("SELECT id, phone, at, text, reply_ok FROM wa_inbox ORDER BY at DESC LIMIT 200").fetchall()]
+        except Exception:
+            inbox = []
+        try:
+            ai_usage = [dict(r) for r in c.execute("SELECT who, day, used FROM ai_usage ORDER BY day DESC, used DESC LIMIT 200").fetchall()]
+        except Exception:
+            ai_usage = []
+        counts = {"subscribers": c.execute("SELECT COUNT(*) FROM wa_subs WHERE verified=1 AND status='active'").fetchone()[0],
+                  "sent_today": c.execute("SELECT COUNT(*) FROM wa_log WHERE ok=1 AND kind IN ('daily','weekly') AND at >= date('now')").fetchone()[0],
+                  "failed_today": c.execute("SELECT COUNT(*) FROM wa_log WHERE ok=0 AND at >= date('now')").fetchone()[0],
+                  "open_requests": c.execute("SELECT COUNT(*) FROM consult_requests WHERE status!='closed'").fetchone()[0]}
+        try:
+            counts["ai_today"] = c.execute("SELECT COALESCE(SUM(used),0) FROM ai_usage WHERE day=date('now')").fetchone()[0]
+        except Exception:
+            counts["ai_today"] = 0
+    overrides = {}
+    for root in override_dirs()[::-1]:                 # image defaults first, persistent edits override
+        for f in sorted(root.glob("festivals_*.json")) if root.exists() else []:
+            try:
+                overrides[f.stem.split("_", 1)[1]] = _json.loads(f.read_text("utf-8"))
+            except ValueError:
+                pass
+    return {"counts": counts, "subscribers": subs, "wa_log": log, "inbox": inbox, "ai_usage": ai_usage, "overrides": overrides, "paid": paid(),
+            "relay_ready": notify.relay_ready(), "ai_providers": [{"name": p["name"], "model": p["model"]} for p in llm.configured()], **admin_overview()}
+
+
+def admin_set_subscriber(phone: str, fields: dict) -> dict:
+    phone = notify.normalize_phone(phone)
+    allowed = {k: v for k, v in fields.items() if k in ("status", "lang", "daily_time", "want_panchang", "want_rashifal", "vrat_alert", "weekly", "verified", "place", "name")}
+    if not allowed:
+        raise ValueError("nothing to change")
+    notify.subs().set(phone, **allowed)
+    return notify.subs().get(phone) or {}
+
+
+def override_dirs() -> list:
+    """[persistent dir next to KUNDALI_DB (if set), repo data/overrides] — writes go to the first."""
+    from pathlib import Path
+    dirs = []
+    db = os.environ.get("KUNDALI_DB")
+    if db:
+        dirs.append(Path(db).resolve().parent / "overrides")
+    dirs.append(Path(__file__).resolve().parents[2] / "data" / "overrides")
+    return dirs
+
+
+def admin_save_override(year: int, data: dict) -> dict:
+    import json as _json
+    from pathlib import Path
+    if not 1950 <= int(year) <= 2099:
+        raise ValueError("year 1950-2099")
+    clean = {"add": [a for a in (data.get("add") or []) if isinstance(a, dict) and a.get("key") and a.get("date") and a.get("name_hi")],
+             "move": [m for m in (data.get("move") or []) if isinstance(m, dict) and m.get("key") and m.get("date")],
+             "remove": [str(x) for x in (data.get("remove") or [])]}
+    root = override_dirs()[0]
+    root.mkdir(parents=True, exist_ok=True)
+    (root / f"festivals_{int(year)}.json").write_text(_json.dumps(clean, ensure_ascii=False, indent=1), "utf-8")
+    try:                                              # the month/festival caches must forget the old calendar
+        from . import panchang_month, festivals as _f
+        for fn in (getattr(panchang_month, "_festivals_by_day", None), getattr(_f, "lunations", None)):
+            if fn is not None and hasattr(fn, "cache_clear"):
+                fn.cache_clear()
+        if hasattr(panchang_month, "month") and hasattr(panchang_month.month, "cache_clear"):
+            panchang_month.month.cache_clear()
+    except Exception:
+        pass
+    return {"year": int(year), **clean}
