@@ -426,6 +426,10 @@ _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v 
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
 
+# chart style toggle, Today city picker, alerts
+for hi, en in [("शैली:", "Style:"), ("उत्तर भारतीय", "North Indian"), ("दक्षिण भारतीय", "South Indian"), ("शहर बदलिए (जैसे: इंदौर)", "Change city (e.g. Indore)"), ("दिखाइए", "Show"), ("से", "from")]:
+    put(hi, en)
+
 # grouped navigation + "आज" home tab
 for hi, en in [("आज", "Today"), ("मेरी कुंडली", "My kundali"), ("पंचांग-मुहूर्त", "Panchang & muhurta"), ("अन्य विद्याएँ", "Other disciplines"), ("सीखिए-पूछिए", "Learn & ask"),
                ("आज का पंचांग", "Today's panchang"), ("लोड हो रहा है…", "Loading…"), ("आज और कल के व्रत-पर्व", "Today's and tomorrow's vrats & festivals"), ("आज के शुभ-अशुभ समय", "Today's good and bad hours"),

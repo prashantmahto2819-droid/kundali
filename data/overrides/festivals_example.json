@@ -1,0 +1,14 @@
+{
+ "_note": "Yearly hand corrections applied over the computed festival calendar (see festivals.apply_overrides). Keep entries few; the engine is the default.",
+ "add": [
+  {
+   "key": "christmas_holiday_note",
+   "name_hi": "बैंक अवकाश (उदाहरण प्रविष्टि — हटाइए)",
+   "name_en": "Bank holiday (example entry — remove)",
+   "date": "2026-12-26",
+   "kind": "national"
+  }
+ ],
+ "move": [],
+ "remove": []
+}

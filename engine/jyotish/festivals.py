@@ -257,6 +257,39 @@ def _makara_sankranti(year: int, tz: str) -> str:
     return lo.astimezone(zone).strftime("%Y-%m-%d")
 
 
+def apply_overrides(year: int, events: list[dict]) -> list[dict]:
+    """Yearly hand corrections from data/overrides/festivals_<year>.json — government holidays, a regional date that the
+    local panchang fixes differently, or an event to drop:
+      {"add": [{"key","name_hi","name_en","date":"YYYY-MM-DD","kind":"national|festival|regional","region"?}],
+       "move": [{"key": "...", "date": "YYYY-MM-DD", "note_hi"?, "note_en"?}],
+       "remove": ["key", ...]}
+    The computed calendar stays the default; the file only patches it, so each year's list is reviewed once by a person."""
+    import json
+    from pathlib import Path
+    f = Path(__file__).resolve().parents[2] / "data" / "overrides" / f"festivals_{year}.json"
+    if not f.exists():
+        return events
+    try:
+        ov = json.loads(f.read_text("utf-8"))
+    except ValueError:
+        return events
+    remove = set(ov.get("remove", []))
+    moves = {m["key"]: m for m in ov.get("move", []) if m.get("key") and m.get("date")}
+    out = []
+    for ev in events:
+        if ev["key"] in remove:
+            continue
+        if ev["key"] in moves:
+            m = moves[ev["key"]]
+            ev = {**ev, "date": m["date"], "rule": "override", "note_hi": m.get("note_hi", "स्थानीय पंचांग के अनुसार तिथि समायोजित।"), "note_en": m.get("note_en", "Date adjusted to the local panchang.")}
+        out.append(ev)
+    for a in ov.get("add", []):
+        if a.get("key") and a.get("date") and a.get("name_hi"):
+            out.append({"key": a["key"], "name_hi": a["name_hi"], "name_en": a.get("name_en", a["name_hi"]), "date": a["date"], "kind": a.get("kind", "national"),
+                        "rule": "override", "note_hi": a.get("note_hi", ""), "note_en": a.get("note_en", ""), **({"region": a["region"]} if a.get("region") else {})})
+    return out
+
+
 def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
     year = max(1950, min(2099, int(year)))
     zone = ZoneInfo(tz)
@@ -361,6 +394,7 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
     if diwali:
         events.append({**diwali, "key": "kali_puja", "name_hi": "काली पूजा", "name_en": "Kali Puja", "kind": "regional", "rule": "regional", "note_hi": "", "note_en": "", "region": "Bengal"})
     events += other_calendars(year, tz)
+    events = apply_overrides(year, events)
     order = {"festival": 0, "regional": 1, "national": 2, "ekadashi": 3, "purnima": 4, "amavasya": 4, "pradosh": 5, "chaturthi": 5, "shivaratri": 5, "christian": 6, "islamic": 6}
     events.sort(key=lambda e: (e["date"], order.get(e["kind"], 9)))
     adh = []

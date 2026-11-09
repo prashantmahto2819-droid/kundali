@@ -203,6 +203,14 @@ def compose_daily(sub: dict, d: date) -> str:
             L.append(("शुभ रंग " if hi else "Lucky colour ") + (r["lucky_colour_hi"] if hi else r["lucky_colour"]) + (" · शुभ अंक " if hi else " · lucky number ") + str(r["lucky_number"]))
         except Exception:
             pass
+    if sub.get("birth"):
+        try:
+            personal = compose_personal_alerts(sub, d)
+            if personal:
+                L.append("")
+                L.append(personal)
+        except Exception:
+            pass
     if sub.get("vrat_alert", 1):
         alert = compose_alert(sub, d + timedelta(days=1), prefix=True)
         if alert:
@@ -212,6 +220,25 @@ def compose_daily(sub: dict, d: date) -> str:
     L.append("_" + ("पंचांग: लाहिड़ी अयनांश, सूर्योदय-कालीन तिथि; राशिफल प्रवृत्ति-संकेत है। बंद करने के लिए STOP लिखें।" if hi else
                     "Panchang: Lahiri ayanamsa, tithi at sunrise; the rashifal is a tendency pointer. Reply STOP to unsubscribe.") + "_")
     return "\n".join(L)
+
+
+def compose_personal_alerts(sub: dict, d: date) -> str:
+    """Dasha / transit changes for the subscriber's own chart: today's, and the coming week's."""
+    from .handlers import chart_from_payload
+    from . import alerts as alerts_mod
+    hi = sub.get("lang", "hi") != "en"
+    birth = json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]
+    ch = chart_from_payload(birth)
+    a = alerts_mod.alerts(ch, d, sub["tz"])
+    L = []
+    for ev in a["today"]:
+        L.append("🔔 " + (ev["hi"] if hi else ev["en"]))
+    up = [ev for ev in a["upcoming"] if ev["kind"] in ("dasha", "sadesati", "ashtama") or ev.get("planet") in ("Jupiter", "Saturn", "Rahu")]
+    for ev in up[:3]:
+        L.append(("📌 " + f'{ev["date"][8:10]}-{ev["date"][5:7]} से: ' if hi else "📌 " + f'From {ev["date"][8:10]}-{ev["date"][5:7]}: ') + (ev["hi"] if hi else ev["en"]))
+    if not L:
+        return ""
+    return ("*आपकी कुंडली में*\n" if hi else "*In your chart*\n") + "\n".join(L)
 
 
 def compose_alert(sub: dict, d: date, prefix: bool = False) -> str:

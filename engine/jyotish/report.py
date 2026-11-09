@@ -57,6 +57,36 @@ def north_chart_svg(cells: list[dict]) -> str:
     return "".join(out)
 
 
+_SOUTH_POS = {11: (0, 0), 0: (1, 0), 1: (2, 0), 2: (3, 0), 3: (3, 1), 4: (3, 2), 5: (3, 3), 6: (2, 3), 7: (1, 3), 8: (0, 3), 9: (0, 2), 10: (0, 1)}
+
+
+def south_chart_svg(cells: list[dict]) -> str:
+    """South Indian style: signs fixed clockwise from Pisces at top-left; the lagna cell carries a diagonal mark."""
+    S = 100
+    out = ['<svg viewBox="-4 -4 408 408" class="chart" xmlns="http://www.w3.org/2000/svg">']
+    for i, cell in enumerate(cells):
+        c, r = _SOUTH_POS[cell["sign"]]
+        x, y = c * S, r * S
+        out.append(f'<rect x="{x}" y="{y}" width="{S}" height="{S}" fill="none" stroke="#7a5c2e" stroke-width="1.6"/>')
+        if i == 0:
+            out.append(f'<line x1="{x}" y1="{y}" x2="{x + 28}" y2="{y + 28}" stroke="#7a5c2e" stroke-width="1.5"/>')
+        out.append(f'<text x="{x + S - 8}" y="{y + 14}" text-anchor="end" font-size="11" fill="#8a7a64">{cell["sign"] + 1}</text>')
+        pl = cell["planets"]
+        for k, (short, retro) in enumerate(pl):
+            col, row = k % 3, k // 3
+            n = min(3, len(pl) - row * 3)
+            px = x + S / 2 + (col - (n - 1) / 2) * 28
+            py = y + 44 + row * 20
+            mark = '<tspan font-size="9" dy="-6">v</tspan>' if retro else ""
+            out.append(f'<text x="{px}" y="{py}" text-anchor="middle" font-size="15" font-weight="600" fill="#2b2118">{e(short)}{mark}</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def chart_svg(cells: list[dict], style: str = "north") -> str:
+    return south_chart_svg(cells) if style == "south" else north_chart_svg(cells)
+
+
 def _d1_cells(chart: dict) -> list[dict]:
     pm = {p["name"]: p for p in chart["planets"]}
     return [{"sign": h["sign"], "planets": [(pm[n]["short_hi"], pm[n]["retrograde"]) for n in h["planets"]]}
@@ -80,7 +110,7 @@ def _table(head: list[str], rows: list[list[str]]) -> str:
     return f"<table>{head_row}{body}</table>"
 
 
-def render(chart: dict, brand: dict | None = None) -> str:
+def render(chart: dict, brand: dict | None = None, style: str = "north") -> str:
     inp, lg = chart["input"], chart["lagna"]
     pm = {p["name"]: p for p in chart["planets"]}
     moon = pm["Moon"]
@@ -278,8 +308,8 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 
 {patri_html}
 <h2>कुंडलियाँ</h2>
-<div class="charts"><div><b>लग्न कुंडली (D1)</b>{north_chart_svg(_d1_cells(chart))}</div>
-<div><b>नवांश (D9)</b>{north_chart_svg(_varga_cells(chart, "D9"))}</div></div>
+<div class="charts"><div><b>लग्न कुंडली (D1)</b>{chart_svg(_d1_cells(chart), style)}</div>
+<div><b>नवांश (D9)</b>{chart_svg(_varga_cells(chart, "D9"), style)}</div></div>
 <div class="small">खानों में अंक राशि-संख्या हैं (1 = मेष)। ‘v’ = वक्री।</div>
 
 <h2>ग्रह स्थिति</h2>
@@ -342,7 +372,7 @@ th {{ background:#f6ecd6; }} td:first-child {{ text-align:left; }}
 
 
 # ---- Matching (ashtakoota) report ---------------------------------------------------------------------
-def render_match(m: dict) -> str:
+def render_match(m: dict, style: str = "north") -> str:
     """Printable Hindi HTML for a /v1/match result (both D1 charts, koota table, doshas/parihara, manglik)."""
     CONF = {"firm": "पक्का नियम", "draft": "ड्राफ़्ट (समीक्षा बाकी)"}
     rows = [[e(k["name_hi"]) + f' <span class="small">({e(k["name"])})</span>', f'<b>{k["score"]}</b> / {k["max"]}', e(k["detail"]), CONF.get(k["confidence"], "")]
@@ -357,7 +387,7 @@ def render_match(m: dict) -> str:
         who = m.get(role + "_name") or label
         moon = pm["Moon"]
         charts_html += (f'<div><b>{label}: {e(who)}</b><div class="small">जन्म {e(ch["input"]["date"])} {e(ch["input"]["time"])} · लग्न {e(ch["lagna"]["sign_name_hi"])} {e(ch["lagna"]["dms"])} · '
-                        f'चंद्र {e(moon["sign_name_hi"])}, {e(moon["nakshatra_hi"])} पाद {moon["pada"]}</div>{north_chart_svg(cells)}</div>')
+                        f'चंद्र {e(moon["sign_name_hi"])}, {e(moon["nakshatra_hi"])} पाद {moon["pada"]}</div>{chart_svg(cells, style)}</div>')
     dosh = ""
     if m.get("doshas"):
         dosh = "<p><b>दोष:</b> " + ", ".join(f'{e(d["name_hi"])} दोष' + (" (परिहार मिला)" if d["cancelled"] else "") for d in m["doshas"]) + "</p>"

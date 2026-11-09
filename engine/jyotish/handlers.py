@@ -59,12 +59,19 @@ def chart_from_payload(payload: dict) -> dict:
         except ValueError as exc:
             raise BadRequest("as_of must be an ISO-8601 timestamp") from exc
     try:
-        return compute_chart(date, time_, tz, lat, lon, name=payload.get("name"),
-                             ayanamsa_system=payload.get("ayanamsa", "lahiri"),
-                             year_days=year_days, as_of=as_of, backend=backend(),
-                             dasha_level=int(payload.get("dasha_level", 2)))
+        chart = compute_chart(date, time_, tz, lat, lon, name=payload.get("name"),
+                              ayanamsa_system=payload.get("ayanamsa", "lahiri"),
+                              year_days=year_days, as_of=as_of, backend=backend(),
+                              dasha_level=int(payload.get("dasha_level", 2)))
     except ValueError as exc:  # e.g. impossible date like 1990-02-31
         raise BadRequest(str(exc)) from exc
+    try:                                             # today's and this week's dasha/transit changes for this chart
+        from . import alerts
+        local_day = (as_of or datetime.now(timezone.utc)).astimezone(ZoneInfo(tz)).date()
+        chart["alerts"] = alerts.alerts(chart, local_day, tz)
+    except Exception:                                # never fail the chart for an alert
+        chart["alerts"] = {"today": [], "upcoming": []}
+    return chart
 
 
 def numerology_from_payload(payload: dict) -> dict:
@@ -118,7 +125,7 @@ def match_from_payload(payload: dict) -> dict:
 def match_report_from_payload(payload: dict) -> str:
     """POST /v1/match/report: printable Hindi HTML of the matching result (same payload as /v1/match, + lang)."""
     from . import i18n, report
-    html = report.render_match(match_from_payload(payload))
+    html = report.render_match(match_from_payload(payload), style="south" if str(payload.get("chart_style", "north")).lower() == "south" else "north")
     if str(payload.get("lang", "hi")).lower() == "en":
         html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
     return html
@@ -160,7 +167,8 @@ def brand_for(headers) -> dict | None:
 def report_from_payload(payload: dict, brand: dict | None = None) -> str:
     """Printable Hindi HTML report for the same payload as /v1/chart. `brand` = astrologer profile for the header."""
     from . import i18n, report
-    html = report.render(chart_from_payload(payload), brand=brand)
+    style = "south" if str(payload.get("chart_style", "north")).lower() == "south" else "north"
+    html = report.render(chart_from_payload(payload), brand=brand, style=style)
     if str(payload.get("lang", "hi")).lower() == "en":
         html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
     return html
