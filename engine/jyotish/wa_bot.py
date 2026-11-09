@@ -40,7 +40,11 @@ SIGN_WORDS = {s.lower(): i for i, s in enumerate(SIGNS)} | {h: i for i, h in enu
 CMD = {"panchang": ("पंचांग", "panchang", "panchaang", "panchag"), "rashifal": ("राशिफल", "rashifal", "rashi", "राशि", "horoscope"),
        "kundali": ("कुंडली", "kundali", "kundli", "chart", "janam"), "vrat": ("व्रत", "vrat", "festival", "त्योहार", "tyohar", "parv", "पर्व"),
        "muhurta": ("मुहूर्त", "muhurta", "muhurat", "muhurt"), "start": ("शुरू", "start", "subscribe", "चालू", "सब्सक्राइब"),
-       "stop": ("बंद", "stop", "unsubscribe", "रोको"), "help": ("मदद", "help", "menu", "मेनू", "hi", "hello", "नमस्ते", "namaste")}
+       "stop": ("बंद", "stop", "unsubscribe", "रोको"), "help": ("मदद", "help", "menu", "मेनू", "hi", "hello", "नमस्ते", "namaste"),
+       "city": ("शहर", "city", "sthan", "स्थान", "place"), "time": ("समय", "time", "samay"), "birth": ("जन्म", "birth", "janm", "dob"),
+       "language": ("भाषा", "language", "bhasha", "lang"), "settings": ("सेटिंग", "settings", "setting", "मेरी", "my")}
+LANG_WORDS = {"hindi": "hi", "हिंदी": "hi", "हिन्दी": "hi", "english": "en", "अंग्रेज़ी": "en", "angrezi": "en", "telugu": "te", "तेलुगु": "te", "తెలుగు": "te", "kannada": "kn", "कन्नड़": "kn", "ಕನ್ನಡ": "kn",
+              "marathi": "mr", "मराठी": "mr", "gujarati": "gu", "गुजराती": "gu", "ગુજરાતી": "gu", "bengali": "bn", "bangla": "bn", "बांग्ला": "bn", "বাংলা": "bn"}
 ACTIVITY_WORDS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "vivah": "marriage",
                   "गृह": "griha_pravesh", "grih": "griha_pravesh", "griha": "griha_pravesh", "housewarming": "griha_pravesh",
                   "वाहन": "vehicle", "vehicle": "vehicle", "gadi": "vehicle", "गाड़ी": "vehicle", "car": "vehicle",
@@ -128,13 +132,13 @@ def reply_help(hi: bool, name: str = "") -> str:
                         "• *पंचांग* [शहर] — आज का पंचांग\n• *राशिफल* [राशि] — आज का राशिफल (जैसे: राशिफल मेष)\n"
                         "• *कुंडली* 15-05-1990 10:30 जबलपुर — संक्षिप्त कुंडली और पूरी रिपोर्ट का लिंक\n"
                         "• *व्रत* — इस सप्ताह के व्रत-पर्व\n• *मुहूर्त* विवाह — अगले 30 दिन के शुभ दिन (विवाह, गृह प्रवेश, वाहन, यात्रा, व्यापार…)\n"
-                        "• *शुरू* — रोज़ सुबह पंचांग-राशिफल पाइए · *बंद* — रोकिए\n\n"
+                        "• *शुरू* — रोज़ सुबह पंचांग-राशिफल पाइए · *बंद* — रोकिए\n• *सेटिंग* — शहर, समय, जन्म-विवरण, भाषा बदलिए\n\n"
                         f"पूरा ऐप: {SITE}\n_फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी नहीं।_")
     return greet + ("Welcome to the Kundali app. Send one word:\n\n"
                     "• *panchang* [city] — today's panchang\n• *rashifal* [sign] — today's rashifal (e.g. rashifal mesh)\n"
                     "• *kundali* 15-05-1990 10:30 Jabalpur — a short chart and a link to the full report\n"
                     "• *vrat* — this week's vrats and festivals\n• *muhurta* marriage — good dates in the next 30 days\n"
-                    "• *start* — daily panchang/rashifal each morning · *stop* — stop it\n\n"
+                    "• *start* — daily panchang/rashifal each morning · *stop* — stop it\n• *settings* — change city, time, birth details, language\n\n"
                     f"Full app: {SITE}\n_Readings are traditional guidance, not predictions._")
 
 
@@ -186,6 +190,7 @@ def menu_list(hi: bool) -> dict:
             ("cmd:muhurta:marriage", "विवाह मुहूर्त" if hi else "Marriage muhurta", "अगले 30 दिन" if hi else "next 30 days"),
             ("cmd:muhurta:griha_pravesh", "गृह प्रवेश मुहूर्त" if hi else "Griha pravesh muhurta", "अगले 30 दिन" if hi else "next 30 days"),
             ("cmd:start", "रोज़ सुबह पंचांग पाइए" if hi else "Daily morning panchang", "सब्सक्राइब" if hi else "subscribe"),
+            ("cmd:settings", "मेरी सेटिंग" if hi else "My settings", "शहर, समय, जन्म-विवरण, भाषा" if hi else "city, time, birth details, language"),
             ("cmd:stop", "रोज़ का संदेश बंद" if hi else "Stop daily message", "" )]
     return {"list": {"title": "कुंडली ऐप" if hi else "Kundali app", "button_text": "विकल्प चुनिए" if hi else "Choose", "footer": SITE.replace("https://", ""),
                      "sections": [{"title": "क्या चाहिए?" if hi else "What would you like?", "rows": [{"id": i, "title": t, **({"description": d} if d else {})} for i, t, d in rows]}]}}
@@ -287,8 +292,72 @@ def reply_start(phone: str, name: str, hi: bool) -> str:
     else:
         notify.subs().upsert({"phone": phone, "name": name[:60], "lang": "hi" if hi else "en", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2, "place": "दिल्ली" if hi else "Delhi",
                               "daily_time": "06:30", "want_panchang": 1, "want_rashifal": 0, "vrat_alert": 1, "weekly": 1, "weekly_day": 0, "verified": 1, "status": "active", "code": None})
-    return (f"✅ रोज़ सुबह 06:30 पर पंचांग और व्रत-सूचना इसी नंबर पर आएगी (स्थान: दिल्ली)। अपना शहर, समय और जन्म-विवरण (अपने राशिफल के लिए) ऐप में सेट कीजिए: {SITE} → कुंडली → \"WhatsApp पर रोज़ का अपडेट\"।\nरोकने के लिए *बंद* लिखिए।" if hi else
-            f"✅ The panchang and vrat alert will arrive here daily at 06:30 (place: Delhi). Set your city, time and birth details (for your own rashifal) in the app: {SITE} → Kundali → \"Daily update on WhatsApp\".\nSend *stop* to end it.")
+    sub = notify.subs().get(phone) or {}
+    return ((f"✅ रोज़ सुबह {sub.get('daily_time', '06:30')} पर पंचांग और व्रत-सूचना इसी नंबर पर आएगी (स्थान: {sub.get('place') or 'दिल्ली'})।\n\nअब यहीं लिखकर सेट कीजिए:\n• *शहर इंदौर*\n• *समय 07:00*\n• *जन्म 15-05-1990 10:30 जबलपुर* — अपना राशिफल व दशा-गोचर अलर्ट पाने के लिए\n• *भाषा english* / telugu / marathi…\nरोकने के लिए *बंद*।" if hi else
+             f"✅ The panchang and vrat alert will arrive here daily at {sub.get('daily_time', '06:30')} (place: {sub.get('place') or 'Delhi'}).\n\nSet things right here:\n• *city Indore*\n• *time 07:00*\n• *birth 15-05-1990 10:30 Jabalpur* — for your own rashifal and dasha/transit alerts\n• *language hindi* / telugu…\nSend *stop* to end it."))
+
+
+def _ensure_sub(phone: str, name: str, hi: bool) -> dict:
+    sub = notify.subs().get(phone)
+    if not sub:
+        reply_start(phone, name, hi)
+        sub = notify.subs().get(phone)
+    return sub
+
+
+def settings_text(sub: dict, hi: bool) -> str:
+    lang_name = {"hi": "हिंदी", "en": "English", "te": "తెలుగు", "kn": "ಕನ್ನಡ", "mr": "मराठी", "gu": "ગુજરાતી", "bn": "বাংলা"}.get(sub.get("lang", "hi"), sub.get("lang"))
+    b = json.loads(sub["birth"]) if isinstance(sub.get("birth"), str) else (sub.get("birth") or {})
+    birth = f"{b.get('date', '—')} {b.get('time', '')}".strip() if b else ("नहीं दिया" if hi else "not given")
+    if hi:
+        return (f"⚙️ *आपकी सेटिंग*\nस्थान: {sub.get('place') or '—'} · समय: {sub['daily_time']} · भाषा: {lang_name}\nजन्म-विवरण: {birth}" + (f" (चंद्र राशि {sub['moon_sign_name']})" if sub.get("moon_sign_name") else "") +
+                f"\nस्थिति: {'चालू' if sub['status'] == 'active' and sub['verified'] else 'बंद'}\n\nबदलने के लिए लिखिए:\n• *शहर इंदौर*\n• *समय 07:00*\n• *जन्म 15-05-1990 10:30 जबलपुर* (अपना राशिफल पाने के लिए)\n• *भाषा english* / telugu / marathi…")
+    return (f"⚙️ *Your settings*\nPlace: {sub.get('place') or '—'} · time: {sub['daily_time']} · language: {lang_name}\nBirth details: {birth}" + (f" (Moon sign {sub['moon_sign_name']})" if sub.get("moon_sign_name") else "") +
+            f"\nStatus: {'on' if sub['status'] == 'active' and sub['verified'] else 'off'}\n\nTo change, send:\n• *city Indore*\n• *time 07:00*\n• *birth 15-05-1990 10:30 Jabalpur* (for your own rashifal)\n• *language hindi* / telugu / marathi…")
+
+
+def reply_settings(phone: str, cmd: str, text: str, words: list[str], sub: dict | None, hi: bool, name: str) -> str:
+    sub = _ensure_sub(phone, name, hi)
+    if cmd == "city":
+        p = find_place(words)
+        if not p:
+            return "शहर पहचाना नहीं गया — जैसे लिखिए: *शहर इंदौर*" if hi else "City not recognised — send e.g. *city Indore*"
+        notify.subs().set(phone, lat=p["lat"], lon=p["lon"], tz=p["tz"], place=(p["hi"] if hi else p["name"]) or p["name"])
+        return (f"✅ स्थान बदला: {p['hi'] or p['name']}। अब पंचांग इसी स्थान का आएगा।" if hi else f"✅ Place set to {p['name']}. The panchang will be for this place.")
+    if cmd == "time":
+        m = _TIME.search(text)
+        if not m:
+            return "समय ऐसे लिखिए: *समय 07:00* (24-घंटे)" if hi else "Send the time like *time 07:00* (24-hour)"
+        hh, mm, ap = int(m.group(1)), int(m.group(2)), (m.group(3) or "").lower()
+        if ap == "pm" and hh < 12: hh += 12
+        if ap == "am" and hh == 12: hh = 0
+        if not (0 <= hh < 24 and 0 <= mm < 60):
+            return "समय 00:00–23:59 के बीच दीजिए।" if hi else "Time must be 00:00–23:59."
+        notify.subs().set(phone, daily_time=f"{hh:02d}:{mm:02d}")
+        return (f"✅ रोज़ का समय {hh:02d}:{mm:02d} कर दिया।" if hi else f"✅ Daily time set to {hh:02d}:{mm:02d}.")
+    if cmd == "birth":
+        md, mt = _DATE.search(text), _TIME.search(text)
+        if not md or not mt:
+            return "जन्म-विवरण ऐसे लिखिए: *जन्म 15-05-1990 10:30 जबलपुर*" if hi else "Send birth details like *birth 15-05-1990 10:30 Jabalpur*"
+        d, m, y = (int(x) for x in md.groups()); hh, mm, ap = int(mt.group(1)), int(mt.group(2)), (mt.group(3) or "").lower()
+        if ap == "pm" and hh < 12: hh += 12
+        if ap == "am" and hh == 12: hh = 0
+        pl = _place_for(sub, words)
+        birth = {"date": f"{y:04d}-{m:02d}-{d:02d}", "time": f"{hh:02d}:{mm:02d}", "tz": pl["tz"], "lat": pl["lat"], "lon": pl["lon"]}
+        ms, mname = notify.moon_sign_from_birth(birth)
+        if ms is None:
+            return "जन्म-विवरण समझ नहीं आया; तारीख़ दिन-महीना-साल में और समय 24-घंटे में दीजिए।" if hi else "Could not read the birth details; use day-month-year and 24-hour time."
+        notify.subs().set(phone, birth=json.dumps(birth, ensure_ascii=False), moon_sign=ms, moon_sign_name=mname, want_rashifal=1)
+        return (f"✅ जन्म-विवरण सहेजा ({birth['date']} {birth['time']}, {pl['place']})। चंद्र राशि: {mname}। कल से आपका राशिफल और दशा/गोचर-अलर्ट भी आएँगे।" if hi else
+                f"✅ Birth details saved ({birth['date']} {birth['time']}, {pl['place_en']}). Moon sign: {mname}. From tomorrow your rashifal and dasha/transit alerts are included.")
+    if cmd == "language":
+        code = next((LANG_WORDS[w] for w in words if w in LANG_WORDS), None)
+        if not code:
+            return "भाषा चुनिए: *भाषा hindi / english / telugu / kannada / marathi / gujarati / bengali*" if hi else "Pick: *language hindi / english / telugu / kannada / marathi / gujarati / bengali*"
+        notify.subs().set(phone, lang=code)
+        return {"hi": "✅ भाषा हिंदी कर दी।", "en": "✅ Language set to English.", "te": "✅ భాష తెలుగుకు మార్చబడింది. రోజువారీ పంచాంగం తెలుగులో వస్తుంది.", "kn": "✅ ಭಾಷೆ ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ.",
+                "mr": "✅ भाषा मराठी केली.", "gu": "✅ ભાષા ગુજરાતી કરી.", "bn": "✅ ভাষা বাংলা করা হয়েছে।"}[code]
+    return settings_text(sub, hi)
 
 
 def reply_stop(phone: str, hi: bool) -> str:
@@ -316,6 +385,8 @@ def answer(phone: str, text: str, name: str = "") -> str:
             return reply_start(phone, name, hi)
         if cmd == "stop":
             return reply_stop(phone, hi)
+        if cmd in ("city", "time", "birth", "language", "settings"):
+            return reply_settings(phone, cmd, text, words, sub, hi, name)
     except Exception as exc:                        # never leave a sender without an answer
         return ("क्षमा करें, यह अभी नहीं बन सका (" + type(exc).__name__ + ")। *मदद* लिखकर विकल्प देखिए।" if hi else
                 "Sorry, that could not be prepared (" + type(exc).__name__ + "). Send *help* for the options.")

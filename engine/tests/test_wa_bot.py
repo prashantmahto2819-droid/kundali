@@ -133,3 +133,21 @@ def test_interactive_menu_and_list_reply(store, monkeypatch):
     evt["data"] = {**evt["data"], "id": "M4", "type": "text", "text": "help"}
     wa_bot.handle_webhook(json.dumps(evt).encode(), {}, lambda p, t: (sent2.append(t) or {"ok": True, "detail": ""}))
     assert sent2 and "panchang" in sent2[0].lower()
+
+
+def test_settings_over_whatsapp(store, monkeypatch):
+    monkeypatch.setattr(notify, "send_whatsapp", lambda *a, **k: {"ok": True, "detail": ""})
+    assert "06:30" in wa_bot.answer("919876543210", "शुरू", "राम")
+    assert "इंदौर" in wa_bot.answer("919876543210", "शहर इंदौर")
+    s = store.get("919876543210"); assert abs(s["lat"] - 22.72) < 0.1 and s["place"] == "इंदौर"
+    assert "07:15" in wa_bot.answer("919876543210", "समय 7:15 am")
+    assert store.get("919876543210")["daily_time"] == "07:15"
+    r = wa_bot.answer("919876543210", "जन्म 15-05-1990 10:30 जबलपुर")
+    s = store.get("919876543210"); assert s["moon_sign_name"] and s["want_rashifal"] == 1 and json.loads(s["birth"])["date"] == "1990-05-15" and "धनु" in r
+    assert "తెలుగు" in wa_bot.answer("919876543210", "भाषा telugu") and store.get("919876543210")["lang"] == "te"
+    wa_bot.answer("919876543210", "language hindi")
+    st = wa_bot.answer("919876543210", "सेटिंग")
+    assert "इंदौर" in st and "07:15" in st and "1990-05-15" in st
+    assert "पहचाना नहीं" in wa_bot.answer("919876543210", "शहर xyzville")
+    # settings on a number that never subscribed → auto-subscribes first
+    assert "✅" in wa_bot.answer("919111111111", "शहर भोपाल") and store.get("919111111111")["place"] == "भोपाल"
