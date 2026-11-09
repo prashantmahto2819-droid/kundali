@@ -426,6 +426,20 @@ _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v 
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
 
+# doshas, remedies, yogini, chart views, ayanamsa, today extras
+for hi, en in [("दोष-विचार (कालसर्प, पितृ, मंगल)", "Doshas (Kaal Sarp, Pitru, Mangal)"), ("उपाय-संकेत (रत्न, रुद्राक्ष, इष्ट, मंत्र)", "Remedy pointers (gem, rudraksha, Ishta, mantra)"),
+               ("कालसर्प योग", "Kaal Sarp yoga"), ("पितृ दोष", "Pitru dosha"), ("मंगल दोष", "Mangal dosha"), ("आंशिक", "partial"), ("परिहार सहित", "with cancellation"), ("मध्यम", "medium"), ("प्रबल", "strong"), ("है", "yes"), ("नहीं", "no"),
+               ("साढ़ेसाती", "Sade Sati"), ("पहला चरण चल रहा", "first phase running"), ("मध्य चरण चल रहा", "peak phase running"), ("अंतिम चरण चल रहा", "last phase running"), ("अभी नहीं", "not now"),
+               ("रुद्राक्ष", "Rudraksha"), ("इष्ट देवता", "Ishta Devata"), ("लग्नेश मंत्र", "Lagna-lord mantra"), ("टालें", "Avoid"), ("के रत्न", "stones"),
+               ("योगिनी दशा", "Yogini dasha"), ("अभी चल रही", "Running now"), ("अंतर", "antar"), ("वर्ष", "years"),
+               ("दृष्टि:", "View:"), ("लग्न", "Lagna"), ("चंद्र कुंडली", "Chandra kundali"), ("सूर्य कुंडली", "Surya kundali"), ("अयनांश", "Ayanamsa"), ("लाहिरी (चित्रपक्ष)", "Lahiri (Chitrapaksha)"), ("रमण", "Raman"), ("कृष्णमूर्ति (KP)", "Krishnamurti (KP)"), ("युक्तेश्वर", "Yukteshwar"),
+               ("नाम-सुझाव", "Name suggestions"), ("लड़का", "boy"), ("लड़की", "girl"),
+               ("अभी चल रहा", "running now"), ("मिनट शेष", "min left"), ("दुर्मुहूर्त", "Dur muhurtam"), ("वर्ज्य", "Varjyam"), ("अमृत काल", "Amrit kalam"), ("आनंदादि योग", "Anandadi yoga"), ("ग्रहण", "Eclipse"),
+               ("जीवन-रत्न", "life stone"), ("भाग्य-रत्न", "fortune stone"), ("लग्नेश (जीवन-रत्न)", "Lagna lord (life stone)"), ("नवमेश (भाग्य-रत्न)", "9th lord (fortune stone)"), ("पंचमेश (बुद्धि/संतान)", "5th lord (intellect/children)"),
+               ("रविवार", "Sunday"), ("सोमवार", "Monday"), ("मंगलवार", "Tuesday"), ("बुधवार", "Wednesday"), ("गुरुवार", "Thursday"), ("शुक्रवार", "Friday"), ("शनिवार", "Saturday"),
+               ("अनामिका", "ring finger"), ("कनिष्ठा", "little finger"), ("तर्जनी", "index finger"), ("मध्यमा", "middle finger")]:
+    put(hi, en)
+
 # chart style toggle, Today city picker, alerts
 for hi, en in [("शैली:", "Style:"), ("उत्तर भारतीय", "North Indian"), ("दक्षिण भारतीय", "South Indian"), ("शहर बदलिए (जैसे: इंदौर)", "Change city (e.g. Indore)"), ("दिखाइए", "Show"), ("से", "from")]:
     put(hi, en)

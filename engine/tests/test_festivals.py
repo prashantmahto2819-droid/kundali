@@ -21,7 +21,7 @@ def test_known_dates_2025_and_2026():
 def test_structure_and_vrat_days():
     c, _ = _fest(2026)
     kinds = {e["kind"] for e in c["events"]}
-    assert kinds == {"festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri", "regional", "national", "christian", "islamic"}
+    assert kinds == {"festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri", "regional", "national", "christian", "islamic", "grahan"}
     by = {e["key"]: e["date"] for e in c["events"]}
     assert by["pongal"] == "2026-01-14" and by["lohri"] == "2026-01-13" and by["tamil_new_year"] == "2026-04-14" and by["easter"] == "2026-04-05"
     assert by["eid_ul_fitr_1447"] in ("2026-03-20", "2026-03-21") and by["eid_ul_adha_1447"] in ("2026-05-27", "2026-05-28") and by["baisakhi"] == "2026-04-14" and by["varalakshmi"].startswith("2026-08")

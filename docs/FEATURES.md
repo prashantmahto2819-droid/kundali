@@ -23,6 +23,24 @@ Ashtakoota 36 points with nadi/bhakoot/gana parihara, Mangal dosha with cancella
 - **Festival and vrat calendar** per year and place: 32 festivals, Ekadashis (named), Purnima/Amavasya, Pradosh, Vinayaka/Sankashti Chaturthi, Masik Shivaratri, adhika masa; regional festivals (Pongal, Lohri, Baisakhi, Tamil/Bengali/Malayalam new year, Onam, Karthigai Deepam, Durga Puja, Kali Puja, Nuakhai, Raja, Varalakshmi, Ugadi, Pola, Jitiya…), national days, Easter/Good Friday/Christmas, Islamic observances by crescent-visibility estimate.
 - **Rashifal** daily/weekly/monthly for the 12 Moon signs from the gochara rules (score, summary, per-planet text, lucky colour/number).
 
+## Doshas and remedy pointers
+Kaal Sarp (full/partial, 12 types by Rahu's house, direction), Pitru dosha indications (Sun/Moon with the nodes, 9th house and lord), Mangal dosha from Lagna/Moon/Venus with the classical cancellations and the 2nd-house (South) note, Sade Sati status; remedy pointers: gemstone of the lagna lord plus friendly 5th/9th lords (day, finger, planets to avoid), rudraksha mukhi, Ishta Devata from the karakamsa's 12th (Jaimini), lagna-lord mantra. All labelled draft/convention.
+
+## Dasha systems
+Vimshottari (up to 3 levels, pratyantars), **Yogini** (36-year cycle, 8 yoginis with antardashas and running period), Jaimini Chara dasha, Tajika mudda dasha (varshaphal).
+
+## Ayanamsa options
+Lahiri (Chitrapaksha, default), Raman, Krishnamurti (KP), Yukteshwar — selectable in the kundali form and API (`ayanamsa`).
+
+## Chart views
+Lagna, **Chandra kundali** and **Surya kundali** views of D1 (houses counted from the Moon or the Sun), in North or South Indian style.
+
+## Almanac extras (Today tab, panchang month, calendar)
+Varjyam, Amrit Kalam, Dur Muhurtam, Anandadi yoga (27), Ravi Pushya / Guru Pushya, Ravi yoga, Tripushkara / Dwipushkara (alongside Sarvartha/Amrita Siddhi, Gand Mool, Panchak, Bhadra); running-muhurta indicator with minutes left; **eclipses** (solar/lunar, from the syzygies and node distance; visibility not computed) as `grahan` events in the festival calendar, WhatsApp lists and the Today tab.
+
+## Baby-name syllables
+Nakshatra-pada syllable (avakahada) with seed name suggestions (boys/girls) from `data/knowledge/baby_names.json`.
+
 ## Personal alerts (dasha & transit changes)
 Every chart carries `alerts`: today's changes for that chart — mahadasha/antardasha start, Sun/Mercury/Venus/Mars/Jupiter/Saturn/Rahu sign ingress with the house from the natal Moon and the gochara tendency text, Sade Sati / Ashtama Shani start, phase change or end, retrograde/direct stations — plus the week ahead. Shown in "आज क्या ख़ास है" and in the subscriber's daily WhatsApp message ("आपकी कुंडली में").
 

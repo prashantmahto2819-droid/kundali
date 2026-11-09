@@ -15,11 +15,18 @@ PADA_SPAN = NAK_SPAN / 4.0  # 3 deg 20'
 LAHIRI_J2000 = 23.853055
 
 
+# J2000 values of the other common ayanamsas (all move with the same precession rate here; differences to each school's own
+# formula stay below ~0.01 deg in 1900-2100): Raman 22 deg 22', Krishnamurti (KP, "old") 23 deg 45' 24", Yukteshwar 22 deg 27' 40".
+AYANAMSA_J2000 = {"lahiri": LAHIRI_J2000, "raman": 22.366667, "kp": 23.7658, "yukteshwar": 22.461111}
+AYANAMSA_HI = {"lahiri": "लाहिरी (चित्रपक्ष)", "raman": "रमण", "kp": "कृष्णमूर्ति (KP)", "yukteshwar": "युक्तेश्वर"}
+
+
 def ayanamsa(jd_tt: float, system: str = "lahiri") -> float:
-    if system != "lahiri":
-        raise ValueError(f"Unsupported ayanamsa '{system}' (only 'lahiri' for now)")
+    system = (system or "lahiri").lower()
+    if system not in AYANAMSA_J2000:
+        raise ValueError(f"Unsupported ayanamsa '{system}' (choose {', '.join(AYANAMSA_J2000)})")
     t = (jd_tt - 2451545.0) / 36525.0
-    return LAHIRI_J2000 + _precession_deg(t)
+    return AYANAMSA_J2000[system] + _precession_deg(t)
 
 
 def gmst_deg(jd_ut: float) -> float:

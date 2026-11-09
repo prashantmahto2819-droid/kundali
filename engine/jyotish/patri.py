@@ -137,6 +137,27 @@ def _hhmm_to_min(t: str) -> float:
     return int(h) * 60 + int(m)
 
 
+_NAMES = None
+
+
+def _name_suggestions(pada_syllable: str, all_syllables: list[str]) -> dict:
+    """Seed names for the pada syllable first, then the other syllables of the nakshatra."""
+    global _NAMES
+    import json
+    from pathlib import Path
+    if _NAMES is None:
+        try:
+            _NAMES = json.loads((Path(__file__).resolve().parents[2] / "data" / "knowledge" / "baby_names.json").read_text("utf-8"))["names"]
+        except Exception:
+            _NAMES = {}
+    boys, girls = [], []
+    for syl in [pada_syllable] + [x for x in all_syllables if x != pada_syllable]:
+        e = _NAMES.get(syl, {})
+        boys += [n for n in e.get("boys", []) if n not in boys]
+        girls += [n for n in e.get("girls", []) if n not in girls]
+    return {"boys": boys[:8], "girls": girls[:8]}
+
+
 def details(chart: dict) -> dict:
     inp, pc, day = chart["input"], chart["panchang"], chart.get("day") or {}
     planets = {p["name"]: p for p in chart["planets"]}
@@ -210,7 +231,8 @@ def details(chart: dict) -> dict:
         "nadi": {"name": nadi, "name_hi": HI[nadi]},
         "tattva": {"name": tattva, "name_hi": TATTVA_HI[tattva]},
         "name_syllable": {"all": SYLLABLES[nak_i], "all_en": SYLLABLES_EN[nak_i],
-                          "pada": SYLLABLES[nak_i].split()[pada - 1], "pada_en": SYLLABLES_EN[nak_i].split()[pada - 1]},
+                          "pada": SYLLABLES[nak_i].split()[pada - 1], "pada_en": SYLLABLES_EN[nak_i].split()[pada - 1],
+                          "suggestions": _name_suggestions(SYLLABLES[nak_i].split()[pada - 1], SYLLABLES[nak_i].split())},
         "rashi": {"name": SIGNS[msign], "name_hi": SIGNS_HI[msign], "lord": SIGN_LORDS[msign], "lord_hi": PLANETS_HI[SIGN_LORDS[msign]]},
         "lagna": {"name": lg["sign_name"], "name_hi": lg["sign_name_hi"], "lord": lg["lord"], "lord_hi": PLANETS_HI[lg["lord"]]},
         "nakshatra_lord": {"name": NAK_LORDS[nak_i], "name_hi": PLANETS_HI[NAK_LORDS[nak_i]]},

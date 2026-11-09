@@ -194,5 +194,9 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["lalkitab"] = lalkitab(chart)
     chart["patri"] = patri_details(chart)
     chart["yogas"] = detect_yogas(chart)
+    from .doshas import layer as doshas_layer
+    chart["doshas"] = doshas_layer(chart)
+    from .yogini import yogini as yogini_dasha
+    chart["yogini_dasha"] = yogini_dasha(sid["Moon"], birth_utc, now)
     chart["readings"] = match_rules(chart)
     return chart

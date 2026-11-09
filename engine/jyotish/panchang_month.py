@@ -140,6 +140,21 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str, only_day: int | 
             special.append({"key": "panchak", "hi": "पंचक", "en": "Panchak"})
         if pc["karana"]["name"] == "Vishti":
             special.append({"key": "bhadra", "hi": "भद्रा", "en": "Bhadra"})
+        # almanac extras: varjyam / amrit kalam, dur muhurtam, pushya & pushkara yogas, anandadi yoga
+        from . import panchang_extra as px
+        sun_nak_idx = nakshatra_of(sun)["index"]
+        special += px.special_yogas(wd, nak_name, sun_nak_idx, n_idx, pc["tithi"]["number"])
+        anand = px.anandadi(wd, n_idx)
+        extras = {}
+        try:
+            n_start = _crossing(rise - timedelta(hours=30), moon_lon, (n_idx * (360.0 / 27.0)) % 360.0, horizon_hours=36)
+            next_name = NAKSHATRAS[(n_idx + 1) % 27]
+            n2_end = _crossing(n_end, moon_lon, ((n_idx + 2) * (360.0 / 27.0)) % 360.0) if n_end else None
+            if n_start and n_end:
+                extras = px.nakshatra_windows(nak_name, n_start, n_end, next_name, n2_end, zone, d)
+        except Exception:
+            extras = {}
+        dur_m = px.dur_muhurtam(rise, sset, wd, zone)
         # sankranti: the local date of the Sun's sign ingress (bisected between consecutive sunrises)
         sank = False
         for back in (0, 1):
@@ -172,7 +187,7 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str, only_day: int | 
             "yoga_ends": y_end.astimezone(zone).strftime("%H:%M") if y_end else None, "yoga_ends_next_day": bool(y_end and y_end.astimezone(zone).date() > d),
             "karana_ends": k_end.astimezone(zone).strftime("%H:%M") if k_end else None,
             "moon_sign": SIGNS[sign_of(moon)], "moon_sign_hi": SIGNS_HI[sign_of(moon)], "disha_shool_hi": DISHA_SHOOL[wd][0], "disha_shool": DISHA_SHOOL[wd][1],
-            "special": special,
+            "special": special, "anandadi_yoga": anand, "varjyam": extras.get("varjyam", []), "amrit_kalam": extras.get("amrit_kalam"), "dur_muhurtam": dur_m,
             "rahu_kaal": dt_tab.get("rahu_kaal"), "yamaganda": dt_tab.get("yamaganda"), "gulika": dt_tab.get("gulika"), "abhijit": dt_tab.get("abhijit"),
             "good_choghadiya": [{"name": c["name"], "name_hi": c["name_hi"], "start": c["start"], "end": c["end"]} for c in dt_tab.get("choghadiya_day", []) if c.get("nature") == "good"],
             "events": fest.get(d.isoformat(), []),

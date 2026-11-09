@@ -164,6 +164,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div><label>अक्षांश (उत्तर +)</label><input id="lat" type="number" step="0.0001" value="23.1815"></div>
       <div><label>देशांतर (पूर्व +)</label><input id="lon" type="number" step="0.0001" value="79.9864"></div>
       <div><label>समय-क्षेत्र (IANA)</label><input id="tz" value="Asia/Kolkata"></div>
+      <div><label>अयनांश</label><select id="ayan"><option value="lahiri">लाहिरी (चित्रपक्ष)</option><option value="raman">रमण</option><option value="kp">कृष्णमूर्ति (KP)</option><option value="yukteshwar">युक्तेश्वर</option></select></div>
       <div><button type="submit">कुंडली बनाइए</button></div>
     </form>
     <datalist id="placelist"></datalist>
@@ -187,7 +188,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
         <label><input type="checkbox" id="wa_en"> English</label>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:.85rem" id="wa_kinds">
-        <label><input type="checkbox" value="festival" checked> त्योहार</label><label><input type="checkbox" value="ekadashi" checked> एकादशी</label><label><input type="checkbox" value="purnima" checked> पूर्णिमा</label><label><input type="checkbox" value="amavasya" checked> अमावस्या</label><label><input type="checkbox" value="pradosh" checked> प्रदोष</label><label><input type="checkbox" value="chaturthi"> चतुर्थी</label><label><input type="checkbox" value="shivaratri"> मासिक शिवरात्रि</label><label><input type="checkbox" value="regional"> क्षेत्रीय पर्व</label><label><input type="checkbox" value="national"> राष्ट्रीय दिवस</label>
+        <label><input type="checkbox" value="festival" checked> त्योहार</label><label><input type="checkbox" value="ekadashi" checked> एकादशी</label><label><input type="checkbox" value="purnima" checked> पूर्णिमा</label><label><input type="checkbox" value="amavasya" checked> अमावस्या</label><label><input type="checkbox" value="pradosh" checked> प्रदोष</label><label><input type="checkbox" value="chaturthi"> चतुर्थी</label><label><input type="checkbox" value="shivaratri"> मासिक शिवरात्रि</label><label><input type="checkbox" value="grahan" checked> ग्रहण</label><label><input type="checkbox" value="regional"> क्षेत्रीय पर्व</label><label><input type="checkbox" value="national"> राष्ट्रीय दिवस</label>
       </div>
       <div class="actions"><button type="button" class="ghost" id="wa_preview">संदेश का नमूना देखिए</button><button type="button" id="wa_sub">कोड भेजिए</button><span id="wa_verify_wrap" hidden><input id="wa_code" placeholder="6 अंकों का कोड" style="width:9em" inputmode="numeric"> <button type="button" id="wa_verify">सत्यापित करें</button></span><button type="button" class="ghost" id="wa_stop">बंद करें</button></div>
       <div class="err" id="wa_err"></div><pre id="wa_out" class="muted" style="white-space:pre-wrap;font-size:.85rem;margin:6px 0 0"></pre>
@@ -225,7 +226,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div class="err" id="rcerr"></div><div id="rcout"></div>
     </div>
     <div class="grid">
-      <div class="card"><b>लग्न कुंडली (D1)</b><div style="display:flex;gap:6px;margin:-4px 0 6px;font-size:.85rem"><span class="muted">शैली:</span><button type="button" class="ghost" id="style_n" style="width:auto;padding:2px 10px">उत्तर भारतीय</button><button type="button" class="ghost" id="style_s" style="width:auto;padding:2px 10px">दक्षिण भारतीय</button></div><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
+      <div class="card"><b>लग्न कुंडली (D1)</b><div style="display:flex;gap:6px;margin:-4px 0 6px;font-size:.85rem"><span class="muted">शैली:</span><button type="button" class="ghost" id="style_n" style="width:auto;padding:2px 10px">उत्तर भारतीय</button><button type="button" class="ghost" id="style_s" style="width:auto;padding:2px 10px">दक्षिण भारतीय</button><span class="muted" style="margin-left:8px">दृष्टि:</span><button type="button" class="ghost on" data-view="lagna" style="width:auto;padding:2px 10px">लग्न</button><button type="button" class="ghost" data-view="moon" style="width:auto;padding:2px 10px">चंद्र कुंडली</button><button type="button" class="ghost" data-view="sun" style="width:auto;padding:2px 10px">सूर्य कुंडली</button></div><svg id="d1" viewBox="-4 -4 408 408" width="100%"></svg></div>
       <div class="card"><b>वर्ग कुंडली</b>
         <select id="vsel" style="width:auto;margin-left:8px">
           <option value="D9">D9 नवांश</option><option value="D2">D2 होरा</option><option value="D3">D3 द्रेष्काण</option>
@@ -253,11 +254,16 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     </div>
     </section>
     <section class="sub" id="s-yoga">
+    <div class="grid">
+      <div class="card"><b>दोष-विचार (कालसर्प, पितृ, मंगल)</b><div id="doshas"></div></div>
+      <div class="card"><b>उपाय-संकेत (रत्न, रुद्राक्ष, इष्ट, मंत्र)</b><div id="remedies"></div></div>
+    </div>
     <div class="card"><b>योग और दोष</b><div id="yogas"></div></div>
     <div class="card"><b>शास्त्रीय संकेत (ड्राफ़्ट नियम)</b><div id="readings"></div></div>
     </section>
     <section class="sub" id="s-dasha">
     <div class="card"><b>विंशोत्तरी दशा</b><div id="dasha"></div></div>
+    <div class="card"><b>योगिनी दशा</b><div id="yogini"></div></div>
     <div class="card"><b>जीवन समय-रेखा (दशा के अनुसार)</b>
       <div class="muted" style="font-size:.85rem" id="tlnote"></div>
       <div id="tl"></div>
@@ -423,7 +429,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <div class="muted" style="font-size:.85rem">इस ऐप के अपने पंचांग से: 32 प्रमुख त्योहार, 24 एकादशी (नाम सहित), पूर्णिमा-अमावस्या, अधिक मास। स्थान कुंडली वाला या ऊपर चुना शहर।</div>
     <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px">
       <div><label>वर्ष</label><input id="fyear" type="number" min="1950" max="2099" style="max-width:110px"></div>
-      <div><label>दिखाइए</label><select id="fkind" style="width:auto"><option value="festival">त्योहार</option><option value="regional">क्षेत्रीय पर्व</option><option value="national">राष्ट्रीय दिवस</option><option value="other">अन्य धर्म (ईद, क्रिसमस…)</option><option value="ekadashi">एकादशी</option><option value="vrat">प्रदोष / चतुर्थी / शिवरात्रि</option><option value="purnima">पूर्णिमा / अमावस्या</option><option value="all">सब</option></select></div>
+      <div><label>दिखाइए</label><select id="fkind" style="width:auto"><option value="festival">त्योहार</option><option value="regional">क्षेत्रीय पर्व</option><option value="national">राष्ट्रीय दिवस</option><option value="other">अन्य धर्म (ईद, क्रिसमस…)</option><option value="ekadashi">एकादशी</option><option value="vrat">प्रदोष / चतुर्थी / शिवरात्रि</option><option value="purnima">पूर्णिमा / अमावस्या</option><option value="grahan">ग्रहण</option><option value="all">सब</option></select></div>
       <button type="button" id="fgo" style="width:auto">देखिए</button>
     </div>
     <div id="ferr" style="color:#c62828;margin-top:6px"></div>
@@ -708,7 +714,16 @@ window.loadTodayTab = (function () {
       const evs = (d, lbl) => { const e = (d.events || []).filter(x => !['sankranti'].includes(x.kind)); return e.length ? `<div><b><span>${lbl}</span>:</b> ${e.map(x => `<span>${esc(x.name_hi)}</span>`).join(', ')}</div>` : `<div class="muted"><b><span>${lbl}</span>:</b> <span>कोई व्रत-पर्व नहीं</span></div>`; };
       $('tdevents').innerHTML = evs(d0, 'आज') + evs(d1, 'कल') + `<div class="muted" style="font-size:.8rem;margin-top:4px"><span>कल की तिथि</span>: <span>${esc(d1.paksha_hi)}</span> <span>${esc(d1.tithi_hi)}</span> ${end(d1.tithi_ends, d1.tithi_ends_next_day)} <span>तक</span></div>`;
       const rng = r => r ? `${esc(r.start)}–${esc(r.end)}` : '—';
-      $('tdkaal').innerHTML = `<div><span>अभिजित</span>: ${rng(d0.abhijit)} ✅</div><div><span>राहु काल</span>: ${rng(d0.rahu_kaal)} ⛔</div><div><span>यमगंड</span>: ${rng(d0.yamaganda)}</div><div><span>गुलिक</span>: ${rng(d0.gulika)}</div><div><span>दिशाशूल</span>: <span>${esc(d0.disha_shool_hi)}</span></div>${(d0.good_choghadiya || []).length ? `<div><span>शुभ चौघड़िया</span>: ${d0.good_choghadiya.map(c => `<span>${esc(c.name_hi || c.name)}</span> ${esc(c.start)}–${esc(c.end)}`).join(' · ')}</div>` : ''}`;
+      const nowHM = () => { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); };
+      const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+      const running = (list, nextDayOk) => (list || []).find(w => w && toMin(w.start) <= nowHM() && nowHM() < toMin(w.end) && !w.next_day);
+      const nowChog = running(d0.good_choghadiya);
+      const status = (w) => w ? ` <span class="chip yes"><span>अभी चल रहा</span> · ${Math.max(0, toMin(w.end) - nowHM())} <span>मिनट शेष</span></span>` : '';
+      $('tdkaal').innerHTML = `<div><span>अभिजित</span>: ${rng(d0.abhijit)} ✅${status(running([d0.abhijit]))}</div><div><span>राहु काल</span>: ${rng(d0.rahu_kaal)} ⛔${running([d0.rahu_kaal]) ? ' <span class="chip" style="color:#c62828"><span>अभी चल रहा</span></span>' : ''}</div><div><span>यमगंड</span>: ${rng(d0.yamaganda)}</div><div><span>गुलिक</span>: ${rng(d0.gulika)}</div>
+        <div><span>दुर्मुहूर्त</span>: ${(d0.dur_muhurtam || []).map(w => `${esc(w.start)}–${esc(w.end)}`).join(', ') || '—'}</div>
+        <div><span>वर्ज्य</span>: ${(d0.varjyam || []).map(w => `${esc(w.start)}–${esc(w.end)}${w.next_day ? '+' : ''}`).join(', ') || '—'} · <span>अमृत काल</span>: ${d0.amrit_kalam ? `${esc(d0.amrit_kalam.start)}–${esc(d0.amrit_kalam.end)}${d0.amrit_kalam.next_day ? '+' : ''}` : '—'}</div>
+        <div><span>दिशाशूल</span>: <span>${esc(d0.disha_shool_hi)}</span>${d0.anandadi_yoga ? ` · <span>आनंदादि योग</span>: <span>${esc((window.getLang ? window.getLang() : 'hi') === 'en' ? d0.anandadi_yoga.name : d0.anandadi_yoga.hi)}</span> ${d0.anandadi_yoga.auspicious ? '✅' : '⚠️'}` : ''}</div>
+        ${(d0.good_choghadiya || []).length ? `<div><span>शुभ चौघड़िया</span>: ${d0.good_choghadiya.map(c => `<span>${esc(c.name_hi || c.name)}</span> ${esc(c.start)}–${esc(c.end)}${nowChog === c ? ' ◀' : ''}`).join(' · ')}${status(nowChog)}</div>` : ''}`;
       $('tdsigns').innerHTML = (rf.signs || []).map(s => `<div><b><span>${esc(s.sign_name_hi)}</span> <span class="chip">${s.score}</span></b><span class="g"><span>${esc(s.grade_hi)}</span> — ${esc(s.summary_hi)}</span></div>`).join('');
     } catch (e) { $('tdhead').textContent = 'पंचांग लोड नहीं हो सका: ' + e.message; }
   };
@@ -789,6 +804,8 @@ function renderVarga(key) {
   drawChart($('d9'), cells, key);
 }
 $('vsel').addEventListener('change', e => renderVarga(e.target.value));
+window.chartView = 'lagna';
+[...document.querySelectorAll('button[data-view]')].forEach(b => b.onclick = () => { window.chartView = b.dataset.view; [...document.querySelectorAll('button[data-view]')].forEach(x => x.classList.toggle('on', x === b)); if (chart) render(chart); });
 (function chartStyleUI() {
   const mark = () => { $('style_n').classList.toggle('on', window.chartStyle !== 'south'); $('style_s').classList.toggle('on', window.chartStyle === 'south'); };
   const set = st => { window.chartStyle = st; try { localStorage.setItem('kundali_chart_style', st); } catch (e) {} mark(); if (chart) { render(chart); } };
@@ -927,7 +944,7 @@ async function loadTodayPanchang(lat, lon, tz) {
   try {
     const q = `lat=${lat || 28.61}&lon=${lon || 77.2}&tz=${encodeURIComponent(tz || 'Asia/Kolkata')}`;
     const r = await apiFetch('/v1/panchang/day?' + q); const d = await r.json(); if (!r.ok) throw new Error(d.detail || '');
-    const fest = d.events.filter(e => ['festival', 'ekadashi', 'national', 'regional'].includes(e.kind)).map(e => esc(e.name_hi)).join(', ');
+    const fest = d.events.filter(e => ['grahan', 'festival', 'ekadashi', 'national', 'regional'].includes(e.kind)).map(e => esc(e.name_hi)).join(', ');
     const sp = (d.special || []).map(x => esc(x.hi)).join(', ');
     host.innerHTML = `<b>${esc(d.vara_hi)}</b>, ${esc(d.masa_purnimanta_hi)} <span>${esc(d.paksha_hi)}</span> <span>${esc(d.tithi_hi)}</span> (<span>तक</span> ${esc(d.tithi_ends || '')}${d.tithi_ends_next_day ? '+' : ''}) · <span>${esc(d.nakshatra_hi)}</span> (${esc(d.nakshatra_ends || '')}${d.nakshatra_ends_next_day ? '+' : ''}) · <span>विक्रम संवत</span> ${d.vikram_samvat}<br>
       <span>सूर्योदय</span> ${esc(d.sunrise)} · <span>सूर्यास्त</span> ${esc(d.sunset)} · <span>चंद्रोदय</span> ${esc(d.moonrise || '—')} · <span>राहु काल</span> ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · <span>अभिजित</span> ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'}${sp ? ` · ${sp}` : ''}${fest ? `<br><b>आज:</b> ${fest}` : ''}`;
@@ -979,7 +996,7 @@ function renderPatri(c) {
     ['नक्षत्र स्वामी', esc(a.nakshatra_lord.name_hi)], ['वर्ण', esc(a.varna.name_hi)], ['वश्य', esc(a.vashya.name_hi)],
     ['योनि', esc(a.yoni.name_hi)], ['गण', esc(a.gana.name_hi)], ['नाड़ी', esc(a.nadi.name_hi)], ['तत्व', esc(a.tattva.name_hi)],
     ['नाम अक्षर', `<b>${esc(a.name_syllable.pada)}</b> <span class="muted">(${esc(a.name_syllable.all)})</span>`],
-  ]);
+  ]) + (a.name_syllable.suggestions && (a.name_syllable.suggestions.boys.length || a.name_syllable.suggestions.girls.length) ? `<div style="margin-top:6px;font-size:.9rem"><span>नाम-सुझाव</span> — <span>लड़का</span>: ${a.name_syllable.suggestions.boys.join(', ') || '—'} · <span>लड़की</span>: ${a.name_syllable.suggestions.girls.join(', ') || '—'}</div>` : '');
   const g = P.ghata;
   if (g) $('patri2').innerHTML += `<details style="margin-top:8px"><summary>घात चक्र (ड्राफ़्ट)</summary>` + kv([
     ['मास', esc(g.masa_hi)], ['तिथि', esc(g.tithi)], ['वार', esc(g.vara_hi)], ['नक्षत्र', esc(g.nakshatra_hi)], ['योग', esc(g.yoga_hi)],
@@ -1084,7 +1101,10 @@ function render(c) {
   }
   const pm = Object.fromEntries(c.planets.map(p => [p.name, p]));
   const d1 = c.houses.map(h => ({sign:h.sign, planets:h.planets.map(n => ({name:n, short:pm[n].short_hi, retro:pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms} ${pm[n].nakshatra_hi} ${pm[n].pada}`}))}));
-  drawChart($('d1'), d1, 'd1'); renderVarga($('vsel').value);
+  // Chandra / Surya kundali: the same planets counted from the Moon's or the Sun's sign as the first house
+  const refSign = window.chartView === 'moon' ? pm.Moon.sign : window.chartView === 'sun' ? pm.Sun.sign : null;
+  const d1v = refSign === null ? d1 : Array.from({length: 12}, (_, i) => { const sg = (refSign + i) % 12; const h = c.houses.find(x => x.sign === sg); return {sign: sg, planets: h ? d1[c.houses.indexOf(h)].planets : []}; });
+  drawChart($('d1'), d1v, 'd1'); renderVarga($('vsel').value);
   renderMuhurta(c.day);
 
   $('ptable').innerHTML = `<table><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>भाव</th><th>नक्षत्र (पाद)</th><th>स्थिति</th></tr>` +
@@ -1160,6 +1180,28 @@ function render(c) {
       <div class="muted" style="font-size:.8rem">क्यों: ${esc(r.because.planet)} → भाव ${r.because.house}, राशि ${esc(r.because.sign)}. स्रोत: ${esc(r.source?.text)} · स्थिति: ${esc(r.review_status)}</div></details>`).join('')
     : '<span class="muted">कोई नियम लागू नहीं हुआ।</span>';
 
+  // doshas and remedies
+  const D = c.doshas || {};
+  const ENM = (window.getLang ? window.getLang() : 'hi') === 'en';
+  const T = (o, k) => esc(ENM && o[k + '_en'] != null ? o[k + '_en'] : o[k + '_hi']);
+  const dRow = (title, d) => `<details ${d.present ? 'open' : ''}><summary>${title} <span class="chip ${d.present ? '' : 'yes'}">${d.present ? (d.partial ? '<span>आंशिक</span>' : d.level ? '<span>' + ({low: 'परिहार सहित', medium: 'मध्यम', high: 'प्रबल'}[d.level] || 'है') + '</span>' : '<span>है</span>') : '<span>नहीं</span>'}</span></summary><div><span>${T(d, 'text')}</span></div><div class="muted" style="font-size:.8rem"><span>${T(d, 'note')}</span></div></details>`;
+  if (D.kaal_sarp) $('doshas').innerHTML = dRow('<span>कालसर्प योग</span>', D.kaal_sarp) + dRow('<span>पितृ दोष</span>', D.pitru) + dRow('<span>मंगल दोष</span>', D.mangal) +
+    `<div class="muted" style="font-size:.8rem;margin-top:6px"><span>साढ़ेसाती</span>: <span>${c.gochara?.sade_sati?.active ? ({rising: 'पहला', peak: 'मध्य', setting: 'अंतिम'}[c.gochara.sade_sati.phase] + ' चरण चल रहा') : 'अभी नहीं'}</span></div>`;
+  const R = D.remedies;
+  if (R) $('remedies').innerHTML = `<table>${R.gemstones.map(g => `<tr><td><b>${T(g, 'gem')}</b>${g.primary ? ' ★' : ''}</td><td><span>${T(g, 'role')}</span> (${ENM ? esc(g.planet) : esc(g.planet_hi)})</td><td class="muted"><span>${esc(g.day_hi)}</span>, <span>${esc(g.finger_hi)}</span></td></tr>`).join('')}</table>
+    <div style="margin-top:6px"><span>रुद्राक्ष</span>: <span>${T(R.rudraksha, 'text')}</span></div>
+    ${R.ishta_devata ? `<div><span>इष्ट देवता</span>: <span>${T(R.ishta_devata, 'text')}</span></div>` : ''}
+    <div><span>लग्नेश मंत्र</span>: <b>${esc(R.mantra_hi)}</b></div>
+    <div class="muted" style="font-size:.8rem;margin-top:6px"><span>टालें</span>: ${(ENM ? R.avoid_planets : R.avoid_planets_hi).map(x => `<span>${esc(x)}</span>`).join(', ')} <span>के रत्न</span> · <span>${T(R, 'note')}</span></div>`;
+  // yogini dasha
+  const Y = c.yogini_dasha;
+  const YN = o => esc(ENM ? o.name : o.name_hi), YL = o => esc(ENM ? o.lord : o.lord_hi);
+  if (Y && Y.running) $('yogini').innerHTML = `<p><b><span>अभी चल रही</span>:</b> ${YN(Y.running.mahadasha)} (${YL(Y.running.mahadasha)}) ${Y.running.mahadasha.start} → ${Y.running.mahadasha.end}${Y.running.antardasha ? ` · <span>अंतर</span> ${YN(Y.running.antardasha)} (${Y.running.antardasha.start} → ${Y.running.antardasha.end})` : ''}</p>
+    <div class="muted" style="font-size:.85rem">${T(Y.running.mahadasha, 'text')}</div>` +
+    Y.periods.filter(p => p.end >= '1950').slice(0, 12).map(p => `<details><summary>${YN(p)} (${YL(p)}, ${p.years} <span>वर्ष</span>) — ${p.start} → ${p.end}</summary><table>${p.antardashas.map(a => `<tr><td>${YN(a)}</td><td>${a.start}</td><td>${a.end}</td></tr>`).join('')}</table></details>`).join('') +
+    `<div class="muted" style="font-size:.8rem">${T(Y, 'note')}</div>`;
+  else if (Y) $('yogini').innerHTML = `<div class="muted">${T(Y, 'note')}</div>`;
+
   const run = c.dasha_running, lbl = ['महादशा','अंतर्दशा','प्रत्यंतर'];
   const fmt = s => s.slice(0,10);
   const pr = c.pratyantars_now || [];
@@ -1199,7 +1241,7 @@ const DIGNITY_HI = {exalted:'उच्च', debilitated:'नीच', own:'स्
 
 $('f').addEventListener('submit', async e => {
   e.preventDefault(); $('err').textContent = '';
-  const body = {name:$('name').value || null, date:$('date').value, time:$('time').value, tz:$('tz').value.trim(), lat:+$('lat').value, lon:+$('lon').value};
+  const body = {name:$('name').value || null, date:$('date').value, time:$('time').value, tz:$('tz').value.trim(), lat:+$('lat').value, lon:+$('lon').value, ayanamsa: $('ayan').value};
   try {
     if (!KB.planets) {
       const [p, h, n, sg] = await Promise.all(['planets', 'houses', 'nakshatras', 'signs'].map(f => fetch(API + '/data/knowledge/' + f + '.json')));
@@ -2144,7 +2186,7 @@ async function openReport(path, body) {
   const mo = new MutationObserver(muts => { if (lang !== 'en' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
   mo.observe(document.body, {childList: true, subtree: true, characterData: true});
-  $('langbtn').onclick = () => { set(lang === 'en' ? 'hi' : 'en'); if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); };
+  $('langbtn').onclick = () => { set(lang === 'en' ? 'hi' : 'en'); if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); };
   if (lang === 'en') set('en');
 })();
 

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS wa_subs(
 CREATE TABLE IF NOT EXISTS wa_log(id INTEGER PRIMARY KEY AUTOINCREMENT, phone TEXT, kind TEXT, at TEXT, ok INTEGER, detail TEXT);
 """
 KINDS_HI = {"festival": "त्योहार", "ekadashi": "एकादशी", "purnima": "पूर्णिमा", "amavasya": "अमावस्या", "pradosh": "प्रदोष", "chaturthi": "चतुर्थी",
-            "shivaratri": "मासिक शिवरात्रि", "regional": "क्षेत्रीय पर्व", "national": "राष्ट्रीय दिवस", "christian": "ईसाई पर्व", "islamic": "इस्लामी पर्व"}
+            "shivaratri": "मासिक शिवरात्रि", "grahan": "ग्रहण", "regional": "क्षेत्रीय पर्व", "national": "राष्ट्रीय दिवस", "christian": "ईसाई पर्व", "islamic": "इस्लामी पर्व"}
 _PHONE = re.compile(r"^\d{10,15}$")
 
 
@@ -186,7 +186,7 @@ def compose_daily(sub: dict, d: date) -> str:
         L.append(f'⏳ {"राहु काल" if hi else "Rahu kaal"} {rk["start"] + "–" + rk["end"] if rk else "—"} · {"अभिजित" if hi else "Abhijit"} {ab["start"] + "–" + ab["end"] if ab else "—"} · {"दिशाशूल" if hi else "Disha shool"} {day["disha_shool_hi"] if hi else day["disha_shool"]}')
         if day.get("special"):
             L.append("✨ " + " · ".join(x["hi"] if hi else x["en"] for x in day["special"]))
-        ev = [x for x in day["events"] if x["kind"] in ("festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri", "national", "regional")]
+        ev = [x for x in day["events"] if x["kind"] in ("grahan", "festival", "ekadashi", "purnima", "amavasya", "pradosh", "chaturthi", "shivaratri", "national", "regional")]
         if ev:
             L.append(("🪔 आज: " if hi else "🪔 Today: ") + ", ".join(x["name_hi"] if hi else x["name_en"] for x in ev))
     if sub.get("want_rashifal", 1) and sub.get("moon_sign") is not None:
@@ -267,7 +267,7 @@ def compose_alert(sub: dict, d: date, prefix: bool = False) -> str:
 
 def compose_weekly(sub: dict, d: date) -> str:
     hi = sub.get("lang", "hi") != "en"
-    kinds = set((sub.get("vrat_kinds") or "festival,ekadashi,purnima,amavasya,pradosh").split(",")) | {"festival", "national"}
+    kinds = set((sub.get("vrat_kinds") or "festival,ekadashi,purnima,amavasya,pradosh").split(",")) | {"festival", "national", "grahan"}
     L = [("📅 *इस सप्ताह के व्रत-पर्व* " if hi else "📅 *This week's vrats and festivals* ") + f'({d.strftime("%d-%m")} – {(d + timedelta(days=6)).strftime("%d-%m-%Y")})']
     any_ev = False
     for i in range(7):

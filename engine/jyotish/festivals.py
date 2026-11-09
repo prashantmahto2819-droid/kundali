@@ -394,8 +394,16 @@ def calendar(year: int, lat: float, lon: float, tz: str) -> dict:
     if diwali:
         events.append({**diwali, "key": "kali_puja", "name_hi": "काली पूजा", "name_en": "Kali Puja", "kind": "regional", "rule": "regional", "note_hi": "", "note_en": "", "region": "Bengal"})
     events += other_calendars(year, tz)
+    try:
+        from .panchang_extra import eclipses
+        for ec in eclipses(year, tz):
+            events.append({"key": f"{ec['kind']}_eclipse_{ec['date']}", "name_hi": ec["kind_hi"] + (" (संभावित)" if ec["certainty"] != "sure" else ""),
+                           "name_en": ("Solar" if ec["kind"] == "solar" else "Lunar") + " eclipse" + (" (possible)" if ec["certainty"] != "sure" else ""),
+                           "date": ec["date"], "kind": "grahan", "rule": "syzygy", "maximum_local": ec["maximum_local"], "note_hi": ec["note_hi"], "note_en": ec["note_en"]})
+    except Exception:
+        pass
     events = apply_overrides(year, events)
-    order = {"festival": 0, "regional": 1, "national": 2, "ekadashi": 3, "purnima": 4, "amavasya": 4, "pradosh": 5, "chaturthi": 5, "shivaratri": 5, "christian": 6, "islamic": 6}
+    order = {"grahan": 0, "festival": 0, "regional": 1, "national": 2, "ekadashi": 3, "purnima": 4, "amavasya": 4, "pradosh": 5, "chaturthi": 5, "shivaratri": 5, "christian": 6, "islamic": 6}
     events.sort(key=lambda e: (e["date"], order.get(e["kind"], 9)))
     adh = []
     for m in luns:
