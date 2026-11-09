@@ -7,7 +7,6 @@ services:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
-      network: host                      # pip inside the build uses the host's DNS/network (fixes "Temporary failure in name resolution")
       args:
         GIT_SHA: ${GIT_SHA:-dev}
     container_name: kundali-api

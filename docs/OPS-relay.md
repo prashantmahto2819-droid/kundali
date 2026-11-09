@@ -121,4 +121,5 @@ cat > /etc/docker/daemon.json <<'EOF2'
 EOF2
 systemctl restart docker
 ```
+(BuildKit does not allow `network: host` in compose without an entitlement, so the daemon DNS setting is the fix; the build then resolves PyPI through the daemon's resolver.)
 `smoke.sh` needs curl on the host: `apt-get install -y curl`.
