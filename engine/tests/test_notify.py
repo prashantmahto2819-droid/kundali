@@ -116,3 +116,22 @@ def test_daily_card_png_and_image_send(fresh_store, monkeypatch):
     notify.subs().set("919876543211", want_image=0)
     assert notify.daily_card(notify.subs().get("919876543211"), date(2026, 11, 9)) is None
     assert card.font_available()
+
+
+def test_birthday_and_broadcast(fresh_store, monkeypatch):
+    sub = {"lang": "hi", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2, "place": "दिल्ली", "want_panchang": 0, "want_rashifal": 0, "vrat_alert": 0, "moon_sign": 8,
+           "birth": '{"date": "1990-05-15", "time": "10:30", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2}'}
+    txt = notify.compose_daily(sub, date(2027, 5, 15))
+    assert "जन्मदिन की शुभकामनाएँ" in txt and "37 वर्ष" in txt and "वर्ष-लग्न" in txt
+    assert "जन्मदिन" not in notify.compose_daily(sub, date(2027, 5, 16))
+    # broadcast target: a group JID gets the plain daily (no STOP footer) at its own time
+    b = fresh_store.upsert_broadcast({"target": "120363001234567890@g.us", "label": "परिवार समूह", "daily_time": "06:00", "place": "इंदौर", "lat": 22.72, "lon": 75.86})
+    assert b["target"].endswith("@g.us") and b["active"] == 1
+    sent = []
+    out = notify.run_once(datetime(2026, 11, 15, 0, 31, tzinfo=timezone.utc), sender=lambda p, t, img=None: (sent.append((p, t, img)) or {"ok": True, "detail": ""}))   # 06:01 IST Sunday
+    kinds = sorted(o["kind"] for o in out)
+    assert kinds == ["broadcast_daily", "broadcast_weekly"] and sent[0][0].endswith("@g.us") and "STOP" not in sent[0][1] and sent[0][2][:4] == b"\x89PNG"
+    assert fresh_store.broadcasts()[0]["last_daily"] == "2026-11-15"
+    with pytest.raises(ValueError):
+        fresh_store.upsert_broadcast({"target": "bad target"})
+    fresh_store.delete_broadcast(b["target"]); assert fresh_store.broadcasts() == []

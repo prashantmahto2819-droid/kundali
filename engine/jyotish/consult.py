@@ -297,7 +297,11 @@ def admin_dashboard() -> dict:
                 overrides[f.stem.split("_", 1)[1]] = _json.loads(f.read_text("utf-8"))
             except ValueError:
                 pass
-    return {"counts": counts, "subscribers": subs, "wa_log": log, "inbox": inbox, "ai_usage": ai_usage, "overrides": overrides, "paid": paid(),
+    try:
+        broadcasts = notify.subs().broadcasts(only_active=False)
+    except Exception:
+        broadcasts = []
+    return {"counts": counts, "subscribers": subs, "wa_log": log, "inbox": inbox, "broadcasts": broadcasts, "ai_usage": ai_usage, "overrides": overrides, "paid": paid(),
             "relay_ready": notify.relay_ready(), "ai_providers": [{"name": p["name"], "model": p["model"]} for p in llm.configured()], **admin_overview()}
 
 

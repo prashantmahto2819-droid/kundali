@@ -815,6 +815,16 @@ def consult_admin_from_payload(payload: dict, headers: dict | None = None) -> di
         return _consult_call("admin_set_subscriber", payload.get("phone"), payload.get("fields") or {})
     if action == "override":
         return _consult_call("admin_save_override", int(payload.get("year") or 0), payload.get("data") or {})
+    if action == "broadcast":
+        from . import notify
+        try:
+            return notify.subs().upsert_broadcast(payload.get("broadcast") or {})
+        except ValueError as exc:
+            raise BadRequest(str(exc)) from exc
+    if action == "broadcast_delete":
+        from . import notify
+        notify.subs().delete_broadcast(str(payload.get("target") or ""))
+        return {"deleted": payload.get("target")}
     if action == "send_test":
         from . import notify
         res = notify.send_whatsapp(notify.normalize_phone(payload.get("phone")), str(payload.get("text") or "कुंडली ऐप: परीक्षण संदेश ✅"))

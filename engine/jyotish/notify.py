@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS wa_subs(
   user_id TEXT, created TEXT NOT NULL, last_daily TEXT, last_weekly TEXT, last_error TEXT
 );
 CREATE TABLE IF NOT EXISTS wa_log(id INTEGER PRIMARY KEY AUTOINCREMENT, phone TEXT, kind TEXT, at TEXT, ok INTEGER, detail TEXT);
+CREATE TABLE IF NOT EXISTS wa_broadcast(target TEXT PRIMARY KEY, label TEXT, lang TEXT NOT NULL DEFAULT 'hi', tz TEXT NOT NULL DEFAULT 'Asia/Kolkata', lat REAL NOT NULL DEFAULT 28.61, lon REAL NOT NULL DEFAULT 77.2,
+  place TEXT, daily_time TEXT NOT NULL DEFAULT '06:00', want_image INTEGER NOT NULL DEFAULT 1, weekly INTEGER NOT NULL DEFAULT 1, active INTEGER NOT NULL DEFAULT 1, last_daily TEXT, last_weekly TEXT, last_error TEXT, created TEXT NOT NULL);
 """
 KINDS_HI = {"festival": "त्योहार", "ekadashi": "एकादशी", "purnima": "पूर्णिमा", "amavasya": "अमावस्या", "pradosh": "प्रदोष", "chaturthi": "चतुर्थी",
             "shivaratri": "मासिक शिवरात्रि", "grahan": "ग्रहण", "regional": "क्षेत्रीय पर्व", "national": "राष्ट्रीय दिवस", "christian": "ईसाई पर्व", "islamic": "इस्लामी पर्व"}
@@ -94,6 +96,40 @@ class Subs:
         with self._lock:
             rows = self._db.execute("SELECT * FROM wa_subs WHERE verified=1 AND status='active'").fetchall()
         return [dict(r) for r in rows]
+
+    # broadcast targets: a WhatsApp group JID (…@g.us), a channel JID (…@newsletter) or a plain number
+    def broadcasts(self, only_active: bool = True) -> list[dict]:
+        with self._lock:
+            rows = self._db.execute("SELECT * FROM wa_broadcast" + (" WHERE active=1" if only_active else "") + " ORDER BY created").fetchall()
+        return [dict(r) for r in rows]
+
+    def upsert_broadcast(self, b: dict) -> dict:
+        target = str(b.get("target") or "").strip()
+        if not target or (not target.endswith(("@g.us", "@newsletter")) and not re.fullmatch(r"\d{10,15}", re.sub(r"\D", "", target))):
+            raise ValueError("target must be a group JID (…@g.us), a channel JID (…@newsletter) or a phone number")
+        if not target.endswith(("@g.us", "@newsletter")):
+            target = normalize_phone(target)
+        with self._lock:
+            old = self._db.execute("SELECT * FROM wa_broadcast WHERE target=?", (target,)).fetchone()
+            row = dict(old) if old else {"created": datetime.now(timezone.utc).isoformat(), "active": 1, "want_image": 1, "weekly": 1, "daily_time": "06:00", "lang": "hi", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2}
+            for k in ("label", "lang", "tz", "lat", "lon", "place", "daily_time", "want_image", "weekly", "active"):
+                if k in b and b[k] is not None:
+                    row[k] = b[k]
+            row["target"] = target
+            cols = ["target", "label", "lang", "tz", "lat", "lon", "place", "daily_time", "want_image", "weekly", "active", "last_daily", "last_weekly", "last_error", "created"]
+            self._db.execute(f"INSERT OR REPLACE INTO wa_broadcast({','.join(cols)}) VALUES ({','.join(':' + c for c in cols)})", {c: row.get(c) for c in cols})
+            self._db.commit()
+            return dict(self._db.execute("SELECT * FROM wa_broadcast WHERE target=?", (target,)).fetchone())
+
+    def set_broadcast(self, target: str, **fields):
+        with self._lock:
+            self._db.execute(f"UPDATE wa_broadcast SET {', '.join(f'{k}=:{k}' for k in fields)} WHERE target=:target", {**fields, "target": target})
+            self._db.commit()
+
+    def delete_broadcast(self, target: str):
+        with self._lock:
+            self._db.execute("DELETE FROM wa_broadcast WHERE target=?", (target,))
+            self._db.commit()
 
     def log(self, phone: str, kind: str, ok: bool, detail: str = ""):
         with self._lock:
@@ -271,6 +307,14 @@ def compose_daily(sub: dict, d: date) -> str:
                     L.append(("💡 *आज के लिए एक बात*: " if hi else "💡 *One thought for today*: ") + line)
             except Exception:
                 pass
+    if sub.get("birth"):
+        try:
+            bday = compose_birthday(sub, d, day)
+            if bday:
+                L.append("")
+                L.append(bday)
+        except Exception:
+            pass
     if sub.get("vrat_alert", 1):
         alert = compose_alert(sub, d + timedelta(days=1), prefix=True)
         if alert:
@@ -280,6 +324,36 @@ def compose_daily(sub: dict, d: date) -> str:
     L.append("_" + ("पंचांग: लाहिड़ी अयनांश, सूर्योदय-कालीन तिथि; राशिफल प्रवृत्ति-संकेत है। बंद करने के लिए STOP लिखें।" if hi else
                     "Panchang: Lahiri ayanamsa, tithi at sunrise; the rashifal is a tendency pointer. Reply STOP to unsubscribe.") + "_")
     return "\n".join(L)
+
+
+def compose_birthday(sub: dict, d: date, day: dict) -> str:
+    """On the Gregorian birthday: greeting + the new varshaphal's headline; on the janma-tithi (same lunar month & tithi): a tithi-birthday note."""
+    hi = sub.get("lang", "hi") != "en"
+    birth = json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]
+    bd = date.fromisoformat(birth["date"])
+    out = []
+    if (d.month, d.day) == (bd.month, bd.day):
+        age = d.year - bd.year
+        try:
+            from .handlers import varshaphal_from_payload
+            v = varshaphal_from_payload({**birth, "year": d.year})
+            t = v.get("tajika") or {}
+            head = (f"वर्ष-लग्न {v['lagna']['sign_name_hi']}, मुंथा भाव {v['muntha']['house']}, वर्षेश {t.get('varshesha_hi', '—')}" if hi else
+                    f"year lagna {v['lagna']['sign_name']}, Muntha in house {v['muntha']['house']}, Varshesha {t.get('varshesha', '—')}")
+        except Exception:
+            head = ""
+        out.append((f"🎂 *जन्मदिन की शुभकामनाएँ!* आज आप {age} वर्ष के हुए। नया वर्षफल: {head}। पूरा वर्षफल ऐप के 'वर्षफल' उप-टैब में।" if hi else
+                    f"🎂 *Happy birthday!* You turn {age} today. New varshaphal: {head}. Full varshaphal in the app's 'Varshaphal' sub-tab.") if head else
+                   (f"🎂 *जन्मदिन की शुभकामनाएँ!* आज आप {age} वर्ष के हुए।" if hi else f"🎂 *Happy birthday!* You turn {age} today."))
+    # tithi birthday: natal lunar month (purnimanta) and tithi match today
+    try:
+        bday_row = panchang_month.month(bd.year, bd.month, float(birth.get("lat", sub["lat"])), float(birth.get("lon", sub["lon"])), birth.get("tz", sub["tz"]), only_day=bd.day)["days"]
+        if bday_row and bday_row[0]["masa_purnimanta"] == day["masa_purnimanta"] and bday_row[0]["tithi_number"] == day["tithi_number"] and (d.month, d.day) != (bd.month, bd.day):
+            out.append((f"🪔 आज आपका *तिथि-जन्मदिन* है ({day['masa_purnimanta_hi']} {day['paksha_hi']} {day['tithi_hi']}) — परंपरा में इस दिन इष्ट-पूजन और दान शुभ माने जाते हैं।" if hi else
+                        f"🪔 Today is your *tithi birthday* ({day['masa_purnimanta']} {day['paksha']} {day['tithi']}) — tradition favours worship and charity on this day."))
+    except Exception:
+        pass
+    return "\n".join(out)
 
 
 def compose_ai_line(sub: dict, d: date) -> str:
@@ -496,6 +570,22 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
             else:
                 subs().set(sub["phone"], last_error=res["detail"])
             results.append({"phone": sub["phone"], "kind": kind, **res})
+    # group / channel broadcasts: the plain panchang (no personal parts), at the target's own time
+    for b in subs().broadcasts():
+        pseudo = {**b, "phone": b["target"], "want_panchang": 1, "want_rashifal": 0, "vrat_alert": 1, "vrat_kinds": "grahan,festival,ekadashi,purnima,amavasya,pradosh", "moon_sign": None, "birth": None, "weekly_day": 0, "verified": 1, "status": "active"}
+        for kind in due_now(pseudo, now_utc):
+            local_day = now_utc.astimezone(ZoneInfo(b["tz"])).date()
+            text = (compose_daily(pseudo, local_day) if kind == "daily" else compose_weekly(pseudo, local_day)).replace("बंद करने के लिए STOP लिखें।", "").replace("Reply STOP to unsubscribe.", "").replace("_STOP_", "").rstrip()
+            img = daily_card(pseudo, local_day) if kind == "daily" else None
+            try:
+                res = sender(b["target"], text, img) if (text and img) else (sender(b["target"], text) if text else {"ok": False, "detail": "empty message"})
+            except TypeError:
+                res = sender(b["target"], text)
+            if img and not res["ok"]:
+                res = sender(b["target"], text)
+            subs().log(b["target"], "broadcast_" + kind, res["ok"], res["detail"])
+            subs().set_broadcast(b["target"], **({("last_daily" if kind == "daily" else "last_weekly"): local_day.isoformat(), "last_error": None} if res["ok"] else {"last_error": res["detail"]}))
+            results.append({"phone": b["target"], "kind": "broadcast_" + kind, **res})
     return results
 
 
