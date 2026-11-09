@@ -1,6 +1,8 @@
 """Sunrise / sunset (NOAA general solar position equations, about +-1 minute)."""
 from __future__ import annotations
 
+from functools import lru_cache
+
 import math
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -31,6 +33,7 @@ def _event_minutes(day_of_year: int, lat: float, lon: float, sunrise: bool, hour
     return 720 - 4 * (lon + ha if sunrise else lon - ha) - eqtime
 
 
+@lru_cache(maxsize=4096)
 def sun_times(day: date, lat: float, lon: float, tz: str, convention: str = "upper_limb") -> dict | None:
     """Sunrise and sunset (aware datetimes in ``tz``) for the *local* calendar date.
 

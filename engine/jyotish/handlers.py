@@ -623,3 +623,29 @@ def rashifal_from_query(q: dict) -> dict:
 def rashifal_report_from_payload(payload: dict) -> str:
     from . import report
     return _localize(report.render_rashifal(rashifal_from_query(payload)), payload)
+
+
+def panchang_today_from_query(q: dict) -> dict:
+    """GET /v1/panchang/day?date=YYYY-MM-DD&lat&lon&tz — one day's sunrise panchang with end times, festivals and kaal."""
+    from . import panchang_month
+    day = str(q.get("date") or datetime.now(ZoneInfo(str(q.get("tz") or "Asia/Kolkata"))).date().isoformat()) if _tz_ok(q.get("tz")) else None
+    if not day or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+        raise BadRequest("date must be YYYY-MM-DD and tz a valid zone")
+    try:
+        lat = float(q.get("lat") or 28.61); lon = float(q.get("lon") or 77.2)
+        y, m, d = (int(x) for x in day.split("-"))
+    except (TypeError, ValueError):
+        raise BadRequest("lat, lon and date must be valid")
+    if not 1950 <= y <= 2099 or not (-66 <= lat <= 66):
+        raise BadRequest("year 1950-2099, lat within -66..66")
+    out = panchang_month.month(y, m, lat, lon, str(q.get("tz") or "Asia/Kolkata"), only_day=d)
+    if not out["days"]:
+        raise BadRequest("no sunrise on that date at this latitude")
+    return {**out["days"][0], "tz": out["tz"], "lat": lat, "lon": lon}
+
+
+def _tz_ok(tz) -> bool:
+    try:
+        ZoneInfo(str(tz or "Asia/Kolkata")); return True
+    except (ZoneInfoNotFoundError, ValueError):
+        return False

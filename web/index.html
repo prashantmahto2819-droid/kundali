@@ -138,7 +138,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <div class="banner danger" id="warns" hidden></div>
     <div class="tiles" id="tiles"></div>
     <div class="card" id="summary"></div>
-    <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaylist"></div></div>
+    <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaypanchang" class="muted" style="font-size:.9rem;margin:4px 0 6px"></div><div id="todaylist"></div></div>
     <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
@@ -784,8 +784,27 @@ function renderTiles(c) {
     tile('आज का गोचर', `${sup} <span class="muted" style="font-weight:400">शुभ</span> · ${ch} <span class="muted" style="font-weight:400">सावधानी</span>`, esc((c.gochara?.as_of || '').slice(0, 10))) +
     tile('जन्म-समय', margin == null ? 'स्थिर' : (margin > 15 ? 'स्थिर' : margin > 5 ? 'सावधान' : 'संवेदनशील'), margin == null ? 'लग्न 3 घंटे तक नहीं बदलता' : `लग्न ${margin} मिनट में बदलता`);
 }
+async function loadTodayPanchang(lat, lon, tz) {
+  const host = $('todaypanchang'); if (!host) return;
+  try {
+    const q = `lat=${lat || 28.61}&lon=${lon || 77.2}&tz=${encodeURIComponent(tz || 'Asia/Kolkata')}`;
+    const r = await apiFetch('/v1/panchang/day?' + q); const d = await r.json(); if (!r.ok) throw new Error(d.detail || '');
+    const fest = d.events.filter(e => ['festival', 'ekadashi', 'national', 'regional'].includes(e.kind)).map(e => esc(e.name_hi)).join(', ');
+    const sp = (d.special || []).map(x => esc(x.hi)).join(', ');
+    host.innerHTML = `<b>${esc(d.vara_hi)}</b>, ${esc(d.masa_purnimanta_hi)} <span>${esc(d.paksha_hi)}</span> <span>${esc(d.tithi_hi)}</span> (<span>तक</span> ${esc(d.tithi_ends || '')}${d.tithi_ends_next_day ? '+' : ''}) · <span>${esc(d.nakshatra_hi)}</span> (${esc(d.nakshatra_ends || '')}${d.nakshatra_ends_next_day ? '+' : ''}) · <span>विक्रम संवत</span> ${d.vikram_samvat}<br>
+      <span>सूर्योदय</span> ${esc(d.sunrise)} · <span>सूर्यास्त</span> ${esc(d.sunset)} · <span>चंद्रोदय</span> ${esc(d.moonrise || '—')} · <span>राहु काल</span> ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · <span>अभिजित</span> ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'}${sp ? ` · ${sp}` : ''}${fest ? `<br><b>आज:</b> ${fest}` : ''}`;
+  } catch (e) { host.textContent = ''; }
+}
 function renderToday(c) {
   const items = [];
+  const moonSign = (c.planets || []).find(p => p.name === 'Moon')?.sign;
+  if (moonSign !== undefined) {
+    apiFetch(`/v1/rashifal?date=${new Date().toISOString().slice(0, 10)}&period=daily&tz=${encodeURIComponent(c.input?.tz || 'Asia/Kolkata')}`).then(r => r.json()).then(d => {
+      const s = (d.signs || []).find(x => x.sign === moonSign); if (!s) return;
+      const li = document.createElement('li'); li.innerHTML = `<b>आज का राशिफल (${esc(s.sign_name_hi)}):</b> <span>${esc(s.grade_hi)}</span> ${s.score}/100 — ${esc(s.summary_hi)} <a href="#" onclick="document.querySelector('button[data-tab=t-muhurta]').click(); document.getElementById('rgo').click(); return false;">पूरा राशिफल</a>`;
+      const ul = $('todaylist').querySelector('ul'); if (ul) ul.appendChild(li);
+    }).catch(() => {});
+  }
   const run = (c.timeline?.periods || []).find(p => p.phase === 'running');
   const ad = (c.dasha_running || []).find(d => d.level === 2), md = (c.dasha_running || []).find(d => d.level === 1);
   if (run) items.push(`<b>दशा:</b> ${esc(pH(c, run.lord))} महादशा${ad ? `, ${esc(pH(c, ad.lord))} अंतर्दशा (${esc(ad.end.slice(0, 10))} तक)` : ''} — ${esc(run.profile.tag_hi)}; सक्रिय क्षेत्र: ${run.profile.themes.slice(0, 2).map(t => esc(t.themes_hi[0])).join(', ')}।`);
@@ -852,6 +871,7 @@ function render(c) {
       `<tr><td>${esc(v.label_hi)}</td><td>${f(v.minutes_earlier)}</td><td>${f(v.minutes_later)}</td><td class="${v.stable_within_15_min ? 'yes' : ''}">${v.stable_within_15_min ? 'स्थिर (15 मिनट तक)' : v.stable_within_5_min ? 'सावधान (5-15 मिनट)' : 'संवेदनशील (5 मिनट से कम)'}</td></tr>`).join('') + '</table>';
   }
   setupRectify();
+  loadTodayPanchang(+$('lat').value, +$('lon').value, ($('tz').value || '').trim());
   if (c.lalkitab) {
     const L = c.lalkitab; $('lkwhy').textContent = L.views_note_hi;
     $('lktable').innerHTML = `<table><tr><th>ग्रह</th><th>पक्का घर</th><th>घर (लग्न से)</th><th>घर (मेष से)</th><th>स्थिति</th><th>उपाय (ड्राफ़्ट)</th></tr>` +
@@ -1354,6 +1374,7 @@ $('repbtn').addEventListener('click', async () => {
   };
 })();
 
+loadTodayPanchang();
 // Calendar design studio
 (function calendarStudio() {
   const MON = ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];

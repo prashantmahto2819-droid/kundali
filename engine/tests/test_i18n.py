@@ -19,7 +19,7 @@ PAYLOADS = [
 
 def test_translation_is_all_or_nothing_and_safe():
     assert i18n.translate_text("सूर्य") == "Sun"
-    assert i18n.translate_text("सूर्योदय") == "सूर्योदय"                   # unknown word untouched (no partial 'Sunोदय')
+    assert i18n.translate_text("सूर्यफूल") == "सूर्यफूल"                   # unknown word untouched (no partial "Sunफूल")
     assert i18n.translate_text("बिलकुल अनजान वाक्य") == "बिलकुल अनजान वाक्य"
     assert i18n.translate_text("  Mars  ") == "  Mars  "                    # Latin text passes through
     assert i18n.translate_text("{1}") == "{1}"

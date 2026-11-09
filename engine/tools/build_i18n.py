@@ -268,7 +268,10 @@ for _hi, _en in (("उत्तम", "excellent"), ("अच्छा", "good"), 
                  ("बारह राशियों के लिए गोचर-आधारित प्रवृत्ति; यह भविष्यवाणी नहीं। अपनी चंद्र राशि कुंडली से देखिए।", "Transit-based tendencies for the twelve signs; not a prediction. Find your Moon sign in the chart."),
                  ("अवधि", "Period"), ("दैनिक", "Daily"), ("साप्ताहिक", "Weekly"), ("मासिक", "Monthly"), ("वार-स्वामी", "weekday lord"), ("शुभ रंग", "lucky colour"), ("शुभ अंक", "lucky number"), ("अनुकूल", "favourable"), ("हर माह के बाद राशिफल पृष्ठ", "Rashifal page after every month"), ("मासिक राशिफल", "Monthly rashifal"), ("राशिफल", "Rashifal")):
     EXACT.setdefault(_hi, _en)
-RASHI_PATTERNS = [("{1} ग्रह अनुकूल भावों में ({2}); सावधानी: {3}।", "{1} planet(s) in favourable houses ({2}); care with {3}."), ("{1} ग्रह अनुकूल भावों में ({2})।", "{1} planet(s) in favourable houses ({2})."),
+for _hi, _en in (("सूर्योदय", "Sunrise"), ("सूर्यास्त", "Sunset"), ("पूरा राशिफल", "full rashifal")):
+    EXACT.setdefault(_hi, _en)
+EXACT.setdefault("तक", "until"); EXACT.setdefault("विक्रम संवत", "Vikram samvat")
+RASHI_PATTERNS = [("आज का राशिफल ({1}):", "Today's rashifal ({1}):"),("{1} ग्रह अनुकूल भावों में ({2}); सावधानी: {3}।", "{1} planet(s) in favourable houses ({2}); care with {3}."), ("{1} ग्रह अनुकूल भावों में ({2})।", "{1} planet(s) in favourable houses ({2})."),
                   ("{1} ग्रह अनुकूल भावों में; सावधानी: {2}।", "{1} planet(s) in favourable houses; care with {2}."), ("वेध: {1}", "vedha: {1}"), ("· शुभ अंक {1}", "· lucky number {1}"), ("{1} राशिफल", "{1} rashifal")]
 UI_CAL.update({"राष्ट्रीय दिवस": "National days", "क्षेत्रीय पर्व (पोंगल, ओणम, दुर्गा पूजा…)": "Regional festivals (Pongal, Onam, Durga Puja…)", "ईद, क्रिसमस आदि": "Eid, Christmas etc.", "क्षेत्रीय पर्व": "Regional festivals", "अन्य धर्म (ईद, क्रिसमस…)": "Other faiths (Eid, Christmas…)", "प्रदोष / चतुर्थी / शिवरात्रि": "Pradosh / Chaturthi / Shivaratri",
                "वर का नक्षत्र": "Groom's nakshatra", "वधू का नक्षत्र": "Bride's nakshatra",

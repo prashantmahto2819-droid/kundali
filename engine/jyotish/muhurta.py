@@ -1,6 +1,8 @@
 """Sunrise-based day divisions: vara, Rahu Kaal, Yamaganda, Gulika, Abhijit, Choghadiya."""
 from __future__ import annotations
 
+from functools import lru_cache
+
 from datetime import datetime, timedelta
 
 from .constants import VARA, VARA_HI
@@ -38,6 +40,11 @@ def _chog(start: datetime, length: timedelta, first: str) -> list[dict]:
 
 
 def day_table(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
+    return _day_table_cached(local_dt.replace(microsecond=0), lat, lon, tz)
+
+
+@lru_cache(maxsize=2048)
+def _day_table_cached(local_dt: datetime, lat: float, lon: float, tz: str) -> dict:
     """``local_dt`` is the aware local birth/query time. Vara follows the Vedic day:
     before sunrise the previous weekday still runs."""
     day = local_dt.date()

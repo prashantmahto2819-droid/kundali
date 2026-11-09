@@ -85,7 +85,8 @@ def _festivals_by_day(year: int, lat: float, lon: float, tz: str) -> dict:
     return out
 
 
-def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
+def month(year: int, mon: int, lat: float, lon: float, tz: str, only_day: int | None = None) -> dict:
+    """Whole month; with only_day the rows cover that day alone and the month-level extras (muhurta, ingress) are skipped."""
     year = max(1950, min(2099, int(year))); mon = max(1, min(12, int(mon)))
     zone = ZoneInfo(tz)
     luns = lunations(year)
@@ -99,7 +100,7 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
     kartika_start = _lun_start(6)
     days = []
     ndays = _cal.monthrange(year, mon)[1]
-    for dnum in range(1, ndays + 1):
+    for dnum in ([only_day] if only_day else range(1, ndays + 1)):
         d = date(year, mon, dnum)
         st = sun_times(d, lat, lon, tz)
         if not st:
@@ -176,6 +177,10 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str) -> dict:
             "good_choghadiya": [{"name": c["name"], "start": c["start"], "end": c["end"]} for c in dt_tab.get("choghadiya_day", []) if c.get("nature") == "good"],
             "events": fest.get(d.isoformat(), []),
         })
+    if only_day:
+        for x in days:
+            x.pop("jd_rise", None)
+        return {"year": year, "month": mon, "tz": tz, "lat": lat, "lon": lon, "days": days}
     # planet ingresses in the month (sign changes between consecutive sunrises, Sun..Saturn + nodes by sign at sunrise)
     ingress = []
     prev = None

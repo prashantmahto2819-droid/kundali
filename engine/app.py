@@ -324,6 +324,14 @@ def muhurta_lagna(req: MuhurtaLagnaRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/panchang/day")
+def panchang_day(date: str | None = None, lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata"):
+    try:
+        return handlers.panchang_today_from_query({"date": date, "lat": lat, "lon": lon, "tz": tz})
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.get("/v1/rashifal")
 def rashifal(date: str | None = None, period: str = "daily", tz: str = "Asia/Kolkata"):
     try:

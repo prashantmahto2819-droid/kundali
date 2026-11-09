@@ -270,6 +270,11 @@
 "हर माह के बाद राशिफल पृष्ठ": "Rashifal page after every month",
 "मासिक राशिफल": "Monthly rashifal",
 "राशिफल": "Rashifal",
+"सूर्योदय": "Sunrise",
+"सूर्यास्त": "Sunset",
+"पूरा राशिफल": "full rashifal",
+"तक": "until",
+"विक्रम संवत": "Vikram samvat",
 "कैलेंडर": "Calendar",
 "कैलेंडर डिज़ाइन स्टूडियो — पंचांग सहित छपने योग्य कैलेंडर": "Calendar design studio — printable calendar with panchang",
 "महीना या पूरा वर्ष चुनिए, ऊपर-नीचे विज्ञापन पट्टी (चित्र या पाठ), लोगो, रंग-योजना, आकार और दिखाने वाली जानकारी तय कीजिए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं (डिज़ाइन इसी डिवाइस पर सहेजा जाता है)।": "Pick a month or the whole year, set the top and bottom advertisement bands (image or text), logo, colour theme, size and what to show; live preview on the right, then \"Print / PDF\". Images stay in your browser (the design is saved on this device).",
@@ -3966,6 +3971,10 @@
 [
 "अभिजित {1} · राहु काल {2} · शुभ चौघड़िया: {3}",
 "Abhijit {1} · Rahu kaal {2} · good choghadiya: {3}"
+],
+[
+"आज का राशिफल ({1}):",
+"Today's rashifal ({1}):"
 ],
 [
 "{1} ग्रह अनुकूल भावों में ({2}); सावधानी: {3}।",

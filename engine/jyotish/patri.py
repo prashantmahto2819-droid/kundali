@@ -10,6 +10,8 @@ Samvat, masa and ritu are computed from the Sun's sidereal sign at the start of 
 """
 from __future__ import annotations
 
+from functools import lru_cache
+
 from . import matching as M
 from .core import ayanamsa, norm360
 from .ephemeris import AnalyticBackend
@@ -61,6 +63,7 @@ def _elong(backend, jd_tt: float) -> float:
     return norm360(pos["Moon"] - pos["Sun"])
 
 
+@lru_cache(maxsize=8192)
 def _amavasya_before(backend, jd_tt: float) -> float:
     """JD (TT) of the last new moon at or before jd_tt: step back day by day until the elongation wraps, then bisect."""
     hi = jd_tt
@@ -81,6 +84,7 @@ def _amavasya_before(backend, jd_tt: float) -> float:
     return (lo + hi) / 2
 
 
+@lru_cache(maxsize=8192)
 def lunar_month(backend, jd_tt: float, ayan: float) -> dict:
     """Amanta month containing jd_tt: name from the Sun's sidereal sign at its start; adhika when no sankranti falls inside."""
     t0 = _amavasya_before(backend, jd_tt)

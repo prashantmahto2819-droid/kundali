@@ -8,6 +8,8 @@ against almanacs. Returns None for a rise or set that does not happen on that lo
 """
 from __future__ import annotations
 
+from functools import lru_cache
+
 import math
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -66,6 +68,7 @@ def moon_altitude(dt_utc: datetime, lat: float, lon_east: float) -> float:
     return math.degrees(math.asin(math.sin(phi) * math.sin(dec) + math.cos(phi) * math.cos(dec) * math.cos(ha)))
 
 
+@lru_cache(maxsize=4096)
 def moon_times(day: date, lat: float, lon_east: float, tz: str) -> dict:
     """Moonrise and moonset (aware datetimes) for the local calendar date; None when absent that day."""
     zone = ZoneInfo(tz)
