@@ -282,6 +282,11 @@ def compose_personal_alerts(sub: dict, d: date) -> str:
     ch = chart_from_payload(birth)
     a = alerts_mod.alerts(ch, d, sub["tz"])
     L = []
+    try:
+        pd = alerts_mod.personal_day(ch, d, sub["tz"])
+        L.append("📊 " + (pd["text_hi"] if hi else pd["text_en"]))
+    except Exception:
+        pass
     for ev in a["today"]:
         L.append("🔔 " + (ev["hi"] if hi else ev["en"]))
     up = [ev for ev in a["upcoming"] if ev["kind"] in ("dasha", "sadesati", "ashtama") or ev.get("planet") in ("Jupiter", "Saturn", "Rahu")]

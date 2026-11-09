@@ -450,6 +450,11 @@ def consult_admin(req: NotifyRequest, request: Request):
     return _consult_route(handlers.consult_admin_from_payload, req, request)
 
 
+@app.post("/v1/chart/year_ahead")
+def chart_year_ahead(req: NotifyRequest):
+    return _consult_route(handlers.year_ahead_from_payload, req)
+
+
 @app.post("/v1/ai/summary")
 def ai_summary(req: NotifyRequest):
     return _consult_route(handlers.ai_summary_from_payload, req)

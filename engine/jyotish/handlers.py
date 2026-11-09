@@ -71,8 +71,9 @@ def chart_from_payload(payload: dict) -> dict:
         from . import alerts
         local_day = (as_of or datetime.now(timezone.utc)).astimezone(ZoneInfo(tz)).date()
         chart["alerts"] = alerts.alerts(chart, local_day, tz)
+        chart["alerts"]["personal_day"] = alerts.personal_day(chart, local_day, tz)
     except Exception:                                # never fail the chart for an alert
-        chart["alerts"] = {"today": [], "upcoming": []}
+        chart["alerts"] = {"today": [], "upcoming": [], "personal_day": None}
     return chart
 
 
@@ -111,6 +112,8 @@ def match_from_payload(payload: dict) -> dict:
                                                          planets["Moon"]["sign"])}
     result = matching.ashtakoota(people["boy"]["moon"], people["girl"]["moon"])
     result["manglik"] = matching.compare_manglik(people["boy"]["manglik"], people["girl"]["manglik"])
+    from .dashakoota import dashakoota
+    result["dashakoota"] = dashakoota(people["boy"]["moon"], people["girl"]["moon"])
     result["backend"] = people["boy"]["chart"]["backend"]
     result["backend_note"] = people["boy"]["chart"]["backend_note"]
     for role in ("boy", "girl"):
@@ -922,3 +925,18 @@ def i18n_languages() -> dict:
                 name = code
         out.append({"code": code, "name": name})
     return {"languages": out}
+
+
+def year_ahead_from_payload(payload: dict) -> dict:
+    """POST /v1/chart/year_ahead — 12-month transit table with Ashtakavarga bindus and change dates for this chart."""
+    from . import alerts
+    chart = chart_from_payload(payload)
+    tz = chart["input"]["tz"]
+    start = datetime.now(ZoneInfo(tz)).date()
+    if payload.get("from"):
+        try:
+            start = datetime.fromisoformat(str(payload["from"])).date()
+        except ValueError:
+            raise BadRequest("from must be YYYY-MM-DD")
+    months = max(1, min(24, int(payload.get("months", 12))))
+    return alerts.year_ahead(chart, start, tz, months)

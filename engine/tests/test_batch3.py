@@ -61,3 +61,19 @@ def test_regional_packs_complete_and_localize():
     g = panchang_today_from_query({"date": "2026-11-09", "lat": 23.02, "lon": 72.57, "tz": "Asia/Kolkata", "lang": "gu"})
     assert g["paksha_loc"] == "વદ" and g["tithi_loc"] == "અમાસ" and g["masa_amanta_loc"] == "આસો"
     assert "vara_loc" not in panchang_today_from_query({"date": "2026-11-09", "lat": 23.02, "lon": 72.57, "tz": "Asia/Kolkata"})
+
+
+def test_dashakoota_and_personal_day_and_year_ahead():
+    from jyotish import dashakoota, alerts
+    from jyotish.handlers import match_from_payload, year_ahead_from_payload
+    r = dashakoota.dashakoota(265.0, 100.0)
+    assert r["max"] == 36 and len(r["kootas"]) == 10 and r["blockers_hi"] == ["समान रज्जु", "नक्षत्र-वेध"] and r["verdict_en"].startswith("not advised")
+    ok = dashakoota.dashakoota(10.0, 190.0)                     # Ashwini vs Swati-ish: different rajju, opposite signs
+    assert "समान रज्जु" not in ok["blockers_hi"] and ok["kootas"][5]["score"] == 7
+    m = match_from_payload({"boy": B, "girl": {"date": "1992-08-20", "time": "06:15", "tz": "Asia/Kolkata", "lat": 19.07, "lon": 72.87}})
+    assert m["dashakoota"]["total"] <= 36 and m["dashakoota"]["kootas"][8]["key"] == "rajju"
+    ch = chart_from_payload(B)
+    pd = ch["alerts"]["personal_day"]
+    assert 0 <= pd["score"] <= 100 and len(pd["planets"]) == 7 and pd["tara_bala"]["n"] in range(1, 10) and "अष्टकवर्ग" in pd["text_hi"]
+    y = year_ahead_from_payload({**B, "from": "2026-11-01", "months": 6})
+    assert len(y["months"]) == 6 and y["months"][0]["planets"]["Jupiter"]["bindus"] is not None and any(e["kind"] == "ingress" for e in y["events"])

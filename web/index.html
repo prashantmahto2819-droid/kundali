@@ -274,6 +274,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
     <section class="sub" id="s-gochara">
     <div class="card"><b>जीवन भर के शनि-गुरु गोचर</b><div class="muted" style="font-size:.85rem" id="ltwhy"></div><div id="ltsade"></div><details><summary>गुरु के भाव-वार काल</summary><div id="ltjup" style="overflow-x:auto"></div></details></div>
     <div class="card"><b>आगामी 12 महीनों का गोचर</b><div class="muted" style="font-size:.85rem" id="tcwhy"></div><div id="tcingress"></div><details><summary>मास-वार ग्रह-राशियाँ</summary><div id="tctable" style="overflow-x:auto"></div></details></div>
+    <div class="card"><b>आपकी वर्ष-सारणी (गोचर × अष्टकवर्ग)</b> <button type="button" class="ghost" id="yago" style="width:auto;padding:2px 10px">बनाइए</button><div id="yaout" style="overflow-x:auto"></div></div>
     <div class="card"><b>अष्टकवर्ग</b>
       <div class="muted" style="font-size:.85rem" id="avwhy"></div>
       <div id="avsav" style="overflow-x:auto"></div>
@@ -1035,6 +1036,7 @@ function renderToday(c) {
   const ing = (c.transit_calendar?.ingress || [])[0];
   if (ing) items.push(`<b>आगे:</b> ${esc(ing.date)} को ${esc(ing.planet_hi)} ${esc(ing.to_sign_hi)} में (चंद्र से ${ing.house_from_moon}वाँ)।`);
   const en = (window.getLang ? window.getLang() : 'hi') === 'en';
+  if (c.alerts?.personal_day) items.push(`📊 <span>${esc(en ? c.alerts.personal_day.text_en : c.alerts.personal_day.text_hi)}</span>`);
   (c.alerts?.today || []).forEach(ev => items.push(`🔔 <b><span>आज</span>:</b> <span>${esc(en ? ev.en : ev.hi)}</span>`));
   (c.alerts?.upcoming || []).slice(0, 3).forEach(ev => items.push(`📌 ${esc(ev.date.slice(8, 10))}-${esc(ev.date.slice(5, 7))} <span>से</span>: <span>${esc(en ? ev.en : ev.hi)}</span>`));
   $('todaylist').innerHTML = items.length ? '<ul style="margin:4px 0 0;padding-left:18px">' + items.map(x => `<li>${x}</li>`).join('') + '</ul><div class="muted" style="font-size:.8rem">दशा और गोचर को साथ पढ़ने का संक्षेप; पूरा विवरण संबंधित टैब में।</div>' : '<span class="muted">—</span>';
@@ -1404,7 +1406,7 @@ $('mf').addEventListener('submit', async e => {
     const rows = m.kootas.map(k => `<tr><td>${esc(k.name_hi)} <span class="muted">(${esc(k.name)})</span></td>
       <td><b>${k.score}</b> / ${k.max}</td><td class="muted">${esc(k.detail)}</td>
       <td><span class="chip ${k.confidence==='firm'?'yes':'muted'}">${CONF[k.confidence]}</span></td></tr>`).join('');
-    const mg = m.manglik;
+    const ENM = (window.getLang ? window.getLang() : 'hi') === 'en'; const mg = m.manglik;
     const mtxt = x => `लग्न से भाव ${x.mars_house_from_lagna} · चंद्र से भाव ${x.mars_house_from_moon} → ${(x.from_lagna||x.from_moon)?'मांगलिक':'मांगलिक नहीं'}`;
     const dosh = (m.doshas || []).length
       ? `<p><b>दोष:</b> ${m.doshas.map(d => `${esc(d.name_hi)} दोष${d.cancelled ? ' (परिहार मिला)' : ''}`).join(', ')}` +
@@ -1420,6 +1422,9 @@ $('mf').addEventListener('submit', async e => {
       <table style="margin-top:8px"><tr><th>कूट</th><th>अंक</th><th>कारण</th><th>भरोसा</th></tr>${rows}</table>
       ${dosh}
       <p><b>मंगल दोष तुलना:</b> ${mg.level==='balanced' ? 'दोनों की स्थिति समान है (दोनों मांगलिक या दोनों नहीं)।' : 'केवल एक साथी मांगलिक है; परंपरा में परिहार (काट) देखना ज़रूरी माना जाता है।'}<br><span class="muted">वर: ${mtxt(mg.boy)}<br>वधू: ${mtxt(mg.girl)}</span></p>
+      ${m.dashakoota ? `<details style="margin-top:8px"><summary><b><span>दशकूट (दक्षिण भारतीय)</span>:</b> ${m.dashakoota.total}/${m.dashakoota.max} — ${esc(ENM ? m.dashakoota.verdict_en : m.dashakoota.verdict_hi)}</summary>
+        <table style="margin-top:6px"><tr><th><span>कूट</span></th><th><span>प्राप्तांक</span></th><th><span>विवरण</span></th></tr>${m.dashakoota.kootas.map(k => `<tr><td>${esc(ENM ? k.key.replace('_', ' ') : k.name_hi)}</td><td>${k.score}/${k.max}</td><td class="muted">${esc(ENM ? k.detail_en : k.detail_hi)}</td></tr>`).join('')}</table>
+        <div class="muted" style="font-size:.8rem">${esc(ENM ? m.dashakoota.note_en : m.dashakoota.note_hi)}</div></details>` : ''}
       <div class="banner">यह अंक एक पारंपरिक पैमाना है। इसमें दोनों कुंडलियों की दशा, सप्तम भाव और ग्रह-बल नहीं देखे जाते, भकूट-नाड़ी परिहार की प्रचलित शर्तें जाँची जाती हैं (ड्राफ़्ट)। ‘ड्राफ़्ट’ वाले कूट की विद्वान-समीक्षा बाकी है।</div>`;
     for (const role of ['boy', 'girl']) { const ch = m[role + '_chart']; if (!ch) continue; const pm = Object.fromEntries(ch.planets.map(p => [p.name, p]));
       drawChart($('m_' + role), ch.houses.map(h => ({sign: h.sign, planets: h.planets.map(n => ({name: n, short: pm[n].short_hi, retro: pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms}`}))})), 'match'); }
@@ -1711,6 +1716,22 @@ $('repbtn').addEventListener('click', async () => {
   const q = new URLSearchParams(location.search).get('consult');
   load().then(() => { if (q) { showTab('t-consult'); if ($('cs_myphone').value) thread(q); } });
 })();
+
+// ---- year-ahead transit table (Jupiter/Saturn/Rahu/Mars/Sun by month, house from Moon, BAV bindus, MD/AD, change dates)
+$('yago').onclick = async () => {
+  if (!window.lastBody) return; $('yaout').innerHTML = '<div class="muted"><span>बन रही है…</span></div>';
+  try {
+    const r = await apiFetch('/v1/chart/year_ahead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(window.lastBody)});
+    const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+    const en = (window.getLang ? window.getLang() : 'hi') === 'en';
+    const MON = en ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] : ['जन','फ़र','मार्च','अप्रै','मई','जून','जुला','अग','सित','अक्टू','नव','दिस'];
+    const cell = p => `${esc(p.sign_hi)}${p.retrograde ? '<sup>व</sup>' : ''}<br><span class="muted" style="font-size:.75rem">${p.house_from_moon}${en ? 'H' : 'भ'} · ${p.bindus ?? '—'}</span>`;
+    $('yaout').innerHTML = `<table style="font-size:.85rem"><tr><th></th><th><span>गुरु</span></th><th><span>शनि</span></th><th><span>राहु</span></th><th><span>मंगल</span></th><th><span>सूर्य</span></th><th><span>दशा</span></th></tr>` +
+      d.months.map(m => `<tr><td><b>${MON[m.month - 1]} ${m.year}</b></td>${['Jupiter', 'Saturn', 'Rahu', 'Mars', 'Sun'].map(p => `<td>${cell(m.planets[p])}</td>`).join('')}<td>${m.dasha.map(x => esc(en ? x.lord : x.lord_hi)).join(' / ')}</td></tr>`).join('') + `</table>` +
+      (d.events.length ? `<details style="margin-top:6px"><summary><span>बदलाव की तारीख़ें</span> (${d.events.length})</summary>${d.events.map(e => `<div>• ${esc(e.date)}: <span>${esc(en ? e.en : e.hi)}</span></div>`).join('')}</details>` : '') +
+      `<div class="muted" style="font-size:.8rem;margin-top:4px"><span>${esc(en ? d.note_en : d.note_hi)}</span> <span>(भाव आपके चंद्र से; संख्या = उस राशि में ग्रह की अष्टकवर्ग रेखाएँ, 5+ शुभ)</span></div>`;
+  } catch (e) { $('yaout').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+};
 
 // ---- AI summaries (chart / match / varshaphal) — plain-language digest of the app's own computed facts
 window.aiSummary = async function (kind, body, target) {

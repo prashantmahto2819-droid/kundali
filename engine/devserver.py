@@ -177,6 +177,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/ai/palm": handlers.ai_palm_from_payload,
                   "/v1/ai/status": handlers.ai_status_from_payload,
                   "/v1/ai/summary": handlers.ai_summary_from_payload,
+                  "/v1/chart/year_ahead": handlers.year_ahead_from_payload,
                   "/v1/ai/calendar_text": handlers.ai_calendar_text_from_payload,
                   "/v1/ai/quiz": handlers.ai_quiz_from_payload,
                   "/v1/consult/request": handlers.consult_request_from_payload,

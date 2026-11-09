@@ -12,7 +12,8 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from .constants import PLANETS_HI, SIGNS, SIGNS_HI
+from .constants import NAKSHATRAS, PLANETS_HI, SIGNS, SIGNS_HI
+NAKSHATRAS_INDEX = {n: i for i, n in enumerate(NAKSHATRAS)}
 from .dasha import current_periods
 from .ephemeris import AnalyticBackend
 from .rules import gochara_text
@@ -99,3 +100,80 @@ def alerts(chart: dict, day: date, tz: str = "Asia/Kolkata", ahead_days: int = 7
     return {"date": day.isoformat(), "today": today, "upcoming": upcoming,
             "note_hi": "दशा और गोचर परिवर्तन की सूचना; यह समय-संकेत है, घटना की भविष्यवाणी नहीं।",
             "note_en": "Notices of dasha and transit changes; a timing pointer, not a prediction of events."}
+
+
+# ---------------------------------------------------------------- ashtakavarga transit score (personal day) and year-ahead table
+AV_PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+
+
+def personal_day(chart: dict, day: date, tz: str = "Asia/Kolkata") -> dict:
+    """Today's transits scored against the natal Ashtakavarga: for each planet, the bindus of its own BAV in the sign it transits
+    (≥5 favourable, ≤3 weak) and the SAV of that sign; plus the Moon's house from the natal Moon (chandra-bala) and tara-bala."""
+    av = chart.get("ashtakavarga") or {}
+    pos = positions_at(_noon(day, tz), _B)
+    moon_sign = next(p for p in chart["planets"] if p["name"] == "Moon")["sign"]
+    moon_nak = NAKSHATRAS_INDEX[next(p for p in chart["planets"] if p["name"] == "Moon")["nakshatra"]]
+    rows, score, mx = [], 0.0, 0.0
+    for pl in AV_PLANETS:
+        s = pos[pl]["sign"]
+        bav = (av.get("bav") or {}).get(pl, {}).get("by_sign")
+        b = bav[s] if bav else None
+        sav = (av.get("sav") or {}).get("by_sign", [None] * 12)[s] if av.get("sav") else None
+        if b is None:
+            continue
+        w = {"Moon": 1.0, "Sun": 0.8, "Mars": 1.0, "Mercury": 0.7, "Jupiter": 1.3, "Venus": 0.9, "Saturn": 1.3}[pl]
+        score += w * (b / 8.0); mx += w
+        rows.append({"planet": pl, "planet_hi": PLANETS_HI[pl], "sign": s, "sign_hi": SIGNS_HI[s], "bindus": b, "sav": sav, "house_from_moon": (s - moon_sign) % 12 + 1,
+                     "grade": "good" if b >= 5 else "weak" if b <= 3 else "mixed"})
+    pct = round(100 * score / mx) if mx else 0
+    tm = pos["Moon"]["sign"]
+    chandra = (tm - moon_sign) % 12 + 1
+    chandra_good = chandra in (1, 3, 6, 7, 10, 11)
+    tnak = int(pos["Moon"]["longitude"] // (360 / 27)) if "longitude" in pos["Moon"] else None
+    tara = None
+    if tnak is not None:
+        t = ((tnak - moon_nak) % 27) % 9 + 1
+        tara = {"n": t, "hi": ["जन्म", "संपत", "विपत", "क्षेम", "प्रत्यरि", "साधक", "वध", "मित्र", "अति-मित्र"][t - 1], "good": t in (2, 4, 6, 8, 9)}
+    good = [r["planet_hi"] for r in rows if r["grade"] == "good"]
+    weak = [r["planet_hi"] for r in rows if r["grade"] == "weak"]
+    text_hi = (f"अष्टकवर्ग के अनुसार आज {pct}/100: " + (f"{', '.join(good)} अनुकूल बिंदुओं में" if good else "कोई ग्रह विशेष अनुकूल नहीं") + (f"; {', '.join(weak)} कम बिंदुओं में" if weak else "") +
+               f"। चंद्र आपके चंद्र से {chandra}वें ({'अनुकूल' if chandra_good else 'सामान्य'})" + (f", तारा {tara['hi']} ({'शुभ' if tara['good'] else 'सावधानी'})" if tara else "") + "।")
+    text_en = (f"By Ashtakavarga today scores {pct}/100: " + (f"{', '.join(r['planet'] for r in rows if r['grade'] == 'good')} in favourable bindus" if good else "no planet especially favourable") +
+               (f"; {', '.join(r['planet'] for r in rows if r['grade'] == 'weak')} in low bindus" if weak else "") + f". Moon {chandra} from your Moon ({'favourable' if chandra_good else 'ordinary'})" +
+               (f", tara {tara['n']} ({'good' if tara['good'] else 'care'})" if tara else "") + ".")
+    return {"date": day.isoformat(), "score": pct, "planets": rows, "chandra_bala": {"house": chandra, "good": chandra_good}, "tara_bala": tara, "text_hi": text_hi, "text_en": text_en,
+            "note_hi": "व्यक्तिगत दिन-स्कोर: गोचर ग्रह की अपनी भिन्नाष्टकवर्ग रेखाएँ उस राशि में (5+ शुभ), सर्वाष्टकवर्ग, चंद्रबल और ताराबल — प्रवृत्ति-संकेत।",
+            "note_en": "Personal day score: each transiting planet's own BAV bindus in its sign (5+ good), SAV, chandra-bala and tara-bala — a tendency pointer."}
+
+
+def year_ahead(chart: dict, start: date, tz: str = "Asia/Kolkata", months: int = 12) -> dict:
+    """Month-by-month transit table for this chart: where Jupiter, Saturn, Rahu, Mars and the Sun sit (house from the natal Moon,
+    BAV bindus), the running MD/AD, and the dasha/sign-change dates within the window (from _day_changes, scanned by day)."""
+    av = (chart.get("ashtakavarga") or {}).get("bav") or {}
+    moon_sign = next(p for p in chart["planets"] if p["name"] == "Moon")["sign"]
+    rows = []
+    d = start.replace(day=1)
+    for i in range(months):
+        y, m = d.year + (d.month - 1 + i) // 12, (d.month - 1 + i) % 12 + 1
+        mid = date(y, m, 15)
+        pos = positions_at(_noon(mid, tz), _B)
+        run = current_periods(chart["dasha"], _noon(mid, tz))
+        pl = {}
+        for p in ("Jupiter", "Saturn", "Rahu", "Mars", "Sun"):
+            s = pos[p]["sign"]
+            b = av.get(p, {}).get("by_sign", [None] * 12)[s] if p in av else None
+            pl[p] = {"sign": s, "sign_hi": SIGNS_HI[s], "house_from_moon": (s - moon_sign) % 12 + 1, "bindus": b, "retrograde": pos[p].get("retrograde", False)}
+        rows.append({"year": y, "month": m, "planets": pl, "dasha": [{"level": r["level"], "lord": r["lord"], "lord_hi": PLANETS_HI[r["lord"]]} for r in run if r["level"] <= 2]})
+    # events in the window
+    events = []
+    cur = start
+    end_y, end_m = start.year + (start.month - 1 + months) // 12, (start.month - 1 + months) % 12 + 1
+    end = date(end_y, end_m, 1)
+    while cur < end:
+        for ev in _day_changes(chart, cur - timedelta(days=1), cur, tz):
+            if ev["kind"] in ("dasha", "sadesati", "ashtama") or (ev["kind"] == "ingress" and ev["planet"] in ("Jupiter", "Saturn", "Rahu", "Mars")) or ev["kind"] == "station":
+                events.append({"date": cur.isoformat(), **ev})
+        cur += timedelta(days=1)
+    return {"from": start.isoformat(), "months": rows, "events": events,
+            "note_hi": "आगामी वर्ष की गोचर-सारणी: गुरु, शनि, राहु, मंगल, सूर्य की राशि (आपके चंद्र से भाव, उस राशि में उनकी अष्टकवर्ग रेखाएँ), चल रही महादशा-अंतर्दशा, और बदलाव की तारीख़ें।",
+            "note_en": "Year-ahead transit table: Jupiter, Saturn, Rahu, Mars, Sun by sign (house from your Moon, their BAV bindus there), running MD/AD, and the change dates."}

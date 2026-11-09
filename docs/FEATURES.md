@@ -26,6 +26,12 @@ Ashtakoota 36 points with nadi/bhakoot/gana parihara, Mangal dosha with cancella
 ## AI (optional, multi-provider)
 Chat grounded in the asker's chart, the rule/glossary corpus and today's panchang; providers Gemini / Groq / OpenRouter (DeepSeek etc.) / Ollama / DeepSeek / OpenAI / Anthropic / any OpenAI-compatible, tried in order with fallback; per-user daily quota; retrieval answer when no provider. Palm photo → the model fills the 16-feature checklist, the app interprets. The WhatsApp bot answers free-text questions through the same chain.
 
+## Dashakoota matching (South Indian)
+Ten kootas (Dina, Gana, Mahendra, Stree Deergha, Yoni, Rasi, Rasyadhipati, Vasya, Rajju, Vedha) out of 36 alongside Ashtakoota; same-rajju and nakshatra-vedha flagged as blockers.
+
+## Personal day score and year table
+Transits scored against the natal Ashtakavarga (each planet's BAV bindus in its transit sign, SAV, chandra-bala, tara-bala) → a daily personal score line (Today card, WhatsApp); `/v1/chart/year_ahead` month-by-month table of Jupiter/Saturn/Rahu/Mars/Sun with house-from-Moon, bindus, MD/AD and change dates.
+
 ## Owner admin panel
 `/admin.html` (admin key): KPIs, WhatsApp subscribers and logs, bot inbox, astrologers and consultation threads, wallet top-ups, AI providers/usage, rule extraction, festival overrides — edits persist on the data volume.
 
