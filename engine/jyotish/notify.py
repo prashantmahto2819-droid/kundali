@@ -126,8 +126,8 @@ def relay_ready() -> bool:
     return bool(c["url"] and c["key"] and c["session"])
 
 
-def send_whatsapp(phone: str, text: str, image_png: bytes | None = None) -> dict:
-    """POST to Vivid Relay (text, or an image with the text as caption). Returns {ok, detail}. Never raises."""
+def send_whatsapp(phone: str, text: str, image_png: bytes | None = None, extra: dict | None = None) -> dict:
+    """POST to Vivid Relay (text; image with caption; or interactive `extra` such as {"list": …} / {"buttons": …}). Never raises."""
     import base64
     c = relay_config()
     if not relay_ready():
@@ -135,6 +135,8 @@ def send_whatsapp(phone: str, text: str, image_png: bytes | None = None) -> dict
     payload = {"to": phone, "text": text, "preview": False}
     if image_png:
         payload["media"] = {"type": "image", "base64": base64.b64encode(image_png).decode(), "mimetype": "image/png", "filename": "panchang.png"}
+    if extra:
+        payload.update(extra)
     body = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(f"{c['url']}/api/sessions/{c['session']}/send", data=body, method="POST",
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {c['key']}"})

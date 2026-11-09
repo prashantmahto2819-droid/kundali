@@ -159,7 +159,8 @@ def reply_rashifal(sub: dict | None, words: list[str], hi: bool) -> str:
         lines = [("🔮 *आज का राशिफल* " if hi else "🔮 *Today's rashifal* ") + today.strftime("%d-%m-%Y")]
         for s in r["signs"]:
             lines.append(f'• {s["sign_name_hi"] if hi else s["sign_name"]}: {s["grade_hi"] if hi else s["grade_en"]} ({s["score"]})')
-        lines.append(("\nअपनी राशि का विस्तार: *राशिफल मेष* जैसे लिखिए।" if hi else "\nFor one sign in detail send e.g. *rashifal mesh*."))
+        lines.append(("\nअपनी राशि का विस्तार: नीचे राशि चुनिए या *राशिफल मेष* लिखिए।" if hi else "\nFor one sign in detail pick below or send *rashifal mesh*."))
+        _LAST_EXTRA.update(sign_list(hi))
         return "\n".join(lines)
     s = r["signs"][sign]
     lines = [(f'🔮 *{s["sign_name_hi"]} — आज का राशिफल* ({today.strftime("%d-%m-%Y")})' if hi else f'🔮 *{s["sign_name"]} — today\'s rashifal* ({today.strftime("%d-%m-%Y")})'),
@@ -175,6 +176,24 @@ def reply_rashifal(sub: dict | None, words: list[str], hi: bool) -> str:
 
 
 _LAST_CARD: dict = {}
+_LAST_EXTRA: dict = {}
+
+
+def menu_list(hi: bool) -> dict:
+    rows = [("cmd:panchang", "पंचांग" if hi else "Panchang", "आज का पंचांग, तिथि-समय" if hi else "today's panchang with timings"),
+            ("cmd:rashifal", "राशिफल" if hi else "Rashifal", "अपनी राशि चुनिए" if hi else "pick your sign"),
+            ("cmd:vrat", "व्रत-पर्व" if hi else "Vrats & festivals", "इस सप्ताह" if hi else "this week"),
+            ("cmd:muhurta:marriage", "विवाह मुहूर्त" if hi else "Marriage muhurta", "अगले 30 दिन" if hi else "next 30 days"),
+            ("cmd:muhurta:griha_pravesh", "गृह प्रवेश मुहूर्त" if hi else "Griha pravesh muhurta", "अगले 30 दिन" if hi else "next 30 days"),
+            ("cmd:start", "रोज़ सुबह पंचांग पाइए" if hi else "Daily morning panchang", "सब्सक्राइब" if hi else "subscribe"),
+            ("cmd:stop", "रोज़ का संदेश बंद" if hi else "Stop daily message", "" )]
+    return {"list": {"title": "कुंडली ऐप" if hi else "Kundali app", "button_text": "विकल्प चुनिए" if hi else "Choose", "footer": SITE.replace("https://", ""),
+                     "sections": [{"title": "क्या चाहिए?" if hi else "What would you like?", "rows": [{"id": i, "title": t, **({"description": d} if d else {})} for i, t, d in rows]}]}}
+
+
+def sign_list(hi: bool) -> dict:
+    rows = [{"id": f"cmd:rashifal:{SIGNS[i].lower()}", "title": SIGNS_HI[i] if hi else SIGNS[i]} for i in range(12)]
+    return {"list": {"title": "राशि चुनिए" if hi else "Pick a sign", "button_text": "राशि" if hi else "Sign", "sections": [{"title": "मेष से मीन" if hi else "Mesha to Meena", "rows": rows}]}}
 
 
 def reply_kundali(text: str, words: list[str], hi: bool) -> str:
@@ -305,6 +324,7 @@ def answer(phone: str, text: str, name: str = "") -> str:
         ans = reply_ai(phone, text, sub, hi)
         if ans:
             return ans
+    _LAST_EXTRA.update(menu_list(hi))
     return reply_help(hi, name)
 
 
@@ -360,27 +380,31 @@ def handle_webhook(body: bytes, headers: dict, sender=None) -> dict:
     if evt.get("event") != "message":
         return {"ok": True, "handled": False, "reason": "event ignored"}
     d = evt.get("data") or {}
-    if d.get("from_me") or d.get("chat_type") not in (None, "dm", "user", "private") or d.get("type") != "text":
+    if d.get("from_me") or d.get("chat_type") not in (None, "dm", "user", "private") or d.get("type") not in ("text", "button_reply", "list_reply"):
         return {"ok": True, "handled": False, "reason": "not a direct text message"}
     text = str(d.get("text") or "").strip()
+    if d.get("type") in ("button_reply", "list_reply") and str(d.get("button_id") or "").startswith("cmd:"):
+        label = str(d.get("text") or "").strip()
+        text = (str(d["button_id"])[4:].replace(":", " ").strip() + " " + label).strip()   # "cmd:rashifal:mesha" + tapped label → keeps the user's script for language
     phone = re.sub(r"\D", "", str(d.get("from_phone") or d.get("chat_phone") or ""))
     msg_id = str(d.get("id") or "")
     if not text or not phone:
         return {"ok": True, "handled": False, "reason": "empty"}
     if msg_id and _seen(msg_id, phone, text):
         return {"ok": True, "handled": False, "reason": "duplicate"}
-    _LAST_CARD.pop("png", None)
+    _LAST_CARD.pop("png", None); _LAST_EXTRA.clear()
     reply = answer(phone, text, str(d.get("push_name") or ""))
     png = _LAST_CARD.pop("png", None)
+    extra = dict(_LAST_EXTRA); _LAST_EXTRA.clear()
     send = sender or notify.send_whatsapp
     res = None
-    if png:
+    if png or extra:
         try:
-            res = send(phone, reply, png)
+            res = send(phone, reply, png, extra or None) if extra else send(phone, reply, png)
         except TypeError:
             res = None
     if res is None or not res.get("ok"):
-        res = send(phone, reply)
+        res = send(phone, reply)                       # plain text always gets through
     if msg_id:
         _mark(msg_id, res["ok"])
     notify.subs().log(phone, "inbound", res["ok"], (text[:60] + " → " + res["detail"])[:500])

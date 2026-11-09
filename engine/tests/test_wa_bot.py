@@ -112,3 +112,24 @@ def test_kundali_command_sends_image(store, monkeypatch):
     evt["data"]["id"] = "K2"
     wa_bot.handle_webhook(json.dumps(evt).encode(), {}, lambda p, t: (sent2.append(t) or {"ok": True, "detail": ""}))
     assert sent2 and "लग्न" in sent2[0]
+
+
+def test_interactive_menu_and_list_reply(store, monkeypatch):
+    monkeypatch.delenv("RELAY_WEBHOOK_SECRET", raising=False)
+    sent = []
+    def sender(phone, text, image=None, extra=None):
+        sent.append((phone, text, image, extra)); return {"ok": True, "detail": ""}
+    evt = {"event": "message", "data": {"id": "M1", "from_phone": "919876543210", "chat_type": "dm", "type": "text", "text": "नमस्ते"}}
+    wa_bot.handle_webhook(json.dumps(evt).encode(), {}, sender)
+    assert sent[-1][3] and sent[-1][3]["list"]["sections"][0]["rows"][0]["id"] == "cmd:panchang"
+    evt["data"] = {**evt["data"], "id": "M2", "type": "list_reply", "button_id": "cmd:rashifal", "text": "राशिफल"}
+    wa_bot.handle_webhook(json.dumps(evt).encode(), {}, sender)
+    assert sent[-1][1].count("•") == 12 and sent[-1][3]["list"]["sections"][0]["rows"][0]["id"] == "cmd:rashifal:mesha"
+    evt["data"] = {**evt["data"], "id": "M3", "button_id": "cmd:rashifal:mesha", "text": "मेष"}
+    wa_bot.handle_webhook(json.dumps(evt).encode(), {}, sender)
+    assert "मेष — आज का राशिफल" in sent[-1][1] and sent[-1][3] is None
+    # old 2-arg sender: interactive extra is dropped, text still goes
+    sent2 = []
+    evt["data"] = {**evt["data"], "id": "M4", "type": "text", "text": "help"}
+    wa_bot.handle_webhook(json.dumps(evt).encode(), {}, lambda p, t: (sent2.append(t) or {"ok": True, "detail": ""}))
+    assert sent2 and "panchang" in sent2[0].lower()
