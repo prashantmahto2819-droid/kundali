@@ -197,7 +197,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div class="err" id="wa_err"></div><pre id="wa_out" class="muted" style="white-space:pre-wrap;font-size:.85rem;margin:6px 0 0"></pre>
     </div>
     <div class="card" id="today"><b>आज क्या ख़ास है</b><div id="todaypanchang" class="muted" style="font-size:.9rem;margin:4px 0 6px"></div><div id="todaylist"></div></div>
-    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="aisumbtn">AI सार</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
+    <div class="actions"><button type="button" id="repbtn">रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="askbtn">इस कुंडली के बारे में पूछिए</button><button type="button" class="ghost" id="sharebtn">लिंक कॉपी करें</button><button type="button" class="ghost" id="aisumbtn">AI सार</button><button type="button" class="ghost" id="cardbtn">कुंडली कार्ड साझा करें</button><button type="button" class="ghost" id="savebtn" style="display:none">सेव करें</button><span class="muted" id="reperr"></span></div>
     <nav class="subtabs" id="subtabs">
       <button type="button" class="on" data-sub="s-summary">सारांश</button>
       <button type="button" data-sub="s-planets">ग्रह व बल</button>
@@ -1756,6 +1756,14 @@ window.aiSummary = async function (kind, body, target) {
   } catch (e) { el.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 };
 $('vaisum').onclick = () => { if (window._lastVarshaBody) window.aiSummary('varshaphal', window._lastVarshaBody, 'vaisumout'); };
+$('cardbtn').onclick = async () => {
+  if (!window.lastBody) return;
+  try {
+    const r = await apiFetch('/v1/chart/card.png', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...window.lastBody, lang: window.getLang ? window.getLang() : 'hi', chart_style: window.chartStyle})});
+    if (!r.ok) throw new Error('कार्ड नहीं बना'); const blob = await r.blob(); const file = new File([blob], 'kundali.png', {type: 'image/png'});
+    if (navigator.canShare && navigator.canShare({files: [file]})) await navigator.share({files: [file], title: 'कुंडली'}); else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kundali.png'; a.click(); }
+  } catch (e) { alert(e.message); }
+};
 $('aisumbtn').onclick = () => { if (!window.lastBody) return; let box = $('aisumout'); if (!box) { box = document.createElement('div'); box.id = 'aisumout'; $('summary').insertAdjacentElement('afterend', box); } window.aiSummary('chart', window.lastBody, box); };
 
 // ---- AI chat (multi-provider on the server; retrieval fallback when no provider)

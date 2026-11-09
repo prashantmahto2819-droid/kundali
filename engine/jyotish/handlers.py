@@ -959,3 +959,12 @@ def panchang_card_from_query(q: dict) -> bytes:
     biz = {"name": str(q.get("name") or os.environ.get("KUNDALI_BRAND_NAME", ""))[:60], "tagline": str(q.get("tagline") or os.environ.get("KUNDALI_BRAND_TAGLINE", ""))[:80],
            "website": str(q.get("website") or os.environ.get("KUNDALI_SITE_URL", "https://kundali.vividbrandify.com").replace("https://", ""))[:60]}
     return card.render_panchang_card(m["days"][0], d, str(q.get("place") or "")[:40], "en" if q.get("lang") == "en" else "hi", biz, str(q.get("theme") or "saffron"))
+
+
+def chart_card_from_payload(payload: dict) -> bytes:
+    """POST /v1/chart/card.png — body = chart request (+ lang, theme, chart_style, name/tagline) → PNG."""
+    from . import card
+    chart = chart_from_payload(payload)
+    biz = {"name": str(payload.get("brand_name") or os.environ.get("KUNDALI_BRAND_NAME", ""))[:60], "tagline": str(payload.get("brand_tagline") or os.environ.get("KUNDALI_BRAND_TAGLINE", ""))[:80],
+           "website": os.environ.get("KUNDALI_SITE_URL", "https://kundali.vividbrandify.com").replace("https://", "")}
+    return card.render_kundali_card(chart, "en" if payload.get("lang") == "en" else "hi", biz, str(payload.get("theme") or "saffron"), "south" if str(payload.get("chart_style", "")).lower() == "south" else "north")

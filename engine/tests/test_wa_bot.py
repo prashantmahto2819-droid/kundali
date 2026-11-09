@@ -97,3 +97,18 @@ def test_webhook_without_secret_accepts(store, monkeypatch):
     evt = {"event": "message", "data": {"id": "Z1", "from_phone": "919876543210", "chat_type": "dm", "type": "text", "text": "panchang"}}
     r = wa_bot.handle_webhook(json.dumps(evt).encode(), {}, lambda p, t: {"ok": False, "detail": "HTTP 503"})
     assert r["handled"] and r["sent"] is False and "Today's panchang" in r["reply"]
+
+
+def test_kundali_command_sends_image(store, monkeypatch):
+    monkeypatch.delenv("RELAY_WEBHOOK_SECRET", raising=False)
+    sent = []
+    def sender(phone, text, image=None):
+        sent.append((phone, text, image)); return {"ok": True, "detail": ""}
+    evt = {"event": "message", "data": {"id": "K1", "from_phone": "919876543210", "chat_type": "dm", "type": "text", "text": "कुंडली 15-05-1990 10:30 जबलपुर"}}
+    r = wa_bot.handle_webhook(json.dumps(evt).encode(), {}, sender)
+    assert r["handled"] and sent[-1][2] is not None and sent[-1][2][:4] == b"\x89PNG" and "लग्न" in sent[-1][1]
+    # a 2-arg sender still works (text only)
+    sent2 = []
+    evt["data"]["id"] = "K2"
+    wa_bot.handle_webhook(json.dumps(evt).encode(), {}, lambda p, t: (sent2.append(t) or {"ok": True, "detail": ""}))
+    assert sent2 and "लग्न" in sent2[0]

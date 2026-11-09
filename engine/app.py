@@ -460,6 +460,15 @@ def consult_admin(req: NotifyRequest, request: Request):
     return _consult_route(handlers.consult_admin_from_payload, req, request)
 
 
+@app.post("/v1/chart/card.png")
+def chart_card(req: NotifyRequest):
+    from fastapi.responses import Response
+    try:
+        return Response(content=handlers.chart_card_from_payload(req.model_dump()), media_type="image/png")
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.post("/v1/chart/year_ahead")
 def chart_year_ahead(req: NotifyRequest):
     return _consult_route(handlers.year_ahead_from_payload, req)

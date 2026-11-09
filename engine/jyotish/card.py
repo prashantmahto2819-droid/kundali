@@ -116,3 +116,88 @@ def render_panchang_card(day: dict, d: date, place: str = "", lang: str = "hi", 
     buf = io.BytesIO()
     img.save(buf, "PNG", optimize=True)
     return buf.getvalue()
+
+
+# ---------------------------------------------------------------- kundali card (chart image + key facts)
+def _draw_north(dr, cells, x0, y0, S, accent, ink, soft, f_sign, f_pl):
+    from .report import _HOUSES
+    k = S / 400.0
+    for h in range(1, 13):
+        pts, (cx, cy) = _HOUSES[h]
+        dr.polygon([(x0 + x * k, y0 + y * k) for x, y in pts], outline=accent, width=3)
+        cell = cells[h - 1]
+        dr.text((x0 + cx * k, y0 + (cy - 18) * k), str(cell["sign"] + 1), font=f_sign, fill="#8a7a64", anchor="mm")
+        pl = cell["planets"]
+        for i, (short, retro) in enumerate(pl):
+            col, row = i % 3, i // 3
+            n = min(3, len(pl) - row * 3)
+            px = x0 + (cx + (col - (n - 1) / 2) * 26) * k
+            py = y0 + (cy + 10 + row * 22) * k
+            dr.text((px, py), short + ("ᵛ" if retro else ""), font=f_pl, fill=ink, anchor="mm")
+
+
+def _draw_south(dr, cells, x0, y0, S, accent, ink, soft, f_sign, f_pl):
+    from .report import _SOUTH_POS
+    c = S / 4.0
+    for i, cell in enumerate(cells):
+        col, row = _SOUTH_POS[cell["sign"]]
+        x, y = x0 + col * c, y0 + row * c
+        dr.rectangle((x, y, x + c, y + c), outline=accent, width=3)
+        if i == 0:
+            dr.line((x, y, x + c * 0.28, y + c * 0.28), fill=accent, width=3)
+        dr.text((x + c - 10, y + 16), str(cell["sign"] + 1), font=f_sign, fill="#8a7a64", anchor="rm")
+        pl = cell["planets"]
+        for k, (short, retro) in enumerate(pl):
+            cc, rr = k % 3, k // 3
+            n = min(3, len(pl) - rr * 3)
+            dr.text((x + c / 2 + (cc - (n - 1) / 2) * 26 * (S / 400.0), y + c * 0.45 + rr * 22 * (S / 400.0)), short + ("ᵛ" if retro else ""), font=f_pl, fill=ink, anchor="mm")
+
+
+def render_kundali_card(chart: dict, lang: str = "hi", business: dict | None = None, theme: str = "saffron", style: str = "north", size: tuple[int, int] = (1080, 1350)) -> bytes:
+    from .report import _d1_cells
+    hi = lang != "en"
+    bg, accent, ink, soft = THEMES.get(theme, THEMES["saffron"])
+    W, H = size
+    img = Image.new("RGB", (W, H), bg)
+    dr = ImageDraw.Draw(img)
+    f_big, f_h1, f_h2, f_b, f_s = _font(56, True), _font(40, True), _font(32, True), _font(28), _font(24)
+    inp = chart["input"]
+    name = inp.get("name") or ("जन्म कुंडली" if hi else "Birth chart")
+    dr.rounded_rectangle((40, 40, W - 40, 230), 36, fill=accent)
+    _txt(dr, (W // 2, 100), name, f_big, "#fff", "mm", maxw=W - 140)
+    _txt(dr, (W // 2, 170), f"{inp['date']}  ·  {inp['time']}  ·  {inp.get('place') or (str(inp['lat']) + ', ' + str(inp['lon']))}", f_s, "#fff", "mm", maxw=W - 140)
+    # chart
+    S = 620
+    x0 = (W - S) // 2; y0 = 270
+    dr.rounded_rectangle((x0 - 20, y0 - 20, x0 + S + 20, y0 + S + 20), 28, fill="#ffffff" if theme != "dark" else "#241c15", outline=soft, width=2)
+    cells = _d1_cells(chart)
+    (_draw_south if style == "south" else _draw_north)(dr, cells, x0, y0, S, accent, ink, soft, _font(20), _font(26, True))
+    # facts
+    y = y0 + S + 50
+    lg = chart["lagna"]; moon = next(p for p in chart["planets"] if p["name"] == "Moon"); sun = next(p for p in chart["planets"] if p["name"] == "Sun")
+    run = chart.get("dasha_running") or []
+    from .constants import PLANETS_HI
+    dasha = " › ".join((PLANETS_HI[r["lord"]] if hi else r["lord"]) + f" ({r['end'][8:10]}-{r['end'][5:7]}-{r['end'][:4]})" for r in run[:2])
+    rows = [((("लग्न" if hi else "Lagna"), f"{lg['sign_name_hi'] if hi else lg['sign_name']} · {lg['nakshatra_hi'] if hi else lg['nakshatra']}")),
+            ((("चंद्र राशि · नक्षत्र" if hi else "Moon sign · nakshatra"), f"{moon['sign_name_hi'] if hi else moon['sign_name']} · {moon['nakshatra_hi'] if hi else moon['nakshatra']} ({moon['pada']})")),
+            ((("सूर्य राशि" if hi else "Sun sign"), (sun["sign_name_hi"] if hi else sun["sign_name"]))),
+            ((("चल रही दशा" if hi else "Running dasha"), dasha or "—"))]
+    cw = (W - 100) // 2
+    for i, (lbl, val) in enumerate(rows):
+        xx = 40 + (i % 2) * (cw + 20); yy = y + (i // 2) * 120
+        dr.rounded_rectangle((xx, yy, xx + cw, yy + 100), 22, fill=soft)
+        _txt(dr, (xx + 24, yy + 18), lbl, f_s, accent)
+        _txt(dr, (xx + 24, yy + 54), val, f_h2, ink, maxw=cw - 48)
+    y += 2 * 120 + 10
+    yp = [yg for yg in chart.get("yogas", []) if yg.get("present")][:4]
+    if yp:
+        _txt(dr, (60, y), ("योग: " if hi else "Yogas: ") + ", ".join((yg.get("name_hi") if hi else yg.get("name")) for yg in yp), f_b, ink, maxw=W - 120)
+    b = business or {}
+    dr.rectangle((40, H - 130, W - 40, H - 40), fill=accent)
+    _txt(dr, (70, H - 105), b.get("name") or ("कुंडली ऐप" if hi else "Kundali app"), f_h2, "#fff", maxw=W - 320)
+    _txt(dr, (70, H - 66), b.get("tagline") or ("लाहिड़ी अयनांश · संपूर्ण राशि भाव" if hi else "Lahiri ayanamsa · whole-sign houses"), f_s, "#fff", maxw=W - 320)
+    if b.get("website"):
+        _txt(dr, (W - 70, H - 85), b["website"], f_s, "#fff", "rm", maxw=320)
+    buf = io.BytesIO()
+    img.save(buf, "PNG", optimize=True)
+    return buf.getvalue()

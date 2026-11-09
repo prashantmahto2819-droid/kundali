@@ -26,6 +26,9 @@ Ashtakoota 36 points with nadi/bhakoot/gana parihara, Mangal dosha with cancella
 ## AI (optional, multi-provider)
 Chat grounded in the asker's chart, the rule/glossary corpus and today's panchang; providers Gemini / Groq / OpenRouter (DeepSeek etc.) / Ollama / DeepSeek / OpenAI / Anthropic / any OpenAI-compatible, tried in order with fallback; per-user daily quota; retrieval answer when no provider. Palm photo → the model fills the 16-feature checklist, the app interprets. The WhatsApp bot answers free-text questions through the same chain.
 
+## Kundali image card
+Shareable PNG of the birth chart (North or South style) with lagna, Moon sign/nakshatra, Sun sign, running dasha, yogas and branding — "कुंडली कार्ड साझा करें" on the summary, `POST /v1/chart/card.png`, and sent as an image by the WhatsApp bot's कुंडली command.
+
 ## Panchang image card
 Shareable 1080×1350 PNG of the day's panchang (Pillow, Devanagari shaping) — "कार्ड साझा करें" on the Today tab (Web Share / download), `GET /v1/panchang/card.png`, and sent with the WhatsApp daily message as an image with the text as caption (per-subscriber toggle; falls back to text if media fails). Footer branding from `KUNDALI_BRAND_NAME/TAGLINE`.
 

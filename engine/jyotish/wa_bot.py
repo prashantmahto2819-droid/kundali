@@ -174,6 +174,9 @@ def reply_rashifal(sub: dict | None, words: list[str], hi: bool) -> str:
     return "\n".join(lines)
 
 
+_LAST_CARD: dict = {}
+
+
 def reply_kundali(text: str, words: list[str], hi: bool) -> str:
     from .handlers import chart_from_payload, BadRequest
     md, mt = _DATE.search(text), _TIME.search(text)
@@ -191,6 +194,12 @@ def reply_kundali(text: str, words: list[str], hi: bool) -> str:
         ch = chart_from_payload({"date": f"{y:04d}-{m:02d}-{d:02d}", "time": f"{hh:02d}:{mm:02d}", "tz": pl["tz"], "lat": pl["lat"], "lon": pl["lon"]})
     except (BadRequest, ValueError) as exc:
         return ("जन्म-विवरण समझ नहीं आया: " if hi else "Could not read the birth details: ") + str(exc)
+    try:                                              # the image card goes with the text (handle_webhook picks it up)
+        from . import card
+        if card.font_available():
+            _LAST_CARD["png"] = card.render_kundali_card(ch, "hi" if hi else "en", {"name": os.environ.get("KUNDALI_BRAND_NAME", ""), "website": SITE.replace("https://", "")})
+    except Exception:
+        _LAST_CARD.pop("png", None)
     moon = next(p for p in ch["planets"] if p["name"] == "Moon")
     sun = next(p for p in ch["planets"] if p["name"] == "Sun")
     run = ch.get("dasha_running") or []
@@ -360,8 +369,18 @@ def handle_webhook(body: bytes, headers: dict, sender=None) -> dict:
         return {"ok": True, "handled": False, "reason": "empty"}
     if msg_id and _seen(msg_id, phone, text):
         return {"ok": True, "handled": False, "reason": "duplicate"}
+    _LAST_CARD.pop("png", None)
     reply = answer(phone, text, str(d.get("push_name") or ""))
-    res = (sender or notify.send_whatsapp)(phone, reply)
+    png = _LAST_CARD.pop("png", None)
+    send = sender or notify.send_whatsapp
+    res = None
+    if png:
+        try:
+            res = send(phone, reply, png)
+        except TypeError:
+            res = None
+    if res is None or not res.get("ok"):
+        res = send(phone, reply)
     if msg_id:
         _mark(msg_id, res["ok"])
     notify.subs().log(phone, "inbound", res["ok"], (text[:60] + " → " + res["detail"])[:500])

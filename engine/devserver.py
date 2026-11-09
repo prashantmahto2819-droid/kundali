@@ -202,6 +202,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(422, {"detail": str(exc)})
             except json.JSONDecodeError:
                 return self._json(400, {"detail": "invalid JSON"})
+        if self.path.split("?")[0] == "/v1/chart/card.png":
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                png = handlers.chart_card_from_payload(json.loads(self.rfile.read(length) or b"{}"))
+            except handlers.BadRequest as exc:
+                return self._json(422, {"detail": str(exc)})
+            self.send_response(200); self.send_header("Content-Type", "image/png"); self.send_header("Content-Length", str(len(png))); self.end_headers(); self.wfile.write(png); return
         if self.path.split("?")[0] == "/v1/notify/webhook":            # Relay inbound messages: raw body + signature headers
             length = int(self.headers.get("Content-Length", 0))
             try:
