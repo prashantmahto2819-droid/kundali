@@ -136,6 +136,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/palm": handlers.palm_from_payload,
                   "/v1/palm/trace": handlers.palm_trace_from_payload,
                   "/v1/muhurta": handlers.muhurta_from_payload,
+                  "/v1/muhurta/lagna": handlers.muhurta_lagna_from_payload,
                   "/v1/prashna": handlers.prashna_from_payload,
                   "/v1/rectify": handlers.rectify_from_payload,
                   "/v1/lalkitab/varshphal": handlers.lalkitab_varshphal_from_payload,

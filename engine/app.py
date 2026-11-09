@@ -303,6 +303,24 @@ def vastu_catalog():
     return handlers.vastu_catalog()
 
 
+class MuhurtaLagnaRequest(BaseModel):
+    date: str
+    lat: float
+    lon: float
+    tz: str = "Asia/Kolkata"
+    activity: str = "marriage"
+    groom_moon_sign: int | None = Field(None, ge=0, le=11)
+    bride_moon_sign: int | None = Field(None, ge=0, le=11)
+
+
+@app.post("/v1/muhurta/lagna")
+def muhurta_lagna(req: MuhurtaLagnaRequest):
+    try:
+        return handlers.muhurta_lagna_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.get("/v1/panchang/month")
 def panchang_month(year: int | None = None, month: int | None = None, lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata"):
     try:

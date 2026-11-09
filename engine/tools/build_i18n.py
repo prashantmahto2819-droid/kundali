@@ -219,6 +219,20 @@ for _hi, _en in (("त्योहार और व्रत कैलेंड�
 for _i, (_hi, _en) in enumerate((("जनवरी", "January"), ("फ़रवरी", "February"), ("मार्च", "March"), ("अप्रैल", "April"), ("मई", "May"), ("जून", "June"), ("जुलाई", "July"), ("अगस्त", "August"), ("सितंबर", "September"), ("अक्टूबर", "October"), ("नवंबर", "November"), ("दिसंबर", "December"))):
     EXACT.setdefault(_hi, _en); EXACT.setdefault(_hi[:3], _en[:3])
 FEST_PATTERNS = [("अधिक मास: {1} — इस मास में त्योहार नहीं गिने गए।", "Adhika masa: {1} — festivals are not counted in this month.")]
+# lagna shuddhi
+from jyotish import muhurta_lagna as _ml
+_mlr = _ml.lagna_muhurta("2026-11-26", 22.35, 82.68, "Asia/Kolkata", "marriage", 3, 5)
+put(_mlr["note_hi"], _mlr["note_en"])
+for _l in _mlr["lagnas"]:
+    for _d in _l["doshas"] + _l["strengths"]:
+        put(_d["hi"], _d["en"])
+for _hi, _en in (("वर की चंद्र राशि", "Groom's Moon sign"), ("वधू की चंद्र राशि", "Bride's Moon sign"), ("लग्न-शुद्धि", "Lagna shuddhi"), ("लग्न-सारणी बन रही है…", "Building the lagna table…"), ("निर्णय", "Verdict"), ("दोष", "Doshas"),
+                 ("शुभ", "good"), ("मध्यम", "middling"), ("वर्जित", "avoid"), ("(रात्रि)", "(night)"), ("मंगल अष्टम में", "Mars in the 8th"), ("शुक्र षष्ठ में", "Venus in the 6th"), ("स्थिर/द्विस्वभाव लग्न", "Fixed or dual lagna"), ("चर लग्न (विवाह में कम वांछित)", "Movable lagna (less preferred for marriage)")):
+    EXACT.setdefault(_hi, _en)
+LAGNA_PATTERNS = [("{1} — लग्न-सारणी और लग्न-शुद्धि", "{1} — lagna table and lagna shuddhi"), ("सप्तम भाव में ग्रह ({1}) — जामित्र दोष", "Planet(s) in the 7th ({1}) — Jamitra dosha"), ("अष्टम भाव में ग्रह ({1})", "Planet(s) in the 8th ({1})"),
+                  ("द्वादश में पाप ग्रह ({1})", "Malefic in the 12th ({1})"), ("लग्नेश {1} {2}वें भाव में", "Lagna lord {1} in house {2}"), ("चंद्र {1}वें भाव में", "Moon in house {1}"), ("लग्न में पाप ग्रह ({1})", "Malefic in the lagna ({1})"),
+                  ("शुभ ग्रह केंद्र/त्रिकोण में ({1})", "Benefic in kendra/trikona ({1})"), ("लग्न वर की चंद्र राशि से {1}वाँ", "Lagna is the {1}th from the groom's Moon sign"), ("लग्न वधू की चंद्र राशि से {1}वाँ", "Lagna is the {1}th from the bride's Moon sign"),
+                  ("अभिजित {1} · राहु काल {2} · शुभ चौघड़िया: {3}", "Abhijit {1} · Rahu kaal {2} · good choghadiya: {3}")]
 # calendar studio (static card labels)
 UI_CAL = {"कैलेंडर": "Calendar", "कैलेंडर डिज़ाइन स्टूडियो — पंचांग सहित छपने योग्य कैलेंडर": "Calendar design studio — printable calendar with panchang",
           "महीना या पूरा वर्ष चुनिए, ऊपर-नीचे विज्ञापन पट्टी (चित्र या पाठ), लोगो, रंग-योजना, आकार और दिखाने वाली जानकारी तय कीजिए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं (डिज़ाइन इसी डिवाइस पर सहेजा जाता है)।":
@@ -375,7 +389,7 @@ PTRACE_PATTERNS = [("ट्रेस की गई रेखाएँ: {1}", "Li
                    ("{1} — {2}", "{1} — {2}")]
 for _hi, _en in (("कनिष्ठा के नीचे", "under the little finger"), ("तर्जनी-अंगूठे के बीच", "between the index finger and thumb"), ("कलाई की ओर", "towards the wrist")):
     put(_hi, _en)
-TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + FEST_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
+TAJIKA_PATTERNS = VPLAN_PATTERNS + PTRACE_PATTERNS + YOGA_PATTERNS + TAJIKA_YOGA_PATTERNS + OVERLAY_PATTERNS + FEST_PATTERNS + LAGNA_PATTERNS + [("(आयु {1}): सूर्य-वापसी", "(age {1}): solar return"), ("({1}) · वर्ष-लग्न", "({1}) · annual Lagna"),
                    ("{1} − {2} + लग्न +30°", "{1} − {2} + Lagna +30°"), ("{1} − {2} + लग्न (रात्रि में उलट) +30°", "{1} − {2} + Lagna (reversed at night) +30°"),
                    ("{1} — {2} → {3} ({4} दिन)", "{1} — {2} → {3} ({4} days)"), ("{1} − {2} + लग्न", "{1} − {2} + Lagna"), ("{1} − {2} + लग्न (रात्रि में उलट)", "{1} − {2} + Lagna (reversed at night)"),
                    ("वर्षेश: {1}", "Year lord: {1}")]

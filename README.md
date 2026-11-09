@@ -111,6 +111,9 @@ Needs a valid API key (even with `KUNDALI_AUTH=off`). Only birth data is stored;
 ## Palmistry from a photo (traced)
 `POST /v1/palm/trace` `{landmarks: {wrist, index, middle, ring, little, thumb: [x,y]}, lines: {life, head, heart, fate?, sun?: [[x,y]…]}, marks?: [{line, type, x, y}], extras?: {union_lines, bracelets, travel_lines, girdle_of_venus: n}, choices?: {…}}`. The photo never leaves the browser; only points arrive. The engine (`engine/jyotish/palm_trace.py`) measures the lines as ratios of the palm frame (life-line reach and sweep, head-line span and drop, heart-line end position and curvature, fate/sun presence), turns them into the checklist choices of `/v1/palm`, reads marks on lines (island, break, chain, cross, star, fork, square, triangle, branches) and counted lines (union, bracelets, travel, girdle of Venus) from `data/knowledge/palm.json`, and never predicts health or lifespan. `GET /v1/palm/trace/catalog`, printable `POST /v1/palm/trace/report`. Thresholds are draft (`docs/REVIEW.md` F).
 
+## Lagna shuddhi (muhurta lagna)
+`POST /v1/muhurta/lagna {date, lat, lon, tz, activity?, groom_moon_sign?, bride_moon_sign?}` → the day's twelve ascendant windows with a chart at each middle and the almanac rules for a muhurta lagna (7th and 8th empty, no malefic in the 12th, lagna lord not in 6/8/12, Moon not in 1/6/8/12, for marriage Mars-8 and Venus-6 avoided, fixed/dual preferred, lagna not 6/8/12 from the bride's or groom's Moon sign), with Abhijit, Rahu kaal and good choghadiya. A "लग्न-शुद्धि" button on every day in the muhurta tab. Draft (`docs/REVIEW.md` A.19).
+
 ## Moonrise / moonset
 `engine/jyotish/moon.py`: Moon latitude (30 Meeus terms), parallax, standard altitude 0.7275π − 34′, 10-minute scan + bisection; Delhi values match published almanac times within a minute (Karva Chauth 2025 moonrise 20:13). Shown in the panchang card, the birth-day table and printed reports; used by the festival calendar for Sharad Purnima.
 

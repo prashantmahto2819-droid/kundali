@@ -231,6 +231,20 @@
 "नवं": "Nov",
 "दिसंबर": "December",
 "दिस": "Dec",
+"वर की चंद्र राशि": "Groom's Moon sign",
+"वधू की चंद्र राशि": "Bride's Moon sign",
+"लग्न-शुद्धि": "Lagna shuddhi",
+"लग्न-सारणी बन रही है…": "Building the lagna table…",
+"निर्णय": "Verdict",
+"दोष": "Doshas",
+"शुभ": "favourable",
+"मध्यम": "medium",
+"वर्जित": "avoid",
+"(रात्रि)": "(night)",
+"मंगल अष्टम में": "Mars in the 8th",
+"शुक्र षष्ठ में": "Venus in the 6th",
+"स्थिर/द्विस्वभाव लग्न": "Fixed or dual lagna",
+"चर लग्न (विवाह में कम वांछित)": "Movable lagna (less preferred for marriage)",
 "कैलेंडर": "Calendar",
 "कैलेंडर डिज़ाइन स्टूडियो — पंचांग सहित छपने योग्य कैलेंडर": "Calendar design studio — printable calendar with panchang",
 "महीना या पूरा वर्ष चुनिए, ऊपर-नीचे विज्ञापन पट्टी (चित्र या पाठ), लोगो, रंग-योजना, आकार और दिखाने वाली जानकारी तय कीजिए; दाईं ओर लाइव झलक, फिर \"प्रिंट / PDF\"। चित्र आपके ब्राउज़र में ही रहते हैं (डिज़ाइन इसी डिवाइस पर सहेजा जाता है)।": "Pick a month or the whole year, set the top and bottom advertisement bands (image or text), logo, colour theme, size and what to show; live preview on the right, then \"Print / PDF\". Images stay in your browser (the design is saved on this device).",
@@ -671,7 +685,6 @@
 "अभिजित": "Abhijit",
 "चौघड़िया (दिन)": "Choghadiya (day)",
 "चौघड़िया (रात)": "Choghadiya (night)",
-"शुभ": "favourable",
 "अशुभ": "inauspicious",
 "सम": "neutral",
 "अंक ज्योतिष": "Numerology",
@@ -1025,7 +1038,6 @@
 "हस्तरेखा (मार्गदर्शित)": "Palmistry (guided)",
 "पढ़िए": "Read",
 "लंबी": "long",
-"मध्यम": "medium",
 "छोटी": "short",
 "सीधी": "straight",
 "हल्की": "faint",
@@ -2749,6 +2761,47 @@
 "कार्तिक अमावस्या": "Kartika Amavasya",
 "मोक्षदा एकादशी": "Mokshada Ekadashi",
 "मार्गशीर्ष पूर्णिमा": "Margashirsha Purnima",
+"लग्न-शुद्धि (पंचांग-स्तर): सप्तम-अष्टम रिक्त, द्वादश में पाप ग्रह नहीं, लग्नेश 6/8/12 में नहीं, चंद्र 1/6/8/12 में नहीं; विवाह में मंगल अष्टम व शुक्र षष्ठ वर्जित, स्थिर/द्विस्वभाव लग्न वांछित, वर-वधू की राशि से 6/8/12 लग्न वर्जित। राहु काल, भद्रा और चौघड़िया साथ देखिए। अंतिम मुहूर्त पंडित तय करें।": "Lagna shuddhi (almanac level): 7th and 8th empty, no malefic in the 12th, lagna lord not in 6/8/12, Moon not in 1/6/8/12; for marriage Mars in the 8th and Venus in the 6th are avoided, fixed/dual lagnas preferred, lagna 6/8/12 from the bride's or groom's Moon sign avoided. Check Rahu kaal, Bhadra and choghadiya alongside; a pandit fixes the final muhurta.",
+"सप्तम भाव में ग्रह (राहु) — जामित्र दोष": "Planet(s) in the 7th (Rahu) — Jamitra dosha",
+"अष्टम भाव में ग्रह (शनि)": "Planet(s) in the 8th (Saturn)",
+"लग्न में पाप ग्रह (मंगल, केतु)": "Malefic in the lagna (Mars, Ketu)",
+"लग्न वधू की चंद्र राशि से 12वाँ": "Lagna is the 12th from the bride's Moon sign",
+"स्थिर/द्विस्वभाव लग्न": "Fixed or dual lagna",
+"शुभ ग्रह केंद्र/त्रिकोण में (गुरु)": "Benefic in kendra/trikona (Jupiter)",
+"सप्तम भाव में ग्रह (शनि) — जामित्र दोष": "Planet(s) in the 7th (Saturn) — Jamitra dosha",
+"द्वादश में पाप ग्रह (मंगल, केतु)": "Malefic in the 12th (Mars, Ketu)",
+"अष्टम भाव में ग्रह (चंद्र)": "Planet(s) in the 8th (Moon)",
+"चंद्र 8वें भाव में": "Moon in house 8",
+"चर लग्न (विवाह में कम वांछित)": "Movable lagna (less preferred for marriage)",
+"शुभ ग्रह केंद्र/त्रिकोण में (बुध, शुक्र)": "Benefic in kendra/trikona (Mercury, Venus)",
+"सप्तम भाव में ग्रह (चंद्र) — जामित्र दोष": "Planet(s) in the 7th (Moon) — Jamitra dosha",
+"लग्न में पाप ग्रह (सूर्य)": "Malefic in the lagna (Sun)",
+"द्वादश में पाप ग्रह (सूर्य)": "Malefic in the 12th (Sun)",
+"लग्न वर की चंद्र राशि से 6वाँ": "Lagna is the 6th from the groom's Moon sign",
+"अष्टम भाव में ग्रह (मंगल, गुरु, केतु)": "Planet(s) in the 8th (Mars, Jupiter, Ketu)",
+"चंद्र 6वें भाव में": "Moon in house 6",
+"मंगल अष्टम में": "Mars in the 8th",
+"सप्तम भाव में ग्रह (मंगल, गुरु, केतु) — जामित्र दोष": "Planet(s) in the 7th (Mars, Jupiter, Ketu) — Jamitra dosha",
+"लग्न में पाप ग्रह (राहु)": "Malefic in the lagna (Rahu)",
+"लग्न वर की चंद्र राशि से 8वाँ": "Lagna is the 8th from the groom's Moon sign",
+"लग्न वधू की चंद्र राशि से 6वाँ": "Lagna is the 6th from the bride's Moon sign",
+"शुभ ग्रह केंद्र/त्रिकोण में (गुरु, बुध, शुक्र)": "Benefic in kendra/trikona (Jupiter, Mercury, Venus)",
+"अष्टम भाव में ग्रह (बुध, शुक्र)": "Planet(s) in the 8th (Mercury, Venus)",
+"द्वादश में पाप ग्रह (राहु)": "Malefic in the 12th (Rahu)",
+"लग्नेश गुरु 6वें भाव में": "Lagna lord Jupiter in house 6",
+"लग्न में पाप ग्रह (शनि)": "Malefic in the lagna (Saturn)",
+"सप्तम भाव में ग्रह (बुध, शुक्र) — जामित्र दोष": "Planet(s) in the 7th (Mercury, Venus) — Jamitra dosha",
+"अष्टम भाव में ग्रह (सूर्य)": "Planet(s) in the 8th (Sun)",
+"द्वादश में पाप ग्रह (शनि)": "Malefic in the 12th (Saturn)",
+"लग्न वधू की चंद्र राशि से 8वाँ": "Lagna is the 8th from the bride's Moon sign",
+"सप्तम भाव में ग्रह (सूर्य) — जामित्र दोष": "Planet(s) in the 7th (Sun) — Jamitra dosha",
+"लग्नेश शुक्र 6वें भाव में": "Lagna lord Venus in house 6",
+"शुक्र षष्ठ में": "Venus in the 6th",
+"चंद्र 1वें भाव में": "Moon in house 1",
+"लग्न वर की चंद्र राशि से 12वाँ": "Lagna is the 12th from the groom's Moon sign",
+"अष्टम भाव में ग्रह (राहु)": "Planet(s) in the 8th (Rahu)",
+"लग्नेश चंद्र 12वें भाव में": "Lagna lord Moon in house 12",
+"चंद्र 12वें भाव में": "Moon in house 12",
 "विवाह / साझेदारी": "marriage / partnership",
 "कर्म / पद": "career / position",
 "संतान / विद्या": "children / studies",
@@ -3720,6 +3773,50 @@
 [
 "अधिक मास: {1} — इस मास में त्योहार नहीं गिने गए।",
 "Adhika masa: {1} — festivals are not counted in this month."
+],
+[
+"{1} — लग्न-सारणी और लग्न-शुद्धि",
+"{1} — lagna table and lagna shuddhi"
+],
+[
+"सप्तम भाव में ग्रह ({1}) — जामित्र दोष",
+"Planet(s) in the 7th ({1}) — Jamitra dosha"
+],
+[
+"अष्टम भाव में ग्रह ({1})",
+"Planet(s) in the 8th ({1})"
+],
+[
+"द्वादश में पाप ग्रह ({1})",
+"Malefic in the 12th ({1})"
+],
+[
+"लग्नेश {1} {2}वें भाव में",
+"Lagna lord {1} in house {2}"
+],
+[
+"चंद्र {1}वें भाव में",
+"Moon in house {1}"
+],
+[
+"लग्न में पाप ग्रह ({1})",
+"Malefic in the lagna ({1})"
+],
+[
+"शुभ ग्रह केंद्र/त्रिकोण में ({1})",
+"Benefic in kendra/trikona ({1})"
+],
+[
+"लग्न वर की चंद्र राशि से {1}वाँ",
+"Lagna is the {1}th from the groom's Moon sign"
+],
+[
+"लग्न वधू की चंद्र राशि से {1}वाँ",
+"Lagna is the {1}th from the bride's Moon sign"
+],
+[
+"अभिजित {1} · राहु काल {2} · शुभ चौघड़िया: {3}",
+"Abhijit {1} · Rahu kaal {2} · good choghadiya: {3}"
 ],
 [
 "(आयु {1}): सूर्य-वापसी",

@@ -354,6 +354,8 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
       <div><label>कार्य</label><select id="mu_act"><option value="general">सामान्य शुभ कार्य</option><option value="marriage">विवाह</option><option value="griha_pravesh">गृह प्रवेश</option><option value="bhoomi_pujan">भूमि पूजन / नींव</option><option value="property">संपत्ति ख़रीद / रजिस्ट्री</option><option value="vehicle">वाहन ख़रीद</option><option value="business">व्यापार / नया काम</option><option value="travel">यात्रा</option><option value="education">विद्यारंभ / पढ़ाई</option><option value="mundan">मुंडन</option><option value="namakaran">नामकरण</option><option value="annaprashan">अन्नप्राशन</option><option value="upanayana">उपनयन (जनेऊ)</option></select></div>
       <div><label>कब से</label><input id="mu_start" type="date"></div>
       <div><label>कितने दिन</label><input id="mu_days" type="number" min="1" max="60" value="30" style="width:90px"></div>
+      <div><label>वर की चंद्र राशि</label><select id="mu_groom" style="width:auto"><option value="">—</option></select></div>
+      <div><label>वधू की चंद्र राशि</label><select id="mu_bride" style="width:auto"><option value="">—</option></select></div>
       <div><label>स्थान</label><input id="mu_city" list="placelist" placeholder="शहर (ख़ाली = कुंडली वाला)"></div>
       <div><button type="submit">खोजिए</button></div>
     </form>
@@ -1724,15 +1726,32 @@ async function openReport(path, body) {
       if (window.lastBody) body.chart = window.lastBody;
       const r = await apiFetch('/v1/muhurta', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
-      const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span></td></tr>`;
+      const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span><br><button type="button" class="ghost mulagna" data-date="${x.date}" style="width:auto;padding:2px 8px;font-size:.8rem">लग्न-शुद्धि</button></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span></td></tr>`;
       window._lastMuhurta = body;
       $('muout').innerHTML = `<p><b>${esc(d.activity_hi)}</b>: ${esc(d.from)} से ${d.days} दिन${body.chart ? ' (ताराबल-चंद्रबल सहित)' : ''}</p>
         <div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/muhurta/report', window._lastMuhurta).catch(e => { document.getElementById('muerr').textContent = 'त्रुटि: ' + e.message; })">मुहूर्त PDF (प्रिंट)</button></div>
         <p><b>सबसे अच्छे दिन</b></p><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.best.map(row).join('')}</table>
         <details><summary>सभी दिन</summary><table><tr><th>तारीख़</th><th>स्कोर</th><th>पंचांग</th><th>कारण</th><th>शुभ समय</th></tr>${d.all.map(row).join('')}</table></details>
-        <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
+        <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div><div id="mulagnaout"></div>`;
+      $('muout').querySelectorAll('.mulagna').forEach(b => b.onclick = () => showLagna(b.dataset.date, body));
     } catch (err) { $('muout').innerHTML = ''; $('muerr').textContent = 'त्रुटि: ' + err.message; }
   });
+  const RASHI_HI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+  RASHI_HI.forEach((r, i) => { for (const id of ['mu_groom', 'mu_bride']) { const o = document.createElement('option'); o.value = i; o.textContent = r; $(id).appendChild(o); } });
+  async function showLagna(date, base) {
+    const host = $('mulagnaout'); host.innerHTML = '<div class="muted">लग्न-सारणी बन रही है…</div>';
+    try {
+      const b = {date, lat: base.lat, lon: base.lon, tz: base.tz, activity: base.activity === 'marriage' ? 'marriage' : 'general', groom_moon_sign: $('mu_groom').value || null, bride_moon_sign: $('mu_bride').value || null};
+      const r = await apiFetch('/v1/muhurta/lagna', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(b)});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const V = {shubh: 'yes', madhyam: '', varjit: 'muted'};
+      host.innerHTML = `<h4 style="margin:12px 0 4px">${esc(date)} — लग्न-सारणी और लग्न-शुद्धि</h4>
+        <p class="muted" style="font-size:.85rem">अभिजित ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'} · राहु काल ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · शुभ चौघड़िया: ${d.good_choghadiya.map(c => `${esc(c.name)} ${esc(c.start)}–${esc(c.end)}`).join(', ')}</p>
+        <table><tr><th>समय</th><th>लग्न</th><th>स्कोर</th><th>निर्णय</th><th>दोष</th><th>बल</th></tr>${d.lagnas.map(l => `<tr${l.night ? ' class="muted"' : ''}><td>${esc(l.start)}–${esc(l.end)}${l.night ? ' <span class="muted">(रात्रि)</span>' : ''}</td><td><b>${esc(l.sign_name_hi)}</b></td><td><b>${l.score}</b></td><td><span class="chip ${V[l.verdict]}">${esc(l.verdict_hi)}</span></td><td class="muted" style="font-size:.85rem">${l.doshas.map(x => esc(x.hi)).join('; ') || '—'}</td><td class="muted" style="font-size:.85rem">${l.strengths.map(x => esc(x.hi)).join('; ') || '—'}</td></tr>`).join('')}</table>
+        <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
+      host.scrollIntoView({behavior: 'smooth', block: 'start'});
+    } catch (err) { host.innerHTML = `<div style="color:#c62828">त्रुटि: ${esc(err.message)}</div>`; }
+  }
 })();
 
 // ---- Prashna (KP horary)

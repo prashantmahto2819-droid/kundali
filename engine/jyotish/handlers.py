@@ -564,3 +564,37 @@ def calendar_report_from_payload(payload: dict) -> str:
             raise BadRequest(f"design.{k} must be a list of up to 400 entries")
     lang = "en" if str(payload.get("lang", "hi")).lower() == "en" else "hi"
     return calendar_design.render_calendar(year, months, lat, lon, tz, design, lang)
+
+
+def muhurta_lagna_from_payload(payload: dict) -> dict:
+    """POST /v1/muhurta/lagna  {date: YYYY-MM-DD, lat, lon, tz, activity?: marriage|general, groom_moon_sign?: 0-11, bride_moon_sign?: 0-11}"""
+    from . import muhurta_lagna
+    try:
+        lat, lon = float(payload.get("lat")), float(payload.get("lon"))
+    except (TypeError, ValueError):
+        raise BadRequest("lat and lon are required numbers")
+    tz = str(payload.get("tz") or "Asia/Kolkata")
+    try:
+        ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise BadRequest(f"unknown time zone '{tz}'")
+    day = str(payload.get("date") or "")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+        raise BadRequest("date must be YYYY-MM-DD")
+    signs = {}
+    for k in ("groom_moon_sign", "bride_moon_sign"):
+        v = payload.get(k)
+        if v in (None, ""):
+            signs[k] = None; continue
+        try:
+            v = int(v)
+        except (TypeError, ValueError):
+            raise BadRequest(f"{k} must be 0-11")
+        if not 0 <= v <= 11:
+            raise BadRequest(f"{k} must be 0-11")
+        signs[k] = v
+    activity = str(payload.get("activity") or "marriage")
+    try:
+        return muhurta_lagna.lagna_muhurta(day, lat, lon, tz, activity, **signs)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
