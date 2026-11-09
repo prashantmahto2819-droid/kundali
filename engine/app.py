@@ -369,6 +369,16 @@ def notify_preview(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.middleware("http")
+async def _no_stale_shell(request: Request, call_next):
+    """HTML, the service worker and i18n must never be served stale (browsers and Cloudflare otherwise keep the old app shell)."""
+    resp = await call_next(request)
+    p = request.url.path
+    if p in ("/", "/index.html", "/sw.js", "/config.js", "/data/i18n_en.json") or p.endswith(".html"):
+        resp.headers["Cache-Control"] = "no-cache, must-revalidate"
+    return resp
+
+
 @app.on_event("startup")
 def _start_notify_worker():
     handlers.start_notify_worker_if_enabled()

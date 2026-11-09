@@ -174,7 +174,7 @@ def month(year: int, mon: int, lat: float, lon: float, tz: str, only_day: int | 
             "moon_sign": SIGNS[sign_of(moon)], "moon_sign_hi": SIGNS_HI[sign_of(moon)], "disha_shool_hi": DISHA_SHOOL[wd][0], "disha_shool": DISHA_SHOOL[wd][1],
             "special": special,
             "rahu_kaal": dt_tab.get("rahu_kaal"), "yamaganda": dt_tab.get("yamaganda"), "gulika": dt_tab.get("gulika"), "abhijit": dt_tab.get("abhijit"),
-            "good_choghadiya": [{"name": c["name"], "start": c["start"], "end": c["end"]} for c in dt_tab.get("choghadiya_day", []) if c.get("nature") == "good"],
+            "good_choghadiya": [{"name": c["name"], "name_hi": c["name_hi"], "start": c["start"], "end": c["end"]} for c in dt_tab.get("choghadiya_day", []) if c.get("nature") == "good"],
             "events": fest.get(d.isoformat(), []),
         })
     if only_day:

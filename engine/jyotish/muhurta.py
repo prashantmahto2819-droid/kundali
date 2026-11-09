@@ -16,6 +16,7 @@ GULIKA = {0: 7, 1: 6, 2: 5, 3: 4, 4: 3, 5: 2, 6: 1}
 CHOG_SEQ = ["Udveg", "Chal", "Labh", "Amrit", "Kaal", "Shubh", "Rog"]
 CHOG_DAY_START = {0: "Udveg", 1: "Amrit", 2: "Rog", 3: "Labh", 4: "Shubh", 5: "Chal", 6: "Kaal"}
 CHOG_NIGHT_START = {0: "Shubh", 1: "Chal", 2: "Kaal", 3: "Udveg", 4: "Amrit", 5: "Rog", 6: "Labh"}
+CHOG_HI = {"Udveg": "उद्वेग", "Chal": "चल", "Labh": "लाभ", "Amrit": "अमृत", "Kaal": "काल", "Shubh": "शुभ", "Rog": "रोग"}
 CHOG_NATURE = {"Amrit": "good", "Shubh": "good", "Labh": "good", "Chal": "neutral",
                "Udveg": "inauspicious", "Kaal": "inauspicious", "Rog": "inauspicious"}
 
@@ -35,7 +36,7 @@ def _chog(start: datetime, length: timedelta, first: str) -> list[dict]:
     for k in range(8):
         name = CHOG_SEQ[(i0 + k) % 7]
         s = start + length * k
-        out.append({"name": name, "nature": CHOG_NATURE[name], "start": _fmt(s), "end": _fmt(s + length)})
+        out.append({"name": name, "name_hi": CHOG_HI[name], "nature": CHOG_NATURE[name], "start": _fmt(s), "end": _fmt(s + length)})
     return out
 
 

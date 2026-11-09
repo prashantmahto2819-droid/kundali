@@ -426,6 +426,15 @@ _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v 
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
 
+# grouped navigation + "आज" home tab
+for hi, en in [("आज", "Today"), ("मेरी कुंडली", "My kundali"), ("पंचांग-मुहूर्त", "Panchang & muhurta"), ("अन्य विद्याएँ", "Other disciplines"), ("सीखिए-पूछिए", "Learn & ask"),
+               ("आज का पंचांग", "Today's panchang"), ("लोड हो रहा है…", "Loading…"), ("आज और कल के व्रत-पर्व", "Today's and tomorrow's vrats & festivals"), ("आज के शुभ-अशुभ समय", "Today's good and bad hours"),
+               ("आज का राशिफल (सभी 12 राशियाँ)", "Today's rashifal (all 12 signs)"), ("चंद्र राशि से गोचर-आधारित प्रवृत्ति-संकेत; अपनी राशि अपनी कुंडली से जानिए।", "Transit-based tendency pointers from the Moon sign; find your sign from your chart."),
+               ("जल्दी जाइए", "Quick links"), ("कुंडली बनाइए", "Make a kundali"), ("मुहूर्त खोजिए", "Find a muhurta"), ("कुंडली मिलान", "Kundali matching"), ("कैलेंडर बनाइए", "Make a calendar"), ("सवाल पूछिए", "Ask a question"),
+               ("कोई व्रत-पर्व नहीं", "no vrat or festival"), ("कल की तिथि", "Tomorrow's tithi"), ("शुभ चौघड़िया", "Good choghadiya"), ("योग / करण", "Yoga / Karana"), ("मास", "Month"), ("शक", "Shaka"), ("कल", "Tomorrow"), ("और", "and"),
+               ("पंचांग लोड नहीं हो सका:", "The panchang could not load:"), ("दिशाशूल", "Disha shool"), ("उद्वेग", "Udveg"), ("अमृत", "Amrit"), ("लाभ", "Labh"), ("रोग", "Rog"), ("चल", "Chal")]:
+    put(hi, en)
+
 # WhatsApp (Vivid Relay) daily-update card
 for hi, en in [("WhatsApp पर रोज़ का अपडेट", "Daily update on WhatsApp"),
                ("(पंचांग, आपका राशिफल, कल के व्रत-पर्व की सूचना, साप्ताहिक सूची — निःशुल्क)", "(panchang, your rashifal, tomorrow's vrat/festival alert, weekly list — free)"),
