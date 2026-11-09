@@ -167,3 +167,37 @@ Relay forwards every inbound message to the app, the app answers through the sam
    A 401 in Relay's webhook log means the secret differs; "duplicate" entries are Relay retries and are expected.
 5. Keep Relay's own STOP keyword on; the bot also honours बंद/stop, and "शुरू"/"start" turns the daily message on (06:30, Delhi — the
    person refines city/time/birth details on the website).
+
+
+## 14. AI providers (chat, palm photo) — free tiers first, any mix, automatic fallback
+
+The app tries providers in `AI_PROVIDERS` order and falls back to the next on error/quota; without any key it still answers from
+its own material (retrieval). Put the keys in `/srv/kundali/deploy/.env` and `docker compose -f docker-compose.relay.yml up -d`.
+
+| Provider | Free? | Key | .env lines |
+|---|---|---|---|
+| Google Gemini | free tier (daily limit), vision ✓ | https://aistudio.google.com/apikey | `GEMINI_API_KEY=…` (model `GEMINI_MODEL=gemini-2.0-flash`) |
+| Groq | free tier, very fast | https://console.groq.com/keys | `GROQ_API_KEY=gsk_…` (`GROQ_MODEL=llama-3.3-70b-versatile`; vision: `GROQ_VISION_MODEL=llama-3.2-11b-vision-preview` if still offered) |
+| OpenRouter (DeepSeek, Llama, Qwen `:free`) | free models | https://openrouter.ai/keys | `OPENROUTER_API_KEY=sk-or-…` (`OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free`) |
+| DeepSeek direct | paid, cheap | https://platform.deepseek.com/api_keys | `DEEPSEEK_API_KEY=…` |
+| Ollama (your own PC/server) | free, unlimited | — | `OLLAMA_URL=http://<tailscale-ip>:11434` `OLLAMA_MODEL=qwen2.5:7b` `OLLAMA_VISION_MODEL=llama3.2-vision:11b` |
+| OpenAI / Anthropic | paid | platform.openai.com / console.anthropic.com | `OPENAI_API_KEY=…` / `ANTHROPIC_API_KEY=…` |
+| any OpenAI-compatible | — | — | `AI_BASE_URL=https://…/v1` `AI_API_KEY=…` `AI_MODEL=…` |
+
+Order example (free first, paid last): `AI_PROVIDERS=gemini,groq,openrouter,ollama,deepseek`. Quota per user per day: `AI_DAILY_QUOTA=30`
+(palm photo counts 2). Check: `GET /v1/ai/status` lists the active providers; the "पूछिए" tab shows the chain. The WhatsApp bot also
+answers free-text questions through the same chain when a provider is configured.
+
+Ollama on the Z440: `curl -fsSL https://ollama.com/install.sh | sh`, `ollama pull qwen2.5:7b`, run with `OLLAMA_HOST=0.0.0.0`, reach it from
+Hetzner over Tailscale (do not expose port 11434 publicly). CPU-only 7B is slow (30–60 s per answer) — keep Gemini/Groq first and Ollama last.
+
+## 15. Astrologer consultation and wallet
+
+`KUNDALI_PAID=0` (default) keeps everything free: seekers send requests, astrologers get a WhatsApp ping (Relay) and answer in the thread.
+Admin calls use header `X-Admin-Key: $KUNDALI_ADMIN_KEY` (set it in .env). Add an astrologer:
+```
+curl -s -X POST https://kundali.vividbrandify.com/v1/consult/admin -H "Content-Type: application/json" -H "X-Admin-Key: $KUNDALI_ADMIN_KEY" \
+  -d '{"action":"astrologer","astrologer":{"name":"Pt. Ramesh Sharma","name_hi":"पं. रमेश शर्मा","phone":"91XXXXXXXXXX","languages":["हिंदी","English"],"specialities":["विवाह","करियर"],"experience_years":15,"bio_hi":"…","price_chat":199,"price_call":499,"price_report":999}}'
+```
+To charge: `KUNDALI_PAID=1`, `KUNDALI_UPI_ID=yourname@upi`; seekers pay by UPI and send the reference; you credit it:
+`{"action":"topup","phone":"91…","amount":500,"ref":"UPI-ref","note":"verified"}`. Requests debit the wallet on creation. `{"action":"overview"}` lists open requests and top-ups.

@@ -23,6 +23,24 @@ Ashtakoota 36 points with nadi/bhakoot/gana parihara, Mangal dosha with cancella
 - **Festival and vrat calendar** per year and place: 32 festivals, Ekadashis (named), Purnima/Amavasya, Pradosh, Vinayaka/Sankashti Chaturthi, Masik Shivaratri, adhika masa; regional festivals (Pongal, Lohri, Baisakhi, Tamil/Bengali/Malayalam new year, Onam, Karthigai Deepam, Durga Puja, Kali Puja, Nuakhai, Raja, Varalakshmi, Ugadi, Pola, Jitiya…), national days, Easter/Good Friday/Christmas, Islamic observances by crescent-visibility estimate.
 - **Rashifal** daily/weekly/monthly for the 12 Moon signs from the gochara rules (score, summary, per-planet text, lucky colour/number).
 
+## AI (optional, multi-provider)
+Chat grounded in the asker's chart, the rule/glossary corpus and today's panchang; providers Gemini / Groq / OpenRouter (DeepSeek etc.) / Ollama / DeepSeek / OpenAI / Anthropic / any OpenAI-compatible, tried in order with fallback; per-user daily quota; retrieval answer when no provider. Palm photo → the model fills the 16-feature checklist, the app interprets. The WhatsApp bot answers free-text questions through the same chain.
+
+## Consultation with astrologers
+Astrologer profiles (admin), request → WhatsApp ping → in-app thread (+ WhatsApp copy of replies) → close & rate; wallet ledger with manual UPI top-ups; free by default (`KUNDALI_PAID`).
+
+## Eclipses at a place
+Local first/maximum/last contact, totality, magnitude, visibility (body above horizon) and the traditional **sutak** window (12 h solar / 9 h lunar; none for penumbral) for the chosen place — on the Today tab and the festival list.
+
+## Outer planets and true node
+Uranus, Neptune, Pluto shown separately (not used in dasha/yoga/strength); mean or true Rahu-Ketu selectable.
+
+## Nadi (Bhrigu Nandi Nadi)
+Planet-karaka reading (jeeva, karma, spouse, shadow planets), Saturn-based profession field, Jupiter transit year-clock, nadi kuta and nadi-amsha.
+
+## Regional languages
+Panchang vocabulary and labels in Telugu, Kannada, Marathi, Gujarati, Bengali (Today tab selector, `lang=` on `/v1/panchang/day`, WhatsApp daily message in the subscriber's language).
+
 ## Doshas and remedy pointers
 Kaal Sarp (full/partial, 12 types by Rahu's house, direction), Pitru dosha indications (Sun/Moon with the nodes, 9th house and lord), Mangal dosha from Lagna/Moon/Venus with the classical cancellations and the 2nd-house (South) note, Sade Sati status; remedy pointers: gemstone of the lagna lord plus friendly 5th/9th lords (day, finger, planets to avoid), rudraksha mukhi, Ishta Devata from the karakamsa's 12th (Jaimini), lagna-lord mantra. All labelled draft/convention.
 

@@ -14,6 +14,10 @@ PLANETS_HI = {"Sun": "सूर्य", "Moon": "चंद्र", "Mars": "म�
 PLANETS_SHORT_HI = {"Sun": "सू", "Moon": "चं", "Mars": "मं", "Mercury": "बु",
                     "Jupiter": "गु", "Venus": "शु", "Saturn": "श",
                     "Rahu": "रा", "Ketu": "के"}
+# outer (non-classical) planets — shown separately, never used in dashas, yogas or strength
+OUTER_PLANETS = ["Uranus", "Neptune", "Pluto"]
+OUTER_HI = {"Uranus": "यूरेनस (अरुण)", "Neptune": "नेपच्यून (वरुण)", "Pluto": "प्लूटो (यम)"}
+OUTER_SHORT_HI = {"Uranus": "अ", "Neptune": "व", "Pluto": "य"}
 
 NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",

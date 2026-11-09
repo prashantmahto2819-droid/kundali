@@ -291,7 +291,28 @@ def answer(phone: str, text: str, name: str = "") -> str:
     except Exception as exc:                        # never leave a sender without an answer
         return ("क्षमा करें, यह अभी नहीं बन सका (" + type(exc).__name__ + ")। *मदद* लिखकर विकल्प देखिए।" if hi else
                 "Sorry, that could not be prepared (" + type(exc).__name__ + "). Send *help* for the options.")
+    # free text: a question → AI chat grounded in the sender's chart (when subscribed with birth details), else the menu
+    if len(words) >= 3 or "?" in text or "क्या" in text or "कैसा" in text or "कब" in text:
+        ans = reply_ai(phone, text, sub, hi)
+        if ans:
+            return ans
     return reply_help(hi, name)
+
+
+def reply_ai(phone: str, text: str, sub: dict | None, hi: bool) -> str | None:
+    from . import ai, llm
+    if not llm.available():
+        return None
+    try:
+        payload = {"messages": [{"role": "user", "content": text}], "lang": "hi" if hi else "en", "phone": phone}
+        if sub and sub.get("birth"):
+            payload["birth"] = json.loads(sub["birth"]) if isinstance(sub["birth"], str) else sub["birth"]
+            payload["lat"], payload["lon"], payload["tz"] = sub["lat"], sub["lon"], sub["tz"]
+        r = ai.chat(payload, store=notify.subs()._store if hasattr(notify.subs(), "_store") else None, who=phone)
+    except Exception:
+        return None
+    tail = ("\n\n_" + r["disclaimer"] + ("" if (sub and sub.get("birth")) else (" अपनी कुंडली के अनुसार उत्तर के लिए ऐप में जन्म-विवरण के साथ सब्सक्राइब करें।" if hi else " Subscribe in the app with birth details for answers from your own chart.")) + "_")
+    return ("🤖 " if r["mode"] == "ai" else "📚 ") + r["answer"] + tail
 
 
 # ---------------------------------------------------------------- webhook entry

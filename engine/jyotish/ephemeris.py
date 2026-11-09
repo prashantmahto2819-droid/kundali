@@ -49,7 +49,26 @@ _ELEMENTS = {
                 (-0.00011607, -0.00013253, -0.00183714, 3034.74612775, 0.21252668, 0.20469106)),
     "Saturn": ((9.53667594, 0.05386179, 2.48599187, 49.95424423, 92.59887831, 113.66242448),
                (-0.00125060, -0.00050991, 0.00193609, 1222.49362201, -0.41897216, -0.28867794)),
+    # outer planets (JPL approximate elements, same source table); Pluto's fit is good to ~1 deg over 1800-2050
+    "Uranus": ((19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503),
+               (-0.00196176, -0.00004397, -0.00242939, 428.48202785, 0.40805281, 0.04240589)),
+    "Neptune": ((30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574),
+                (0.00026291, 0.00005105, 0.00035372, 218.45945325, -0.32241464, -0.00508664)),
+    "Pluto": ((39.48211675, 0.24882730, 17.14001206, 238.92903833, 224.06891629, 110.30393684),
+              (-0.00031596, 0.00005170, 0.00004818, 145.20780515, -0.04062942, -0.01183482)),
 }
+OUTER = ("Uranus", "Neptune", "Pluto")
+
+
+def true_node(jd_tt: float) -> float:
+    """True (osculating) lunar node: mean node plus the main periodic terms (Meeus ch. 47), tropical of date."""
+    t = (jd_tt - 2451545.0) / 36525.0
+    d = math.radians(297.8501921 + 445267.1114034 * t - 0.0018819 * t * t)
+    m = math.radians(357.5291092 + 35999.0502909 * t - 0.0001536 * t * t)
+    mp = math.radians(134.9633964 + 477198.8675055 * t + 0.0087414 * t * t)
+    f = math.radians(93.2720950 + 483202.0175233 * t - 0.0036539 * t * t)
+    corr = (-1.4979 * math.sin(2 * (d - f)) - 0.1500 * math.sin(m) - 0.1226 * math.sin(2 * d) + 0.1176 * math.sin(2 * f) - 0.0801 * math.sin(2 * (mp - f)))
+    return norm360(mean_node(jd_tt) + corr)
 
 
 def _helio_xyz(name: str, t: float):
@@ -139,6 +158,17 @@ class AnalyticBackend:
         out["Moon"] = moon_longitude(jd_tt)
         return out
 
+    def positions_outer(self, jd_tt: float) -> dict[str, float]:
+        """Uranus, Neptune, Pluto (tropical of date) — kept apart from the classical set."""
+        t = (jd_tt - 2451545.0) / 36525.0
+        precess = _precession_deg(t)
+        ex, ey, ez = _helio_xyz("Earth", t)
+        out = {}
+        for planet in OUTER:
+            x, y, z = _helio_xyz(planet, t)
+            out[planet] = norm360(math.degrees(math.atan2(y - ey, x - ex)) + precess)
+        return out
+
 
 # --------------------------------------------------------------------------
 # JPL backend (Skyfield)
@@ -150,6 +180,7 @@ class JPLBackend:
     _KEYS = {"Sun": "sun", "Moon": "moon", "Mercury": "mercury barycenter",
              "Venus": "venus barycenter", "Mars": "mars barycenter",
              "Jupiter": "jupiter barycenter", "Saturn": "saturn barycenter"}
+    _OUTER_KEYS = {"Uranus": "uranus barycenter", "Neptune": "neptune barycenter", "Pluto": "pluto barycenter"}
 
     def __init__(self, directory: str | None = None, filename: str = "de440s.bsp"):
         from skyfield.api import Loader  # imported lazily: optional dependency
@@ -164,6 +195,16 @@ class JPLBackend:
         earth = self._eph["earth"]
         out = {}
         for name, key in self._KEYS.items():
+            app = earth.at(t).observe(self._eph[key]).apparent()
+            _, lon, _ = app.ecliptic_latlon(epoch="date")
+            out[name] = float(norm360(float(lon.degrees)))
+        return out
+
+    def positions_outer(self, jd_tt: float) -> dict[str, float]:
+        t = self._ts.tt_jd(jd_tt)
+        earth = self._eph["earth"]
+        out = {}
+        for name, key in self._OUTER_KEYS.items():
             app = earth.at(t).observe(self._eph[key]).apparent()
             _, lon, _ = app.ecliptic_latlon(epoch="date")
             out[name] = float(norm360(float(lon.degrees)))

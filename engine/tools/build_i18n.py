@@ -426,6 +426,24 @@ _tjs = _tj.tajika({"planets": [{"name": k, "longitude": v, "house": 1} for k, v 
                   0, 0, {k: 1.0 for k in _tj.SEVEN}, __import__("datetime").datetime(2026, 1, 1, tzinfo=__import__("datetime").timezone.utc))
 put(_tjs["note_hi"], _tjs["note_en"])
 
+# AI chat / palm scan, consultation, nadi, outer planets, eclipse, regional
+for hi, en in [("AI से बातचीत", "Chat with AI"), ("जाँच रहा हूँ…", "checking…"), ("AI चालू", "AI on"), ("AI सेट नहीं — उत्तर ऐप की सामग्री से", "AI not configured — answers from the app's material"), ("vision AI सेट नहीं", "vision AI not configured"),
+               ("लगातार सवाल-जवाब; उत्तर आपकी कुंडली (बनाई हो तो), ऐप के नियम-ग्रंथ और आज के पंचांग से बँधे रहते हैं। यह प्रवृत्ति-मार्गदर्शन है, भविष्यवाणी नहीं।", "A running conversation; answers stay grounded in your chart (if made), the app's rule texts and today's panchang. Tendency guidance, not prediction."),
+               ("भेजिए", "Send"), ("नई बातचीत", "New chat"), ("सोच रहा हूँ…", "thinking…"), ("स्रोत", "Sources"), ("आज की AI सीमा पूरी — सामग्री से उत्तर", "Today's AI quota is used — answer from the material"), ("सामग्री से", "from the material"),
+               ("हस्तरेखा — फ़ोटो से AI पहचान", "Palmistry — AI recognition from a photo"), ("हथेली की फ़ोटो", "Palm photo"), ("हाथ", "Hand"), ("दायाँ", "right"), ("बायाँ", "left"), ("AI से पढ़िए", "Read with AI"), ("पहचाने गए लक्षण", "Recognised features"),
+               ("नीचे की सूची में विकल्प भर दिए गए हैं — बदलकर \"पढ़िए\" दबाइए।", "The choices below have been filled in — adjust and press \"Read\"."), ("पहले फ़ोटो चुनिए।", "Choose a photo first."),
+               ("हथेली की साफ़ फ़ोटो (ऊपर से, उँगलियाँ थोड़ी खुली, अच्छी रोशनी)। AI केवल दिखने वाले लक्षण (रेखा लंबी/छोटी, पर्वत उभरे/सपाट…) पहचानता है; अर्थ ऐप की अपनी हस्तरेखा-सामग्री से आता है। पहचाने गए विकल्प नीचे की सूची में भर जाते हैं — आप बदल सकते हैं।", "A clear palm photo (from above, fingers slightly apart, good light). The AI only recognises visible features (line long/short, mounts raised/flat…); the meaning comes from the app's own palmistry material. Recognised choices fill the list below — you can change them."),
+               ("परामर्श", "Consult"), ("ज्योतिषी से परामर्श", "Consult an astrologer"), ("सशुल्क (वॉलेट)", "paid (wallet)"), ("निःशुल्क · दक्षिणा वैकल्पिक", "free · dakshina optional"), ("निःशुल्क", "free"),
+               ("अपना प्रश्न चुने हुए ज्योतिषी को भेजिए — उन्हें WhatsApp पर सूचना जाती है और उत्तर यहीं धागे में (और आपके WhatsApp पर) आता है। कुंडली बनाई हो तो जन्म-विवरण साथ जाता है।", "Send your question to the chosen astrologer — they are notified on WhatsApp and the reply arrives in this thread (and on your WhatsApp). Birth details go along if a chart was made."),
+               ("अनुरोध", "Request"), ("माध्यम", "Mode"), ("प्रश्न", "Question"), ("रद्द", "Cancel"), ("मेरे अनुरोध", "My requests"), ("वॉलेट", "Wallet"), ("प्रश्न भेजिए", "Send a question"), ("अभी कोई ज्योतिषी सूचीबद्ध नहीं है।", "No astrologer is listed yet."),
+               ("अनुरोध भेजा गया", "Request sent"), ("(ज्योतिषी को WhatsApp सूचना नहीं जा सकी — Relay सेट नहीं)", "(the astrologer could not be notified on WhatsApp — Relay not configured)"), ("शेष", "balance"), ("ज्योतिषी", "Astrologer"), ("स्थिति", "Status"), ("खोलिए", "Open"), ("कोई अनुरोध नहीं।", "No requests."),
+               ("बंद करें (रेटिंग ★5)", "Close (rate ★5)"), ("संदेश…", "Message…"),
+               ("नाड़ी (भृगु नंदी नाड़ी)", "Nadi (Bhrigu Nandi Nadi)"), ("गुरु-गोचर घड़ी", "Jupiter transit clock"), ("नाड़ी (कूट)", "Nadi (kuta)"), ("नाड़ी-अंश", "Nadi amsha"), ("जीव (जातक)", "Jeeva (the native)"), ("कर्म / व्यवसाय", "Karma / profession"), ("जीवनसाथी", "Spouse"), ("छाया ग्रह", "Shadow planets"),
+               ("बाह्य ग्रह", "outer planet"), ("राहु-केतु", "Rahu-Ketu"), ("मध्यम नोड", "Mean node"), ("सत्य नोड", "True node"), ("सत्य (true) नोड", "true node"), ("मध्यम (mean) नोड", "mean node"),
+               ("बाह्य ग्रह (यूरेनस, नेपच्यून, प्लूटो) केवल संदर्भ के लिए; दशा, योग, बल में प्रयुक्त नहीं।", "Outer planets (Uranus, Neptune, Pluto) for reference only; not used in dashas, yogas or strength."),
+               ("इस स्थान पर ग्रहण", "Eclipses at this place"), ("भाषा", "Language"), ("यूरेनस (अरुण)", "Uranus"), ("नेपच्यून (वरुण)", "Neptune"), ("प्लूटो (यम)", "Pluto"), ("आदि (वात)", "Adi (vata)"), ("मध्य (पित्त)", "Madhya (pitta)"), ("अंत्य (कफ)", "Antya (kapha)")]:
+    put(hi, en)
+
 # doshas, remedies, yogini, chart views, ayanamsa, today extras
 for hi, en in [("दोष-विचार (कालसर्प, पितृ, मंगल)", "Doshas (Kaal Sarp, Pitru, Mangal)"), ("उपाय-संकेत (रत्न, रुद्राक्ष, इष्ट, मंत्र)", "Remedy pointers (gem, rudraksha, Ishta, mantra)"),
                ("कालसर्प योग", "Kaal Sarp yoga"), ("पितृ दोष", "Pitru dosha"), ("मंगल दोष", "Mangal dosha"), ("आंशिक", "partial"), ("परिहार सहित", "with cancellation"), ("मध्यम", "medium"), ("प्रबल", "strong"), ("है", "yes"), ("नहीं", "no"),

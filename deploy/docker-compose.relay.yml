@@ -24,6 +24,27 @@ services:
       KUNDALI_NOTIFY: ${KUNDALI_NOTIFY:-0}            # 1 = run the once-a-minute sender inside this container
       RELAY_WEBHOOK_SECRET: ${RELAY_WEBHOOK_SECRET:-}  # secret of the Relay webhook that points at /v1/notify/webhook (two-way bot)
       KUNDALI_SITE_URL: ${KUNDALI_SITE_URL:-https://kundali.vividbrandify.com}
+      # AI providers (any subset; tried in AI_PROVIDERS order) — see docs/OPS-relay.md §14
+      AI_PROVIDERS: ${AI_PROVIDERS:-gemini,groq,openrouter,ollama,deepseek,openai,anthropic,custom}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      GROQ_VISION_MODEL: ${GROQ_VISION_MODEL:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-deepseek/deepseek-chat-v3-0324:free}
+      OPENROUTER_VISION_MODEL: ${OPENROUTER_VISION_MODEL:-qwen/qwen2.5-vl-72b-instruct:free}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      OLLAMA_URL: ${OLLAMA_URL:-}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b}
+      OLLAMA_VISION_MODEL: ${OLLAMA_VISION_MODEL:-llama3.2-vision:11b}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-}
+      AI_DAILY_QUOTA: ${AI_DAILY_QUOTA:-30}
+      AI_TIMEOUT: ${AI_TIMEOUT:-45}
     volumes:
       - kundali-data:/srv/data
     mem_limit: 768m

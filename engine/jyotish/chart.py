@@ -74,17 +74,29 @@ def _retro(backend, jd_tt: float, name: str) -> bool:
 def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
                   name: str | None = None, ayanamsa_system: str = "lahiri",
                   year_days: float = 365.25, as_of: datetime | None = None,
-                  backend=None, dasha_level: int = 2) -> dict:
+                  backend=None, dasha_level: int = 2, node_type: str = "mean", outer: bool = True) -> dict:
     backend = backend or get_backend()
     birth_utc = local_to_utc(date, time, tz)
     jd_ut = julian_day(birth_utc)
     jd_tt = jd_ut + delta_t(year_fraction(birth_utc)) / 86400.0
 
     trop = backend.positions(jd_tt)
-    trop["Rahu"] = mean_node(jd_tt)
+    from .ephemeris import true_node
+    trop["Rahu"] = true_node(jd_tt) if node_type == "true" else mean_node(jd_tt)
     trop["Ketu"] = norm360(trop["Rahu"] + 180.0)
     ayan = ayanamsa(jd_tt, ayanamsa_system)
     sid = {p: norm360(trop[p] - ayan) for p in PLANETS}
+    outer_planets = []
+    if outer and hasattr(backend, "positions_outer"):
+        from .constants import OUTER_PLANETS, OUTER_HI, OUTER_SHORT_HI
+        trop_outer = backend.positions_outer(jd_tt)
+        for p in OUTER_PLANETS:
+            if p not in trop_outer:
+                continue
+            lp = norm360(trop_outer[p] - ayan); sp = sign_of(lp); nk = nakshatra_of(lp)
+            outer_planets.append({"name": p, "name_hi": OUTER_HI[p], "short_hi": OUTER_SHORT_HI[p], "longitude": lp, "sign": sp, "sign_name": SIGNS[sp], "sign_name_hi": SIGNS_HI[sp],
+                                  "degree_in_sign": lp - sp * 30, "dms": dms(lp - sp * 30), "nakshatra": nk["name"], "nakshatra_hi": nk["name_hi"], "pada": nk["pada"],
+                                  "retrograde": ((trop_outer[p] - backend.positions_outer(jd_tt - 1.0)[p] + 180) % 360 - 180) < 0})
 
     asc_trop = ascendant_tropical(jd_ut, jd_tt, lat, lon)
     asc = norm360(asc_trop - ayan)
@@ -122,6 +134,8 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
                        "lord_house": by_name[SIGN_LORDS[s]]["house"],
                        "planets": [p["name"] for p in planets if p["house"] == h]})
 
+    for op in outer_planets:
+        op["house"] = _house_of(op["sign"], lagna_sign)
     nav_lagna = navamsa_sign(asc)
     navamsa = {"lagna_sign": nav_lagna,
                "houses": [{"house": h, "sign": (nav_lagna + h - 1) % 12,
@@ -147,7 +161,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
         "engine_version": ENGINE_VERSION,
         "backend": backend.name, "backend_note": backend.accuracy_note,
         "input": {"name": name, "date": date, "time": time, "tz": tz, "lat": lat, "lon": lon,
-                  "ayanamsa": ayanamsa_system, "house_system": "whole-sign"},
+                  "ayanamsa": ayanamsa_system, "house_system": "whole-sign", "node_type": node_type},
         "birth_utc": birth_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "jd_ut": jd_ut, "ayanamsa_value": ayan, "ayanamsa_dms": dms(ayan),
         "obliquity": obliquity_deg(jd_tt),
@@ -156,7 +170,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
                   "dms": dms(asc - lagna_sign * 30), "nakshatra": lagna_nak["name"],
                   "nakshatra_hi": lagna_nak["name_hi"], "pada": lagna_nak["pada"],
                   "lord": SIGN_LORDS[lagna_sign]},
-        "planets": planets, "houses": houses, "navamsa": navamsa,
+        "planets": planets, "outer_planets": outer_planets, "houses": houses, "navamsa": navamsa,
         "chalit": {"system": "sripati", "mc": mc, "mc_dms": dms(mc - sign_of(mc) * 30), "mc_sign": sign_of(mc),
                    "mc_sign_name": SIGNS[sign_of(mc)], "mc_sign_name_hi": SIGNS_HI[sign_of(mc)],
                    "cusps": [{"house": i + 1, "longitude": c, "sign": sign_of(c), "sign_name_hi": SIGNS_HI[sign_of(c)],
@@ -198,5 +212,7 @@ def compute_chart(date: str, time: str, tz: str, lat: float, lon: float,
     chart["doshas"] = doshas_layer(chart)
     from .yogini import yogini as yogini_dasha
     chart["yogini_dasha"] = yogini_dasha(sid["Moon"], birth_utc, now)
+    from .nadi import reading as nadi_reading
+    chart["nadi"] = nadi_reading(chart)
     chart["readings"] = match_rules(chart)
     return chart

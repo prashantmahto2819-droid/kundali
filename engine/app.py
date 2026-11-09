@@ -369,6 +369,82 @@ def notify_preview(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/ai/status")
+def ai_status():
+    return handlers.ai_status_from_payload()
+
+
+@app.post("/v1/ai/chat")
+def ai_chat(req: NotifyRequest):
+    try:
+        return handlers.ai_chat_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/ai/palm")
+def ai_palm(req: NotifyRequest):
+    try:
+        return handlers.ai_palm_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/panchang/eclipse")
+def panchang_eclipse(request: Request):
+    try:
+        return handlers.eclipse_from_query(dict(request.query_params))
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/v1/consult/astrologers")
+def consult_astrologers():
+    return handlers.consult_astrologers_from_query()
+
+
+def _consult_route(fn, req: NotifyRequest, request: Request | None = None):
+    try:
+        return fn(req.model_dump(), dict(request.headers)) if request is not None else fn(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/v1/consult/request")
+def consult_request(req: NotifyRequest):
+    return _consult_route(handlers.consult_request_from_payload, req)
+
+
+@app.post("/v1/consult/mine")
+def consult_mine(req: NotifyRequest):
+    return _consult_route(handlers.consult_mine_from_payload, req)
+
+
+@app.post("/v1/wallet")
+def wallet(req: NotifyRequest):
+    return _consult_route(handlers.wallet_from_payload, req)
+
+
+@app.post("/v1/consult/get")
+def consult_get(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.consult_get_from_payload, req, request)
+
+
+@app.post("/v1/consult/message")
+def consult_message(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.consult_message_from_payload, req, request)
+
+
+@app.post("/v1/consult/close")
+def consult_close(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.consult_close_from_payload, req, request)
+
+
+@app.post("/v1/consult/admin")
+def consult_admin(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.consult_admin_from_payload, req, request)
+
+
 @app.post("/v1/notify/webhook")
 async def notify_webhook(request: Request):
     try:

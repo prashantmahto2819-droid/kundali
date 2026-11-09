@@ -82,6 +82,16 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/v1/palm/catalog":
             from jyotish import palm
             return self._json(200, palm.catalog())
+        if path == "/v1/ai/status":
+            return self._json(200, handlers.ai_status_from_payload())
+        if path == "/v1/panchang/eclipse":
+            from urllib.parse import parse_qs
+            try:
+                return self._json(200, handlers.eclipse_from_query({k: v[0] for k, v in parse_qs(query).items()}))
+            except handlers.BadRequest as exc:
+                return self._json(422, {"detail": str(exc)})
+        if path == "/v1/consult/astrologers":
+            return self._json(200, handlers.consult_astrologers_from_query())
         if path == "/v1/palm/trace/catalog":
             return self._json(200, handlers.palm_trace_catalog())
         if path == "/v1/vastu/catalog":
@@ -160,7 +170,24 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/notify/verify": handlers.notify_verify_from_payload,
                   "/v1/notify/unsubscribe": handlers.notify_unsubscribe_from_payload,
                   "/v1/notify/status": handlers.notify_status_from_payload,
-                  "/v1/notify/preview": handlers.notify_preview_from_payload}
+                  "/v1/notify/preview": handlers.notify_preview_from_payload,
+                  "/v1/ai/chat": handlers.ai_chat_from_payload,
+                  "/v1/ai/palm": handlers.ai_palm_from_payload,
+                  "/v1/ai/status": handlers.ai_status_from_payload,
+                  "/v1/consult/request": handlers.consult_request_from_payload,
+                  "/v1/consult/mine": handlers.consult_mine_from_payload,
+                  "/v1/wallet": handlers.wallet_from_payload}
+        header_routes = {"/v1/consult/get": handlers.consult_get_from_payload, "/v1/consult/message": handlers.consult_message_from_payload,
+                         "/v1/consult/close": handlers.consult_close_from_payload, "/v1/consult/admin": handlers.consult_admin_from_payload}
+        if self.path in header_routes:
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                payload = json.loads(self.rfile.read(length) or b"{}")
+                return self._json(200, header_routes[self.path](payload, dict(self.headers)))
+            except handlers.BadRequest as exc:
+                return self._json(422, {"detail": str(exc)})
+            except json.JSONDecodeError:
+                return self._json(400, {"detail": "invalid JSON"})
         if self.path.split("?")[0] == "/v1/notify/webhook":            # Relay inbound messages: raw body + signature headers
             length = int(self.headers.get("Content-Length", 0))
             try:

@@ -62,7 +62,9 @@ def chart_from_payload(payload: dict) -> dict:
         chart = compute_chart(date, time_, tz, lat, lon, name=payload.get("name"),
                               ayanamsa_system=payload.get("ayanamsa", "lahiri"),
                               year_days=year_days, as_of=as_of, backend=backend(),
-                              dasha_level=int(payload.get("dasha_level", 2)))
+                              dasha_level=int(payload.get("dasha_level", 2)),
+                              node_type="true" if str(payload.get("node_type", "mean")).lower() == "true" else "mean",
+                              outer=bool(payload.get("outer", True)))
     except ValueError as exc:  # e.g. impossible date like 1990-02-31
         raise BadRequest(str(exc)) from exc
     try:                                             # today's and this week's dasha/transit changes for this chart
@@ -650,7 +652,12 @@ def panchang_today_from_query(q: dict) -> dict:
     out = panchang_month.month(y, m, lat, lon, str(q.get("tz") or "Asia/Kolkata"), only_day=d)
     if not out["days"]:
         raise BadRequest("no sunrise on that date at this latitude")
-    return {**out["days"][0], "tz": out["tz"], "lat": lat, "lon": lon}
+    row = {**out["days"][0], "tz": out["tz"], "lat": lat, "lon": lon}
+    lang = str(q.get("lang") or "")
+    if lang in ("te", "kn", "mr", "gu", "bn"):
+        from . import regional
+        row = regional.localize_day(row, lang)
+    return row
 
 
 def _tz_ok(tz) -> bool:
@@ -707,3 +714,119 @@ def notify_webhook(body: bytes, headers: dict) -> dict:
     """POST /v1/notify/webhook — Vivid Relay delivers inbound WhatsApp messages here; the bot answers through Relay."""
     from . import wa_bot
     return wa_bot.handle_webhook(body, headers)
+
+
+# ---------------------------------------------------------------- AI (multi-provider chat, palm photo)
+def _ai_who(payload: dict) -> str:
+    return str(payload.get("user_id") or payload.get("phone") or payload.get("client_id") or "anon")[:80]
+
+
+def ai_status_from_payload(payload: dict | None = None) -> dict:
+    from . import llm
+    provs = llm.configured()
+    return {"available": bool(provs), "providers": [{"name": p["name"], "model": p["model"], "vision": bool(p.get("vision"))} for p in provs],
+            "daily_quota": int(os.environ.get("AI_DAILY_QUOTA", "30"))}
+
+
+def ai_chat_from_payload(payload: dict) -> dict:
+    """POST /v1/ai/chat  {messages:[{role,content}], lang?, birth?|chart?, lat?, lon?, tz?, user_id?|phone?|client_id?}"""
+    from . import ai, access
+    try:
+        return ai.chat(payload, store=access.default_store(), who=_ai_who(payload))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def ai_palm_from_payload(payload: dict) -> dict:
+    """POST /v1/ai/palm  {content_b64, mime?, hand?, lang?}"""
+    import base64
+    from . import ai, access
+    b64 = payload.get("content_b64")
+    if not isinstance(b64, str) or not b64:
+        raise BadRequest("content_b64 (base64 of the photo) is required")
+    mime = "image/jpeg"
+    if b64.startswith("data:"):
+        head, b64 = b64.split(",", 1)
+        mime = head[5:].split(";")[0] or mime
+    try:
+        data = base64.b64decode(b64, validate=False)
+    except Exception as exc:
+        raise BadRequest("content_b64 is not valid base64") from exc
+    try:
+        return ai.palm_scan(data, mime=str(payload.get("mime") or mime), lang=payload.get("lang") or "hi", hand=str(payload.get("hand") or "right"),
+                            store=access.default_store(), who=_ai_who(payload))
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+# ---------------------------------------------------------------- consultation with astrologers + wallet
+def _consult_call(fn, *args, **kw):
+    from . import consult
+    try:
+        return getattr(consult, fn)(*args, **kw)
+    except ValueError as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def consult_astrologers_from_query(_q: dict | None = None) -> dict:
+    from . import consult
+    return {"astrologers": consult.list_astrologers(), "paid": consult.paid(), "modes": {k: {"hi": v[0], "en": v[1]} for k, v in consult.MODES.items()}}
+
+
+def consult_request_from_payload(payload: dict) -> dict:
+    return _consult_call("create_request", payload)
+
+
+def consult_get_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    from . import consult
+    return _consult_call("get_request", str(payload.get("id") or ""), payload.get("phone"), admin=consult.is_admin(headers or {}))
+
+
+def consult_mine_from_payload(payload: dict) -> dict:
+    return {"requests": _consult_call("my_requests", payload.get("phone"))}
+
+
+def consult_message_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    from . import consult
+    return _consult_call("post_message", str(payload.get("id") or ""), str(payload.get("sender") or "seeker"), str(payload.get("text") or ""), payload.get("phone"), admin=consult.is_admin(headers or {}))
+
+
+def consult_close_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    from . import consult
+    return _consult_call("close_request", str(payload.get("id") or ""), payload.get("phone"), payload.get("rating"), admin=consult.is_admin(headers or {}))
+
+
+def wallet_from_payload(payload: dict) -> dict:
+    return _consult_call("wallet_view", payload.get("phone"))
+
+
+def consult_admin_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    """POST /v1/consult/admin {action: overview|astrologer|topup, ...}  — X-Admin-Key required."""
+    from . import consult
+    if not consult.is_admin(headers or {}):
+        raise BadRequest("admin key required (X-Admin-Key)")
+    action = str(payload.get("action") or "overview")
+    if action == "astrologer":
+        return _consult_call("upsert_astrologer", payload.get("astrologer") or {})
+    if action == "topup":
+        return _consult_call("topup", payload.get("phone"), int(payload.get("amount") or 0), str(payload.get("ref") or ""), str(payload.get("note") or ""))
+    return consult.admin_overview()
+
+
+def eclipse_from_query(q: dict) -> dict:
+    """GET /v1/panchang/eclipse?year=YYYY&lat&lon&tz[&date=YYYY-MM-DD] — the year's eclipses with local circumstances and sutak."""
+    from . import panchang_extra as px
+    try:
+        year = int(q.get("year") or str(q.get("date") or "")[:4] or datetime.now(timezone.utc).year)
+        lat = float(q.get("lat") or 28.61); lon = float(q.get("lon") or 77.2)
+    except (TypeError, ValueError):
+        raise BadRequest("year, lat, lon must be numbers")
+    tz = str(q.get("tz") or "Asia/Kolkata")
+    if not _tz_ok(tz) or not 1950 <= year <= 2099:
+        raise BadRequest("tz must be a valid zone and year 1950-2099")
+    ecs = px.eclipses(year, tz)
+    if q.get("date"):
+        ecs = [e for e in ecs if e["date"] == q["date"]]
+    return {"year": year, "lat": lat, "lon": lon, "tz": tz, "eclipses": [px.eclipse_local(e, lat, lon, tz) for e in ecs],
+            "note_hi": "स्थानीय स्पर्श-मध्य-मोक्ष, दृश्यता और सूतक इस स्थान के लिए (चंद्र ग्रहण ±2 मिनट, सूर्य ग्रहण ±15 मिनट); परंपरा: सूर्य ग्रहण का सूतक 12 घंटे, चंद्र का 9 घंटे पहले; उपच्छाया ग्रहण का सूतक नहीं।",
+            "note_en": "Local contacts, visibility and sutak for this place (lunar ±2 min, solar ±15 min); tradition: sutak 12 h before a solar, 9 h before a lunar eclipse; none for penumbral eclipses."}
