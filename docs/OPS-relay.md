@@ -149,3 +149,21 @@ exposing anything. Subscribers verify their number with a 6-digit code sent over
 6. Subscribers live in the same SQLite file as the access store (`/srv/data/access.sqlite`, tables `wa_subs`, `wa_log`), so the
    existing backup covers them. The worker checks every minute, sends once per subscriber per local day (and the weekly list on the
    chosen weekday), retries next minute on a failed send, and records the last error on the row.
+
+
+## 13. Two-way WhatsApp bot (people message the number and get panchang / rashifal / kundali back)
+
+Relay forwards every inbound message to the app, the app answers through the same Relay session. Commands: पंचांग [शहर], राशिफल [राशि],
+कुंडली DD-MM-YYYY HH:MM शहर, व्रत, मुहूर्त विवाह, शुरू, बंद, मदद (English equivalents work too).
+
+1. Relay → Developer → **Webhooks** → New webhook:
+   - URL: `https://kundali.vividbrandify.com/v1/notify/webhook` (the public URL — Relay refuses private docker addresses for user webhooks)
+   - Events: `message` only
+   - Copy the **secret** Relay shows.
+2. Add to `/srv/kundali/deploy/.env`: `RELAY_WEBHOOK_SECRET=<that secret>` (the sender settings from §12 must also be present).
+3. `cd /srv/kundali/deploy && docker compose -f docker-compose.relay.yml up -d`
+4. Test: send "मदद" to the business number from any phone; the menu must come back within a few seconds.
+   `docker exec kundali-api python -c "import sqlite3;print(sqlite3.connect('/srv/data/access.sqlite').execute('select * from wa_inbox order by at desc limit 5').fetchall())"` lists handled messages.
+   A 401 in Relay's webhook log means the secret differs; "duplicate" entries are Relay retries and are expected.
+5. Keep Relay's own STOP keyword on; the bot also honours बंद/stop, and "शुरू"/"start" turns the daily message on (06:30, Delhi — the
+   person refines city/time/birth details on the website).

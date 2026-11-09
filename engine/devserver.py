@@ -161,6 +161,12 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/notify/unsubscribe": handlers.notify_unsubscribe_from_payload,
                   "/v1/notify/status": handlers.notify_status_from_payload,
                   "/v1/notify/preview": handlers.notify_preview_from_payload}
+        if self.path.split("?")[0] == "/v1/notify/webhook":            # Relay inbound messages: raw body + signature headers
+            length = int(self.headers.get("Content-Length", 0))
+            try:
+                return self._json(200, handlers.notify_webhook(self.rfile.read(length), dict(self.headers)))
+            except PermissionError:
+                return self._json(401, {"detail": "bad signature"})
         if self.path.split("?")[0] in handlers.REPORT_ROUTES:
             try:
                 length = int(self.headers.get("Content-Length", 0))

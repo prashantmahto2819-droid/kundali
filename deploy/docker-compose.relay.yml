@@ -22,6 +22,8 @@ services:
       RELAY_API_KEY: ${RELAY_API_KEY:-}
       RELAY_SESSION: ${RELAY_SESSION:-}
       KUNDALI_NOTIFY: ${KUNDALI_NOTIFY:-0}            # 1 = run the once-a-minute sender inside this container
+      RELAY_WEBHOOK_SECRET: ${RELAY_WEBHOOK_SECRET:-}  # secret of the Relay webhook that points at /v1/notify/webhook (two-way bot)
+      KUNDALI_SITE_URL: ${KUNDALI_SITE_URL:-https://kundali.vividbrandify.com}
     volumes:
       - kundali-data:/srv/data
     mem_limit: 768m

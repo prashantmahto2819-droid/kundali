@@ -369,6 +369,14 @@ def notify_preview(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.post("/v1/notify/webhook")
+async def notify_webhook(request: Request):
+    try:
+        return handlers.notify_webhook(await request.body(), dict(request.headers))
+    except PermissionError:
+        raise HTTPException(status_code=401, detail="bad signature")
+
+
 @app.middleware("http")
 async def _no_stale_shell(request: Request, call_next):
     """HTML, the service worker and i18n must never be served stale (browsers and Cloudflare otherwise keep the old app shell)."""

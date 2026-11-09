@@ -693,3 +693,9 @@ def start_notify_worker_if_enabled() -> bool:
     notify.start_worker()
     notify._worker_started = True
     return True
+
+
+def notify_webhook(body: bytes, headers: dict) -> dict:
+    """POST /v1/notify/webhook — Vivid Relay delivers inbound WhatsApp messages here; the bot answers through Relay."""
+    from . import wa_bot
+    return wa_bot.handle_webhook(body, headers)

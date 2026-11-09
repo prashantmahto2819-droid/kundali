@@ -220,7 +220,7 @@ def guard(headers, path: str, store: Store | None = None, mode: str | None = Non
     required : a valid key is mandatory for every /v1 call.
     """
     mode = mode or auth_mode()
-    if mode == "off" or not path.startswith("/v1/"):
+    if mode == "off" or not path.startswith("/v1/") or path == "/v1/notify/webhook":   # the webhook is verified by its own HMAC signature
         return 200, {}, {}, None
     store = store or default_store()
     org, err = resolve(headers, store)
