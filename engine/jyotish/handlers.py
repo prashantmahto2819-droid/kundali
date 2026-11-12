@@ -815,6 +815,25 @@ def consult_admin_from_payload(payload: dict, headers: dict | None = None) -> di
         return _consult_call("admin_set_subscriber", payload.get("phone"), payload.get("fields") or {})
     if action == "override":
         return _consult_call("admin_save_override", int(payload.get("year") or 0), payload.get("data") or {})
+    if action == "announce":
+        from . import notify
+        text = str(payload.get("text") or "").strip()
+        if len(text) < 5:
+            raise BadRequest("text required")
+        lang = payload.get("lang")
+        targets = [s for s in notify.subs().active() if not lang or s.get("lang") == lang]
+        if payload.get("test_phone"):
+            targets = [{"phone": notify.normalize_phone(payload["test_phone"])}]
+        limit = int(payload.get("limit") or 500)
+        sent = failed = 0
+        import time as _t
+        for i, s_ in enumerate(targets[:limit]):
+            res = notify.send_whatsapp(s_["phone"], text)
+            notify.subs().log(s_["phone"], "announce", res["ok"], res["detail"])
+            sent += res["ok"]; failed += (not res["ok"])
+            if i % 20 == 19:
+                _t.sleep(1.0)                                # gentle pacing on top of Relay's own
+        return {"targets": len(targets[:limit]), "sent": sent, "failed": failed}
     if action == "export_subscribers":
         import csv, io
         from . import notify

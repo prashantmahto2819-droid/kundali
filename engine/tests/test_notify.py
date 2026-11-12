@@ -144,3 +144,9 @@ def test_monthly_digest_due_on_first(fresh_store):
     s = {"tz": "Asia/Kolkata", "daily_time": "06:30", "weekly": 1, "weekly_day": 0, "last_daily": "2026-12-01", "last_weekly": None, "last_monthly": None}
     assert notify.due_now(s, datetime(2026, 12, 1, 1, 1, tzinfo=timezone.utc)) == ["monthly"]              # 1 Dec 06:31 IST (Tuesday)
     assert notify.due_now({**s, "last_monthly": "2026-12-01"}, datetime(2026, 12, 1, 1, 1, tzinfo=timezone.utc)) == []
+
+
+def test_term_of_day_in_daily():
+    sub = {"lang": "hi", "tz": "Asia/Kolkata", "lat": 28.61, "lon": 77.2, "want_panchang": 1, "want_rashifal": 0, "vrat_alert": 0, "moon_sign": None}
+    txt = notify.compose_daily(sub, date(2026, 11, 12))
+    assert "आज का शब्द" in txt and notify.term_of_day(date(2026, 11, 12), True) == notify.term_of_day(date(2026, 11, 12), True) and notify.term_of_day(date(2026, 11, 13), False).startswith("📖 *Term of the day")

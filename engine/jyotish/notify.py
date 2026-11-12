@@ -322,10 +322,29 @@ def compose_daily(sub: dict, d: date) -> str:
         if alert:
             L.append("")
             L.append(alert)
+    if sub.get("want_panchang", 1):
+        try:
+            L.append("")
+            L.append(term_of_day(d, hi))
+        except Exception:
+            L.pop()
     L.append("")
     L.append("_" + ("पंचांग: लाहिड़ी अयनांश, सूर्योदय-कालीन तिथि; राशिफल प्रवृत्ति-संकेत है। बंद करने के लिए STOP लिखें।" if hi else
                     "Panchang: Lahiri ayanamsa, tithi at sunrise; the rashifal is a tendency pointer. Reply STOP to unsubscribe.") + "_")
     return "\n".join(L)
+
+
+_TERMS: list | None = None
+
+
+def term_of_day(d: date, hi: bool) -> str:
+    """One glossary term per day (same for everyone that day) — a small learning line at the end of the daily message."""
+    global _TERMS
+    if _TERMS is None:
+        from pathlib import Path
+        _TERMS = json.loads((Path(__file__).resolve().parents[2] / "data" / "knowledge" / "glossary.json").read_text("utf-8"))["terms"]
+    t = _TERMS[d.toordinal() % len(_TERMS)]
+    return (f"📖 *आज का शब्द — {t['hi']}*: {t['definition_hi']}" if hi else f"📖 *Term of the day — {t['en']}*: {t['definition_en']}")
 
 
 def compose_birthday(sub: dict, d: date, day: dict) -> str:

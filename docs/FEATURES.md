@@ -92,6 +92,9 @@ Five sections — **आज** (home: today's panchang tiles, today's and tomorrow
 ## WhatsApp daily updates (Vivid Relay)
 Free subscription from the Kundali tab: a 6-digit code over WhatsApp verifies the number; then every day at the chosen time (subscriber's own time zone and place) a message with the panchang — weekday, month, **the tithi window** (from when to when, and which tithi follows, so two-tithi days are explicit), nakshatra end, sunrise/sunset/moonrise, Rahu kaal, Abhijit, disha shool, special yogas, today's vrats/festivals — the subscriber's own daily rashifal (Moon sign from the chart), and a **day-before alert** for tomorrow's vrat/festival with its tithi start/end, sunrise/sunset, Ekadashi parana and Pradosha window; a **weekly list** on the chosen weekday. Kinds are selectable (festival, Ekadashi, Purnima, Amavasya, Pradosh, Chaturthi, Masik Shivaratri, regional, national). Hindi or English. Sending goes through the owner's Vivid Relay gateway (`RELAY_URL`, `RELAY_API_KEY`, `RELAY_SESSION`, `KUNDALI_NOTIFY=1`); Relay's STOP keyword and the card's "बंद करें" both opt out.
 
+## Tarot, prashna, term of the day, announcements
+Bot: *टैरो* (one card for the day, stable per number/day) or *टैरो <प्रश्न>* (three cards); *प्रश्न 108 नौकरी* (KP horary verdict with reasons). The daily WhatsApp message ends with a glossary term of the day. Admin: paced announcement to all active subscribers (optional language filter, test-send first).
+
 ## More bot commands
 *पंचांग 25-12-2026 इंदौर* / *पंचांग कल*, *दीपावली कब है* (next dates with tithi), *वर्षफल [जन्म-विवरण] [वर्ष]*, *अंक 15-05-1990 Name* (moolank, bhagyank, personal year, name number, Lo Shu gaps), *मिलान वर | वधू* (Ashtakoota + Dashakoota + manglik). Admin: subscribers CSV export. Today tab: next 30 days' vrats/festivals.
 

@@ -44,7 +44,12 @@ CMD = {"panchang": ("पंचांग", "panchang", "panchaang", "panchag"), "
        "city": ("शहर", "city", "sthan", "स्थान", "place"), "time": ("समय", "time", "samay"), "birth": ("जन्म", "birth", "janm", "dob"),
        "language": ("भाषा", "language", "bhasha", "lang"), "settings": ("सेटिंग", "settings", "setting", "मेरी", "my"),
        "varshaphal": ("वर्षफल", "varshaphal", "varshphal", "varsha"), "numerology": ("अंक", "ank", "numerology", "mulank", "मूलांक"),
-       "festival": ("त्योहार", "tyohar", "festival", "कब", "kab", "when"), "match": ("मिलान", "milan", "match", "gun", "गुण")}
+       "festival": ("त्योहार", "tyohar", "festival", "कब", "kab", "when"), "match": ("मिलान", "milan", "match", "gun", "गुण"),
+       "tarot": ("टैरो", "tarot", "card", "कार्ड"), "prashna": ("प्रश्न", "prashna", "prashn", "question", "सवाल")}
+PRASHNA_TOPICS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "नौकरी": "job", "job": "job", "naukri": "job", "व्यापार": "business", "business": "business", "vyapar": "business",
+                  "धन": "money", "पैसा": "money", "money": "money", "paisa": "money", "वसूली": "money", "संपत्ति": "property", "मकान": "property", "property": "property", "ghar": "property", "घर": "property",
+                  "शिक्षा": "education", "परीक्षा": "education", "exam": "education", "education": "education", "padhai": "education", "संतान": "children", "बच्चा": "children", "children": "children", "santan": "children",
+                  "विदेश": "travel", "यात्रा": "travel", "travel": "travel", "videsh": "travel", "खोई": "lost_item", "खोया": "lost_item", "lost": "lost_item", "khoya": "lost_item"}
 LANG_WORDS = {"hindi": "hi", "हिंदी": "hi", "हिन्दी": "hi", "english": "en", "अंग्रेज़ी": "en", "angrezi": "en", "telugu": "te", "तेलुगु": "te", "తెలుగు": "te", "kannada": "kn", "कन्नड़": "kn", "ಕನ್ನಡ": "kn",
               "marathi": "mr", "मराठी": "mr", "gujarati": "gu", "गुजराती": "gu", "ગુજરાતી": "gu", "bengali": "bn", "bangla": "bn", "बांग्ला": "bn", "বাংলা": "bn"}
 ACTIVITY_WORDS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "vivah": "marriage",
@@ -136,14 +141,14 @@ def reply_help(hi: bool, name: str = "") -> str:
                         "• *पंचांग* [शहर] — आज का पंचांग\n• *राशिफल* [राशि] — आज का राशिफल (जैसे: राशिफल मेष)\n"
                         "• *कुंडली* 15-05-1990 10:30 जबलपुर — संक्षिप्त कुंडली और पूरी रिपोर्ट का लिंक\n"
                         "• *व्रत* — इस सप्ताह के व्रत-पर्व · *दीपावली कब है* — किसी पर्व की तारीख़\n• *मुहूर्त* विवाह — अगले 30 दिन के शुभ दिन (विवाह, गृह प्रवेश, वाहन, यात्रा, व्यापार…)\n"
-                        "• *वर्षफल* [जन्म-विवरण] · *अंक* 15-05-1990 नाम · *मिलान* वर | वधू\n"
+                        "• *वर्षफल* [जन्म-विवरण] · *अंक* 15-05-1990 नाम · *मिलान* वर | वधू\n• *टैरो* [प्रश्न] · *प्रश्न 108 नौकरी* (KP प्रश्न कुंडली)\n"
                         "• *शुरू* — रोज़ सुबह पंचांग-राशिफल पाइए · *बंद* — रोकिए\n• *सेटिंग* — शहर, समय, जन्म-विवरण, भाषा बदलिए\n\n"
                         f"पूरा ऐप: {SITE}\n_फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी नहीं।_")
     return greet + ("Welcome to the Kundali app. Send one word:\n\n"
                     "• *panchang* [city] — today's panchang\n• *rashifal* [sign] — today's rashifal (e.g. rashifal mesh)\n"
                     "• *kundali* 15-05-1990 10:30 Jabalpur — a short chart and a link to the full report\n"
                     "• *vrat* — this week's vrats and festivals · *when is diwali* — a festival's date\n• *muhurta* marriage — good dates in the next 30 days\n"
-                    "• *varshaphal* [birth details] · *ank* 15-05-1990 name · *match* boy | girl\n"
+                    "• *varshaphal* [birth details] · *ank* 15-05-1990 name · *match* boy | girl\n• *tarot* [question] · *prashna 108 job* (KP horary)\n"
                     "• *start* — daily panchang/rashifal each morning · *stop* — stop it\n• *settings* — change city, time, birth details, language\n\n"
                     f"Full app: {SITE}\n_Readings are traditional guidance, not predictions._")
 
@@ -406,6 +411,41 @@ def reply_match(text: str, hi: bool) -> str:
     return "\n".join(L)
 
 
+def reply_tarot(phone: str, text: str, words: list[str], hi: bool) -> str:
+    """One card for the day (seeded by number + date, so it stays the same all day) or three cards for a question."""
+    from .handlers import tarot_from_payload
+    q = " ".join(w for w in words if w not in CMD["tarot"]).strip()
+    today = datetime.now(ZoneInfo("Asia/Kolkata")).date().isoformat()
+    spread = "three" if q else "single"
+    t = tarot_from_payload({"spread": spread, "seed": f"{phone}:{today}:{q}", "question": q or None})
+    L = [("🃏 *आज का टैरो कार्ड*" if hi else "🃏 *Tarot card for today*") if not q else ((f"🃏 *टैरो — {q}*" if hi else f"🃏 *Tarot — {q}*"))]
+    for c in t["cards"]:
+        nm = c["card"]["name_hi"] if hi else c["card"]["name"]
+        L.append(f"• {c['position_hi'] if hi else c['position_en']}: *{nm}*{(' (उलटा)' if hi else ' (reversed)') if c.get('reversed') else ''} — {c['meaning_hi'] if hi else c['meaning']}")
+    L.append("")
+    L.append("_" + (t.get("disclaimer_hi") if hi else "Tarot is reflective guidance, not prediction.") + "_")
+    return "\n".join(L)
+
+
+def reply_prashna(sub: dict | None, text: str, words: list[str], hi: bool) -> str:
+    """KP horary: 'प्रश्न 108 नौकरी' (number 1-249 + topic) → verdict with reasons."""
+    from .handlers import prashna_from_payload
+    n = next((int(w) for w in words if w.isdigit() and 1 <= int(w) <= 249), None)
+    topic = next((PRASHNA_TOPICS[w] for w in words if w in PRASHNA_TOPICS), None)
+    if n is None or topic is None:
+        return ("कृष्णमूर्ति प्रश्न के लिए मन में 1 से 249 के बीच एक अंक सोचिए और विषय लिखिए: *प्रश्न 108 नौकरी* (विषय: विवाह, नौकरी, व्यापार, धन, संपत्ति, शिक्षा, संतान, यात्रा, खोई वस्तु)" if hi else
+                "For a KP horary pick a number 1–249 and the topic: *prashna 108 job* (topics: marriage, job, business, money, property, education, children, travel, lost)")
+    pl = _place_for(sub, [w for w in words if not w.isdigit() and w not in PRASHNA_TOPICS])
+    p = prashna_from_payload({"topic": topic, "lat": pl["lat"], "lon": pl["lon"], "tz": pl["tz"], "kp_number": n})
+    L = [(f"❓ *प्रश्न कुंडली (KP)* — {p['topic_hi']}, अंक {n}" if hi else f"❓ *Prashna (KP)* — {p['topic_en']}, number {n}"),
+         (f"उत्तर: *{p['verdict_hi']}*" if hi else f"Verdict: *{p['verdict']}*")]
+    for r in (p.get("reasons_hi") if hi else p.get("reasons_en")) or []:
+        L.append("• " + str(r))
+    L.append("")
+    L.append("_" + (p.get("disclaimer_hi") if hi else p.get("disclaimer_en", "")) + "_")
+    return "\n".join(L)
+
+
 def reply_vrat(sub: dict | None, words: list[str], hi: bool) -> str:
     pl = _place_for(sub, words)
     s = {"lang": "hi" if hi else "en", "tz": pl["tz"], "lat": pl["lat"], "lon": pl["lon"], "vrat_kinds": "festival,ekadashi,purnima,amavasya,pradosh,chaturthi,shivaratri"}
@@ -580,6 +620,10 @@ def answer(phone: str, text: str, name: str = "") -> str:
             return reply_festival(sub, text, words, hi)
         if cmd == "match":
             return reply_match(text, hi)
+        if cmd == "tarot":
+            return reply_tarot(phone, text, words, hi)
+        if cmd == "prashna":
+            return reply_prashna(sub, text, words, hi)
     except Exception as exc:                        # never leave a sender without an answer
         return ("क्षमा करें, यह अभी नहीं बन सका (" + type(exc).__name__ + ")। *मदद* लिखकर विकल्प देखिए।" if hi else
                 "Sorry, that could not be prepared (" + type(exc).__name__ + "). Send *help* for the options.")

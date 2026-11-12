@@ -178,3 +178,12 @@ def test_more_commands(store, monkeypatch):
     m = wa_bot.answer("919876543210", "मिलान 15-05-1990 10:30 दिल्ली | 20-08-1992 06:15 मुंबई")
     assert "अष्टकूट" in m and "दशकूट" in m and "मंगल दोष" in m
     assert "ऐसे लिखिए" in wa_bot.answer("919876543210", "मिलान")
+
+
+def test_tarot_and_prashna(store, monkeypatch):
+    t1 = wa_bot.answer("919876543210", "टैरो"); t2 = wa_bot.answer("919876543210", "टैरो")
+    assert t1 == t2 and "आज का टैरो कार्ड" in t1 and "•" in t1
+    assert wa_bot.answer("919876543210", "tarot job change").count("•") == 3
+    p = wa_bot.answer("919876543210", "प्रश्न 108 नौकरी")
+    assert "प्रश्न कुंडली (KP)" in p and "उत्तर:" in p
+    assert "1 से 249" in wa_bot.answer("919876543210", "प्रश्न नौकरी")
