@@ -115,3 +115,10 @@ KP horary with 1–249 numbers; retrieval-based Q&A over the app's own knowledge
 
 ## टैरो, वास्तु, हस्तरेखा, अंक
 Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu), vastu (room × 8 directions, and from a floor plan: PDF/DXF/image upload, 16-zone degree wheel, 81-pada mandala, map), palmistry (guided checklist, and photo tracing with measured lines, marks, counted lines).
+
+## होम पेज और मेरा डैशबोर्ड (Home page & personal dashboard)
+- New app header (logo, light/dark theme toggle saved per browser, language switch, install) and a full site footer with links to every tool.
+- **Home** (default tab): time-of-day greeting, hero with quick 4-field kundali form (fills the main form, builds the chart, saves the person to "My people"), today-at-a-glance tiles (day/V.S., tithi with end time, nakshatra, sunrise·sunset·moonrise, Rahu kaal + Abhijit, next festival), 15 feature cards that jump to the right tab/sub-tab, rashifal picker for all 12 signs (score ring, Moon/Jupiter/Saturn notes, lucky colour/number), WhatsApp join band, trust cards, FAQ.
+- **My dashboard**: family profiles stored only in this browser (add form with relation, add current chart, import from account when signed in); per person: identity chips (lagna, Moon sign, nakshatra-pada, Sun sign, name syllable), today's personal score (Ashtakavarga) and rashifal, running Vimshottari MD/AD/PD with progress bars and Yogini dasha, Sade Sati/Ashtama Shani, Mangal/Kaal Sarp/Pitru dosha chips, yogas, birthday countdown + varshaphal link, six-month timeline of dasha and transit changes, and actions (open full chart, share card, WhatsApp updates for this person, delete).
+- API: `POST /v1/dashboard` (birth payload → all of the above in one call).
+- Fully translated to English; works on phone (2-column cards, bottom nav) and desktop.

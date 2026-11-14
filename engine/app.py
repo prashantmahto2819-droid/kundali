@@ -469,6 +469,11 @@ def chart_card(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.post("/v1/dashboard")
+def dashboard(req: NotifyRequest):
+    return _consult_route(handlers.dashboard_from_payload, req)
+
+
 @app.post("/v1/chart/year_ahead")
 def chart_year_ahead(req: NotifyRequest):
     return _consult_route(handlers.year_ahead_from_payload, req)

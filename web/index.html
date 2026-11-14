@@ -17,7 +17,8 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
   :root { --bg:#fbf7ef; --ink:#2a2118; --muted:#7a6a58; --line:#b08a4a; --card:#fff; --accent:#8a3b12; --ok:#2e7d32; --warn:#b26a00; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#17120d; --ink:#f1e6d3; --muted:#b9a88f; --line:#c9a25f; --card:#221a12; --accent:#f0a060; } }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#17120d; --ink:#f1e6d3; --muted:#b9a88f; --line:#c9a25f; --card:#221a12; --accent:#f0a060; } }
+  :root[data-theme="dark"] { --bg:#17120d; --ink:#f1e6d3; --muted:#b9a88f; --line:#c9a25f; --card:#221a12; --accent:#f0a060; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,"Noto Sans Devanagari",sans-serif; }
   header { padding:20px 16px 8px; max-width:1100px; margin:auto; }
@@ -91,26 +92,84 @@
   #note { font-size:.78rem; color:var(--muted); background:transparent; border:0; padding:2px 0; }
   footer { max-width:1100px; margin:24px auto 0; padding:16px; color:var(--muted); font-size:.8rem; border-top:1px solid color-mix(in srgb,var(--line) 30%,transparent); }
   @media (max-width:600px) { .tile .v { font-size:1.02rem; } h1 { font-size:1.3rem; } }
+
+  /* ---------- app bar, home, dashboard, footer ---------- */
+  .appbar { position:relative; padding:12px 16px; max-width:1100px; margin:auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); margin-right:auto; }
+  .brand b { display:block; font-size:1.3rem; color:var(--accent); line-height:1.1; } .brand small { display:block; color:var(--muted); font-size:.78rem; }
+  .appbar .acts { display:flex; gap:8px; align-items:center; }
+  .appbar .acts button { width:auto; padding:6px 12px; margin:0; font-size:.88rem; }
+  .iconbtn { background:transparent !important; color:var(--ink) !important; border:1px solid color-mix(in srgb,var(--line) 50%,transparent) !important; display:inline-flex; align-items:center; justify-content:center; }
+  .hero { position:relative; overflow:hidden; border-radius:22px; padding:28px; margin:12px 0; display:grid; grid-template-columns:1.15fr .85fr; gap:24px; align-items:center;
+          background:radial-gradient(circle at 85% 15%, color-mix(in srgb,#f3a23a 30%,transparent), transparent 45%), linear-gradient(135deg, color-mix(in srgb,var(--accent) 16%,var(--card)), var(--card) 70%);
+          border:1px solid color-mix(in srgb,var(--line) 35%,transparent); }
+  .hero::after { content:""; position:absolute; right:-80px; bottom:-80px; width:300px; height:300px; border-radius:50%; border:2px dashed color-mix(in srgb,var(--accent) 25%,transparent); pointer-events:none; }
+  .hero h2 { font-size:2.1rem; line-height:1.2; margin:6px 0 10px; color:var(--ink); } .hero h2 em { font-style:normal; color:var(--accent); }
+  .hero p { color:var(--muted); font-size:1.02rem; margin:0 0 14px; max-width:46ch; }
+  .hello { display:inline-flex; gap:6px; align-items:center; font-weight:700; color:var(--accent); background:color-mix(in srgb,var(--accent) 10%,transparent); padding:4px 12px; border-radius:99px; font-size:.88rem; }
+  .hero-stats { display:flex; gap:18px; flex-wrap:wrap; font-size:.85rem; color:var(--muted); } .hero-stats b { display:block; color:var(--ink); font-size:1.1rem; }
+  .hero-cta { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px; } .hero-cta button { width:auto; padding:10px 18px; border-radius:12px; }
+  .hero-form { position:relative; z-index:1; margin:0; box-shadow:0 12px 32px -18px rgba(80,40,10,.45); }
+  .hero-form form { grid-template-columns:1fr 1fr; } .hero-form .full { grid-column:1/-1; }
+  .glance { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:14px 0; }
+  .glance .tile { cursor:default; } .glance .tile.link { cursor:pointer; }
+  h3.sec { font-size:1.15rem; margin:26px 0 4px; color:var(--ink); } .sec-sub { color:var(--muted); margin:0 0 12px; font-size:.92rem; }
+  .features { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .feat { display:flex; gap:12px; align-items:flex-start; text-align:left; background:var(--card); color:var(--ink); border:1px solid color-mix(in srgb,var(--line) 30%,transparent); border-radius:16px; padding:14px; cursor:pointer; font-weight:400; transition:transform .12s, box-shadow .12s, border-color .12s; }
+  .feat:hover { transform:translateY(-2px); box-shadow:0 10px 24px -16px rgba(80,40,10,.5); border-color:color-mix(in srgb,var(--accent) 50%,transparent); }
+  .feat .ic { flex:none; width:42px; height:42px; border-radius:12px; display:grid; place-items:center; color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,transparent); }
+  .feat b { display:block; font-size:.98rem; margin-bottom:2px; } .feat span { font-size:.82rem; color:var(--muted); line-height:1.4; }
+  .chipsrow { display:flex; flex-wrap:wrap; gap:8px; } .chipsrow button { width:auto; padding:6px 12px; border-radius:99px; background:transparent; color:var(--ink); border:1px solid color-mix(in srgb,var(--line) 50%,transparent); font-weight:600; }
+  .chipsrow button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .wa-band { display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center; padding:20px; border-radius:18px; margin:18px 0; color:#fff; background:linear-gradient(120deg,#1f7a4a,#128c7e); }
+  .wa-band .ic { width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,.18); display:grid; place-items:center; }
+  .wa-band h4 { margin:0 0 4px; font-size:1.15rem; } .wa-band p { margin:0; opacity:.9; font-size:.9rem; }
+  .wa-band button { width:auto; background:#fff; color:#128c7e; padding:10px 18px; border-radius:12px; }
+  .trust { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .trust div { padding:14px; border-radius:14px; border:1px dashed color-mix(in srgb,var(--line) 45%,transparent); }
+  .trust .ic { color:var(--accent); } .trust b { display:block; margin:6px 0 2px; } .trust span { font-size:.85rem; color:var(--muted); }
+  .faq details { border-bottom:1px solid color-mix(in srgb,var(--line) 25%,transparent); padding:8px 0; } .faq summary { font-weight:600; } .faq p { margin:6px 0 0; color:var(--muted); font-size:.92rem; }
+  .people { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
+  .person { flex:none; width:auto; min-width:150px; max-width:220px; text-align:left; background:var(--card); color:var(--ink); border:1px solid color-mix(in srgb,var(--line) 35%,transparent); border-radius:14px; padding:10px 12px; font-weight:400; cursor:pointer; }
+  .person.on { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+  .person b { display:block; } .person span { font-size:.8rem; color:var(--muted); }
+  .person.add { border-style:dashed; color:var(--accent); display:grid; place-items:center; font-weight:700; }
+  .dgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; } .dgrid .card { margin:0; }
+  .ring { display:flex; gap:14px; align-items:center; } .ring svg { flex:none; }
+  .bar { height:8px; border-radius:99px; background:color-mix(in srgb,var(--line) 25%,transparent); overflow:hidden; margin:4px 0 10px; } .bar i { display:block; height:100%; background:linear-gradient(90deg,#f3a23a,var(--accent)); border-radius:99px; }
+  .tl { list-style:none; padding:0; margin:0; } .tl li { position:relative; padding:0 0 12px 18px; border-left:2px solid color-mix(in srgb,var(--line) 30%,transparent); margin-left:6px; font-size:.9rem; }
+  .tl li::before { content:""; position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%; background:var(--accent); } .tl li b { display:block; font-size:.78rem; color:var(--muted); }
+  .idchips { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 0; } .idchips span { padding:4px 10px; border-radius:10px; background:color-mix(in srgb,var(--accent) 9%,transparent); font-size:.85rem; } .idchips span i { font-style:normal; color:var(--muted); margin-right:4px; }
+  footer.site { max-width:1100px; margin:32px auto 0; padding:24px 16px 32px; border-top:1px solid color-mix(in srgb,var(--line) 30%,transparent); color:var(--muted); font-size:.86rem; }
+  footer.site .cols { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:20px; } footer.site h5 { margin:0 0 8px; color:var(--ink); font-size:.92rem; }
+  footer.site a { display:block; color:var(--muted); text-decoration:none; padding:2px 0; cursor:pointer; } footer.site a:hover { color:var(--accent); }
+  footer.site .fine { margin-top:18px; padding-top:12px; border-top:1px solid color-mix(in srgb,var(--line) 20%,transparent); font-size:.78rem; }
+  @media (max-width:600px) { .features { grid-template-columns:1fr 1fr; gap:8px; } .feat { flex-direction:column; gap:8px; padding:12px; } .feat .ic { width:36px; height:36px; } .feat span span { font-size:.76rem; } }
+  @media (max-width:800px) { .hero { grid-template-columns:1fr; padding:20px; } .hero h2 { font-size:1.6rem; } .wa-band { grid-template-columns:1fr; text-align:left; } footer.site .cols { grid-template-columns:1fr 1fr; } .brand small { display:none; } }
 @media (max-width:900px){ #calgrid{grid-template-columns:1fr !important} #cframe{height:60vh !important} }
 .ck{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:normal} .ck input{width:auto;margin:0}
 input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 </style>
 </head>
 <body>
-<header>
-  <button type="button" id="langbtn" style="float:right;width:auto;padding:4px 14px;margin:0" title="Language">English</button>
-  <button type="button" id="installbtn" style="float:right;width:auto;padding:4px 14px;margin:0 8px 0 0;display:none" onclick="deferredInstall && deferredInstall.prompt()">ऐप इंस्टॉल करें</button>
-  <h1>कुंडली <span class="chip">पहला संस्करण</span></h1>
-  <div class="sub">जन्म विवरण डालिए। गणना खगोलीय है; फलादेश परंपरागत शास्त्र पर आधारित मार्गदर्शन है, अंतिम निर्णय नहीं।</div>
+<header class="appbar">
+  <a class="brand" href="#" data-go="t-home"><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3a23a"/><stop offset="1" stop-color="#8a3b12"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg1)"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M10 10h28v28H10z" opacity=".55"/><path d="M10 10l28 28M38 10L10 38" opacity=".55"/><path d="M24 10l14 14-14 14-14-14z"/></g><circle cx="24" cy="24" r="4" fill="#fff"/></svg><span><b>कुंडली</b><small>पंचांग · कुंडली · मुहूर्त — निःशुल्क</small></span></a>
+  <div class="acts">
+    <button type="button" id="installbtn" style="display:none" onclick="deferredInstall && deferredInstall.prompt()">ऐप इंस्टॉल करें</button>
+    <button type="button" class="iconbtn" id="themebtn" title="रंग-रूप (हल्का/गहरा)" aria-label="theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg></button>
+    <button type="button" id="langbtn" title="Language">English</button>
+  </div>
 </header>
 <nav class="groups" id="groups">
-  <button type="button" data-group="today"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg> आज</button>
+  <button type="button" data-group="today"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg> होम</button>
   <button type="button" data-group="kundali"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3v18M3 12h18"/></svg> मेरी कुंडली</button>
   <button type="button" data-group="panchang"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> पंचांग-मुहूर्त</button>
   <button type="button" data-group="vidya"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9L9.5 8z"/></svg> अन्य विद्याएँ</button>
   <button type="button" data-group="learn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> सीखिए-पूछिए</button>
 </nav>
 <nav class="tabs" id="tabs">
+  <button type="button" data-tab="t-home"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg> होम</button>
+  <button type="button" data-tab="t-dash"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg> मेरा डैशबोर्ड</button>
   <button type="button" data-tab="t-today"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2"/></svg> आज का पंचांग</button>
   <button type="button" class="on" data-tab="t-kundali"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3v18M3 12h18"/></svg> कुंडली</button>
   <button type="button" data-tab="t-match"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 0 .1M16 7a4 4 0 1 0 0 .1M4 20c0-3 2-5 4-5s4 2 4 5M12 20c0-3 2-5 4-5s4 2 4 5"/></svg> मिलान</button>
@@ -126,6 +185,100 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
   <button type="button" data-tab="t-mine" id="tab-mine" style="display:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg> मेरी कुंडलियाँ</button>
 </nav>
 <main>
+  <section class="tab" id="t-home">
+    <div class="hero">
+      <div style="position:relative;z-index:1">
+        <span class="hello" id="hm_hello">🙏 नमस्ते</span>
+        <h2>आपका <em>निःशुल्क</em> ज्योतिष साथी</h2>
+        <p>सटीक खगोलीय गणना से जन्म कुंडली, रोज़ का पंचांग, मुहूर्त, मिलान और वर्षफल — सरल हिंदी में, और WhatsApp पर भी।</p>
+        <div class="hero-cta"><button type="button" data-go="t-today">आज का पंचांग देखिए</button><button type="button" class="ghost" data-go="t-kundali" data-scroll="wacard" style="background:transparent;color:var(--accent);border:1px solid var(--accent)">WhatsApp पर रोज़ पाइए</button></div>
+        <div class="hero-stats"><span><b>NASA JPL</b>ग्रह-गणना</span><span><b>40+</b>उपकरण</span><span><b>7</b>भाषाएँ</span><span><b>₹0</b>हमेशा निःशुल्क</span></div>
+      </div>
+      <div class="card hero-form"><b>तुरंत कुंडली बनाइए</b>
+        <form id="hm_form">
+          <div class="full"><label>नाम</label><input id="hm_name" placeholder="नाम (वैकल्पिक)"></div>
+          <div><label>जन्म तारीख</label><input id="hm_date" type="date" required></div>
+          <div><label>जन्म समय</label><input id="hm_time" type="time" step="60" required></div>
+          <div class="full"><label>जन्म स्थान</label><input id="hm_city" list="placelist" placeholder="शहर लिखिए — जैसे: जबलपुर" autocomplete="off" required></div>
+          <div class="full"><button type="submit">कुंडली बनाइए →</button></div>
+          <div class="full muted" id="hm_err" style="font-size:.82rem">समय न पता हो तो 12:00 डालें — लग्न अनिश्चित रहेगा, चंद्र राशि प्रायः सही।</div>
+        </form>
+      </div>
+    </div>
+
+    <div class="glance" id="hm_glance"><div class="tile"><div class="k">आज</div><div class="v">…</div></div></div>
+
+    <div id="hm_people_wrap" hidden>
+      <h3 class="sec">मेरे लोग</h3>
+      <div class="people" id="hm_people"></div>
+    </div>
+
+    <h3 class="sec">क्या करना चाहेंगे?</h3>
+    <p class="sec-sub">सारे उपकरण निःशुल्क — कोई लॉगिन ज़रूरी नहीं।</p>
+    <div class="features">
+      <button type="button" class="feat" data-go="t-kundali"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3l9 9-9 9-9-9z"/></svg></span><span><b>जन्म कुंडली</b><span>लग्न, नवांश, 16 वर्ग, षड्बल, दशा, योग — विस्तृत PDF रिपोर्ट</span></span></button>
+      <button type="button" class="feat" data-go="t-match"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg></span><span><b>कुंडली मिलान</b><span>अष्टकूट + दशकूट, मंगल दोष, भकूट-नाड़ी परिहार</span></span></button>
+      <button type="button" class="feat" data-go="t-today"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span><b>आज का पंचांग</b><span>तिथि कब से कब तक, नक्षत्र, राहु काल, चौघड़िया, ग्रहण</span></span></button>
+      <button type="button" class="feat" data-go="t-muhurta"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><span><b>मुहूर्त</b><span>विवाह, गृह प्रवेश, वाहन, व्यापार — लग्न-शुद्धि सहित</span></span></button>
+      <button type="button" class="feat" data-go="t-cal"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h3v3H8z"/></svg></span><span><b>कैलेंडर स्टूडियो</b><span>पंचांग वाला अपना ब्रांडेड कैलेंडर, विज्ञापन-स्थान सहित</span></span></button>
+      <button type="button" class="feat" data-go="t-muhurta" data-sub="rashifal"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg></span><span><b>राशिफल</b><span>दैनिक, साप्ताहिक, मासिक — 12 राशियाँ</span></span></button>
+      <button type="button" class="feat" data-go="t-kundali" data-sub="s-varsha"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M21 3v6h-6"/><path d="M12 7v5l3 3"/></svg></span><span><b>वर्षफल</b><span>ताजिक वर्ष-कुंडली, मुंथा, वर्षेश, मुद्दा दशा</span></span></button>
+      <button type="button" class="feat" data-go="t-tarot"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="11" height="16" rx="2" transform="rotate(-8 10 11)"/><rect x="9" y="5" width="11" height="16" rx="2"/><path d="M14.5 10l1 2 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2-1.5-1.4 2-.3z"/></svg></span><span><b>टैरो</b><span>एक कार्ड, तीन कार्ड, केल्टिक क्रॉस</span></span></button>
+      <button type="button" class="feat" data-go="t-kundali" data-sub="s-numer"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></span><span><b>अंक ज्योतिष</b><span>मूलांक, भाग्यांक, नामांक, लो-शू ग्रिड</span></span></button>
+      <button type="button" class="feat" data-go="t-vastu"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M12 14l2 3h-4z"/></svg></span><span><b>वास्तु</b><span>नक्शा अपलोड कर 16 ज़ोन और वास्तु-पुरुष मंडल</span></span></button>
+      <button type="button" class="feat" data-go="t-palm"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11.5V4a1.5 1.5 0 0 1 3 0v8M14 11.5V5.5a1.5 1.5 0 0 1 3 0V14"/><path d="M8 13l-1.7-1.7a1.6 1.6 0 0 0-2.3 2.3L8 18c1.5 2 3 3 6 3a5 5 0 0 0 5-5v-6a1.5 1.5 0 0 0-3 0"/></svg></span><span><b>हस्तरेखा</b><span>फ़ोटो से AI पहचान या खुद रेखाएँ बनाइए</span></span></button>
+      <button type="button" class="feat" data-go="t-prashna"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg></span><span><b>प्रश्न कुंडली</b><span>KP अंक (1–249) से सवाल का उत्तर</span></span></button>
+      <button type="button" class="feat" data-go="t-ask"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span><span><b>AI से पूछिए</b><span>अपनी कुंडली के आधार पर बातचीत</span></span></button>
+      <button type="button" class="feat" data-go="t-consult"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span><b>ज्योतिषी परामर्श</b><span>अनुभवी ज्योतिषी से सवाल, WhatsApp पर उत्तर</span></span></button>
+      <button type="button" class="feat" data-go="t-learn"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8l10-5 10 5-10 5z"/><path d="M6 10v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><span><b>ज्योतिष सीखिए</b><span>54 शब्द, 10 पाठ, प्रश्नोत्तरी</span></span></button>
+    </div>
+
+    <h3 class="sec">आज का राशिफल</h3>
+    <p class="sec-sub">अपनी चंद्र राशि चुनिए (न पता हो तो कुंडली बनाइए — डैशबोर्ड में दिखेगी)।</p>
+    <div class="card"><div class="chipsrow" id="hm_signs"><button type="button" data-sign="0">मेष</button><button type="button" data-sign="1">वृषभ</button><button type="button" data-sign="2">मिथुन</button><button type="button" data-sign="3">कर्क</button><button type="button" data-sign="4">सिंह</button><button type="button" data-sign="5">कन्या</button><button type="button" data-sign="6">तुला</button><button type="button" data-sign="7">वृश्चिक</button><button type="button" data-sign="8">धनु</button><button type="button" data-sign="9">मकर</button><button type="button" data-sign="10">कुंभ</button><button type="button" data-sign="11">मीन</button></div><div id="hm_rashi" style="margin-top:12px"></div></div>
+
+    <div class="wa-band">
+      <div class="ic"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-4.6A9 9 0 1 1 8 19.5z"/><path d="M8.5 9.5c.5 2.5 2.5 4.5 5 5l1.2-1.2 2 1-.5 1.7c-3.5.5-8.7-4.7-8.2-8.2l1.7-.5 1 2z"/></svg></div>
+      <div><h4>हर सुबह WhatsApp पर पंचांग</h4><p>तिथि-समय, व्रत-त्योहार की एक दिन पहले सूचना, आपकी राशि का फल, साप्ताहिक सूची — सब निःशुल्क। बीच में "मदद" लिखकर कुछ भी पूछिए।</p></div>
+      <button type="button" data-go="t-kundali" data-scroll="wacard">अभी जुड़िए</button>
+    </div>
+
+    <h3 class="sec">क्यों भरोसा करें</h3>
+    <div class="trust">
+      <div><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>खगोलीय सटीकता</b><span>ग्रह NASA JPL DE440s से, लाहिरी अयनांश; तिथि-नक्षत्र के समाप्ति-समय मिनट तक; प्रकाशित पंचांगों से मिलान।</span></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg></span><b>शास्त्र-आधारित, पारदर्शी</b><span>हर फल के साथ उसका नियम और स्रोत; व्याख्याएँ ड्राफ़्ट के रूप में चिह्नित, विद्वान-समीक्षा जारी।</span></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><b>आपकी गोपनीयता</b><span>बिना लॉगिन काम करता है; परिवार की प्रोफ़ाइल आपके ही फ़ोन/ब्राउज़र में रहती हैं।</span></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c-.5 3.5-3 7-7 9"/><path d="M13 21l4-9 4 9M14.5 18h5"/></svg></span><b>आपकी भाषा</b><span>हिंदी, English, मराठी, ગુજરાતી, বাংলা, తెలుగు, ಕನ್ನಡ में पंचांग।</span></div>
+    </div>
+
+    <h3 class="sec">अक्सर पूछे जाने वाले प्रश्न</h3>
+    <div class="card faq">
+      <details><summary>क्या यह सच में निःशुल्क है?</summary><p>हाँ। कुंडली, पंचांग, मुहूर्त, मिलान, रिपोर्ट और WhatsApp अपडेट — सब निःशुल्क हैं।</p></details>
+      <details><summary>जन्म समय ठीक न पता हो तो?</summary><p>अनुमानित समय डालें; चंद्र राशि और नक्षत्र प्रायः सही रहते हैं, पर लग्न और भाव बदल सकते हैं। "कुंडली" में "जन्म-समय शुद्धि" उपकरण भी है।</p></details>
+      <details><summary>तिथि दो दिन क्यों दिखती है?</summary><p>तिथि सूर्योदय से नहीं, चंद्र-सूर्य के अंतर से बदलती है — इसलिए एक दिन में दो तिथियाँ आ सकती हैं। हम हर तिथि का आरंभ और समाप्ति-समय दिखाते हैं; व्रत प्रायः सूर्योदय-कालीन तिथि से माना जाता है।</p></details>
+      <details><summary>क्या यह भविष्यवाणी करता है?</summary><p>नहीं। यह परंपरागत शास्त्र के नियमों के अनुसार प्रवृत्तियाँ बताता है। स्वास्थ्य, धन या क़ानूनी निर्णयों के लिए संबंधित विशेषज्ञ से सलाह लें।</p></details>
+      <details><summary>मेरा डेटा कहाँ जाता है?</summary><p>कुंडली की गणना हमारे सर्वर पर होती है और सहेजी नहीं जाती (जब तक आप लॉगिन करके सेव न करें)। "मेरे लोग" की सूची केवल आपके ब्राउज़र में रहती है।</p></details>
+    </div>
+  </section>
+
+  <section class="tab" id="t-dash">
+    <div class="card"><b>मेरे लोग</b>
+      <div class="people" id="dash_people"></div>
+      <details id="dash_addbox" style="margin-top:10px"><summary>नई प्रोफ़ाइल जोड़िए</summary>
+        <form id="dash_add" style="margin-top:8px">
+          <div><label>नाम</label><input id="dp_name" required placeholder="जैसे: माँ, राहुल"></div>
+          <div><label>रिश्ता</label><select id="dp_rel"><option>स्वयं</option><option>जीवनसाथी</option><option>पुत्र</option><option>पुत्री</option><option>माता</option><option>पिता</option><option>भाई</option><option>बहन</option><option>अन्य</option></select></div>
+          <div><label>जन्म तारीख</label><input id="dp_date" type="date" required></div>
+          <div><label>जन्म समय</label><input id="dp_time" type="time" step="60" required></div>
+          <div><label>जन्म स्थान</label><input id="dp_city" list="placelist" required placeholder="शहर"></div>
+          <div><button type="submit">जोड़ें</button></div>
+        </form>
+      </details>
+      <div class="actions"><button type="button" class="ghost" id="dash_fromchart">अभी की कुंडली को जोड़ें</button><button type="button" class="ghost" id="dash_import" hidden>खाते से आयात करें</button></div>
+      <div class="muted" style="font-size:.8rem">प्रोफ़ाइल केवल इसी ब्राउज़र में सहेजी जाती हैं।</div>
+    </div>
+    <div id="dash_view"><div class="card muted">ऊपर किसी प्रोफ़ाइल को चुनिए या नई जोड़िए — यहाँ उसकी दशा, आज का दिन, आगामी बदलाव और जन्मदिन दिखेंगे।</div></div>
+  </section>
   <section class="tab" id="t-today">
     <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><button type="button" class="ghost" id="tdshare" style="width:auto;padding:4px 12px">कार्ड साझा करें</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
     <div id="todaygrid">
@@ -668,7 +821,16 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 
   </section>
 </main>
-<footer>कुंडली ऐप · गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश); फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन हैं।</footer>
+<footer class="site">
+  <div class="cols">
+    <div><a class="brand" data-go="t-home" style="margin-bottom:8px"><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3a23a"/><stop offset="1" stop-color="#8a3b12"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg1)"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M10 10h28v28H10z" opacity=".55"/><path d="M10 10l28 28M38 10L10 38" opacity=".55"/><path d="M24 10l14 14-14 14-14-14z"/></g><circle cx="24" cy="24" r="4" fill="#fff"/></svg><span><b>कुंडली</b></span></a>
+      <p style="margin:6px 0">सरल हिंदी में निःशुल्क ज्योतिष — पंचांग, कुंडली, मुहूर्त, मिलान, वर्षफल, और WhatsApp पर रोज़ का अपडेट।</p></div>
+    <div><h5>ज्योतिष</h5><a data-go="t-kundali">जन्म कुंडली</a><a data-go="t-match">कुंडली मिलान</a><a data-go="t-kundali" data-sub="s-varsha">वर्षफल</a><a data-go="t-kundali" data-sub="s-numer">अंक ज्योतिष</a><a data-go="t-prashna">प्रश्न कुंडली</a><a data-go="t-tarot">टैरो</a></div>
+    <div><h5>पंचांग व मुहूर्त</h5><a data-go="t-today">आज का पंचांग</a><a data-go="t-muhurta">मुहूर्त</a><a data-go="t-cal">कैलेंडर स्टूडियो</a><a data-go="t-vastu">वास्तु</a><a data-go="t-palm">हस्तरेखा</a></div>
+    <div><h5>सेवाएँ</h5><a data-go="t-dash">मेरा डैशबोर्ड</a><a data-go="t-kundali" data-scroll="wacard">WhatsApp अपडेट</a><a data-go="t-ask">AI से पूछिए</a><a data-go="t-consult">ज्योतिषी परामर्श</a><a data-go="t-learn">ज्योतिष सीखिए</a></div>
+  </div>
+  <div class="fine">गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश, संपूर्ण-राशि भाव)। फलादेश परंपरागत मार्गदर्शन है — भविष्यवाणी, चिकित्सा, क़ानूनी या वित्तीय सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन। © <span id="yr"></span> कुंडली ऐप</div>
+</footer>
 <div id="offline" class="banner" style="display:none;max-width:1100px;margin:8px auto">ऑफ़लाइन: कुंडली बनाने के लिए इंटरनेट चाहिए; सीखने की सामग्री खुली रहेगी।</div>
 <script src="config.js"></script>
 <script>
@@ -713,7 +875,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved && btns.some(b => b.dataset[attr] === saved && b.style.display !== 'none')) show(saved);
     return show;
   };
-  const GROUPS = {today: ['t-today'], kundali: ['t-kundali', 't-match', 't-mine'], panchang: ['t-muhurta', 't-cal'], vidya: ['t-tarot', 't-vastu', 't-palm', 't-prashna'], learn: ['t-learn', 't-ask', 't-consult']};
+  const GROUPS = {today: ['t-home', 't-dash', 't-today'], kundali: ['t-kundali', 't-match', 't-mine'], panchang: ['t-muhurta', 't-cal'], vidya: ['t-tarot', 't-vastu', 't-palm', 't-prashna'], learn: ['t-learn', 't-ask', 't-consult']};
   const groupOf = id => Object.keys(GROUPS).find(g => GROUPS[g].includes(id)) || 'kundali';
   const showGroup = g => {
     [...$('groups').querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.group === g));
@@ -728,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.showTab(first);
   }));
   let saved = null; try { saved = localStorage.getItem('kundali_tab'); } catch (e) {}
-  setTimeout(() => window.showTab(saved && document.getElementById(saved) ? saved : 't-today'), 0);   // after loadTodayTab is defined below
+  setTimeout(() => window.showTab(saved && document.getElementById(saved) ? saved : 't-home'), 0);   // after loadTodayTab is defined below
   window.showSub = wire($('subtabs'), 'sub', 'sub', 'kundali_sub');
 })();
 // ---- "आज" home: today's panchang, kaal, events for today & tomorrow, rashifal for all signs
@@ -1765,6 +1927,176 @@ $('yago').onclick = async () => {
   } catch (e) { $('yaout').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 };
 
+// ================= Home page, dashboard, theme, navigation links =================
+(function homeAndDashboard() {
+  const LS = {get: (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+              set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }};
+  const EN = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  const isoLocal = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const findPlace = q => { const v = String(q || '').trim().toLowerCase(); const P = window.placesList || []; if (!v) return null;
+    return P.find(x => `${x.name} · ${x.hi}, ${x.state}`.toLowerCase() === v) || P.find(x => [x.name, x.hi, ...(x.aka || [])].some(n => n.toLowerCase() === v)) || P.find(x => [x.name, x.hi].some(n => n.toLowerCase().startsWith(v))); };
+
+  // theme: light / dark / follow system
+  const applyTheme = t => { if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; };
+  applyTheme(LS.get('kundali_theme', null));
+  $('themebtn').onclick = () => { const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const nx = cur === 'dark' ? 'light' : 'dark'; applyTheme(nx); LS.set('kundali_theme', nx); };
+  $('yr').textContent = new Date().getFullYear();
+
+  // any element with data-go="t-…" (optional data-sub, data-scroll) navigates
+  document.addEventListener('click', e => {
+    const g = e.target.closest('[data-go]'); if (!g) return; e.preventDefault();
+    window.showTab(g.dataset.go);
+    if (g.dataset.sub && window.showSub) { if (!window.lastBody && g.dataset.go === 't-kundali') { $('formcard')?.scrollIntoView({behavior: 'smooth'}); } else window.showSub(g.dataset.sub); }
+    if (g.dataset.go === 't-muhurta' && g.closest('.feat') && g.querySelector('b')?.textContent.includes('राशिफल')) setTimeout(() => $('rgo')?.scrollIntoView({behavior: 'smooth'}), 60);
+    setTimeout(() => { const t = g.dataset.scroll && $(g.dataset.scroll); (t || document.querySelector('.tab.on'))?.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
+  });
+
+  // greeting by time of day
+  const greet = () => { const h = new Date().getHours(); $('hm_hello').textContent = h < 12 ? '🌅 शुभ प्रभात' : h < 17 ? '☀️ शुभ दोपहर' : h < 21 ? '🌇 शुभ संध्या' : '🌙 शुभ रात्रि'; };
+  greet();
+
+  // hero quick form → fills the main kundali form and builds the chart
+  const today = new Date(); $('hm_date').value = ''; $('hm_time').value = '';
+  $('hm_form').addEventListener('submit', e => {
+    e.preventDefault();
+    const pl = findPlace($('hm_city').value);
+    if (!pl) { $('hm_err').innerHTML = '<span style="color:#c62828">शहर सूची में नहीं मिला — पास का बड़ा शहर लिखिए या "कुंडली" टैब में अक्षांश-देशांतर डालिए।</span>'; return; }
+    $('name').value = $('hm_name').value.trim(); $('date').value = $('hm_date').value; $('time').value = $('hm_time').value;
+    $('citysearch').value = `${pl.name} · ${pl.hi}, ${pl.state}`; $('lat').value = pl.lat; $('lon').value = pl.lon; $('tz').value = pl.tz;
+    window.showTab('t-kundali'); $('f').requestSubmit();
+    const prof = {id: 'p' + Date.now().toString(36), name: $('hm_name').value.trim() || 'मेरी कुंडली', rel: 'स्वयं', date: $('hm_date').value, time: $('hm_time').value, lat: pl.lat, lon: pl.lon, tz: pl.tz, place: pl.hi || pl.name};
+    const list = LS.get('kundali_profiles', []);
+    if (!list.some(x => x.date === prof.date && x.time === prof.time && Math.abs(x.lat - prof.lat) < 1e-3)) { list.push(prof); LS.set('kundali_profiles', list); if (!LS.get('kundali_profile_active', null)) LS.set('kundali_profile_active', prof.id); renderPeople(); }
+  });
+
+  // today at a glance (home)
+  let glanceKey = '';
+  window.loadHome = async function () { if ($('hm_rashi') && $('hm_rashi').dataset.lang !== (EN() ? 'en' : 'hi')) document.querySelector('#hm_signs button.on')?.click();
+    greet();
+    const own = LS.get('kundali_today_place', null);
+    const lat = own ? own.lat : +($('lat').value || 28.61), lon = own ? own.lon : +($('lon').value || 77.2), tz = own ? own.tz : (($('tz').value || '').trim() || 'Asia/Kolkata');
+    const d = new Date(), key = `${lat},${lon},${tz},${d.toDateString()},${EN()}`; if (glanceKey === key) return; glanceKey = key;
+    try {
+      const q = `date=${isoLocal(d)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`;
+      const [p, f] = await Promise.all([apiFetch('/v1/panchang/day?' + q).then(r => r.json()), apiFetch(`/v1/festivals?year=${d.getFullYear()}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`).then(r => r.json()).catch(() => ({events: []}))]);
+      const en = EN();
+      const next = (f.events || []).filter(e => ['festival', 'ekadashi', 'purnima', 'amavasya', 'grahan'].includes(e.kind) && e.date >= isoLocal(d)).sort((a, b) => a.date.localeCompare(b.date))[0];
+      const days = next ? Math.round((new Date(next.date) - new Date(isoLocal(d))) / 86400000) : null;
+      const end = (t, n) => `${esc(t || '—')}${n ? '+' : ''}`;
+      const tile = (k, v, sub, go) => `<div class="tile${go ? ' link' : ''}"${go ? ` data-go="${go}"` : ''}><div class="k">${k}</div><div class="v">${v}</div>${sub ? `<div class="s">${sub}</div>` : ''}</div>`;
+      $('hm_glance').innerHTML =
+        tile('<span>आज</span>', `<span>${esc(en ? p.vara : p.vara_hi)}</span>`, d.toLocaleDateString(en ? 'en-IN' : 'hi-IN', {day: 'numeric', month: 'long'}) + ` · <span>वि.सं.</span> ${p.vikram_samvat}`, 't-today') +
+        tile('<span>तिथि</span>', `<span>${esc(en ? p.paksha : p.paksha_hi)}</span> <span>${esc(en ? p.tithi : p.tithi_hi)}</span>`, `${end(p.tithi_ends, p.tithi_ends_next_day)} <span>तक</span>`, 't-today') +
+        tile('<span>नक्षत्र</span>', `<span>${esc(en ? p.nakshatra : p.nakshatra_hi)}</span>`, `${end(p.nakshatra_ends, p.nakshatra_ends_next_day)} <span>तक</span>`, 't-today') +
+        tile('<span>सूर्योदय · सूर्यास्त</span>', `${esc(p.sunrise)} · ${esc(p.sunset)}`, `<span>चंद्रोदय</span> ${esc(p.moonrise || '—')}`, 't-today') +
+        tile('<span>राहु काल</span>', p.rahu_kaal ? `${esc(p.rahu_kaal.start)}–${esc(p.rahu_kaal.end)}` : '—', p.abhijit ? `<span>अभिजित</span> ${esc(p.abhijit.start)}–${esc(p.abhijit.end)}` : '', 't-today') +
+        (next ? tile('<span>अगला पर्व</span>', `<span>${esc(en ? next.name_en : next.name_hi)}</span>`, days === 0 ? '<span>आज</span>' : days === 1 ? '<span>कल</span>' : `${days} <span>दिन बाद</span> · ${esc(next.date.slice(8, 10))}-${esc(next.date.slice(5, 7))}`, 't-today') : '');
+    } catch (e) { $('hm_glance').innerHTML = `<div class="tile"><div class="k">पंचांग</div><div class="v muted">लोड नहीं हुआ</div></div>`; }
+    renderPeople();
+  };
+
+  // rashifal picker on home
+  $('hm_signs').addEventListener('click', async e => {
+    const b = e.target.closest('button[data-sign]'); if (!b) return;
+    [...$('hm_signs').children].forEach(x => x.classList.toggle('on', x === b)); LS.set('kundali_home_sign', +b.dataset.sign);
+    $('hm_rashi').innerHTML = '<span class="muted">…</span>';
+    try {
+      const r = await (await apiFetch(`/v1/rashifal?date=${isoLocal(new Date())}&period=daily&tz=Asia%2FKolkata`)).json();
+      const sg = r.signs[+b.dataset.sign], en = EN();
+      $('hm_rashi').dataset.lang = en ? 'en' : 'hi'; $('hm_rashi').innerHTML = `<div class="ring">${ringSvg(sg.score)}<div><b style="font-size:1.1rem">${esc(en ? sg.sign_name : sg.sign_name_hi)}</b> — <span>${esc(en ? sg.grade_en : sg.grade_hi)}</span><div class="muted">${esc(en ? sg.summary_en : sg.summary_hi)}</div>
+        <div style="margin-top:6px;font-size:.9rem">${sg.planets.filter(x => ['Moon', 'Jupiter', 'Saturn'].includes(x.planet)).map(x => `• <b>${esc(en ? x.planet : x.planet_hi)}</b>: ${esc((en ? x.text_en : x.text_hi).split(': ').pop())}`).join('<br>')}</div>
+        <div class="muted" style="font-size:.82rem;margin-top:4px"><span>शुभ रंग</span> ${esc(en ? r.lucky_colour : r.lucky_colour_hi)} · <span>शुभ अंक</span> ${r.lucky_number}</div></div></div>`;
+    } catch (err) { $('hm_rashi').textContent = err.message; }
+  });
+  const ringSvg = (v, size = 74, label = '') => { const r = 30, c = 2 * Math.PI * r, col = v >= 70 ? '#2e7d32' : v >= 55 ? '#558b2f' : v >= 40 ? '#b26a00' : '#c62828';
+    return `<svg viewBox="0 0 74 74" width="${size}" height="${size}" role="img" aria-label="${v}/100"><circle cx="37" cy="37" r="${r}" fill="none" stroke="color-mix(in srgb, currentColor 12%, transparent)" stroke-width="8"/><circle cx="37" cy="37" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 37 37)"/><text x="37" y="${label ? 38 : 42}" text-anchor="middle" font-size="17" font-weight="700" fill="currentColor">${v}</text>${label ? `<text x="37" y="52" text-anchor="middle" font-size="8" fill="currentColor" opacity=".7">${label}</text>` : ''}</svg>`; };
+  window.ringSvg = ringSvg;
+  const hs = LS.get('kundali_home_sign', null); if (hs !== null) setTimeout(() => $('hm_signs').children[hs]?.click(), 400);
+
+  // ---------- profiles ("मेरे लोग") and dashboard ----------
+  const profiles = () => LS.get('kundali_profiles', []);
+  const activeId = () => LS.get('kundali_profile_active', null);
+  function renderPeople() {
+    const list = profiles(), act = activeId(), meta = LS.get('kundali_profile_meta', {});
+    const card = (p, home) => `<button type="button" class="person${!home && p.id === act ? ' on' : ''}" data-pid="${esc(p.id)}"><b>${esc(p.name)}</b><span>${esc(p.rel || '')}${meta[p.id] ? ' · ' + esc(meta[p.id]) : ''}</span><span style="display:block">${esc(p.date.split('-').reverse().join('-'))} ${esc(p.time)}</span></button>`;
+    $('dash_people').innerHTML = list.map(p => card(p, false)).join('') + `<button type="button" class="person add" id="dash_addbtn">+ <span>जोड़िए</span></button>`;
+    $('hm_people').innerHTML = list.map(p => card(p, true)).join('');
+    $('hm_people_wrap').hidden = !list.length;
+    $('dash_addbtn').onclick = () => { $('dash_addbox').open = true; $('dp_name').focus(); };
+  }
+  window.renderPeople = renderPeople;
+  const openProfile = id => { LS.set('kundali_profile_active', id); window.showTab('t-dash'); renderPeople(); loadDash(); };
+  $('hm_people').addEventListener('click', e => { const b = e.target.closest('[data-pid]'); if (b) openProfile(b.dataset.pid); });
+  $('dash_people').addEventListener('click', e => { const b = e.target.closest('[data-pid]'); if (b) openProfile(b.dataset.pid); });
+  $('dash_add').addEventListener('submit', e => {
+    e.preventDefault(); const pl = findPlace($('dp_city').value);
+    if (!pl) { alert('शहर सूची में नहीं मिला'); return; }
+    const p = {id: 'p' + Date.now().toString(36), name: $('dp_name').value.trim(), rel: $('dp_rel').value, date: $('dp_date').value, time: $('dp_time').value, lat: pl.lat, lon: pl.lon, tz: pl.tz, place: pl.hi || pl.name};
+    LS.set('kundali_profiles', [...profiles(), p]); $('dash_add').reset(); $('dash_addbox').open = false; openProfile(p.id);
+  });
+  $('dash_fromchart').onclick = () => {
+    const b = window.lastBody; if (!b) { alert('पहले "कुंडली" टैब में कुंडली बनाइए।'); return; }
+    const p = {id: 'p' + Date.now().toString(36), name: b.name || 'बिना नाम', rel: 'अन्य', date: b.date, time: b.time, lat: b.lat, lon: b.lon, tz: b.tz, place: $('citysearch').value.split(' · ').pop() || ''};
+    LS.set('kundali_profiles', [...profiles(), p]); openProfile(p.id);
+  };
+  $('dash_import').onclick = async () => {
+    try { const r = await apiFetch('/v1/people'); const d = await r.json(); const cur = profiles();
+      (d.people || []).forEach(x => { if (!cur.some(c => c.date === x.date && c.time === x.time)) cur.push({id: 'p' + Math.random().toString(36).slice(2, 9), name: x.name, rel: 'अन्य', date: x.date, time: x.time, lat: x.lat, lon: x.lon, tz: x.tz, place: x.place || ''}); });
+      LS.set('kundali_profiles', cur); renderPeople(); } catch (e) { alert(e.message); }
+  };
+  setInterval(() => { $('dash_import').hidden = !window.authToken; }, 2000);
+
+  let dashKey = '';
+  async function loadDash(force) {
+    const p = profiles().find(x => x.id === activeId()); if (!p) { renderPeople(); return; }
+    const key = p.id + (EN() ? 'en' : 'hi') + new Date().toDateString(); if (!force && dashKey === key) return; dashKey = key;
+    $('dash_view').innerHTML = '<div class="card muted"><span>डैशबोर्ड बन रहा है…</span></div>';
+    try {
+      const body = {name: p.name, date: p.date, time: p.time, tz: p.tz, lat: p.lat, lon: p.lon};
+      const r = await apiFetch('/v1/dashboard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
+      const en = EN(), I = d.identity, T = d.today;
+      const meta = LS.get('kundali_profile_meta', {}); meta[p.id] = en ? I.moon_sign : I.moon_sign_hi; LS.set('kundali_profile_meta', meta); renderPeople();
+      const dasha = d.dasha.map(x => `<div style="display:flex;justify-content:space-between;font-size:.9rem"><span><b>${esc(en ? x.lord : x.lord_hi)}</b> <span class="muted">${esc(en ? x.level_en : x.level_hi)}</span></span><span class="muted">${esc(x.end.split('-').reverse().join('-'))} <span>तक</span></span></div><div class="bar"><i style="width:${x.percent}%"></i></div>`).join('');
+      const evs = d.upcoming.map(e => `<li><b>${esc(e.date.split('-').reverse().join('-'))}</b>${esc(en ? e.en : e.hi)}</li>`).join('');
+      const ss = d.sade_sati;
+      const dosh = Object.entries(d.doshas).map(([k, v]) => `<span class="chip ${v.present ? '' : 'yes'}" style="${v.present ? 'color:var(--warn);border-color:var(--warn)' : ''}" title="${esc(en ? v.text_en : v.text_hi)}">${esc({mangal: en ? 'Mangal' : 'मंगल', kaal_sarp: en ? 'Kaal Sarp' : 'कालसर्प', pitru: en ? 'Pitru' : 'पितृ'}[k])}: ${v.present ? (en ? 'yes' : 'है') : (en ? 'no' : 'नहीं')}</span>`).join(' ');
+      $('dash_view').innerHTML = `
+        <div class="hero" style="grid-template-columns:1fr auto;padding:20px">
+          <div style="position:relative;z-index:1"><span class="hello">${esc(p.rel || '')}</span><h2 style="font-size:1.6rem;margin:6px 0">${esc(p.name)}</h2>
+            <div class="muted">${esc(p.date.split('-').reverse().join('-'))} · ${esc(p.time)} · ${esc(p.place || '')}</div>
+            <div class="idchips"><span><i>लग्न</i>${esc(en ? I.lagna : I.lagna_hi)}</span><span><i>चंद्र राशि</i>${esc(en ? I.moon_sign : I.moon_sign_hi)}</span><span><i>नक्षत्र</i>${esc(en ? I.nakshatra : I.nakshatra_hi)} (${I.pada})</span><span><i>सूर्य राशि</i>${esc(en ? I.sun_sign : I.sun_sign_hi)}</span>${I.name_syllable ? `<span><i>नामाक्षर</i>${esc(I.name_syllable)}</span>` : ''}</div></div>
+          <div style="position:relative;z-index:1;text-align:center">${ringSvg(T.personal ? T.personal.score : T.rashifal.score, 96)}<div class="muted" style="font-size:.8rem"><span>आज का दिन</span></div></div>
+        </div>
+        <div class="dgrid">
+          <div class="card"><b>आज आपके लिए</b><div style="font-size:.92rem">${T.personal ? esc(en ? T.personal.text_en : T.personal.text_hi) : ''}</div>
+            <div style="margin-top:8px"><span>राशिफल</span>: <b>${esc(en ? T.rashifal.grade_en : T.rashifal.grade_hi)}</b> (${T.rashifal.score}/100) — <span class="muted">${esc(en ? T.rashifal.summary_en : T.rashifal.summary_hi)}</span></div>
+            ${T.alerts.length ? `<div style="margin-top:8px">${T.alerts.map(a => `🔔 ${esc(en ? a.en : a.hi)}`).join('<br>')}</div>` : ''}</div>
+          <div class="card"><b>चल रही दशा</b>${dasha}${d.yogini ? `<div class="muted" style="font-size:.85rem"><span>योगिनी दशा</span>: ${esc(en ? d.yogini.name : d.yogini.name_hi)} (${esc((d.yogini.end || '').split('-').reverse().join('-'))} <span>तक</span>)</div>` : ''}</div>
+          <div class="card"><b>शनि व दोष</b><div><span>साढ़ेसाती</span>: <b>${ss.active ? (en ? 'running (' + ss.phase + ')' : 'चल रही (' + ({rising: 'पहला', peak: 'मध्य', setting: 'अंतिम'}[ss.phase] || '') + ' चरण)') : (en ? 'not running' : 'नहीं चल रही')}</b>${ss.ashtama ? ` · <span>अष्टम शनि</span>` : ''}</div>
+            <div style="margin-top:8px">${dosh}</div>${d.yogas.length ? `<div class="muted" style="font-size:.85rem;margin-top:8px"><span>योग</span>: ${d.yogas.map(y => esc(en ? y.name : y.name_hi)).join(', ')}</div>` : ''}</div>
+          <div class="card"><b>जन्मदिन</b><div style="font-size:1.6rem;font-weight:700;color:var(--accent)">${d.birthday.days === 0 ? (en ? 'Today! 🎂' : 'आज! 🎂') : d.birthday.days + ' <span style="font-size:1rem">' + (en ? 'days' : 'दिन') + '</span>'}</div><div class="muted">${esc(d.birthday.date.split('-').reverse().join('-'))} · ${d.birthday.age} <span>वर्ष</span></div><div class="actions"><button type="button" class="ghost" id="dash_varsha">वर्षफल देखिए</button></div></div>
+        </div>
+        <div class="card"><b>आगामी छह महीने में बदलाव</b>${evs ? `<ul class="tl">${evs}</ul>` : '<span class="muted">कोई बड़ा बदलाव नहीं।</span>'}</div>
+        <div class="actions"><button type="button" id="dash_open">पूरी कुंडली खोलिए</button><button type="button" class="ghost" id="dash_card">कुंडली कार्ड साझा करें</button><button type="button" class="ghost" id="dash_wa">इनके लिए WhatsApp अपडेट</button><button type="button" class="ghost" id="dash_del">प्रोफ़ाइल हटाएँ</button></div>`;
+      const loadInto = () => { $('name').value = p.name; $('date').value = p.date; $('time').value = p.time; $('lat').value = p.lat; $('lon').value = p.lon; $('tz').value = p.tz; $('citysearch').value = p.place || ''; };
+      $('dash_open').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); };
+      $('dash_varsha').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => window.showSub && window.showSub('s-varsha'), 1500); };
+      $('dash_wa').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 1200); };
+      $('dash_card').onclick = async () => { try { const rr = await apiFetch('/v1/chart/card.png', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...body, lang: en ? 'en' : 'hi', chart_style: window.chartStyle})}); const blob = await rr.blob(); const file = new File([blob], 'kundali.png', {type: 'image/png'}); if (navigator.canShare && navigator.canShare({files: [file]})) await navigator.share({files: [file]}); else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kundali.png'; a.click(); } } catch (e) {} };
+      $('dash_del').onclick = () => { if (!confirm('यह प्रोफ़ाइल हटाएँ?')) return; LS.set('kundali_profiles', profiles().filter(x => x.id !== p.id)); LS.set('kundali_profile_active', profiles()[0]?.id || null); dashKey = ''; renderPeople(); loadDash(); if (!profiles().length) $('dash_view').innerHTML = '<div class="card muted"><span>कोई प्रोफ़ाइल नहीं।</span></div>'; };
+    } catch (e) { $('dash_view').innerHTML = `<div class="card err">${esc(e.message)}</div>`; }
+  }
+  window.loadDash = loadDash;
+  renderPeople();
+  // load the home / dashboard when their tab opens
+  const _show = window.showTab;
+  window.showTab = id => { _show(id); if (id === 't-home') window.loadHome(); if (id === 't-dash') loadDash(); };
+  [...document.querySelectorAll('#tabs button')].forEach(b => b.addEventListener('click', () => { if (b.dataset.tab === 't-home') window.loadHome(); if (b.dataset.tab === 't-dash') loadDash(); }));
+  if (document.querySelector('.tab.on')?.id === 't-home') window.loadHome();
+  setTimeout(() => { if (document.querySelector('.tab.on')?.id === 't-home') window.loadHome(); if (document.querySelector('.tab.on')?.id === 't-dash') loadDash(); }, 50);
+})();
+
 // ---- AI summaries (chart / match / varshaphal) — plain-language digest of the app's own computed facts
 window.aiSummary = async function (kind, body, target) {
   const el = typeof target === 'string' ? $(target) : target; el.innerHTML = '<div class="muted" style="margin-top:8px"><span>AI सार बन रहा है…</span></div>';
@@ -2477,7 +2809,7 @@ async function openReport(path, body) {
   const mo = new MutationObserver(muts => { if (lang === 'hi' || busy) return; for (const m of muts) m.addedNodes.forEach(nd => { if (nd.nodeType === 1) apply(nd); else if (nd.nodeType === 3 && nd.parentElement) apply(nd.parentElement); });
     muts.forEach(m => { if (m.type === 'characterData' && m.target.parentElement) { originals.delete(m.target); apply(m.target.parentElement); } }); })
   mo.observe(document.body, {childList: true, subtree: true, characterData: true});
-  const after = () => { if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); if (window._rerenderMatch) setTimeout(window._rerenderMatch, 70); };
+  const after = () => { if (window.loadTodayTab && document.querySelector('.tab.on')?.id === 't-today') setTimeout(window.loadTodayTab, 50); if (chart) setTimeout(() => render(chart), 60); if (window._rerenderMatch) setTimeout(window._rerenderMatch, 70); const on = document.querySelector('.tab.on')?.id; if (on === 't-home' && window.loadHome) setTimeout(window.loadHome, 80); if (on === 't-dash' && window.loadDash) setTimeout(() => window.loadDash(true), 80); };
   $('langbtn').onclick = () => { set(lang === 'hi' ? 'en' : 'hi'); after(); };
   // more languages when translation packs exist (data/i18n_<code>.json)
   apiFetch('/v1/i18n/languages').then(r => r.json()).then(d => {

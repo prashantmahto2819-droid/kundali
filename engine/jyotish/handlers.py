@@ -1007,3 +1007,49 @@ def chart_card_from_payload(payload: dict) -> bytes:
     biz = {"name": str(payload.get("brand_name") or os.environ.get("KUNDALI_BRAND_NAME", ""))[:60], "tagline": str(payload.get("brand_tagline") or os.environ.get("KUNDALI_BRAND_TAGLINE", ""))[:80],
            "website": os.environ.get("KUNDALI_SITE_URL", "https://kundali.vividbrandify.com").replace("https://", "")}
     return card.render_kundali_card(chart, "en" if payload.get("lang") == "en" else "hi", biz, str(payload.get("theme") or "saffron"), "south" if str(payload.get("chart_style", "")).lower() == "south" else "north")
+
+
+def dashboard_from_payload(payload: dict) -> dict:
+    """POST /v1/dashboard — compact personal digest for one person (birth payload): who they are in the chart, what runs now,
+    today's personal score and rashifal, what changes soon, next birthday. Built from the same engine as the full chart."""
+    from . import alerts, rashifal as rf
+    from .constants import PLANETS_HI
+    chart = chart_from_payload({**payload, "dasha_level": 3})
+    tz = chart["input"]["tz"]
+    now = datetime.now(timezone.utc)
+    today = now.astimezone(ZoneInfo(tz)).date()
+    p = {x["name"]: x for x in chart["planets"]}
+    moon, sun, lg = p["Moon"], p["Sun"], chart["lagna"]
+
+    def pct(start: str, end: str) -> int:
+        s, e = datetime.fromisoformat(start.replace("Z", "+00:00")), datetime.fromisoformat(end.replace("Z", "+00:00"))
+        return max(0, min(100, round(100 * (now - s).total_seconds() / max(1.0, (e - s).total_seconds()))))
+    level_hi = {1: "महादशा", 2: "अंतर्दशा", 3: "प्रत्यंतर"}
+    level_en = {1: "Mahadasha", 2: "Antardasha", 3: "Pratyantar"}
+    dasha = [{"level": r["level"], "level_hi": level_hi[r["level"]], "level_en": level_en[r["level"]], "lord": r["lord"], "lord_hi": PLANETS_HI[r["lord"]],
+              "start": r["start"][:10], "end": r["end"][:10], "percent": pct(r["start"], r["end"])} for r in chart.get("dasha_running") or []]
+    rs = rf.rashifal(today.isoformat(), tz, "daily")["signs"][moon["sign"]]
+    bd = datetime.fromisoformat(chart["input"]["date"]).date()
+    nb = bd.replace(year=today.year) if not (bd.month == 2 and bd.day == 29) else date(today.year, 3, 1)
+    if nb < today:
+        nb = nb.replace(year=today.year + 1)
+    ya = alerts.year_ahead(chart, today, tz, 6)
+    yrun = (chart.get("yogini_dasha") or {}).get("running") or {}
+    al = chart.get("alerts") or {}
+    ss = (chart.get("gochara") or {}).get("sade_sati") or {}
+    doshas = chart.get("doshas") or {}
+    return {
+        "name": chart["input"].get("name"), "input": chart["input"],
+        "identity": {"lagna": lg["sign_name"], "lagna_hi": lg["sign_name_hi"], "moon_sign": moon["sign_name"], "moon_sign_hi": moon["sign_name_hi"], "moon_sign_index": moon["sign"],
+                     "nakshatra": moon["nakshatra"], "nakshatra_hi": moon["nakshatra_hi"], "pada": moon["pada"], "sun_sign": sun["sign_name"], "sun_sign_hi": sun["sign_name_hi"],
+                     "name_syllable": ((chart.get("patri") or {}).get("avakahada") or {}).get("name_syllable", {}).get("pada")},
+        "dasha": dasha,
+        "yogini": {"name": yrun.get("mahadasha", {}).get("name"), "name_hi": yrun.get("mahadasha", {}).get("name_hi"), "end": yrun.get("mahadasha", {}).get("end")} if yrun else None,
+        "sade_sati": {"active": bool(ss.get("active")), "phase": ss.get("phase"), "ashtama": bool(ss.get("ashtama"))},
+        "today": {"date": today.isoformat(), "personal": al.get("personal_day"), "alerts": al.get("today", []),
+                  "rashifal": {"score": rs["score"], "grade_hi": rs["grade_hi"], "grade_en": rs["grade_en"], "summary_hi": rs["summary_hi"], "summary_en": rs["summary_en"]}},
+        "upcoming": [e for e in ya["events"] if e["kind"] in ("dasha", "sadesati", "ashtama", "ingress", "station")][:8],
+        "birthday": {"date": nb.isoformat(), "days": (nb - today).days, "age": nb.year - bd.year},
+        "doshas": {k: {"present": bool(v.get("present")), "text_hi": v.get("text_hi"), "text_en": v.get("text_en")} for k, v in doshas.items() if k in ("mangal", "kaal_sarp", "pitru")},
+        "yogas": [{"name": y.get("name"), "name_hi": y.get("name_hi")} for y in chart.get("yogas", []) if y.get("present")][:6],
+    }
