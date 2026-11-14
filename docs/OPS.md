@@ -7,7 +7,7 @@ The VPS publishes **no ports**; `cloudflared` makes an outbound tunnel to Cloudf
 
 1. **VPS:** an India-region Ubuntu 22.04/24.04 VPS, about 4 vCPU / 8 GB RAM to start. Install Docker: <https://docs.docker.com/engine/install/ubuntu/>
 2. **Cloudflare Tunnel:** Zero Trust → Networks → Tunnels → create a tunnel, copy the token, add a public hostname (e.g. `api.yourdomain.com` → `http://api:8000`). Guide: <https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/>
-3. **Supabase:** create a project in a nearby region, then run `supabase/migrations/0001_init.sql` in the SQL editor (staging project first). Docs: <https://supabase.com/docs/guides/database/overview>
+3. **Supabase:** create a project in a nearby region, then connect the repo once (docs/SUPABASE-GITHUB.md) so `supabase/migrations/*.sql` deploy on every push — or run `0001_init.sql` in the SQL editor (it is idempotent). Docs: <https://supabase.com/docs/guides/database/overview>
 4. **Copy the repo to the VPS**, create `deploy/.env`:
    ```
    TUNNEL_TOKEN=...your tunnel token...

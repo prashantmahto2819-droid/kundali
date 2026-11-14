@@ -1,0 +1,15 @@
+# Supabase CLI / GitHub-integration project file.
+# The Supabase GitHub integration (Project Settings → Integrations → GitHub, working directory ".")
+# reads this folder: every new file in supabase/migrations/ is applied to the database when it reaches
+# the production branch. Auth/API settings below are NOT pushed by the integration (it ignores them);
+# set those in the dashboard. Add a migration with:  supabase migration new <name>   (or a new numbered .sql file).
+project_id = "kundali"
+
+[api]
+enabled = true
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+site_url = "https://kundali.vividbrandify.com"
+additional_redirect_urls = ["https://kundali.vividbrandify.com/**", "http://localhost:8765/**"]
