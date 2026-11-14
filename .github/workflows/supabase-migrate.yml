@@ -45,12 +45,12 @@ jobs:
 
       - name: Link project
         if: steps.chk.outputs.run == '1'
-        run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"        # DB password comes from SUPABASE_DB_PASSWORD
 
       - name: Show pending migrations
         if: steps.chk.outputs.run == '1'
-        run: supabase migration list --password "$SUPABASE_DB_PASSWORD"
+        run: supabase migration list --remote || supabase migration list --linked
 
       - name: Apply migrations
         if: steps.chk.outputs.run == '1'
-        run: supabase db push --include-all --password "$SUPABASE_DB_PASSWORD"
+        run: supabase db push --remote --include-all --yes || supabase db push --linked --include-all --yes
