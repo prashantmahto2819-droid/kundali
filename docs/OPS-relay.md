@@ -241,3 +241,13 @@ Restore: `docker run --rm -v kundali-data:/data -v /srv/backups/kundali:/b alpin
 
 Rate limits (per client IP, from Caddy's X-Forwarded-For): subscribe 5/h, verify 20/h, AI palm 10/h, AI 60/h, consult requests 10/h,
 all /v1 600/min; OTP codes 3 per phone per hour. `KUNDALI_RATE_LIMIT=0` disables them (tests/dev).
+
+## Automatic server update from GitHub (optional, replaces the manual update block)
+`.github/workflows/deploy.yml` runs the tests on every push to `phase-0-engine`; when the secrets below exist it then SSHes
+into the server, pulls, rebuilds, waits for "healthy", runs `deploy/smoke.sh`, and rolls back to the previous commit if smoke fails.
+1. On the server: `ssh-keygen -t ed25519 -f ~/.ssh/gh_deploy -N ""` then `cat ~/.ssh/gh_deploy.pub >> ~/.ssh/authorized_keys`.
+2. Show the private key once with `cat ~/.ssh/gh_deploy` and paste it as a GitHub secret (never in chat).
+3. https://github.com/prashantmahto2819-droid/kundali/settings/secrets/actions → New repository secret:
+   `DEPLOY_HOST` (server IP), `DEPLOY_USER` (e.g. root), `DEPLOY_SSH_KEY` (the private key), optional `DEPLOY_PORT`.
+4. https://github.com/prashantmahto2819-droid/kundali/actions/workflows/deploy.yml → Run workflow (or just push).
+`deploy/.env` is untracked, so the pull never touches your keys.

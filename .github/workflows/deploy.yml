@@ -1,0 +1,80 @@
+# Test, then update the Hetzner server automatically on every push to phase-0-engine.
+# Needs repository secrets (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST     – server IP or host name
+#   DEPLOY_USER     – SSH user (e.g. root)
+#   DEPLOY_SSH_KEY  – private key of a key pair whose public half is in that user's ~/.ssh/authorized_keys
+#   DEPLOY_PORT     – optional, default 22
+# Without DEPLOY_HOST the deploy job only prints a notice (tests still run).
+name: Test and deploy
+
+on:
+  push:
+    branches: [phase-0-engine]
+    paths-ignore: ["docs/**", "**/*.md", "supabase/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-kundali
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: engine/requirements.txt
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-noto-core fonts-freefont-ttf
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+        env:
+          KUNDALI_BACKEND: analytic
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      HOST: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - name: Secrets present?
+        id: chk
+        run: |
+          if [ -z "$HOST" ]; then echo "::notice::DEPLOY_HOST not set — skipping server update."; echo "run=0" >> "$GITHUB_OUTPUT"; else echo "run=1" >> "$GITHUB_OUTPUT"; fi
+      - name: Update server over SSH
+        if: steps.chk.outputs.run == '1'
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          command_timeout: 30m
+          script: |
+            set -e
+            cd /srv/kundali
+            PREV=$(git rev-parse --short HEAD)
+            git fetch --quiet origin phase-0-engine
+            git checkout --quiet phase-0-engine
+            git reset --hard --quiet origin/phase-0-engine
+            NEW=$(git rev-parse --short HEAD)
+            echo "deploying $PREV -> $NEW"
+            cd deploy
+            GIT_SHA=$NEW docker compose -f docker-compose.relay.yml up -d --build
+            for i in $(seq 1 40); do
+              s=$(docker inspect -f '{{.State.Health.Status}}' kundali-api 2>/dev/null || echo none)
+              [ "$s" = healthy ] && break; sleep 5
+            done
+            echo "container: $s"
+            cd /srv/kundali
+            if ./deploy/smoke.sh https://kundali.vividbrandify.com | tee /tmp/kundali-smoke.txt | tail -3 | grep -q "ALL OK"; then
+              echo "smoke ALL OK"
+            else
+              echo "::error::smoke failed — rolling back to $PREV"; tail -20 /tmp/kundali-smoke.txt
+              git reset --hard --quiet "$PREV"; cd deploy && GIT_SHA=$PREV docker compose -f docker-compose.relay.yml up -d --build; exit 1
+            fi

@@ -122,3 +122,11 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **My dashboard**: family profiles stored only in this browser (add form with relation, add current chart, import from account when signed in); per person: identity chips (lagna, Moon sign, nakshatra-pada, Sun sign, name syllable), today's personal score (Ashtakavarga) and rashifal, running Vimshottari MD/AD/PD with progress bars and Yogini dasha, Sade Sati/Ashtama Shani, Mangal/Kaal Sarp/Pitru dosha chips, yogas, birthday countdown + varshaphal link, six-month timeline of dasha and transit changes, and actions (open full chart, share card, WhatsApp updates for this person, delete).
 - API: `POST /v1/dashboard` (birth payload → all of the above in one call).
 - Fully translated to English; works on phone (2-column cards, bottom nav) and desktop.
+
+## Animated home and page design (2026-11-14)
+- Cosmic hero: twinkling star field, shooting star, shimmering headline, count-up stats, and a **live sky wheel** — the nine grahas where they are right now (sidereal, Lahiri; `GET /v1/sky`, cached 5 min), 12 signs and 27 nakshatra ticks, slowly turning rings, planets popping in with pulsing halos and a tooltip (sign, degree, nakshatra, retrograde).
+- Quick kundali strip overlapping the hero; **day-cycle card**: sunrise→sunset arc with the Sun's current position, Rahu kaal and Abhijit segments, % of day gone, time to sunset/sunrise.
+- Every tool page has an animated page header (icon, title, one-line purpose); cards reveal on scroll; tab changes fade in; feature cards lift on hover. All motion is off under `prefers-reduced-motion`.
+- Baby-name suggestions and the name syllable are romanized in English mode (`jyotish/translit.py`).
+- Phone fixes: wide tables scroll inside their card; chart-style buttons wrap.
+- Frontend restructured: `web/index.html` is markup only; styles in `web/assets/app.css`, script in `web/assets/app.js` (cache-busted with the git SHA at Docker build).

@@ -1042,7 +1042,8 @@ def dashboard_from_payload(payload: dict) -> dict:
         "name": chart["input"].get("name"), "input": chart["input"],
         "identity": {"lagna": lg["sign_name"], "lagna_hi": lg["sign_name_hi"], "moon_sign": moon["sign_name"], "moon_sign_hi": moon["sign_name_hi"], "moon_sign_index": moon["sign"],
                      "nakshatra": moon["nakshatra"], "nakshatra_hi": moon["nakshatra_hi"], "pada": moon["pada"], "sun_sign": sun["sign_name"], "sun_sign_hi": sun["sign_name_hi"],
-                     "name_syllable": ((chart.get("patri") or {}).get("avakahada") or {}).get("name_syllable", {}).get("pada")},
+                     "name_syllable": ((chart.get("patri") or {}).get("avakahada") or {}).get("name_syllable", {}).get("pada"),
+                     "name_syllable_en": ((chart.get("patri") or {}).get("avakahada") or {}).get("name_syllable", {}).get("pada_en")},
         "dasha": dasha,
         "yogini": {"name": yrun.get("mahadasha", {}).get("name"), "name_hi": yrun.get("mahadasha", {}).get("name_hi"), "end": yrun.get("mahadasha", {}).get("end")} if yrun else None,
         "sade_sati": {"active": bool(ss.get("active")), "phase": ss.get("phase"), "ashtama": bool(ss.get("ashtama"))},
@@ -1053,3 +1054,33 @@ def dashboard_from_payload(payload: dict) -> dict:
         "doshas": {k: {"present": bool(v.get("present")), "text_hi": v.get("text_hi"), "text_en": v.get("text_en")} for k, v in doshas.items() if k in ("mangal", "kaal_sarp", "pitru")},
         "yogas": [{"name": y.get("name"), "name_hi": y.get("name_hi")} for y in chart.get("yogas", []) if y.get("present")][:6],
     }
+
+
+_SKY_CACHE: dict = {}
+
+
+def sky_from_query(q: dict) -> dict:
+    """Where the nine grahas are right now (sidereal, Lahiri): sign, degree, nakshatra, retrograde — for the live sky wheel
+    on the home page. Cached for five minutes (the Moon moves ~0.04° in that time)."""
+    import time as _t
+    from datetime import datetime as _dt, timezone as _tz
+    from .transit import positions_at
+    from .constants import NAKSHATRAS, PLANETS_HI, SIGNS, SIGNS_HI
+    key = int(_t.time() // 300)
+    if _SKY_CACHE.get("key") == key:
+        return _SKY_CACHE["data"]
+    now = _dt.now(_tz.utc)
+    pos = positions_at(now, backend())
+    try:
+        from .constants import NAKSHATRAS_HI
+    except ImportError:
+        NAKSHATRAS_HI = NAKSHATRAS
+    rows = []
+    for name, v in pos.items():
+        lon = v["longitude"]; ni = int(lon // (360 / 27))
+        rows.append({"name": name, "name_hi": PLANETS_HI[name], "longitude": round(lon, 3), "sign": v["sign"], "sign_name": SIGNS[v["sign"]],
+                     "sign_name_hi": SIGNS_HI[v["sign"]], "degree": round(lon % 30, 2), "nakshatra": NAKSHATRAS[ni], "nakshatra_hi": NAKSHATRAS_HI[ni],
+                     "retrograde": bool(v["retrograde"])})
+    data = {"at": now.isoformat(timespec="seconds"), "planets": rows, "ayanamsa": "lahiri"}
+    _SKY_CACHE.update(key=key, data=data)
+    return data

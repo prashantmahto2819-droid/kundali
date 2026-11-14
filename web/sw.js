@@ -1,7 +1,7 @@
 // Kundali service worker: the app shell and knowledge files work offline; API calls go to the network.
 // Bump VERSION on every deploy that changes web/ or data/ (the build sets it from the git commit).
 const VERSION = 'kundali-v1';
-const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './data/places.json', './data/i18n_en.json',
+const SHELL = ['./', './index.html', './assets/app.css', './assets/app.js', './config.js', './manifest.webmanifest', './data/places.json', './data/i18n_en.json',
   './data/knowledge/planets.json', './data/knowledge/houses.json', './data/knowledge/nakshatras.json', './data/knowledge/signs.json',
   './data/knowledge/numbers.json', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', e => {

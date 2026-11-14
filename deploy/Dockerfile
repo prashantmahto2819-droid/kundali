@@ -9,7 +9,7 @@ COPY data data
 COPY web web
 # Service-worker cache version = the git commit, so every deploy refreshes the offline app shell
 ARG GIT_SHA=dev
-RUN sed -i "s/kundali-v1/kundali-${GIT_SHA}/" /srv/web/sw.js
+RUN sed -i "s/kundali-v1/kundali-${GIT_SHA}/" /srv/web/sw.js && sed -i "s#assets/app\.\(css\|js\)\"#assets/app.\1?v=${GIT_SHA}\"#g" /srv/web/index.html
 ENV KUNDALI_EPHEMERIS_DIR=/srv/ephemeris KUNDALI_BACKEND=jpl
 # fetch NASA JPL DE440s (~32 MB) at build time so the container starts offline
 RUN mkdir -p /srv/ephemeris && cd /srv/engine && python -c "from jyotish.ephemeris import JPLBackend; JPLBackend()"

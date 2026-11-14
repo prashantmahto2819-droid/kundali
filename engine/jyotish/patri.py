@@ -155,7 +155,8 @@ def _name_suggestions(pada_syllable: str, all_syllables: list[str]) -> dict:
         e = _NAMES.get(syl, {})
         boys += [n for n in e.get("boys", []) if n not in boys]
         girls += [n for n in e.get("girls", []) if n not in girls]
-    return {"boys": boys[:8], "girls": girls[:8]}
+    from .translit import roman
+    return {"boys": boys[:8], "girls": girls[:8], "boys_en": [roman(n) for n in boys[:8]], "girls_en": [roman(n) for n in girls[:8]]}
 
 
 def details(chart: dict) -> dict:

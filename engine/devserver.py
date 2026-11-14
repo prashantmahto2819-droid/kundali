@@ -128,6 +128,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(200, handlers.panchang_month_from_query(q))
             except handlers.BadRequest as exc:
                 return self._json(400, {"detail": str(exc)})
+        if path == "/v1/sky":
+            return self._json(200, handlers.sky_from_query({}))
         if path == "/v1/festivals":
             from urllib.parse import parse_qs
             q = {k: v[0] for k, v in parse_qs(query).items()}
