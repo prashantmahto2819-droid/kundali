@@ -53,7 +53,7 @@ def harvest(obj):
             harvest(v)
 
 
-for f in (ROOT / "data" / "knowledge").glob("*.json"):
+for f in sorted((ROOT / "data" / "knowledge").glob("*.json")):
     if f.name == "vastu_zones.json":          # handled below: its devata names must not override planet names (सूर्य → Sun)
         continue
     harvest(json.loads(f.read_text(encoding="utf-8")))
@@ -64,7 +64,7 @@ LK_THEMES_EN = {"1": "self, personality and beginnings", "2": "family, savings a
                 "10": "work, position and father", "11": "income, friends and fulfilment of wishes", "12": "expenses, solitude and foreign lands"}
 for k, v in lk["house_theme_hi"].items():
     EXACT[v] = LK_THEMES_EN[k]
-for f in (ROOT / "data" / "rules").glob("*.json"):
+for f in sorted((ROOT / "data" / "rules").glob("*.json")):
     for r in json.loads(f.read_text(encoding="utf-8")).get("rules", []):
         put(r["text_hi"], r["text_en"])
 
