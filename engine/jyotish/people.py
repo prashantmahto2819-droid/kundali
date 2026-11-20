@@ -36,7 +36,7 @@ CREATE INDEX IF NOT EXISTS people_org ON people(org_id);
 
 def _row(r) -> dict:
     return {"id": r["id"], "name": r["name"], "birth": json.loads(r["birth"]),
-            "place": r["place"], "note": r["note"], "created": r["created"]}
+            "place": r["place"], "note": r["note"], "created": r["created"], "rel": r["rel"] if "rel" in r.keys() else None}
 
 
 def add(store, org_id: str, payload: dict) -> dict:
@@ -50,9 +50,9 @@ def add(store, org_id: str, payload: dict) -> dict:
         n = store._db.execute("SELECT COUNT(*) FROM people WHERE org_id=?", (org_id,)).fetchone()[0]
         if n >= MAX_PEOPLE:
             raise handlers.BadRequest(f"limit of {MAX_PEOPLE} saved people reached")
-        store._db.execute("INSERT INTO people VALUES(?,?,?,?,?,?,?)",
+        store._db.execute("INSERT INTO people(id, org_id, name, birth, place, note, created, rel) VALUES(?,?,?,?,?,?,?,?)",
                           (pid, org_id, name, json.dumps(birth), str(payload.get("place", ""))[:120],
-                           str(payload.get("note", ""))[:500], access._now().isoformat()))
+                           str(payload.get("note", ""))[:500], access._now().isoformat(), str(payload.get("rel") or "")[:30]))
         store._db.commit()
     return get(store, org_id, pid)
 
@@ -80,8 +80,10 @@ def update(store, org_id: str, pid: str, payload: dict) -> dict | None:
         sets.append("place=?"); vals.append(str(payload["place"] or "")[:120])
     if "note" in payload:
         sets.append("note=?"); vals.append(str(payload["note"] or "")[:2000])
+    if "rel" in payload:
+        sets.append("rel=?"); vals.append(str(payload["rel"] or "")[:30])
     if not sets:
-        raise handlers.BadRequest("nothing to update (name, place or note)")
+        raise handlers.BadRequest("nothing to update (name, place, note or rel)")
     with store._lock:
         store._db.execute(f"UPDATE people SET {', '.join(sets)} WHERE id=? AND org_id=?", (*vals, pid, org_id))
         store._db.commit()

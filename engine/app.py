@@ -667,6 +667,28 @@ def palm_trace(req: PalmTraceRequest):
 
 
 # Serve the web page and the knowledge data from the same container (one deployable unit).
+# Search-engine pages: /panchang, /rashifal, /tyohar/<year>, sitemap.xml, robots.txt (server-rendered, no JS needed)
+from fastapi.responses import Response as _Resp
+
+
+@app.get("/sitemap.xml")
+@app.get("/robots.txt")
+@app.get("/panchang")
+@app.get("/panchang/{rest:path}")
+@app.get("/rashifal")
+@app.get("/rashifal/{rest:path}")
+@app.get("/tyohar")
+@app.get("/tyohar/{rest:path}")
+@app.get("/.well-known/assetlinks.json")
+def seo_pages(request: Request):
+    from jyotish import seo
+    r = seo.route(request.url.path)
+    if r is None:
+        raise HTTPException(status_code=404)
+    code, ctype, body = r
+    return _Resp(content=body, status_code=code, media_type=ctype.split(";")[0], headers={"Cache-Control": "public, max-age=900"})
+
+
 # Set KUNDALI_SERVE_WEB=0 when the web/ folder is hosted elsewhere (e.g. Cloudflare Pages).
 _ROOT = Path(__file__).resolve().parents[1]
 if os.environ.get("KUNDALI_SERVE_WEB", "1") == "1" and (_ROOT / "web").is_dir():

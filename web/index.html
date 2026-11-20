@@ -147,8 +147,8 @@
           <div><button type="submit">जोड़ें</button></div>
         </form>
       </details>
-      <div class="actions"><button type="button" class="ghost" id="dash_fromchart">अभी की कुंडली को जोड़ें</button><button type="button" class="ghost" id="dash_import" hidden>खाते से आयात करें</button></div>
-      <div class="muted" style="font-size:.8rem">प्रोफ़ाइल केवल इसी ब्राउज़र में सहेजी जाती हैं।</div>
+      <div class="actions"><button type="button" class="ghost" id="dash_fromchart">अभी की कुंडली को जोड़ें</button><button type="button" class="ghost" id="dash_import" hidden>अभी sync करें</button></div><div class="muted" id="dash_sync" hidden style="font-size:.85rem;margin-top:6px"></div>
+      <div class="muted" style="font-size:.8rem">प्रोफ़ाइल इसी ब्राउज़र में सहेजी जाती हैं; लॉगिन करने पर खाते से sync होकर हर फ़ोन पर दिखती हैं।</div>
     </div>
     <div id="dash_view"><div class="card muted">ऊपर किसी प्रोफ़ाइल को चुनिए या नई जोड़िए — यहाँ उसकी दशा, आज का दिन, आगामी बदलाव और जन्मदिन दिखेंगे।</div></div>
   </section>
@@ -701,6 +701,7 @@
     <div><h5>ज्योतिष</h5><a data-go="t-kundali">जन्म कुंडली</a><a data-go="t-match">कुंडली मिलान</a><a data-go="t-kundali" data-sub="s-varsha">वर्षफल</a><a data-go="t-kundali" data-sub="s-numer">अंक ज्योतिष</a><a data-go="t-prashna">प्रश्न कुंडली</a><a data-go="t-tarot">टैरो</a></div>
     <div><h5>पंचांग व मुहूर्त</h5><a data-go="t-today">आज का पंचांग</a><a data-go="t-muhurta">मुहूर्त</a><a data-go="t-cal">कैलेंडर स्टूडियो</a><a data-go="t-vastu">वास्तु</a><a data-go="t-palm">हस्तरेखा</a></div>
     <div><h5>सेवाएँ</h5><a data-go="t-dash">मेरा डैशबोर्ड</a><a data-go="t-kundali" data-scroll="wacard">WhatsApp अपडेट</a><a data-go="t-ask">AI से पूछिए</a><a data-go="t-consult">ज्योतिषी परामर्श</a><a data-go="t-learn">ज्योतिष सीखिए</a></div>
+    <div><h5>पढ़िए</h5><a href="/panchang">आज का पंचांग (शहर-वार)</a><a href="/rashifal">आज का राशिफल</a><a href="/rashifal/mesh">मेष से मीन तक</a><a href="/tyohar">व्रत-त्योहार कैलेंडर</a><a href="/sitemap.xml">साइट-मैप</a></div>
   </div>
   <div class="fine">गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश, संपूर्ण-राशि भाव)। फलादेश परंपरागत मार्गदर्शन है — भविष्यवाणी, चिकित्सा, क़ानूनी या वित्तीय सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन। © <span id="yr"></span> कुंडली ऐप</div>
 </footer>

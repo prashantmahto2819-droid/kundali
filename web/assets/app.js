@@ -1105,6 +1105,11 @@ $('yago').onclick = async () => {
     setTimeout(() => { const t = g.dataset.scroll && $(g.dataset.scroll); (t || document.querySelector('.tab.on'))?.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
   });
 
+  // deep links from the search pages: /#wa, /#t-today, /#t-dash …
+  const deepLink = () => { const h = location.hash.slice(1); if (h === 'wa') { window.showTab('t-kundali'); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 120); } else if (/^t-[a-z]+$/.test(h) && $(h)) window.showTab(h); };
+  if (document.readyState === 'complete') setTimeout(deepLink, 400); else window.addEventListener('load', () => setTimeout(deepLink, 400));
+  window.addEventListener('hashchange', deepLink);
+
   // greeting by time of day
   const greet = () => { const h = new Date().getHours(); $('hm_hello').textContent = h < 12 ? '🌅 शुभ प्रभात' : h < 17 ? '☀️ शुभ दोपहर' : h < 21 ? '🌇 शुभ संध्या' : '🌙 शुभ रात्रि'; };
   greet();
@@ -1120,7 +1125,7 @@ $('yago').onclick = async () => {
     window.showTab('t-kundali'); $('f').requestSubmit();
     const prof = {id: 'p' + Date.now().toString(36), name: $('hm_name').value.trim() || 'मेरी कुंडली', rel: 'स्वयं', date: $('hm_date').value, time: $('hm_time').value, lat: pl.lat, lon: pl.lon, tz: pl.tz, place: pl.hi || pl.name};
     const list = LS.get('kundali_profiles', []);
-    if (!list.some(x => x.date === prof.date && x.time === prof.time && Math.abs(x.lat - prof.lat) < 1e-3)) { list.push(prof); LS.set('kundali_profiles', list); if (!LS.get('kundali_profile_active', null)) LS.set('kundali_profile_active', prof.id); renderPeople(); }
+    if (!list.some(x => x.date === prof.date && x.time === prof.time && Math.abs(x.lat - prof.lat) < 1e-3)) { list.push(prof); LS.set('kundali_profiles', list); if (!LS.get('kundali_profile_active', null)) LS.set('kundali_profile_active', prof.id); renderPeople(); if (window._pushProfile) window._pushProfile(); }
   });
 
   // today at a glance (home)
@@ -1313,19 +1318,48 @@ $('yago').onclick = async () => {
     e.preventDefault(); const pl = findPlace($('dp_city').value);
     if (!pl) { alert('शहर सूची में नहीं मिला'); return; }
     const p = {id: 'p' + Date.now().toString(36), name: $('dp_name').value.trim(), rel: $('dp_rel').value, date: $('dp_date').value, time: $('dp_time').value, lat: pl.lat, lon: pl.lon, tz: pl.tz, place: pl.hi || pl.name};
-    LS.set('kundali_profiles', [...profiles(), p]); $('dash_add').reset(); $('dash_addbox').open = false; openProfile(p.id);
+    LS.set('kundali_profiles', [...profiles(), p]); $('dash_add').reset(); $('dash_addbox').open = false; openProfile(p.id); window._pushProfile();
   });
   $('dash_fromchart').onclick = () => {
     const b = window.lastBody; if (!b) { alert('पहले "कुंडली" टैब में कुंडली बनाइए।'); return; }
     const p = {id: 'p' + Date.now().toString(36), name: b.name || 'बिना नाम', rel: 'अन्य', date: b.date, time: b.time, lat: b.lat, lon: b.lon, tz: b.tz, place: $('citysearch').value.split(' · ').pop() || ''};
-    LS.set('kundali_profiles', [...profiles(), p]); openProfile(p.id);
+    LS.set('kundali_profiles', [...profiles(), p]); openProfile(p.id); window._pushProfile();
   };
-  $('dash_import').onclick = async () => {
-    try { const r = await apiFetch('/v1/people'); const d = await r.json(); const cur = profiles();
-      (d.people || []).forEach(x => { if (!cur.some(c => c.date === x.date && c.time === x.time)) cur.push({id: 'p' + Math.random().toString(36).slice(2, 9), name: x.name, rel: 'अन्य', date: x.date, time: x.time, lat: x.lat, lon: x.lon, tz: x.tz, place: x.place || ''}); });
-      LS.set('kundali_profiles', cur); renderPeople(); } catch (e) { alert(e.message); }
-  };
-  setInterval(() => { $('dash_import').hidden = !window.authToken; }, 2000);
+  // ---- two-way sync of "मेरे लोग" with the signed-in account (server table people, per org) ----
+  const sameBirth = (a, b) => a.date === b.date && a.time === b.time && Math.abs(a.lat - b.lat) < 1e-3 && Math.abs(a.lon - b.lon) < 1e-3;
+  let syncing = false, lastSyncTok = null;
+  async function syncProfiles(force) {
+    if (!window.authToken || syncing || (!force && lastSyncTok === window.authToken)) return;
+    syncing = true; const st = $('dash_sync');
+    try {
+      st.hidden = false; st.innerHTML = '☁️ <span>खाते से sync हो रहा है…</span>';
+      const call = async (m, u, body) => { const r = await apiFetch(u, {method: m, headers: body ? {'Content-Type': 'application/json'} : {}, body: body ? JSON.stringify(body) : undefined}); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.status); return r.json(); };
+      const server = (await call('GET', '/v1/people')).people || [];
+      let list = profiles(); const seen = new Set();
+      // 1) a profile synced earlier but gone from the account was deleted elsewhere
+      list = list.filter(p => !p.sid || server.some(x => x.id === p.sid));
+      // 2) push local-only profiles (or link them to an identical saved person)
+      for (const p of list) {
+        if (p.sid) { seen.add(p.sid); continue; }
+        const m = server.find(x => !seen.has(x.id) && sameBirth(x.birth, p));
+        if (m) { p.sid = m.id; seen.add(m.id); continue; }
+        const r = await call('POST', '/v1/people', {name: p.name || 'बिना नाम', rel: p.rel || '', date: p.date, time: p.time, tz: p.tz, lat: +p.lat, lon: +p.lon, place: p.place || ''});
+        p.sid = r.id; seen.add(r.id);
+      }
+      // 3) pull people saved from another device
+      for (const x of server) if (!seen.has(x.id)) list.push({id: 's_' + x.id, sid: x.id, name: x.name, rel: x.rel || '', date: x.birth.date, time: x.birth.time, tz: x.birth.tz, lat: x.birth.lat, lon: x.birth.lon, place: x.place || ''});
+      LS.set('kundali_profiles', list);
+      if (!list.some(p => p.id === activeId())) LS.set('kundali_profile_active', list[0]?.id || null);
+      lastSyncTok = window.authToken; renderPeople();
+      st.innerHTML = `☁️ <span>खाते से जुड़ा</span> · ${list.length} <span>प्रोफ़ाइल</span>`;
+    } catch (e) { st.innerHTML = '⚠️ <span>sync नहीं हुआ</span>: ' + esc(e.message); }
+    finally { syncing = false; }
+  }
+  window.syncProfiles = syncProfiles;
+  window._unsyncProfile = p => { if (p && p.sid && window.authToken) apiFetch('/v1/people/' + p.sid, {method: 'DELETE'}).catch(() => {}); };
+  window._pushProfile = () => { if (window.authToken) syncProfiles(true); };
+  $('dash_import').onclick = () => syncProfiles(true);
+  setInterval(() => { $('dash_import').hidden = !window.authToken; if (!window.authToken) { $('dash_sync').hidden = true; lastSyncTok = null; } else syncProfiles(); }, 2000);
 
   let dashKey = '';
   async function loadDash(force) {
@@ -1365,7 +1399,7 @@ $('yago').onclick = async () => {
       $('dash_varsha').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => window.showSub && window.showSub('s-varsha'), 1500); };
       $('dash_wa').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 1200); };
       $('dash_card').onclick = async () => { try { const rr = await apiFetch('/v1/chart/card.png', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...body, lang: en ? 'en' : 'hi', chart_style: window.chartStyle})}); const blob = await rr.blob(); const file = new File([blob], 'kundali.png', {type: 'image/png'}); if (navigator.canShare && navigator.canShare({files: [file]})) await navigator.share({files: [file]}); else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kundali.png'; a.click(); } } catch (e) {} };
-      $('dash_del').onclick = () => { if (!confirm('यह प्रोफ़ाइल हटाएँ?')) return; LS.set('kundali_profiles', profiles().filter(x => x.id !== p.id)); LS.set('kundali_profile_active', profiles()[0]?.id || null); dashKey = ''; renderPeople(); loadDash(); if (!profiles().length) $('dash_view').innerHTML = '<div class="card muted"><span>कोई प्रोफ़ाइल नहीं।</span></div>'; };
+      $('dash_del').onclick = () => { if (!confirm('यह प्रोफ़ाइल हटाएँ?')) return; window._unsyncProfile(p); LS.set('kundali_profiles', profiles().filter(x => x.id !== p.id)); LS.set('kundali_profile_active', profiles()[0]?.id || null); dashKey = ''; renderPeople(); loadDash(); if (!profiles().length) $('dash_view').innerHTML = '<div class="card muted"><span>कोई प्रोफ़ाइल नहीं।</span></div>'; };
     } catch (e) { $('dash_view').innerHTML = `<div class="card err">${esc(e.message)}</div>`; }
   }
   window.loadDash = loadDash;

@@ -52,6 +52,9 @@ class Store:
             self._db.executescript(_SCHEMA)
             from . import people
             self._db.executescript(people.SCHEMA)
+            if "rel" not in [r[1] for r in self._db.execute("PRAGMA table_info(people)")]:       # migration: relation (family dashboard sync)
+                self._db.execute("ALTER TABLE people ADD COLUMN rel TEXT")
+                self._db.commit()
             if "profile" not in [r[1] for r in self._db.execute("PRAGMA table_info(orgs)")]:      # migration: astrologer profile
                 self._db.execute("ALTER TABLE orgs ADD COLUMN profile TEXT")
                 self._db.commit()

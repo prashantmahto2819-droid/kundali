@@ -44,6 +44,8 @@ services:
       EMBED_PROVIDER: ${EMBED_PROVIDER:-}
       EMBED_MODEL: ${EMBED_MODEL:-}
       AI_WA_SUMMARY: ${AI_WA_SUMMARY:-0}
+      TWA_PACKAGE: ${TWA_PACKAGE:-}                  # Play Store app (Trusted Web Activity) package, e.g. com.vividbrandify.kundali
+      TWA_SHA256: ${TWA_SHA256:-}                    # app-signing SHA-256 fingerprint(s) from Play Console → App integrity
       KUNDALI_BRAND_NAME: ${KUNDALI_BRAND_NAME:-}        # footer of the daily panchang image card
       KUNDALI_BRAND_TAGLINE: ${KUNDALI_BRAND_TAGLINE:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}

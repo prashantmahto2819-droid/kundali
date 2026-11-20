@@ -83,3 +83,16 @@ def test_notes_profile_and_report_branding():
         assert handlers.brand_for(h)["brand_name"] == "ज्योतिष केंद्र" and handlers.brand_for({}) is None
     finally:
         access._store = None
+
+
+def test_relation_is_stored_for_dashboard_sync(st, tmp_path):
+    s, ha, _ = st
+    code, p = people.api("POST", "/v1/people", ha, {"name": "माँ", "rel": "माता", **BIRTH}, s)
+    assert code == 201 and p["rel"] == "माता"
+    assert people.api("PUT", f"/v1/people/{p['id']}", ha, {"rel": "पिता"}, s)[1]["rel"] == "पिता"
+    # an old database without the rel column is migrated on open
+    import sqlite3
+    db = tmp_path / "old.db"
+    c = sqlite3.connect(db); c.executescript("CREATE TABLE people(id TEXT PRIMARY KEY, org_id TEXT NOT NULL, name TEXT NOT NULL, birth TEXT NOT NULL, place TEXT, note TEXT, created TEXT NOT NULL);"); c.close()
+    s2 = access.Store(str(db))
+    assert "rel" in [r[1] for r in s2._db.execute("PRAGMA table_info(people)")]

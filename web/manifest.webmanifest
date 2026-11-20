@@ -1,17 +1,112 @@
 {
   "name": "कुंडली — Kundali",
   "short_name": "कुंडली",
-  "description": "Vedic astrology, numerology, tarot, vastu and palmistry — Hindi and English.",
-  "start_url": "./",
-  "scope": "./",
+  "description": "निःशुल्क ज्योतिष — जन्म कुंडली, आज का पंचांग, मुहूर्त, मिलान, राशिफल, वर्षफल, टैरो, वास्तु, हस्तरेखा; हिंदी और English, WhatsApp पर रोज़ पंचांग.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#fbf7ef",
   "theme_color": "#8a3b12",
   "lang": "hi",
   "icons": [
-    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
-    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "/",
+  "categories": [
+    "lifestyle",
+    "education",
+    "utilities"
+  ],
+  "orientation": "portrait",
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "आज का पंचांग",
+      "short_name": "पंचांग",
+      "url": "/#t-today",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "मेरा डैशबोर्ड",
+      "short_name": "डैशबोर्ड",
+      "url": "/#t-dash",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "कुंडली मिलान",
+      "short_name": "मिलान",
+      "url": "/#t-match",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "आज का राशिफल",
+      "short_name": "राशिफल",
+      "url": "/rashifal",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screen-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "होम — लाइव ग्रह-चक्र और आज का पंचांग"
+    },
+    {
+      "src": "icons/screen-phone-1.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "होम"
+    },
+    {
+      "src": "icons/screen-phone-2.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "मेरा डैशबोर्ड"
+    }
   ]
 }
