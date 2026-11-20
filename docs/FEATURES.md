@@ -135,3 +135,8 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **Family profiles sync**: when signed in, "मेरे लोग" sync two-way with the account (server `people` table, new `rel` column): local-only profiles are uploaded, profiles saved on another phone are pulled, deletions propagate. Fixed the old "import from account" button, which read the wrong fields.
 - **Search pages** (server-rendered, no JS): `/panchang` + 24 city pages, `/rashifal` + 12 sign pages (daily/weekly/monthly), `/tyohar` and `/tyohar/<year>` (all vrats/festivals by month) + one page per major festival with that day's tithi window, sunrise, Rahu kaal, Abhijit and previous/next year dates; JSON-LD (Breadcrumb, Article, Event), canonical/OG tags, `sitemap.xml`, `robots.txt`. Linked from the app footer.
 - **Play Store**: manifest with id, shortcuts (panchang, dashboard, matching, rashifal), categories and store screenshots; deep links `/#t-today`, `/#t-dash`, `/#wa`; `/.well-known/assetlinks.json` from `TWA_PACKAGE`/`TWA_SHA256`. Steps in docs/PLAY-STORE.md.
+
+## Tamil & Malayalam, legal pages, what's new (2026-11-20)
+- Panchang term packs for **Tamil (ta)** and **Malayalam (ml)**: signs, weekdays, tithis, pakshas, 27 nakshatras (local names), yogas, karanas, months, labels — in the Today tab, `/v1/panchang/day?lang=`, WhatsApp daily message and bot ("भाषा tamil / malayalam").
+- `/privacy` (privacy policy, Hindi + English) and `/terms` — needed for the Play Store listing; contact from `KUNDALI_CONTACT_EMAIL`.
+- "नया क्या है" bell in the header with a red dot until the latest update has been seen.

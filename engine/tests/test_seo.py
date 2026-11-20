@@ -36,3 +36,9 @@ def test_festival_pages_and_sitemap():
     assert code == 200 and len(locs) > 80 and any(l.endswith("/rashifal/mesh") for l in locs) and any(re.search(r"/tyohar/\d{4}/holi$", l) for l in locs)
     assert "Sitemap:" in seo.route("/robots.txt")[2]
     assert seo.route("/assets/app.js") is None
+
+
+def test_privacy_and_terms(monkeypatch):
+    monkeypatch.setenv("KUNDALI_CONTACT_EMAIL", "help@example.com")
+    b = _ok("/privacy", ["गोपनीयता नीति", "STOP", "help@example.com", "OpenAI"])
+    _ok("/terms", ["उपयोग की शर्तें", "सलाह नहीं"])

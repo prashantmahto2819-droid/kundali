@@ -88,7 +88,7 @@ def page(path: str, title: str, desc: str, body: str, crumbs: list[tuple[str, st
 <header><div class="in"><a href="/">🪔 कुंडली · पंचांग</a><nav><a href="/panchang">आज का पंचांग</a><a href="/rashifal">राशिफल</a><a href="/tyohar/{today().year}">व्रत-त्योहार {today().year}</a><a href="/">कुंडली बनाइए</a></nav></div></header>
 <main><div class="crumb">{crumb_html}</div>{body}
 <div class="card"><b>अपनी जन्म कुंडली, दशा और दैनिक फल निःशुल्क देखिए</b><br><a class="cta" href="/">कुंडली बनाइए →</a><a class="cta" style="background:#2e9d5b" href="/#wa">WhatsApp पर रोज़ पंचांग</a></div></main>
-<footer><div class="in">गणना: NASA JPL DE440s, लाहिरी अयनांश। फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। · <a href="/panchang">पंचांग</a> · <a href="/rashifal">राशिफल</a> · <a href="/tyohar/{today().year}">त्योहार</a> · <a href="/sitemap.xml">sitemap</a></div></footer>
+<footer><div class="in">गणना: NASA JPL DE440s, लाहिरी अयनांश। फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। · <a href="/panchang">पंचांग</a> · <a href="/rashifal">राशिफल</a> · <a href="/tyohar/{today().year}">त्योहार</a> · <a href="/privacy">गोपनीयता</a> · <a href="/terms">शर्तें</a> · <a href="/sitemap.xml">sitemap</a></div></footer>
 </body></html>"""
 
 
@@ -263,7 +263,7 @@ def festival_page(year: int, key: str) -> str | None:
 
 def sitemap() -> str:
     y, d = today().year, today().isoformat()
-    urls = ["/", "/panchang", "/rashifal", "/tyohar"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
+    urls = ["/", "/panchang", "/rashifal", "/tyohar", "/privacy", "/terms"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
     for yr in (y, y + 1):
         urls.append(f"/tyohar/{yr}")
         urls += sorted({f"/tyohar/{yr}/{_fkey(ev)}" for ev in _events(yr) if ev["kind"] in MAJOR_KINDS})
@@ -291,6 +291,10 @@ def route(path: str) -> tuple[int, str, str] | None:
         b = rashifal_sign(m.group(1)) if m.group(1) else rashifal_index(); return (200, H, b) if b else (404, H, not_found())
     if p == "/.well-known/assetlinks.json":
         return 200, "application/json", assetlinks()
+    if p == "/privacy":
+        return 200, H, privacy_page()
+    if p == "/terms":
+        return 200, H, terms_page()
     if p == "/tyohar":
         return 200, H, festivals_year(today().year)
     m = re.fullmatch(r"/tyohar/(\d{4})(?:/([a-z0-9-]+))?", p)
@@ -298,6 +302,53 @@ def route(path: str) -> tuple[int, str, str] | None:
         y = int(m.group(1)); b = festival_page(y, m.group(2)) if m.group(2) else festivals_year(y)
         return (200, H, b) if b else (404, H, not_found())
     return None
+
+
+def _contact() -> str:
+    em = os.environ.get("KUNDALI_CONTACT_EMAIL", "").strip()
+    return (f'<a href="mailto:{e(em)}">{e(em)}</a>' if em else "WhatsApp पर <b>मदद</b> लिखकर") + " (Contact: " + (e(em) if em else "WhatsApp, send <b>help</b>") + ")"
+
+
+def privacy_page() -> str:
+    upd = "20 नवंबर 2026"
+    sec = [
+        ("हम कौन हैं", f"यह निःशुल्क ज्योतिष ऐप {e(site())} पर चलता है। इस नीति में बताया गया है कि ऐप कौन-सी जानकारी लेता है, क्यों, और आप उसे कैसे हटा सकते हैं।",
+         "This free astrology app runs at " + e(site()) + ". This policy explains what it collects, why, and how you can delete it."),
+        ("जन्म विवरण", "कुंडली, मिलान, मुहूर्त आदि के लिए नाम, जन्म तारीख, समय और स्थान हमारे सर्वर पर केवल गणना के लिए भेजे जाते हैं और सहेजे नहीं जाते — जब तक आप लॉगिन करके किसी व्यक्ति को \"सहेजें\" न करें। \"मेरे लोग\" की सूची आपके ब्राउज़र में रहती है; लॉगिन करने पर वह आपके खाते में sync होती है ताकि दूसरे फ़ोन पर भी दिखे।",
+         "Birth details are sent to our server only to compute charts and are not stored unless you sign in and save a person. The \"My people\" list lives in your browser and, when you sign in, syncs to your account."),
+        ("लॉगिन", "लॉगिन (Supabase के ज़रिए) पर आपका ईमेल और एक खाता-पहचान रखी जाती है ताकि आपकी सहेजी कुंडलियाँ आपके ही खाते में रहें।",
+         "Sign-in (via Supabase) stores your email and an account id so saved charts stay in your account."),
+        ("WhatsApp अपडेट", "रोज़ का पंचांग पाने के लिए आपका WhatsApp नंबर, चुना हुआ शहर, भाषा, समय और (वैकल्पिक) जन्म विवरण सहेजे जाते हैं, साथ में भेजे गए संदेशों का छोटा लॉग। \"STOP\" लिखते ही भेजना बंद हो जाता है; पूरा डेटा हटवाने के लिए नीचे संपर्क करें।",
+         "For daily WhatsApp updates we store your number, city, language, time and optional birth details, plus a short delivery log. Send STOP to stop; contact us below to erase everything."),
+        ("AI सुविधाएँ", "जब आप \"AI से पूछिए\", हस्तरेखा-फ़ोटो या वास्तु-नक्शा AI से जाँचते हैं, तो आपका प्रश्न/चित्र और कुंडली का सार उस समय चालू AI सेवा (जैसे OpenAI, Groq, Google Gemini) को उत्तर बनाने के लिए भेजा जाता है। हम फ़ोटो सहेजते नहीं; दैनिक सीमा के लिए केवल गिनती रखी जाती है। ये सेवाएँ अपनी नीतियों के अनुसार डेटा संभालती हैं।",
+         "When you use AI features, your question or photo and a chart summary are sent to the active AI provider (e.g. OpenAI, Groq, Google Gemini) to produce the answer. We do not keep photos; only a usage count is kept for the daily limit."),
+        ("ज्योतिषी परामर्श", "परामर्श में आपका सवाल, फ़ोन नंबर और ज्योतिषी का उत्तर सहेजा जाता है ताकि उत्तर आप तक पहुँचे।",
+         "Consultations store your question, phone number and the astrologer's reply so it can reach you."),
+        ("ब्राउज़र में", "भाषा, रंग-रूप, प्रोफ़ाइल और पसंद आपके ब्राउज़र के localStorage में रहते हैं। हम विज्ञापन-ट्रैकर या तीसरे पक्ष के analytics का उपयोग नहीं करते।",
+         "Language, theme, profiles and preferences stay in your browser's localStorage. We use no advertising trackers or third-party analytics."),
+        ("साझा करना", "हम आपकी जानकारी बेचते नहीं। केवल ऊपर लिखी सेवाओं (होस्टिंग, Supabase लॉगिन, WhatsApp भेजने का गेटवे, AI सेवा) के साथ, उतना ही, जितना काम के लिए ज़रूरी है।",
+         "We never sell your data; it is shared only with the services above, and only as needed."),
+        ("आपके अधिकार", "आप कभी भी अपनी सहेजी प्रोफ़ाइल ऐप में हटा सकते हैं, WhatsApp पर STOP लिख सकते हैं, या पूरा डेटा हटवाने/देखने के लिए संपर्क कर सकते हैं: " + _contact() + "। हम 30 दिनों में अनुरोध पूरा करते हैं।",
+         "You can delete saved profiles in the app, send STOP on WhatsApp, or ask us to show or erase your data; we act within 30 days."),
+        ("बच्चे", "यह सेवा 13 वर्ष से कम आयु के बच्चों के लिए नहीं है; माता-पिता बच्चों की कुंडली अपने खाते से बना सकते हैं।",
+         "The service is not directed at children under 13; parents may make charts for their children from their own account."),
+        ("सुरक्षा व बदलाव", "डेटा HTTPS से भेजा जाता है और सर्वर पर सुरक्षित रखा जाता है। नीति में बदलाव होने पर यह पेज और ऊपर की तारीख बदलेगी।",
+         "Data travels over HTTPS and is kept on secured servers. Changes to this policy update this page and its date."),
+    ]
+    body = f"<div class='hero'><h1>गोपनीयता नीति</h1><p>Privacy policy · अंतिम अद्यतन: {upd}</p></div>" + "".join(
+        f"<div class='card'><h2>{e(h)}</h2><p>{hi}</p><p class='en'>{en}</p></div>" for h, hi, en in sec)
+    return page("/privacy", "गोपनीयता नीति | Privacy policy", "कुंडली ऐप कौन-सी जानकारी लेता है, क्यों, और आप उसे कैसे हटा सकते हैं।", body, [("गोपनीयता नीति", "/privacy")])
+
+
+def terms_page() -> str:
+    sec = [("सेवा", "यह ऐप परंपरागत ज्योतिष के नियमों के अनुसार गणना और सामान्य मार्गदर्शन देता है, निःशुल्क।", "The app provides traditional astrological computation and general guidance, free of charge."),
+           ("सलाह नहीं", "फलादेश भविष्यवाणी, चिकित्सा, क़ानूनी या वित्तीय सलाह नहीं है। स्वास्थ्य, धन या क़ानूनी निर्णयों के लिए योग्य विशेषज्ञ से मिलें। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन।",
+            "Readings are not predictions or medical, legal or financial advice. Consult a qualified professional for such decisions."),
+           ("गणना", "ग्रह-स्थिति NASA JPL DE440s और लाहिरी अयनांश से। स्थानीय परंपराओं में व्रत-तिथि एक दिन अलग हो सकती है।", "Positions from NASA JPL DE440s with Lahiri ayanamsa; local traditions may differ by a day."),
+           ("उचित उपयोग", "स्वचालित भारी उपयोग, दुरुपयोग या दूसरों को परेशान करने वाले संदेश मना हैं; ऐसे उपयोग पर सीमा लगाई जा सकती है।", "Abusive or automated heavy use may be rate-limited or blocked."),
+           ("संपर्क", "प्रश्न या शिकायत: " + _contact(), "Questions or complaints: see contact above.")]
+    body = "<div class='hero'><h1>उपयोग की शर्तें</h1><p>Terms of use</p></div>" + "".join(f"<div class='card'><h2>{e(h)}</h2><p>{hi}</p><p class='en'>{en}</p></div>" for h, hi, en in sec)
+    return page("/terms", "उपयोग की शर्तें | Terms of use", "कुंडली ऐप के उपयोग की शर्तें।", body, [("उपयोग की शर्तें", "/terms")])
 
 
 def assetlinks() -> str:

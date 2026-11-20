@@ -657,7 +657,7 @@ def panchang_today_from_query(q: dict) -> dict:
         raise BadRequest("no sunrise on that date at this latitude")
     row = {**out["days"][0], "tz": out["tz"], "lat": lat, "lon": lon}
     lang = str(q.get("lang") or "")
-    if lang in ("te", "kn", "mr", "gu", "bn"):
+    if lang in ("te", "kn", "mr", "gu", "bn", "ta", "ml"):
         from . import regional
         row = regional.localize_day(row, lang)
     return row

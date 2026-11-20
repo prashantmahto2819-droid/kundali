@@ -200,3 +200,17 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 @media (max-width:800px) { .hero.cosmic { grid-template-columns:1fr; padding:24px 20px 62px; min-height:0; } .hero.cosmic h2 { font-size:1.85rem; } #hm_sky { width:min(100%,320px); } .card.quick { margin:-42px 8px 14px; } .pagehead { padding:14px; } .pagehead h2 { font-size:1.15rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; } .reveal { opacity:1; transform:none; } }
 @media (max-width: 600px) { .tab table:not(.keep) { display: block; max-width: 100%; overflow-x: auto; } }
+
+/* ---- what's new ---- */
+#newsdot { position:absolute; top:5px; right:5px; width:8px; height:8px; border-radius:50%; background:#e0533d; box-shadow:0 0 0 2px var(--bg); animation:livedot 1.8s infinite; }
+#newsdlg { border:1px solid var(--line); border-radius:18px; padding:0; width:min(520px,calc(100vw - 32px)); max-height:min(80vh,640px); background:var(--card); color:var(--ink); box-shadow:0 30px 60px -20px rgba(0,0,0,.45); }
+#newsdlg::backdrop { background:rgba(20,10,40,.45); backdrop-filter:blur(2px); }
+#newsdlg[open] { animation:pagein .3s ease both; }
+.newshead { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--card); }
+#newslist { padding:6px 16px 16px; overflow:auto; }
+#newslist .ni { display:flex; gap:12px; padding:12px 0; border-bottom:1px dashed var(--line); } #newslist .ni:last-child { border:0; }
+#newslist .ni .em { font-size:1.4rem; line-height:1; } #newslist .ni b { display:block; } #newslist .ni span { color:var(--muted); font-size:.9rem; }
+#newslist .ni small { color:var(--muted); font-size:.75rem; } #newslist .ni a { cursor:pointer; }
+#newsclose { width:auto !important; flex:none; padding:6px 11px !important; }
+#newslist .ni a { color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap; }
+.newshead b { font-size:1.05rem; }

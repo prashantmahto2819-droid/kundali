@@ -220,7 +220,7 @@ def _tithi_window(sub: dict, d: date, hi: bool) -> str:
 
 
 def compose_daily_regional(sub: dict, d: date, day: dict) -> str:
-    """Compact panchang in Telugu / Kannada / Marathi / Gujarati / Bengali, with festival names kept in Hindi."""
+    """Compact panchang in Telugu / Kannada / Marathi / Gujarati / Bengali / Tamil / Malayalam, with festival names kept in Hindi."""
     from . import regional
     r = regional.localize_day(day, sub["lang"])
     lb = r["labels"]
@@ -263,7 +263,7 @@ def compose_daily(sub: dict, d: date) -> str:
     day = _day(sub, d)
     if not day:
         return ""
-    if sub.get("lang") in ("te", "kn", "mr", "gu", "bn"):
+    if sub.get("lang") in ("te", "kn", "mr", "gu", "bn", "ta", "ml"):
         return compose_daily_regional(sub, d, day)
     L = []
     L.append(("🌅 *आज का पंचांग* — " if hi else "🌅 *Today's panchang* — ") + f'{d.strftime("%d-%m-%Y")}, {day["vara_hi"] if hi else day["vara"]}' + (f' ({sub["place"]})' if sub.get("place") else ""))
@@ -515,7 +515,7 @@ def start_subscription(payload: dict) -> dict:
     birth = payload.get("birth") if isinstance(payload.get("birth"), dict) else None
     moon_sign, moon_name = moon_sign_from_birth(birth) if birth else (None, None)
     code = f"{random.randint(0, 999999):06d}"
-    sub = {"phone": phone, "name": str(payload.get("name") or "")[:60], "lang": payload.get("lang") if payload.get("lang") in ("en", "te", "kn", "mr", "gu", "bn") else "hi", "tz": tz, "lat": lat, "lon": lon,
+    sub = {"phone": phone, "name": str(payload.get("name") or "")[:60], "lang": payload.get("lang") if payload.get("lang") in ("en", "te", "kn", "mr", "gu", "bn", "ta", "ml") else "hi", "tz": tz, "lat": lat, "lon": lon,
            "place": str(payload.get("place") or "")[:80], "birth": json.dumps(birth, ensure_ascii=False) if birth else None, "moon_sign": moon_sign, "moon_sign_name": moon_name,
            "daily_time": daily_time, "want_panchang": int(bool(payload.get("want_panchang", True))), "want_rashifal": int(bool(payload.get("want_rashifal", True)) and moon_sign is not None),
            "vrat_alert": int(bool(payload.get("vrat_alert", True))), "vrat_kinds": ",".join(kinds), "weekly": int(bool(payload.get("weekly", True))), "weekly_day": int(payload.get("weekly_day", 0)) % 7,
@@ -580,7 +580,7 @@ def preview(payload: dict) -> dict:
     birth = payload.get("birth") if isinstance(payload.get("birth"), dict) else None
     moon_sign, moon_name = moon_sign_from_birth(birth) if birth else (None, None)
     kinds = [k for k in str(payload.get("vrat_kinds") or "festival,ekadashi,purnima,amavasya,pradosh").split(",") if k in KINDS_HI]
-    sub = {"lang": payload.get("lang") if payload.get("lang") in ("en", "te", "kn", "mr", "gu", "bn") else "hi", "tz": tz, "lat": float(payload.get("lat", 28.61)), "lon": float(payload.get("lon", 77.2)), "place": payload.get("place") or "",
+    sub = {"lang": payload.get("lang") if payload.get("lang") in ("en", "te", "kn", "mr", "gu", "bn", "ta", "ml") else "hi", "tz": tz, "lat": float(payload.get("lat", 28.61)), "lon": float(payload.get("lon", 77.2)), "place": payload.get("place") or "",
            "moon_sign": moon_sign, "want_panchang": payload.get("want_panchang", True), "want_rashifal": payload.get("want_rashifal", True), "vrat_alert": payload.get("vrat_alert", True), "vrat_kinds": ",".join(kinds)}
     d = date.fromisoformat(payload["date"]) if payload.get("date") else datetime.now(ZoneInfo(tz)).date()
     return {"daily": compose_daily(sub, d), "weekly": compose_weekly(sub, d), "moon_sign_name": moon_name, "relay_ready": relay_ready()}

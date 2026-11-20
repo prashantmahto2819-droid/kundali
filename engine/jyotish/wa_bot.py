@@ -51,7 +51,8 @@ PRASHNA_TOPICS = {"विवाह": "marriage", "शादी": "marriage", "ma
                   "शिक्षा": "education", "परीक्षा": "education", "exam": "education", "education": "education", "padhai": "education", "संतान": "children", "बच्चा": "children", "children": "children", "santan": "children",
                   "विदेश": "travel", "यात्रा": "travel", "travel": "travel", "videsh": "travel", "खोई": "lost_item", "खोया": "lost_item", "lost": "lost_item", "khoya": "lost_item"}
 LANG_WORDS = {"hindi": "hi", "हिंदी": "hi", "हिन्दी": "hi", "english": "en", "अंग्रेज़ी": "en", "angrezi": "en", "telugu": "te", "तेलुगु": "te", "తెలుగు": "te", "kannada": "kn", "कन्नड़": "kn", "ಕನ್ನಡ": "kn",
-              "marathi": "mr", "मराठी": "mr", "gujarati": "gu", "गुजराती": "gu", "ગુજરાતી": "gu", "bengali": "bn", "bangla": "bn", "बांग्ला": "bn", "বাংলা": "bn"}
+              "marathi": "mr", "मराठी": "mr", "gujarati": "gu", "गुजराती": "gu", "ગુજરાતી": "gu", "bengali": "bn", "bangla": "bn", "बांग्ला": "bn", "বাংলা": "bn",
+              "tamil": "ta", "तमिल": "ta", "தமிழ்": "ta", "malayalam": "ml", "मलयालम": "ml", "മലയാളം": "ml"}
 ACTIVITY_WORDS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "vivah": "marriage",
                   "गृह": "griha_pravesh", "grih": "griha_pravesh", "griha": "griha_pravesh", "housewarming": "griha_pravesh",
                   "वाहन": "vehicle", "vehicle": "vehicle", "gadi": "vehicle", "गाड़ी": "vehicle", "car": "vehicle",
@@ -531,7 +532,7 @@ def _ensure_sub(phone: str, name: str, hi: bool) -> dict:
 
 
 def settings_text(sub: dict, hi: bool) -> str:
-    lang_name = {"hi": "हिंदी", "en": "English", "te": "తెలుగు", "kn": "ಕನ್ನಡ", "mr": "मराठी", "gu": "ગુજરાતી", "bn": "বাংলা"}.get(sub.get("lang", "hi"), sub.get("lang"))
+    lang_name = {"hi": "हिंदी", "en": "English", "te": "తెలుగు", "kn": "ಕನ್ನಡ", "mr": "मराठी", "gu": "ગુજરાતી", "bn": "বাংলা", "ta": "தமிழ்", "ml": "മലയാളം"}.get(sub.get("lang", "hi"), sub.get("lang"))
     b = json.loads(sub["birth"]) if isinstance(sub.get("birth"), str) else (sub.get("birth") or {})
     birth = f"{b.get('date', '—')} {b.get('time', '')}".strip() if b else ("नहीं दिया" if hi else "not given")
     if hi:
@@ -578,10 +579,10 @@ def reply_settings(phone: str, cmd: str, text: str, words: list[str], sub: dict 
     if cmd == "language":
         code = next((LANG_WORDS[w] for w in words if w in LANG_WORDS), None)
         if not code:
-            return "भाषा चुनिए: *भाषा hindi / english / telugu / kannada / marathi / gujarati / bengali*" if hi else "Pick: *language hindi / english / telugu / kannada / marathi / gujarati / bengali*"
+            return "भाषा चुनिए: *भाषा hindi / english / telugu / kannada / marathi / gujarati / bengali / tamil / malayalam*" if hi else "Pick: *language hindi / english / telugu / kannada / marathi / gujarati / bengali / tamil / malayalam*"
         notify.subs().set(phone, lang=code)
         return {"hi": "✅ भाषा हिंदी कर दी।", "en": "✅ Language set to English.", "te": "✅ భాష తెలుగుకు మార్చబడింది. రోజువారీ పంచాంగం తెలుగులో వస్తుంది.", "kn": "✅ ಭಾಷೆ ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ.",
-                "mr": "✅ भाषा मराठी केली.", "gu": "✅ ભાષા ગુજરાતી કરી.", "bn": "✅ ভাষা বাংলা করা হয়েছে।"}[code]
+                "mr": "✅ भाषा मराठी केली.", "gu": "✅ ભાષા ગુજરાતી કરી.", "bn": "✅ ভাষা বাংলা করা হয়েছে।", "ta": "✅ மொழி தமிழாக மாற்றப்பட்டது.", "ml": "✅ ഭാഷ മലയാളമാക്കി."}[code]
     return settings_text(sub, hi)
 
 

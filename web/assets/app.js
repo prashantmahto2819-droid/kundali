@@ -1105,6 +1105,21 @@ $('yago').onclick = async () => {
     setTimeout(() => { const t = g.dataset.scroll && $(g.dataset.scroll); (t || document.querySelector('.tab.on'))?.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
   });
 
+  // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
+  const NEWS = [
+    {id: '2026-11-20c', em: '🗣️', t: 'तमिल और मलयालम में पंचांग', d: 'WhatsApp और "आज" टैब में अब तमिल व मलयालम भी।', go: 't-today'},
+    {id: '2026-11-20b', em: '☁️', t: 'परिवार की प्रोफ़ाइल हर फ़ोन पर', d: 'लॉगिन करने पर "मेरे लोग" खाते से sync होते हैं।', go: 't-dash'},
+    {id: '2026-11-20a', em: '📅', t: 'व्रत-त्योहार और राशिफल के पेज', d: 'हर त्योहार की तिथि और हर राशि का अलग पेज।', href: '/tyohar'},
+    {id: '2026-11-14b', em: '🪐', t: 'लाइव ग्रह-चक्र और दिन-चक्र', d: 'होम पर अभी आकाश में ग्रह और सूर्य की स्थिति।', go: 't-home'},
+    {id: '2026-11-14a', em: '👨‍👩‍👧', t: 'मेरा डैशबोर्ड', d: 'परिवार के हर सदस्य की दशा, आज का दिन और जन्मदिन।', go: 't-dash'},
+  ];
+  const seenNews = () => LS.get('kundali_news_seen', '');
+  $('newsdot').hidden = seenNews() === NEWS[0].id;
+  $('newslist').innerHTML = NEWS.map(n => `<div class="ni"><span class="em">${n.em}</span><div><b>${n.t}</b><span>${n.d}</span> ${n.go ? `<a data-go="${n.go}" data-close>देखिए →</a>` : `<a href="${n.href}">देखिए →</a>`}</div></div>`).join('');
+  $('newsbtn').onclick = () => { try { $('newsdlg').showModal(); } catch (e) { $('newsdlg').setAttribute('open', ''); } LS.set('kundali_news_seen', NEWS[0].id); $('newsdot').hidden = true; };
+  $('newsclose').onclick = () => $('newsdlg').close();
+  $('newsdlg').addEventListener('click', e => { if (e.target === $('newsdlg') || e.target.closest('[data-close]')) $('newsdlg').close(); });
+
   // deep links from the search pages: /#wa, /#t-today, /#t-dash …
   const deepLink = () => { const h = location.hash.slice(1); if (h === 'wa') { window.showTab('t-kundali'); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 120); } else if (/^t-[a-z]+$/.test(h) && $(h)) window.showTab(h); };
   if (document.readyState === 'complete') setTimeout(deepLink, 400); else window.addEventListener('load', () => setTimeout(deepLink, 400));

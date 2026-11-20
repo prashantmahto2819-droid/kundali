@@ -22,6 +22,7 @@
   <a class="brand" href="#" data-go="t-home"><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3a23a"/><stop offset="1" stop-color="#8a3b12"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg1)"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M10 10h28v28H10z" opacity=".55"/><path d="M10 10l28 28M38 10L10 38" opacity=".55"/><path d="M24 10l14 14-14 14-14-14z"/></g><circle cx="24" cy="24" r="4" fill="#fff"/></svg><span><b>कुंडली</b><small>पंचांग · कुंडली · मुहूर्त — निःशुल्क</small></span></a>
   <div class="acts">
     <button type="button" id="installbtn" style="display:none" onclick="deferredInstall && deferredInstall.prompt()">ऐप इंस्टॉल करें</button>
+    <button type="button" class="iconbtn" id="newsbtn" title="नया क्या है" aria-label="what's new" style="position:relative"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i id="newsdot" hidden></i></button>
     <button type="button" class="iconbtn" id="themebtn" title="रंग-रूप (हल्का/गहरा)" aria-label="theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg></button>
     <button type="button" id="langbtn" title="Language">English</button>
   </div>
@@ -153,7 +154,7 @@
     <div id="dash_view"><div class="card muted">ऊपर किसी प्रोफ़ाइल को चुनिए या नई जोड़िए — यहाँ उसकी दशा, आज का दिन, आगामी बदलाव और जन्मदिन दिखेंगे।</div></div>
   </section>
   <section class="tab" id="t-today">
-    <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><button type="button" class="ghost" id="tdshare" style="width:auto;padding:4px 12px">कार्ड साझा करें</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
+    <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><button type="button" class="ghost" id="tdshare" style="width:auto;padding:4px 12px">कार्ड साझा करें</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="ml">മലയാളം</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
     <div id="todaygrid">
       <div class="card"><b>आज और कल के व्रत-पर्व</b><div id="tdevents" class="muted">—</div></div>
       <div class="card"><b>आज के शुभ-अशुभ समय</b><div id="tdkaal" class="muted">—</div></div>
@@ -220,7 +221,7 @@
         <label><input type="checkbox" id="wa_alert" checked> कल के व्रत-पर्व की सूचना</label>
         <label><input type="checkbox" id="wa_weekly" checked> साप्ताहिक सूची (रविवार)</label>
         <label><input type="checkbox" id="wa_image" checked> पंचांग का चित्र-कार्ड</label>
-        <label><span>भाषा</span> <select id="wa_lang" style="width:auto"><option value="hi">हिंदी</option><option value="en">English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></label>
+        <label><span>भाषा</span> <select id="wa_lang" style="width:auto"><option value="hi">हिंदी</option><option value="en">English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="ml">മലയാളം</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></label>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:.85rem" id="wa_kinds">
         <label><input type="checkbox" value="festival" checked> त्योहार</label><label><input type="checkbox" value="ekadashi" checked> एकादशी</label><label><input type="checkbox" value="purnima" checked> पूर्णिमा</label><label><input type="checkbox" value="amavasya" checked> अमावस्या</label><label><input type="checkbox" value="pradosh" checked> प्रदोष</label><label><input type="checkbox" value="chaturthi"> चतुर्थी</label><label><input type="checkbox" value="shivaratri"> मासिक शिवरात्रि</label><label><input type="checkbox" value="grahan" checked> ग्रहण</label><label><input type="checkbox" value="regional"> क्षेत्रीय पर्व</label><label><input type="checkbox" value="national"> राष्ट्रीय दिवस</label>
@@ -694,6 +695,7 @@
 
   </section>
 </main>
+<dialog id="newsdlg"><div class="newshead"><b>नया क्या है</b><button type="button" class="iconbtn" id="newsclose" aria-label="close">✕</button></div><div id="newslist"></div></dialog>
 <footer class="site">
   <div class="cols">
     <div><a class="brand" data-go="t-home" style="margin-bottom:8px"><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3a23a"/><stop offset="1" stop-color="#8a3b12"/></linearGradient></defs><rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg1)"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M10 10h28v28H10z" opacity=".55"/><path d="M10 10l28 28M38 10L10 38" opacity=".55"/><path d="M24 10l14 14-14 14-14-14z"/></g><circle cx="24" cy="24" r="4" fill="#fff"/></svg><span><b>कुंडली</b></span></a>
@@ -701,7 +703,7 @@
     <div><h5>ज्योतिष</h5><a data-go="t-kundali">जन्म कुंडली</a><a data-go="t-match">कुंडली मिलान</a><a data-go="t-kundali" data-sub="s-varsha">वर्षफल</a><a data-go="t-kundali" data-sub="s-numer">अंक ज्योतिष</a><a data-go="t-prashna">प्रश्न कुंडली</a><a data-go="t-tarot">टैरो</a></div>
     <div><h5>पंचांग व मुहूर्त</h5><a data-go="t-today">आज का पंचांग</a><a data-go="t-muhurta">मुहूर्त</a><a data-go="t-cal">कैलेंडर स्टूडियो</a><a data-go="t-vastu">वास्तु</a><a data-go="t-palm">हस्तरेखा</a></div>
     <div><h5>सेवाएँ</h5><a data-go="t-dash">मेरा डैशबोर्ड</a><a data-go="t-kundali" data-scroll="wacard">WhatsApp अपडेट</a><a data-go="t-ask">AI से पूछिए</a><a data-go="t-consult">ज्योतिषी परामर्श</a><a data-go="t-learn">ज्योतिष सीखिए</a></div>
-    <div><h5>पढ़िए</h5><a href="/panchang">आज का पंचांग (शहर-वार)</a><a href="/rashifal">आज का राशिफल</a><a href="/rashifal/mesh">मेष से मीन तक</a><a href="/tyohar">व्रत-त्योहार कैलेंडर</a><a href="/sitemap.xml">साइट-मैप</a></div>
+    <div><h5>पढ़िए</h5><a href="/panchang">आज का पंचांग (शहर-वार)</a><a href="/rashifal">आज का राशिफल</a><a href="/rashifal/mesh">मेष से मीन तक</a><a href="/tyohar">व्रत-त्योहार कैलेंडर</a><a href="/privacy">गोपनीयता नीति</a><a href="/terms">उपयोग की शर्तें</a><a href="/sitemap.xml">साइट-मैप</a></div>
   </div>
   <div class="fine">गणना खगोलीय (NASA JPL DE440s, लाहिरी अयनांश, संपूर्ण-राशि भाव)। फलादेश परंपरागत मार्गदर्शन है — भविष्यवाणी, चिकित्सा, क़ानूनी या वित्तीय सलाह नहीं। व्याख्याएँ ड्राफ़्ट हैं और विद्वान-समीक्षा के अधीन। © <span id="yr"></span> कुंडली ऐप</div>
 </footer>

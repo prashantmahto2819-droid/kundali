@@ -1,4 +1,4 @@
-"""Regional-language term packs for the panchang: Telugu (te), Kannada (kn), Marathi (mr), Gujarati (gu), Bengali (bn).
+"""Regional-language term packs for the panchang: Telugu (te), Kannada (kn), Marathi (mr), Gujarati (gu), Bengali (bn), Tamil (ta), Malayalam (ml).
 
 `localize_day(row, lang)` adds `*_loc` names and a `labels` dict to a panchang day row so the Today tab, WhatsApp
 message or calendar can show the panchang in the reader's script. Only the fixed vocabulary is translated (signs, weekdays,
@@ -101,7 +101,7 @@ def localize_day(row: dict, lang: str) -> dict:
             out[key + "_loc"] = MASA_L[lang][MASA_EN.index(name)]
         elif isinstance(name, str) and name.startswith("Adhika "):
             base = name.replace("Adhika ", "")
-            out[key + "_loc"] = ("అధిక " if lang == "te" else "ಅಧಿಕ " if lang == "kn" else "अधिक " if lang == "mr" else "અધિક " if lang == "gu" else "অধিক ") + (MASA_L[lang][MASA_EN.index(base)] if base in MASA_EN else base)
+            out[key + "_loc"] = ("అధిక " if lang == "te" else "ಅಧಿಕ " if lang == "kn" else "अधिक " if lang == "mr" else "અધિક " if lang == "gu" else "அதிக " if lang == "ta" else "അധിക " if lang == "ml" else "অধিক ") + (MASA_L[lang][MASA_EN.index(base)] if base in MASA_EN else base)
     if row.get("moon_sign") in SIGNS:
         out["moon_sign_loc"] = SIGNS_L[lang][SIGNS.index(row["moon_sign"])]
     out["labels"] = LABELS[lang]
@@ -112,3 +112,39 @@ def localize_day(row: dict, lang: str) -> dict:
 
 def sign_name(sign: int, lang: str) -> str:
     return SIGNS_L[lang][sign % 12] if lang in SIGNS_L else SIGNS[sign % 12]
+
+
+# ---- Tamil (ta) and Malayalam (ml) — added 2026-11. Tamil/Malayalam names for nakshatras and signs follow local usage
+# (e.g. ml: അശ്വതി, മകയിരം, തിരുവാതിര; ta: திருவாதிரை, திருவோணம்); lunar months keep the Sanskrit names.
+LANGS.update({"ta": "தமிழ்", "ml": "മലയാളം"})
+SIGNS_L["ta"] = ["மேஷம்", "ரிஷபம்", "மிதுனம்", "கடகம்", "சிம்மம்", "கன்னி", "துலாம்", "விருச்சிகம்", "தனுசு", "மகரம்", "கும்பம்", "மீனம்"]
+SIGNS_L["ml"] = ["മേടം", "ഇടവം", "മിഥുനം", "കർക്കടകം", "ചിങ്ങം", "കന്നി", "തുലാം", "വൃശ്ചികം", "ധനു", "മകരം", "കുംഭം", "മീനം"]
+VARA_L["ta"] = ["ஞாயிறு", "திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி"]
+VARA_L["ml"] = ["ഞായർ", "തിങ്കൾ", "ചൊവ്വ", "ബുധൻ", "വ്യാഴം", "വെള്ളി", "ശനി"]
+TITHI_L["ta"] = ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி", "பௌர்ணமி", "அமாவாசை"]
+TITHI_L["ml"] = ["പ്രഥമ", "ദ്വിതീയ", "തൃതീയ", "ചതുർത്ഥി", "പഞ്ചമി", "ഷഷ്ഠി", "സപ്തമി", "അഷ്ടമി", "നവമി", "ദശമി", "ഏകാദശി", "ദ്വാദശി", "ത്രയോദശി", "ചതുർദശി", "പൗർണ്ണമി", "അമാവാസി"]
+PAKSHA_L["ta"] = ["வளர்பிறை", "தேய்பிறை"]
+PAKSHA_L["ml"] = ["ശുക്ല", "കൃഷ്ണ"]
+NAK_L["ta"] = ["அசுவினி", "பரணி", "கார்த்திகை", "ரோகிணி", "மிருகசீரிடம்", "திருவாதிரை", "புனர்பூசம்", "பூசம்", "ஆயில்யம்", "மகம்", "பூரம்", "உத்திரம்", "அஸ்தம்", "சித்திரை",
+               "சுவாதி", "விசாகம்", "அனுஷம்", "கேட்டை", "மூலம்", "பூராடம்", "உத்திராடம்", "திருவோணம்", "அவிட்டம்", "சதயம்", "பூரட்டாதி", "உத்திரட்டாதி", "ரேவதி"]
+NAK_L["ml"] = ["അശ്വതി", "ഭരണി", "കാർത്തിക", "രോഹിണി", "മകയിരം", "തിരുവാതിര", "പുണർതം", "പൂയം", "ആയില്യം", "മകം", "പൂരം", "ഉത്രം", "അത്തം", "ചിത്തിര",
+               "ചോതി", "വിശാഖം", "അനിഴം", "തൃക്കേട്ട", "മൂലം", "പൂരാടം", "ഉത്രാടം", "തിരുവോണം", "അവിട്ടം", "ചതയം", "പൂരുരുട്ടാതി", "ഉത്രട്ടാതി", "രേവതി"]
+YOGA_L["ta"] = ["விஷ்கம்பம்", "ப்ரீதி", "ஆயுஷ்மான்", "சௌபாக்கியம்", "சோபனம்", "அதிகண்டம்", "சுகர்மம்", "திருதி", "சூலம்", "கண்டம்", "விருத்தி", "துருவம்", "வியாகாதம்", "ஹர்ஷணம்",
+                "வஜ்ரம்", "சித்தி", "வியதீபாதம்", "வரியான்", "பரிகம்", "சிவம்", "சித்தம்", "சாத்தியம்", "சுபம்", "சுக்லம்", "பிரம்மம்", "ஐந்திரம்", "வைதிருதி"]
+YOGA_L["ml"] = ["വിഷ്കംഭം", "പ്രീതി", "ആയുഷ്മാൻ", "സൗഭാഗ്യം", "ശോഭനം", "അതിഗണ്ഡം", "സുകർമ്മം", "ധൃതി", "ശൂലം", "ഗണ്ഡം", "വൃദ്ധി", "ധ്രുവം", "വ്യാഘാതം", "ഹർഷണം",
+                "വജ്രം", "സിദ്ധി", "വ്യതീപാതം", "വരീയാൻ", "പരിഘം", "ശിവം", "സിദ്ധം", "സാധ്യം", "ശുഭം", "ശുക്ലം", "ബ്രഹ്മം", "ഐന്ദ്രം", "വൈധൃതി"]
+KARANA_L["ta"] = {"Bava": "பவம்", "Balava": "பாலவம்", "Kaulava": "கௌலவம்", "Taitila": "தைதுலம்", "Gara": "கரசை", "Vanija": "வணிசை", "Vishti": "பத்திரை (விஷ்டி)",
+                  "Shakuni": "சகுனி", "Chatushpada": "சதுஷ்பாதம்", "Naga": "நாகவம்", "Kimstughna": "கிம்ஸ்துக்னம்"}
+KARANA_L["ml"] = {"Bava": "ബവം", "Balava": "ബാലവം", "Kaulava": "കൗലവം", "Taitila": "തൈതിലം", "Gara": "ഗരജം", "Vanija": "വണിജം", "Vishti": "വിഷ്ടി (ഭദ്ര)",
+                  "Shakuni": "ശകുനി", "Chatushpada": "ചതുഷ്പാദം", "Naga": "നാഗവം", "Kimstughna": "കിംസ്തുഘ്നം"}
+MASA_L["ta"] = ["சைத்ரம்", "வைசாகம்", "ஜ்யேஷ்டம்", "ஆஷாடம்", "ஸ்ராவணம்", "பாத்ரபதம்", "ஆஸ்வயுஜம்", "கார்த்திகம்", "மார்கசீர்ஷம்", "புஷ்யம்", "மாகம்", "பால்குனம்"]
+MASA_L["ml"] = ["ചൈത്രം", "വൈശാഖം", "ജ്യേഷ്ഠം", "ആഷാഢം", "ശ്രാവണം", "ഭാദ്രപദം", "ആശ്വിനം", "കാർത്തികം", "മാർഗ്ഗശീർഷം", "പൗഷം", "മാഘം", "ഫാൽഗുനം"]
+LABELS["ta"] = {"panchang": "பஞ்சாங்கம்", "today": "இன்று", "tithi": "திதி", "nakshatra": "நட்சத்திரம்", "yoga": "யோகம்", "karana": "கரணம்", "vara": "கிழமை", "masa": "மாதம்",
+                "paksha": "பக்ஷம்", "sunrise": "சூரிய உதயம்", "sunset": "சூரிய அஸ்தமனம்", "moonrise": "சந்திர உதயம்", "rahu_kaal": "ராகு காலம்", "yamaganda": "எமகண்டம்",
+                "gulika": "குளிகை", "abhijit": "அபிஜித்", "varjyam": "தியாஜ்யம்", "amrit_kalam": "அமிர்த காலம்", "dur_muhurtam": "துர்முகூர்த்தம்", "until": "வரை",
+                "moon_sign": "சந்திர ராசி", "samvat": "சக ஆண்டு"}
+LABELS["ml"] = {"panchang": "പഞ്ചാംഗം", "today": "ഇന്ന്", "tithi": "തിഥി", "nakshatra": "നക്ഷത്രം", "yoga": "യോഗം", "karana": "കരണം", "vara": "ദിവസം", "masa": "മാസം",
+                "paksha": "പക്ഷം", "sunrise": "സൂര്യോദയം", "sunset": "സൂര്യാസ്തമയം", "moonrise": "ചന്ദ്രോദയം", "rahu_kaal": "രാഹുകാലം", "yamaganda": "യമകണ്ടം",
+                "gulika": "ഗുളികകാലം", "abhijit": "അഭിജിത്", "varjyam": "വർജ്ജ്യം", "amrit_kalam": "അമൃതകാലം", "dur_muhurtam": "ദുർമുഹൂർത്തം", "until": "വരെ",
+                "moon_sign": "ചന്ദ്രരാശി", "samvat": "ശകവർഷം"}
+REGIONAL = tuple(LANGS)          # every code with a pack — use this instead of hard-coded lists
