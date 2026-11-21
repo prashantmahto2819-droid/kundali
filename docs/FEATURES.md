@@ -148,3 +148,4 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **Right-now strip** on Home's day card (`GET /v1/now`): running choghadiya and hora with minutes left, next good choghadiya, and a red "Rahu kaal now" / green "Abhijit now" flag; refreshed every minute.
 - Push notifications include the Moon-sign rashifal score of the active dashboard profile.
 - **Muhurta → calendar**: every muhurta day and every auspicious lagna slot has "📅 Google · iPhone/Outlook" links (timed event in UTC from the place's time zone, 30-minute reminder in the .ics).
+- **Regional janma patrika**: report language picker (9 languages); for mr/gu/bn/te/kn/ta/ml the report opens with a one-page patrika in that language (birth details, birth panchang, north-style chart, nine grahas with sign/degree/nakshatra-pada/house, running dasha), followed by the detailed Hindi report.

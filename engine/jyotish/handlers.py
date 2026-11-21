@@ -173,8 +173,13 @@ def report_from_payload(payload: dict, brand: dict | None = None) -> str:
     """Printable Hindi HTML report for the same payload as /v1/chart. `brand` = astrologer profile for the header."""
     from . import i18n, report
     style = "south" if str(payload.get("chart_style", "north")).lower() == "south" else "north"
-    html = report.render(chart_from_payload(payload), brand=brand, style=style)
-    if str(payload.get("lang", "hi")).lower() == "en":
+    chart = chart_from_payload(payload)
+    html = report.render(chart, brand=brand, style=style)
+    lang = str(payload.get("lang", "hi")).lower()
+    from . import regional_report
+    if lang in regional_report.LANGS:               # regional summary page first, then the full Hindi report
+        html = html.replace('<body>', '<body>' + regional_report.page(chart, lang, str(payload.get("place") or "")), 1)
+    if lang == "en":
         html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
     return html
 

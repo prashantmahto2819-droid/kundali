@@ -826,7 +826,7 @@ $('repbtn').addEventListener('click', async () => {
   $('reperr').textContent = '';
   const w = window.open('', '_blank');
   try {
-    const r = await apiFetch('/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, lang: window.getLang ? window.getLang() : 'hi', chart_style: window.chartStyle})});
+    const r = await apiFetch('/v1/report', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...window.lastBody, place: ($('citysearch') && $('citysearch').value) || '', lang: $('replang').value || (window.getLang ? window.getLang() : 'hi'), chart_style: window.chartStyle})});
     if (!r.ok) throw new Error((await r.json()).detail || 'त्रुटि');
     const html = await r.text();
     w.document.open(); w.document.write(html); w.document.close();
@@ -1107,6 +1107,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21d', em: '📜', t: 'कुंडली रिपोर्ट 9 भाषाओं में', d: 'मराठी, ગુજરાતી, বাংলা, తెలుగు, ಕನ್ನಡ, தமிழ், മലയാളം में जन्म पत्रिका का पहला पन्ना।', go: 't-kundali'},
     {id: '2026-11-21c', em: '📅', t: 'मुहूर्त सीधे फ़ोन के कैलेंडर में', d: 'मुहूर्त और शुभ लग्न के समय Google/iPhone कैलेंडर में जोड़िए, 30 मिनट पहले याद दिलाएगा।', go: 't-muhurta'},
     {id: '2026-11-21b', em: '⏱️', t: 'अभी कौन-सा चौघड़िया और होरा', d: 'होम के दिन-चक्र में अभी का चौघड़िया, होरा और अगला शुभ समय।', go: 't-home'},
     {id: '2026-11-21a', em: '🔔', t: 'फ़ोन पर रोज़ पंचांग की सूचना', d: 'WhatsApp के बिना हर सुबह ब्राउज़र/ऐप की सूचना।', go: 't-home'},
