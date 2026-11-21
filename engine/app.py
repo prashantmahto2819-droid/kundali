@@ -361,6 +361,32 @@ def notify_status(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/push/key")
+def push_key():
+    return handlers.push_key()
+
+
+@app.post("/v1/push/subscribe")
+def push_subscribe(req: NotifyRequest):
+    try:
+        return handlers.push_subscribe_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/v1/push/unsubscribe")
+def push_unsubscribe(req: NotifyRequest):
+    return handlers.push_unsubscribe_from_payload(req.model_dump())
+
+
+@app.post("/v1/push/test")
+def push_test(req: NotifyRequest):
+    try:
+        return handlers.push_test_from_payload(req.model_dump())
+    except handlers.BadRequest as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
 @app.post("/v1/notify/preview")
 def notify_preview(req: NotifyRequest):
     try:
@@ -688,7 +714,7 @@ def seo_pages(request: Request):
     if r is None:
         raise HTTPException(status_code=404)
     code, ctype, body = r
-    return _Resp(content=body, status_code=code, media_type=ctype.split(";")[0], headers={"Cache-Control": "public, max-age=900"})
+    return _Resp(content=body, status_code=code, media_type=ctype.split(";")[0], headers={"Cache-Control": "public, max-age=900", **({"Content-Disposition": "inline; filename=festivals.ics"} if ctype.startswith("text/calendar") else {})})
 
 
 # Set KUNDALI_SERVE_WEB=0 when the web/ folder is hosted elsewhere (e.g. Cloudflare Pages).

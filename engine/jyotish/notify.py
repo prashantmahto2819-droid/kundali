@@ -643,13 +643,20 @@ def run_once(now_utc: datetime | None = None, sender=send_whatsapp) -> list[dict
     return results
 
 
-def start_worker(interval: int = 60) -> threading.Thread:
+def start_worker(interval: int = 60, wa: bool = True, push: bool = False) -> threading.Thread:
     def loop():
         while True:
-            try:
-                run_once()
-            except Exception as exc:          # keep the worker alive
-                print("notify worker error:", exc, flush=True)
+            if wa:
+                try:
+                    run_once()
+                except Exception as exc:          # keep the worker alive
+                    print("notify worker error:", exc, flush=True)
+            if push:
+                try:
+                    from . import webpush
+                    webpush.run_once()
+                except Exception as exc:
+                    print("push worker error:", exc, flush=True)
             time.sleep(interval)
     t = threading.Thread(target=loop, name="kundali-notify", daemon=True)
     t.start()

@@ -24,3 +24,19 @@ self.addEventListener('fetch', e => {
   e.respondWith(fetch(e.request).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put(e.request, copy)); return r; })
     .catch(() => caches.match(e.request).then(m => m || (e.request.mode === 'navigate' ? caches.match('./index.html') : undefined))));
 });
+
+// daily panchang notification (server sends an encrypted {title, body, url, tag})
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = {body: e.data ? e.data.text() : ''}; }
+  e.waitUntil(self.registration.showNotification(d.title || 'आज का पंचांग', {body: d.body || '', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png',
+    tag: d.tag || 'panchang', renotify: false, data: {url: d.url || '/'}}));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || '/', self.location.origin).href;
+  e.waitUntil(clients.matchAll({type: 'window', includeUncontrolled: true}).then(ws => {
+    for (const w of ws) if (w.url.startsWith(self.location.origin) && 'focus' in w) { w.navigate(url).catch(() => {}); return w.focus(); }
+    return clients.openWindow(url);
+  }));
+});

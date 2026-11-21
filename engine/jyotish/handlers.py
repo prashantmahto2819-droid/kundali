@@ -702,15 +702,44 @@ def notify_preview_from_payload(payload: dict) -> dict:
 
 
 def start_notify_worker_if_enabled() -> bool:
-    """Start the once-a-minute sender thread when KUNDALI_NOTIFY=1 (and only once per process)."""
-    if os.environ.get("KUNDALI_NOTIFY", "") not in ("1", "true", "yes"):
+    """Start the once-a-minute sender thread (only once per process): WhatsApp when KUNDALI_NOTIFY=1, browser push unless
+    KUNDALI_PUSH=0."""
+    wa = os.environ.get("KUNDALI_NOTIFY", "") in ("1", "true", "yes")
+    push = os.environ.get("KUNDALI_PUSH", "1") not in ("0", "false", "no")
+    if not (wa or push):
         return False
     from . import notify
     if getattr(notify, "_worker_started", False):
         return True
-    notify.start_worker()
+    notify.start_worker(wa=wa, push=push)
     notify._worker_started = True
     return True
+
+
+def _push_call(fn, payload: dict) -> dict:
+    from . import webpush
+    try:
+        return getattr(webpush, fn)(payload if isinstance(payload, dict) else {})
+    except (ValueError, AssertionError, KeyError) as exc:
+        raise BadRequest(str(exc) or "bad request") from exc
+
+
+def push_key() -> dict:
+    from . import webpush
+    return {"publicKey": webpush.public_key()}
+
+
+def push_subscribe_from_payload(payload: dict) -> dict:
+    """POST /v1/push/subscribe — browser notification for the daily panchang at the chosen time."""
+    return _push_call("subscribe", payload)
+
+
+def push_unsubscribe_from_payload(payload: dict) -> dict:
+    return _push_call("unsubscribe", payload)
+
+
+def push_test_from_payload(payload: dict) -> dict:
+    return _push_call("test", payload)
 
 
 def notify_webhook(body: bytes, headers: dict) -> dict:

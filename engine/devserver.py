@@ -135,6 +135,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(200, handlers.panchang_month_from_query(q))
             except handlers.BadRequest as exc:
                 return self._json(400, {"detail": str(exc)})
+        if path == "/v1/push/key":
+            return self._json(200, handlers.push_key())
         if path == "/v1/sky":
             return self._json(200, handlers.sky_from_query({}))
         if path == "/v1/festivals":
@@ -189,6 +191,9 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/notify/unsubscribe": handlers.notify_unsubscribe_from_payload,
                   "/v1/notify/status": handlers.notify_status_from_payload,
                   "/v1/notify/preview": handlers.notify_preview_from_payload,
+                  "/v1/push/subscribe": handlers.push_subscribe_from_payload,
+                  "/v1/push/unsubscribe": handlers.push_unsubscribe_from_payload,
+                  "/v1/push/test": handlers.push_test_from_payload,
                   "/v1/ai/chat": handlers.ai_chat_from_payload,
                   "/v1/ai/palm": handlers.ai_palm_from_payload,
                   "/v1/ai/status": handlers.ai_status_from_payload,
@@ -258,5 +263,5 @@ if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     print(f"Kundali dev server on http://127.0.0.1:{port}  (backend: {handlers.backend().name})")
     if handlers.start_notify_worker_if_enabled():
-        print("WhatsApp notify worker running (KUNDALI_NOTIFY=1)")
+        print("notify worker running (WhatsApp if KUNDALI_NOTIFY=1, browser push unless KUNDALI_PUSH=0)")
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

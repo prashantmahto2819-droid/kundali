@@ -13,6 +13,7 @@ import html
 import json
 import os
 import re
+import urllib.parse
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -214,7 +215,12 @@ def festivals_year(year: int) -> str | None:
         evs = _events(year); months: dict = {}
         for ev in evs:
             months.setdefault(int(ev["date"][5:7]), []).append(ev)
-        body = f"<div class='hero'><h1>व्रत-त्योहार {year}</h1><p>{year} के सभी प्रमुख त्योहार, एकादशी, पूर्णिमा, अमावस्या, प्रदोष और ग्रहण — तिथि सहित (दिल्ली सूर्योदय के अनुसार)</p></div>"
+        host = site().split("//")[-1]
+        gcal = "https://calendar.google.com/calendar/render?cid=" + urllib.parse.quote(f"webcal://{host}/tyohar/{year}.ics", safe="")
+        body = (f"<div class='hero'><h1>व्रत-त्योहार {year}</h1><p>{year} के सभी प्रमुख त्योहार, एकादशी, पूर्णिमा, अमावस्या, प्रदोष और ग्रहण — तिथि सहित (दिल्ली सूर्योदय के अनुसार)</p></div>"
+                f"<div class='card'><b>📅 अपने फ़ोन के कैलेंडर में जोड़िए</b> — सारे व्रत-त्योहार अपने-आप दिखेंगे।<br>"
+                f"<a class='cta' href='{e(gcal)}' rel='nofollow'>Google Calendar में जोड़ें</a><a class='cta' style='background:#444' href='webcal://{e(host)}/tyohar/{year}.ics' rel='nofollow'>iPhone / Outlook</a>"
+                f"<a class='cta' style='background:#777' href='/tyohar/{year}.ics' rel='nofollow'>.ics डाउनलोड</a></div>")
         for m in sorted(months):
             rows = ""
             for ev in months[m]:
@@ -261,6 +267,40 @@ def festival_page(year: int, key: str) -> str | None:
     return _cached(("fest", year, key), build)
 
 
+def festivals_ics(year: int) -> str | None:
+    """All-day calendar events for every vrat/festival of the year — subscribe once in Google/Apple/Outlook calendar."""
+    if not 1950 <= year <= 2099:
+        return None
+    def esc_ics(t: str) -> str:
+        return str(t).replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
+    def fold(line: str) -> str:
+        b = line.encode("utf-8"); out = []
+        while len(b) > 74:
+            cut = 74
+            while cut and (b[cut] & 0xC0) == 0x80:       # never split a UTF-8 character
+                cut -= 1
+            out.append(b[:cut].decode()); b = b[cut:]
+        out.append(b.decode())
+        return "\r\n ".join(out)
+    stamp = datetime.now(timezone_utc()).strftime("%Y%m%dT%H%M%SZ")
+    L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//kundali//festivals//HI", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+         f"X-WR-CALNAME:व्रत-त्योहार {year}", "X-WR-TIMEZONE:Asia/Kolkata", "REFRESH-INTERVAL;VALUE=DURATION:P7D", "X-PUBLISHED-TTL:P7D"]
+    for ev in _events(year):
+        d0 = date.fromisoformat(ev["date"]); d1 = d0 + timedelta(days=1)
+        url = f"{site()}/tyohar/{year}/{_fkey(ev)}" if ev["kind"] in MAJOR_KINDS else f"{site()}/tyohar/{year}"
+        desc = " · ".join(x for x in (ev.get("tithi_hi"), ev.get("masa_hi"), ev.get("name_en"), url) if x)
+        L += ["BEGIN:VEVENT", f"UID:{ev['key']}@{site().split('//')[-1]}", f"DTSTAMP:{stamp}", f"DTSTART;VALUE=DATE:{d0:%Y%m%d}", f"DTEND;VALUE=DATE:{d1:%Y%m%d}",
+              f"SUMMARY:{esc_ics(ev['name_hi'])}", f"DESCRIPTION:{esc_ics(desc)}", f"URL:{url}", "TRANSP:TRANSPARENT",
+              f"CATEGORIES:{esc_ics(ev['kind'])}", "END:VEVENT"]
+    L.append("END:VCALENDAR")
+    return "\r\n".join(fold(x) for x in L) + "\r\n"
+
+
+def timezone_utc():
+    from datetime import timezone
+    return timezone.utc
+
+
 def sitemap() -> str:
     y, d = today().year, today().isoformat()
     urls = ["/", "/panchang", "/rashifal", "/tyohar", "/privacy", "/terms"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
@@ -297,6 +337,10 @@ def route(path: str) -> tuple[int, str, str] | None:
         return 200, H, terms_page()
     if p == "/tyohar":
         return 200, H, festivals_year(today().year)
+    m = re.fullmatch(r"/tyohar/(\d{4})\.ics", p)
+    if m:
+        b = festivals_ics(int(m.group(1)))
+        return (200, "text/calendar; charset=utf-8", b) if b else (404, H, not_found())
     m = re.fullmatch(r"/tyohar/(\d{4})(?:/([a-z0-9-]+))?", p)
     if m:
         y = int(m.group(1)); b = festival_page(y, m.group(2)) if m.group(2) else festivals_year(y)

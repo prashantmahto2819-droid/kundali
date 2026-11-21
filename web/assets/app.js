@@ -1107,6 +1107,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21a', em: '🔔', t: 'फ़ोन पर रोज़ पंचांग की सूचना', d: 'WhatsApp के बिना हर सुबह ब्राउज़र/ऐप की सूचना।', go: 't-home'},
     {id: '2026-11-20c', em: '🗣️', t: 'तमिल और मलयालम में पंचांग', d: 'WhatsApp और "आज" टैब में अब तमिल व मलयालम भी।', go: 't-today'},
     {id: '2026-11-20b', em: '☁️', t: 'परिवार की प्रोफ़ाइल हर फ़ोन पर', d: 'लॉगिन करने पर "मेरे लोग" खाते से sync होते हैं।', go: 't-dash'},
     {id: '2026-11-20a', em: '📅', t: 'व्रत-त्योहार और राशिफल के पेज', d: 'हर त्योहार की तिथि और हर राशि का अलग पेज।', href: '/tyohar'},
@@ -1119,6 +1120,43 @@ $('yago').onclick = async () => {
   $('newsbtn').onclick = () => { try { $('newsdlg').showModal(); } catch (e) { $('newsdlg').setAttribute('open', ''); } LS.set('kundali_news_seen', NEWS[0].id); $('newsdot').hidden = true; };
   $('newsclose').onclick = () => $('newsdlg').close();
   $('newsdlg').addEventListener('click', e => { if (e.target === $('newsdlg') || e.target.closest('[data-close]')) $('newsdlg').close(); });
+
+  // ---- browser push: daily panchang notification without WhatsApp ----
+  (() => {
+    const msg = t => { $('push_msg').innerHTML = t; };
+    if (!('serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window)) {
+      msg('<span>इस ब्राउज़र में सूचनाएँ उपलब्ध नहीं। iPhone पर पहले Safari के "Share → Add to Home Screen" से ऐप जोड़ें, फिर वहीं से चालू करें।</span>'); $('push_on').disabled = true; return;
+    }
+    const u8 = s => Uint8Array.from(atob((s + '='.repeat((4 - s.length % 4) % 4)).replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    const post = (u, b) => apiFetch(u, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(b)});
+    const reg = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('service worker not ready')), 8000))]);
+    async function state() {
+      const s = await (await reg()).pushManager.getSubscription();
+      $('push_on').innerHTML = s ? '<span>समय / शहर अपडेट करें</span>' : '<span>सूचना चालू करें</span>';
+      $('push_test').hidden = $('push_off').hidden = !s; return s;
+    }
+    $('push_time').value = LS.get('kundali_push_time', '06:30');
+    $('push_on').onclick = async () => {
+      try {
+        if (await Notification.requestPermission() !== 'granted') return msg('⚠️ <span>सूचना की अनुमति नहीं मिली — ब्राउज़र की site settings में Notifications को Allow करें।</span>');
+        const r = await reg(); let s = await r.pushManager.getSubscription();
+        if (!s) { const {publicKey} = await (await apiFetch('/v1/push/key')).json(); s = await r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(publicKey)}); }
+        const own = LS.get('kundali_today_place', null) || {lat: 28.61, lon: 77.2, tz: 'Asia/Kolkata', name: 'दिल्ली'};
+        const res = await post('/v1/push/subscribe', {subscription: s.toJSON(), lat: own.lat, lon: own.lon, tz: own.tz, place: own.name || '', lang: EN() ? 'en' : 'hi', daily_time: $('push_time').value || '06:30'});
+        const j = await res.json(); if (!res.ok) throw new Error(j.detail || res.status);
+        LS.set('kundali_push_time', j.daily_time);
+        msg(`✅ <span>रोज़</span> ${esc(j.daily_time)} <span>बजे सूचना आएगी</span> (${esc(own.name || '')}).`); state();
+      } catch (e) { msg(e.name === 'NotAllowedError' || /permission/i.test(e.message) ? '⚠️ <span>सूचना की अनुमति नहीं मिली — ब्राउज़र की site settings में Notifications को Allow करें।</span>' : '⚠️ ' + esc(e.message)); }
+    };
+    $('push_test').onclick = async () => {
+      try { const s = await state(); if (!s) return; const j = await (await post('/v1/push/test', {endpoint: s.endpoint})).json();
+        msg(j.ok ? '✅ <span>भेज दिया — कुछ सेकंड में सूचना आएगी।</span>' : '⚠️ ' + esc(j.detail || j.status)); } catch (e) { msg('⚠️ ' + esc(e.message)); }
+    };
+    $('push_off').onclick = async () => {
+      try { const s = await state(); if (s) { await post('/v1/push/unsubscribe', {endpoint: s.endpoint}); await s.unsubscribe(); } msg('<span>सूचना बंद कर दी।</span>'); state(); } catch (e) { msg('⚠️ ' + esc(e.message)); }
+    };
+    state().catch(() => {});
+  })();
 
   // deep links from the search pages: /#wa, /#t-today, /#t-dash …
   const deepLink = () => { const h = location.hash.slice(1); if (h === 'wa') { window.showTab('t-kundali'); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 120); } else if (/^t-[a-z]+$/.test(h) && $(h)) window.showTab(h); };

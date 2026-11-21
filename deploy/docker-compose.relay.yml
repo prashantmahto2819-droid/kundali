@@ -44,6 +44,8 @@ services:
       EMBED_PROVIDER: ${EMBED_PROVIDER:-}
       EMBED_MODEL: ${EMBED_MODEL:-}
       AI_WA_SUMMARY: ${AI_WA_SUMMARY:-0}
+      KUNDALI_PUSH: ${KUNDALI_PUSH:-1}                # browser push notifications (0 = off); VAPID key is generated into /srv/data/vapid.json
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       KUNDALI_CONTACT_EMAIL: ${KUNDALI_CONTACT_EMAIL:-}  # shown on /privacy and /terms
       TWA_PACKAGE: ${TWA_PACKAGE:-}                  # Play Store app (Trusted Web Activity) package, e.g. com.vividbrandify.kundali
       TWA_SHA256: ${TWA_SHA256:-}                    # app-signing SHA-256 fingerprint(s) from Play Console → App integrity

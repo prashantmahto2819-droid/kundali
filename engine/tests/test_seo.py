@@ -42,3 +42,12 @@ def test_privacy_and_terms(monkeypatch):
     monkeypatch.setenv("KUNDALI_CONTACT_EMAIL", "help@example.com")
     b = _ok("/privacy", ["गोपनीयता नीति", "STOP", "help@example.com", "OpenAI"])
     _ok("/terms", ["उपयोग की शर्तें", "सलाह नहीं"])
+
+
+def test_festival_calendar_feed():
+    code, ctype, ics = seo.route("/tyohar/2026.ics")
+    assert code == 200 and ctype.startswith("text/calendar")
+    assert ics.startswith("BEGIN:VCALENDAR\r\n") and ics.endswith("END:VCALENDAR\r\n")
+    assert ics.count("BEGIN:VEVENT") > 60 and "DTSTART;VALUE=DATE:2026" in ics and "SUMMARY:दीपावली" in ics
+    assert all(len(line.encode()) <= 75 for line in ics.split("\r\n"))
+    assert "calendar.google.com" in seo.route("/tyohar/2026")[2]

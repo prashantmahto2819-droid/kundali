@@ -116,6 +116,13 @@
       <div><h4>हर सुबह WhatsApp पर पंचांग</h4><p>तिथि-समय, व्रत-त्योहार की एक दिन पहले सूचना, आपकी राशि का फल, साप्ताहिक सूची — सब निःशुल्क। बीच में "मदद" लिखकर कुछ भी पूछिए।</p></div>
       <button type="button" data-go="t-kundali" data-scroll="wacard">अभी जुड़िए</button>
     </div>
+    <div class="card pushcard" id="pushcard">
+      <div class="pc-ic" aria-hidden="true">🔔</div>
+      <div><h4>बिना WhatsApp — फ़ोन पर रोज़ पंचांग की सूचना</h4>
+        <p class="muted">हर सुबह सूचना में तिथि (कब तक), नक्षत्र, राहु काल, आज और कल के व्रत-पर्व। शहर वही रहेगा जो "आज" टैब में चुना है।</p>
+        <div class="pc-row"><label><span>समय</span> <input type="time" id="push_time" value="06:30" step="60"></label><button type="button" id="push_on">सूचना चालू करें</button><button type="button" class="ghost" id="push_test" hidden>अभी एक भेजिए</button><button type="button" class="ghost" id="push_off" hidden>बंद करें</button></div>
+        <div id="push_msg" class="muted" style="font-size:.85rem;margin-top:6px"></div></div>
+    </div>
 
     <h3 class="sec">क्यों भरोसा करें</h3>
     <div class="trust">
@@ -710,7 +717,7 @@
 <div id="offline" class="banner" style="display:none;max-width:1100px;margin:8px auto">ऑफ़लाइन: कुंडली बनाने के लिए इंटरनेट चाहिए; सीखने की सामग्री खुली रहेगी।</div>
 <script src="config.js"></script>
 <script>
-if ('serviceWorker' in navigator && location.protocol === 'https:') {
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   // register, check for a new build on every load, and reload once when the new worker takes over (so an old shell never sticks)
   navigator.serviceWorker.register('sw.js').then(reg => reg.update()).catch(() => {});
   let reloaded = false; navigator.serviceWorker.addEventListener('controllerchange', () => { if (!reloaded) { reloaded = true; location.reload(); } });

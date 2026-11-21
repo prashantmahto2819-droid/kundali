@@ -140,3 +140,8 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - Panchang term packs for **Tamil (ta)** and **Malayalam (ml)**: signs, weekdays, tithis, pakshas, 27 nakshatras (local names), yogas, karanas, months, labels — in the Today tab, `/v1/panchang/day?lang=`, WhatsApp daily message and bot ("भाषा tamil / malayalam").
 - `/privacy` (privacy policy, Hindi + English) and `/terms` — needed for the Play Store listing; contact from `KUNDALI_CONTACT_EMAIL`.
 - "नया क्या है" bell in the header with a red dot until the latest update has been seen.
+
+## Browser push and calendar feed (2026-11-21)
+- **Daily panchang notification without WhatsApp** (Web Push): card on Home — pick a time, allow notifications; every morning the phone/desktop shows tithi with end time, nakshatra, Rahu kaal, today's and tomorrow's vrats for the Today-tab city. "Send one now" test and turn-off buttons. Works in Android Chrome, desktop browsers and iPhone home-screen apps (iOS 16.4+).
+  Server: `jyotish/webpush.py` — VAPID (RFC 8292) + aes128gcm encryption (RFC 8291, verified against the RFC's Appendix A test vector); keys from `VAPID_PRIVATE_KEY` or generated once into `vapid.json` beside the DB; table `push_subs`; sent by the notify worker (runs unless `KUNDALI_PUSH=0`), expired endpoints removed. API: `GET /v1/push/key`, `POST /v1/push/subscribe|unsubscribe|test`.
+- **Festival calendar feed**: `/tyohar/<year>.ics` (all vrats/festivals as all-day events, refreshes weekly) with "Google Calendar में जोड़ें", iPhone/Outlook (webcal) and download buttons on the year page.

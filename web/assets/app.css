@@ -214,3 +214,10 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 #newsclose { width:auto !important; flex:none; padding:6px 11px !important; }
 #newslist .ni a { color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap; }
 .newshead b { font-size:1.05rem; }
+
+/* ---- browser push card ---- */
+.pushcard { display:flex; gap:14px; align-items:flex-start; margin:14px 0; }
+.pushcard .pc-ic { font-size:1.8rem; width:52px; height:52px; flex:none; display:grid; place-items:center; border-radius:15px; background:color-mix(in srgb,var(--accent) 14%,transparent); animation:ring 4s ease-in-out infinite; transform-origin:50% 10%; }
+.pushcard h4 { margin:0 0 4px; } .pushcard p { margin:0 0 8px; }
+.pc-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; } .pc-row label { display:flex; gap:6px; align-items:center; } .pc-row input { width:auto; } .pc-row button { width:auto; }
+@keyframes ring { 0%,86%,100% { transform:rotate(0); } 88% { transform:rotate(14deg); } 91% { transform:rotate(-12deg); } 94% { transform:rotate(8deg); } 97% { transform:rotate(-4deg); } }
