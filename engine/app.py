@@ -761,6 +761,8 @@ from fastapi.responses import Response as _Resp
 @app.get("/.well-known/assetlinks.json")
 @app.get("/privacy")
 @app.get("/ratna")
+@app.get("/shop")
+@app.get("/shop/{rest:path}")
 @app.get("/terms")
 def seo_pages(request: Request):
     from jyotish import seo

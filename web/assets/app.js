@@ -1114,6 +1114,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21h', em: '📦', t: 'मेरे ऑर्डर और परिवार मिलान', d: 'शॉप में अपने सारे ऑर्डर की स्थिति; डैशबोर्ड में परिवार के दो लोगों का एक-क्लिक मिलान; WhatsApp पर उपाय और रत्न।', go: 't-shop'},
     {id: '2026-11-21g', em: '💎', t: 'उपाय, राशि रत्न और रत्न शॉप', d: 'समस्या चुनिए — आपकी कुंडली से मंत्र, दान, व्रत; कौन-सा रत्न पहनें; प्रमाणित रत्न ऑर्डर कीजिए।', go: 't-upay'},
     {id: '2026-11-21f', em: '🧭', t: 'नया, व्यवस्थित मेन्यू', d: 'होम · पंचांग · कुंडली · विद्याएँ · सहायता; पंचांग में पूरा चौघड़िया और होरा, होम पर आपका अपना दिन।', go: 't-today'},
     {id: '2026-11-21e', em: '💍', t: 'मिलान रिपोर्ट भी 9 भाषाओं में', d: 'अष्टकूट तालिका, दोनों की राशि-नक्षत्र और मंगल दोष — क्षेत्रीय भाषा में पहला पन्ना।', go: 't-match'},
@@ -2214,6 +2215,7 @@ async function openReport(path, body) {
       <b>${esc(en && p.name_en ? p.name_en : p.name_hi)}</b>
       <div class="price">${rs(p.price)} <span class="muted">/ ${esc(en ? p.unit_en : p.unit_hi)}</span>${p.mrp && p.mrp > p.price ? ` <s class="muted">${rs(p.mrp)}</s>` : ''}</div>
       <div class="muted small">${[p.origin, p.certificate ? (en ? 'Certified: ' : 'प्रमाणपत्र: ') + p.certificate : ''].filter(Boolean).map(esc).join(' · ')}</div>
+      <a class="small" href="/shop/${esc(p.id)}" target="_blank" rel="noopener">🔗 ${en ? 'Product page' : 'उत्पाद पेज'}</a>
       ${p.desc_hi ? `<details><summary>${en ? 'Details' : 'विवरण'}</summary><p class="small">${esc(en && p.desc_en ? p.desc_en : p.desc_hi)}</p></details>` : ''}
       ${p.in_stock ? `<div class="addrow"><input type="number" min="${p.min_qty}" max="${p.max_qty}" step="${p.step}" value="${p.min_qty}" data-q="${p.id}" aria-label="qty"><span class="muted small">${esc(en ? p.unit_en : p.unit_hi)}</span><button type="button" data-add="${p.id}">${en ? 'Add to cart' : 'कार्ट में डालें'}</button></div>` : `<div class="muted">${en ? 'Out of stock' : 'स्टॉक में नहीं'}</div>`}
     </div>`).join('');
@@ -2253,6 +2255,7 @@ async function openReport(path, body) {
     try {
       const r = await apiFetch('/v1/shop/order', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
       cart = []; LSs('kundali_cart', cart); renderCart(); $('sh_oid').value = d.order_id; $('sh_ophone').value = body.phone;
+      const mine = LSg('kundali_my_orders', []); mine.unshift({id: d.order_id, phone: body.phone, total: d.total, at: new Date().toISOString().slice(0, 10)}); LSs('kundali_my_orders', mine.slice(0, 30)); renderMine();
       const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
       $('sh_done').innerHTML = `<div class="okbox">✅ <b>${en ? 'Order placed' : 'ऑर्डर दर्ज हुआ'}: ${esc(d.order_id)}</b> · ${en ? 'Total' : 'कुल'} <b>${rs(d.total)}</b>
         ${d.payment === 'upi' ? `<p>${en ? 'Pay by UPI now:' : 'अभी UPI से भुगतान कीजिए:'} ${mobile ? `<a class="btnlink" href="${esc(d.upi_link)}">${en ? 'Pay' : 'भुगतान करें'} ${rs(d.total)}</a>` : ''} <span class="muted">UPI ID: <b>${esc(d.upi_id)}</b> · ${en ? 'note' : 'नोट में'}: ${esc(d.order_id)}</span></p><p class="muted small">${en ? 'After paying, send the UPI reference on WhatsApp — we confirm and ship.' : 'भुगतान के बाद UPI संदर्भ संख्या WhatsApp पर भेजें — पुष्टि के बाद डिलीवरी होगी।'}</p>` : `<p>${d.payment === 'cod' ? (en ? 'Pay cash on delivery.' : 'डिलीवरी पर नकद भुगतान।') : (en ? 'We will contact you on WhatsApp.' : 'हम WhatsApp पर संपर्क करेंगे।')}</p>`}
@@ -2265,8 +2268,23 @@ async function openReport(path, body) {
       $('sh_trackout').innerHTML = `<b>${esc(d.id)}</b>: ${E() ? esc(d.status) : esc(ST[d.status] || d.status)}${d.track ? ` · ${E() ? 'tracking' : 'ट्रैकिंग'}: ${esc(d.track)}` : ''} · ${rs(d.total)}`;
     } catch (e) { $('sh_trackout').innerHTML = '⚠️ ' + esc(e.message); }
   };
+  const ST = {new: 'नया', paid: 'भुगतान मिला', packed: 'पैक हुआ', shipped: 'भेजा गया', delivered: 'पहुँच गया', cancelled: 'रद्द'};
+  const STEPS = ['new', 'paid', 'packed', 'shipped', 'delivered'];
+  async function renderMine() {
+    const mine = LSg('kundali_my_orders', []); $('myorders').hidden = !mine.length; if (!mine.length) return;
+    const en = E();
+    $('sh_mine').innerHTML = mine.map(o => `<div class="myo" data-o="${esc(o.id)}"><b>${esc(o.id)}</b> <span class="muted small">${esc(o.at)} · ${rs(o.total)}</span><div class="steps" data-st="${esc(o.id)}">…</div></div>`).join('');
+    for (const o of mine.slice(0, 10)) {
+      try { const r = await apiFetch('/v1/shop/status', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: o.id, phone: o.phone})}); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+        const box = document.querySelector(`[data-st="${o.id}"]`); if (!box) continue;
+        box.innerHTML = d.status === 'cancelled' ? `<span class="kf bad">${en ? 'cancelled' : 'रद्द'}</span>` :
+          STEPS.map((s2, i) => `<span class="${i <= STEPS.indexOf(d.status) ? 'done' : ''}">${en ? s2 : ST[s2]}</span>`).join('') + (d.track ? `<em>${en ? 'tracking' : 'ट्रैकिंग'}: ${esc(d.track)}</em>` : '') +
+          `<details><summary>${en ? 'Items' : 'सामान'}</summary>${d.items.map(i => `${esc(i.name_hi)} × ${i.qty} ${esc(i.unit_hi)}`).join('<br>')}</details>`;
+      } catch (e) { const box = document.querySelector(`[data-st="${o.id}"]`); if (box) box.textContent = '—'; }
+    }
+  }
   count();
-  const _st = window.showTab; window.showTab = id => { _st(id); if (id === 't-shop') { if (!data) load(); else { render(); renderCart(); } } };
+  const _st = window.showTab; window.showTab = id => { _st(id); if (id === 't-shop') { if (!data) load(); else { render(); renderCart(); } renderMine(); } };
 })();
 
 // ---- "add to calendar" links for a time window (Google Calendar + .ics for iPhone/Outlook) ----

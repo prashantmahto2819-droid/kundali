@@ -97,3 +97,16 @@ def test_bot_upay_ratna_shop(monkeypatch):
     assert "पुखराज" in wa_bot.answer("919811111111", "रत्न धनु")
     assert "Lucky gemstones" in wa_bot.answer("919811111111", "ratna mesh") and "Red coral" in wa_bot.answer("919811111111", "ratna mesh")
     assert "रत्न शॉप" in wa_bot.answer("919811111111", "शॉप")
+
+
+def test_shop_seo_pages(store):
+    from jyotish import seo
+    H = {"X-Admin-Key": "secret"}
+    pid = handlers.shop_admin_from_payload({"action": "save_product", "product": {"name_hi": "मूँगा (इटैलियन)", "name_en": "Red coral", "category": "gemstone", "planet": "Mars",
+                                            "price": 950, "unit": "ratti", "min_qty": 5, "max_qty": 12, "certificate": "GJEPC"}}, H)["saved"]
+    code, _, b = seo.route("/shop")
+    assert code == 200 and f"/shop/{pid}" in b and "मूँगा" in b
+    code, _, b = seo.route(f"/shop/{pid}")
+    assert code == 200 and '"@type": "Product"' in b and '"price": "950.00"' in b and "मंगल" in b and "GJEPC" in b
+    assert seo.route("/shop/nope")[0] == 404
+    assert f"/shop/{pid}" in seo.sitemap()

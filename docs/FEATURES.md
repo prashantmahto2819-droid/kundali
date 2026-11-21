@@ -164,3 +164,5 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **WhatsApp bot**: `उपाय नौकरी` / `upay marriage` (from saved or given birth details, else Moon sign), `रत्न [राशि]` / `ratna mesh` (by lagna or sign, with stones to avoid), `शॉप` (top items + link); menu list has Remedies and Lucky gemstone.
 - **Shop**: changing an order's status in admin sends the customer a WhatsApp message (paid, packed, shipped with tracking, delivered, cancelled).
 - **Family matching on the dashboard**: pick another family profile, mark groom/bride, see the 36-guna total, band, Mangal dosha for both and koota bars; open the full matching in one tap.
+- **Shop pages for Google**: `/shop` (all products) and `/shop/<id>` (photos, price per unit, planet, origin, certificate, stock, Product JSON-LD with offer), in the sitemap; product cards link to them.
+- **My orders**: orders placed from the browser are listed in the shop with a live progress bar (new → paid → packed → shipped → delivered), tracking number and items.

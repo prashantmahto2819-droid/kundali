@@ -86,7 +86,7 @@ def page(path: str, title: str, desc: str, body: str, crumbs: list[tuple[str, st
 <meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{e(url)}">
 <meta property="og:image" content="{e(site())}/icons/icon-512.png"><meta name="theme-color" content="#22154a"><link rel="icon" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest"><style>{CSS}</style>{lds}</head><body>
-<header><div class="in"><a href="/">🪔 कुंडली · पंचांग</a><nav><a href="/panchang">आज का पंचांग</a><a href="/rashifal">राशिफल</a><a href="/tyohar/{today().year}">व्रत-त्योहार {today().year}</a><a href="/ratna">राशि रत्न</a><a href="/">कुंडली बनाइए</a></nav></div></header>
+<header><div class="in"><a href="/">🪔 कुंडली · पंचांग</a><nav><a href="/panchang">आज का पंचांग</a><a href="/rashifal">राशिफल</a><a href="/tyohar/{today().year}">व्रत-त्योहार {today().year}</a><a href="/ratna">राशि रत्न</a><a href="/shop">रत्न शॉप</a><a href="/">कुंडली बनाइए</a></nav></div></header>
 <main><div class="crumb">{crumb_html}</div>{body}
 <div class="card"><b>अपनी जन्म कुंडली, दशा और दैनिक फल निःशुल्क देखिए</b><br><a class="cta" href="/">कुंडली बनाइए →</a><a class="cta" style="background:#2e9d5b" href="/#wa">WhatsApp पर रोज़ पंचांग</a></div></main>
 <footer><div class="in">गणना: NASA JPL DE440s, लाहिरी अयनांश। फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। · <a href="/panchang">पंचांग</a> · <a href="/rashifal">राशिफल</a> · <a href="/tyohar/{today().year}">त्योहार</a> · <a href="/privacy">गोपनीयता</a> · <a href="/terms">शर्तें</a> · <a href="/sitemap.xml">sitemap</a></div></footer>
@@ -303,7 +303,7 @@ def timezone_utc():
 
 def sitemap() -> str:
     y, d = today().year, today().isoformat()
-    urls = ["/", "/panchang", "/rashifal", "/tyohar", "/ratna", "/privacy", "/terms"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
+    urls = ["/", "/panchang", "/rashifal", "/tyohar", "/ratna", "/shop", "/privacy", "/terms"] + [f"/shop/{x['id']}" for x in _shop_products()] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
     for yr in (y, y + 1):
         urls.append(f"/tyohar/{yr}")
         urls += sorted({f"/tyohar/{yr}/{_fkey(ev)}" for ev in _events(yr) if ev["kind"] in MAJOR_KINDS})
@@ -331,6 +331,11 @@ def route(path: str) -> tuple[int, str, str] | None:
         b = rashifal_sign(m.group(1)) if m.group(1) else rashifal_index(); return (200, H, b) if b else (404, H, not_found())
     if p == "/.well-known/assetlinks.json":
         return 200, "application/json", assetlinks()
+    if p == "/shop":
+        return 200, H, shop_index_page()
+    m = re.fullmatch(r"/shop/([a-z0-9]+)", p)
+    if m:
+        b = shop_product_page(m.group(1)); return (200, H, b) if b else (404, H, not_found())
     if p == "/ratna":
         return 200, H, _cached(("ratna",), ratna_page)
     if p == "/privacy":
@@ -353,6 +358,47 @@ def route(path: str) -> tuple[int, str, str] | None:
 def _contact() -> str:
     em = os.environ.get("KUNDALI_CONTACT_EMAIL", "").strip()
     return (f'<a href="mailto:{e(em)}">{e(em)}</a>' if em else "WhatsApp पर <b>मदद</b> लिखकर") + " (Contact: " + (e(em) if em else "WhatsApp, send <b>help</b>") + ")"
+
+
+def _shop_products():
+    try:
+        from . import shop
+        return shop.products({})["products"]
+    except Exception:
+        return []
+
+
+def shop_index_page() -> str:
+    ps = _shop_products()
+    cards = "".join(f"<a class='card sign' href='/shop/{e(p['id'])}'>{(f'<img src=\"{e(p["images"][0])}\" alt=\"{e(p["name_hi"])}\" width=\"72\" height=\"72\" style=\"border-radius:12px;object-fit:cover\">' if p['images'] else '<span class=g>💎</span>')}"
+                    f"<span><b>{e(p['name_hi'])}</b><br><span class='en'>{e(p.get('name_en') or '')}</span><br>₹{p['price']:,.0f} / {e(p['unit_hi'])}</span></a>" for p in ps)
+    body = ("<div class='hero'><h1>रत्न शॉप — प्रमाणित रत्न, रुद्राक्ष, यंत्र</h1><p>राशि और लग्न के अनुसार रत्न; UPI या कैश ऑन डिलीवरी</p></div>"
+            + (f"<div class='grid'>{cards}</div>" if cards else "<div class='card'>शॉप जल्द खुल रही है।</div>")
+            + "<p><a href='/ratna'>कौन-सा रत्न पहनें? राशि रत्न तालिका →</a></p>")
+    return page("/shop", "रत्न शॉप — प्रमाणित रत्न, रुद्राक्ष, यंत्र | Gem shop", "प्रमाणित पुखराज, मूँगा, मोती, नीलम, पन्ना, रुद्राक्ष और यंत्र — राशि/लग्न के अनुसार, UPI या कैश ऑन डिलीवरी।", body, [("रत्न शॉप", "/shop")])
+
+
+def shop_product_page(pid: str) -> str | None:
+    p = next((x for x in _shop_products() if x["id"] == pid), None)
+    if not p:
+        return None
+    from .constants import PLANETS_HI
+    pl = PLANETS_HI.get(p.get("planet") or "", "")
+    imgs = "".join(f"<img src='{e(u)}' alt='{e(p['name_hi'])}' style='width:100%;max-width:320px;border-radius:14px;margin:4px'>" for u in p["images"][:4])
+    facts = [("दाम", f"₹{p['price']:,.0f} प्रति {p['unit_hi']}" + (f" (MRP ₹{p['mrp']:,.0f})" if p.get("mrp") and p["mrp"] > p["price"] else "")),
+             ("ग्रह", pl), ("श्रेणी", p["category_hi"]), ("मूल स्थान", p.get("origin")), ("प्रमाणपत्र", p.get("certificate")),
+             ("मात्रा", f"{p['min_qty']:g}–{p['max_qty']:g} {p['unit_hi']}"), ("उपलब्धता", "स्टॉक में" if p["in_stock"] else "स्टॉक में नहीं")]
+    kv = "".join(f"<b>{e(k)}</b><span>{e(v)}</span>" for k, v in facts if v)
+    ld = [{"@context": "https://schema.org", "@type": "Product", "name": p.get("name_en") or p["name_hi"], "alternateName": p["name_hi"], "sku": p["id"],
+           "image": [site() + u for u in p["images"]], "description": p.get("desc_en") or p.get("desc_hi") or p["name_hi"], "category": p["category_en"],
+           "offers": {"@type": "Offer", "priceCurrency": "INR", "price": f"{p['price']:.2f}", "url": f"{site()}/shop/{p['id']}",
+                      "availability": "https://schema.org/InStock" if p["in_stock"] else "https://schema.org/OutOfStock"}}]
+    body = (f"<div class='hero'><h1>{e(p['name_hi'])}</h1><p class='en'>{e(p.get('name_en') or '')}</p></div><div class='card'>{imgs}<div class='kv'>{kv}</div>"
+            f"{('<p>' + e(p['desc_hi']) + '</p>') if p.get('desc_hi') else ''}<a class='cta' href='/#t-shop'>ऑर्डर कीजिए →</a></div>"
+            + (f"<div class='card'><b>{e(pl)} ग्रह के लिए — किसे पहनना चाहिए?</b><p>लग्न के अनुसार शुभ ग्रह का रत्न ही पहनें; 6, 8, 12 भाव के स्वामी का रत्न नहीं (रुद्राक्ष और यंत्र सभी के लिए सुरक्षित माने जाते हैं)। "
+               f"<a href='/ratna'>राशि रत्न तालिका</a> · <a href='/#t-upay'>अपनी कुंडली से जाँचिए</a></p></div>" if pl else ""))
+    return page(f"/shop/{p['id']}", f"{p['name_hi']} — ₹{p['price']:,.0f}/{p['unit_hi']} | रत्न शॉप", f"{p['name_hi']} ({p.get('name_en') or ''}) — {p['category_hi']}, {pl or ''} ग्रह, {p.get('certificate') or ''}। UPI या कैश ऑन डिलीवरी।",
+                body, [("रत्न शॉप", "/shop"), (p["name_hi"], f"/shop/{p['id']}")], ld)
 
 
 def ratna_page() -> str:

@@ -289,3 +289,7 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .fmrow { display:flex; gap:14px; align-items:center; margin:10px 0; }
 .kbars { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:6px 16px; margin:8px 0; font-size:.86rem; }
 .kbars > div { display:grid; grid-template-columns:96px 1fr 44px; gap:8px; align-items:center; } .kbars i { height:8px; border-radius:6px; background:color-mix(in srgb,var(--accent) 12%,transparent); overflow:hidden; } .kbars i b { display:block; height:100%; border-radius:6px; }
+
+.myo { padding:10px 0; border-bottom:1px dashed var(--line); } .myo:last-child { border:0; }
+.steps { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; align-items:center; } .steps span { font-size:.76rem; padding:2px 8px; border-radius:99px; background:color-mix(in srgb,var(--line) 40%,transparent); color:var(--muted); }
+.steps span.done { background:#2e9d5b; color:#fff; } .steps em { font-size:.8rem; font-style:normal; margin-left:6px; } .steps details { width:100%; font-size:.82rem; }
