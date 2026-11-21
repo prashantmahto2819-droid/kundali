@@ -15,3 +15,12 @@ def test_now_running_slots():
     # after midnight (before sunrise) the night slots of the previous day run
     n = handlers.now_from_query({"lat": 28.61, "lon": 77.2, "tz": "Asia/Kolkata", "at": "2026-11-22T02:00:00+05:30"})
     assert n["vara"]["index"] == 6 and n["choghadiya"] and n["hora"]["night"] is True
+
+
+def test_now_tables():
+    r = handlers.now_from_query({"lat": 28.61, "lon": 77.2, "tz": "Asia/Kolkata", "at": "2026-11-21T10:00:00+05:30", "tables": 1})
+    t = r["tables"]
+    assert len(t["choghadiya_day"]) == 8 and len(t["choghadiya_night"]) == 8 and len(t["hora"]) == 24
+    assert sum(x["now"] for x in t["choghadiya_day"] + t["choghadiya_night"]) == 1 and sum(x["now"] for x in t["hora"]) == 1
+    assert t["choghadiya_day"][0]["past"] and not t["choghadiya_night"][0]["past"]
+    assert handlers.now_from_query({"lat": 28.61, "lon": 77.2, "tz": "Asia/Kolkata"})["tables"] is None

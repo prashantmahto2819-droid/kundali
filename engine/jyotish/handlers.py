@@ -1169,4 +1169,10 @@ def now_from_query(q: dict) -> dict:
     from .muhurta import CHOG_NATURE  # noqa: F401  (kept for callers that import it from here)
     return {"available": True, "at": now.strftime("%H:%M"), "vara": t["vedic_vara"], "choghadiya": c_cur, "next_good_choghadiya": c_next,
             "hora": h_cur, "next_good_hora": h_next, "rahu_kaal_now": inside(t["rahu_kaal"]), "abhijit_now": inside(t["abhijit"]),
-            "rahu_kaal": t["rahu_kaal"], "abhijit": t["abhijit"]}
+            "rahu_kaal": t["rahu_kaal"], "abhijit": t["abhijit"],
+            "tables": {"choghadiya_day": [_strip(x, nm) for x in chog[:8]], "choghadiya_night": [_strip(x, nm) for x in chog[8:]],
+                       "hora": [_strip(x, nm) for x in hora]} if q.get("tables") else None}
+
+
+def _strip(x: dict, nm: int) -> dict:
+    return {**{k: v for k, v in x.items() if not k.startswith("_")}, "now": x["_a"] <= nm < x["_b"], "past": x["_b"] <= nm}

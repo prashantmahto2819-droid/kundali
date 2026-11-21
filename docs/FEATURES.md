@@ -150,3 +150,8 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **Muhurta → calendar**: every muhurta day and every auspicious lagna slot has "📅 Google · iPhone/Outlook" links (timed event in UTC from the place's time zone, 30-minute reminder in the .ics).
 - **Regional janma patrika**: report language picker (9 languages); for mr/gu/bn/te/kn/ta/ml the report opens with a one-page patrika in that language (birth details, birth panchang, north-style chart, nine grahas with sign/degree/nakshatra-pada/house, running dasha), followed by the detailed Hindi report.
 - **Regional matching page**: the matching report (same 9-language picker) opens with a regional page — both people (lagna, Moon sign, nakshatra-pada, Mangal dosha), the Ashtakoota table with bars, total and total after parihara.
+
+## Reorganised navigation and sections (2026-11-21, after comparing AstroSage, Drik Panchang and Co-Star)
+- Five clear sections (bottom bar on phones): **होम** (Home, My dashboard) · **पंचांग** (Today's panchang, Muhurta, Calendar studio) · **कुंडली** (Kundali, Matching, Prashna, My charts) · **विद्याएँ** (Tarot, Vastu, Palmistry) · **सहायता** (Astrologer, AI, Learn).
+- Home shows **"आज आपके लिए"** for the active family profile (personal day score ring, next transit/dasha change, Moon sign · nakshatra, running dasha, Sade Sati / birthday chips) — or an invitation to add a profile. Cached per day.
+- Today's panchang gains sticky jump chips and Drik-style **choghadiya (day/night) and hora tables** with the running slot highlighted and a countdown, refreshed every minute (`/v1/now?tables=1`).

@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved && btns.some(b => b.dataset[attr] === saved && b.style.display !== 'none')) show(saved);
     return show;
   };
-  const GROUPS = {today: ['t-home', 't-dash', 't-today'], kundali: ['t-kundali', 't-match', 't-mine'], panchang: ['t-muhurta', 't-cal'], vidya: ['t-tarot', 't-vastu', 't-palm', 't-prashna'], learn: ['t-learn', 't-ask', 't-consult']};
+  const GROUPS = {today: ['t-home', 't-dash'], panchang: ['t-today', 't-muhurta', 't-cal'], kundali: ['t-kundali', 't-match', 't-prashna', 't-mine'], vidya: ['t-tarot', 't-vastu', 't-palm'], learn: ['t-ask', 't-consult', 't-learn']};
   const groupOf = id => Object.keys(GROUPS).find(g => GROUPS[g].includes(id)) || 'kundali';
   const showGroup = g => {
     [...$('groups').querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.group === g));
@@ -76,6 +76,7 @@ window.loadTodayTab = (function () {
     const lat = own ? own.lat : +($('lat').value || 28.61), lon = own ? own.lon : +($('lon').value || 77.2), tz = own ? own.tz : (($('tz').value || '').trim() || 'Asia/Kolkata');
     const rl = $('tdlang').value;
     const key = `${lat},${lon},${tz},${new Date().toDateString()},${window.getLang ? window.getLang() : 'hi'},${rl}`; if (loaded === key) return; loaded = key;
+    window.loadTimeTables && window.loadTimeTables(lat, lon, tz);
     const today = new Date(); const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     const tomorrow = new Date(today.getTime() + 86400000);
     const q = d => `date=${iso(d)}&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}` + (rl ? `&lang=${rl}` : '');
@@ -1107,6 +1108,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21f', em: '🧭', t: 'नया, व्यवस्थित मेन्यू', d: 'होम · पंचांग · कुंडली · विद्याएँ · सहायता; पंचांग में पूरा चौघड़िया और होरा, होम पर आपका अपना दिन।', go: 't-today'},
     {id: '2026-11-21e', em: '💍', t: 'मिलान रिपोर्ट भी 9 भाषाओं में', d: 'अष्टकूट तालिका, दोनों की राशि-नक्षत्र और मंगल दोष — क्षेत्रीय भाषा में पहला पन्ना।', go: 't-match'},
     {id: '2026-11-21d', em: '📜', t: 'कुंडली रिपोर्ट 9 भाषाओं में', d: 'मराठी, ગુજરાતી, বাংলা, తెలుగు, ಕನ್ನಡ, தமிழ், മലയാളം में जन्म पत्रिका का पहला पन्ना।', go: 't-kundali'},
     {id: '2026-11-21c', em: '📅', t: 'मुहूर्त सीधे फ़ोन के कैलेंडर में', d: 'मुहूर्त और शुभ लग्न के समय Google/iPhone कैलेंडर में जोड़िए, 30 मिनट पहले याद दिलाएगा।', go: 't-muhurta'},
@@ -1187,7 +1189,7 @@ $('yago').onclick = async () => {
 
   // today at a glance (home)
   let glanceKey = '';
-  window.loadHome = async function () { if ($('hm_rashi') && $('hm_rashi').dataset.lang !== (EN() ? 'en' : 'hi')) document.querySelector('#hm_signs button.on')?.click();
+  window.loadHome = async function () { try { window.renderMine && window.renderMine(); } catch (e) {} if ($('hm_rashi') && $('hm_rashi').dataset.lang !== (EN() ? 'en' : 'hi')) document.querySelector('#hm_signs button.on')?.click();
     greet();
     const own = LS.get('kundali_today_place', null);
     const lat = own ? own.lat : +($('lat').value || 28.61), lon = own ? own.lon : +($('lon').value || 77.2), tz = own ? own.tz : (($('tz').value || '').trim() || 'Asia/Kolkata');
@@ -1302,7 +1304,7 @@ $('yago').onclick = async () => {
       const r = await (await apiFetch(`/v1/now?lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz || (own && own.tz) || 'Asia/Kolkata')}`)).json();
       if (!r.available) { $('hm_now').innerHTML = ''; return; }
       const en = EN(), m = n => { const h = Math.floor(n / 60), mm = n % 60; return en ? (h ? `${h}h ${mm}m` : `${mm} min`) : (h ? `${h} घं ${mm} मि` : `${mm} मि`); };
-      const at = (x, k) => x ? `<span class="nc ${x.nature}"><i>${k}</i> <b>${esc(en ? (x.name || x.lord) : (x.name_hi || x.lord_hi))}</b> <i>· ${m(x.mins_left)} ${en ? 'left' : 'बाकी'}</i></span>` : '';
+      const at = (x, k) => x ? `<span class="nc ${x.nature === 'inauspicious' ? 'bad' : x.nature}"><i>${k}</i> <b>${esc(en ? (x.name || x.lord) : (x.name_hi || x.lord_hi))}</b> <i>· ${m(x.mins_left)} ${en ? 'left' : 'बाकी'}</i></span>` : '';
       const nx = (x, k) => x ? `<span class="nc"><i>${k}</i> <b>${esc(en ? (x.name || x.lord) : (x.name_hi || x.lord_hi))}</b> <i>${esc(x.start)} (${en ? 'in ' + m(x.mins_to) : m(x.mins_to) + ' में'})</i></span>` : '';
       $('hm_now').innerHTML = (r.rahu_kaal_now ? `<span class="nc alert">⚠️ ${en ? 'Rahu kaal now' : 'अभी राहु काल'} · ${esc(r.rahu_kaal.end)} ${en ? 'till' : 'तक'}</span>` : '') +
         (r.abhijit_now ? `<span class="nc good">✨ ${en ? 'Abhijit muhurta now' : 'अभी अभिजित मुहूर्त'}</span>` : '') +
@@ -1310,6 +1312,37 @@ $('yago').onclick = async () => {
         nx(r.next_good_choghadiya, en ? 'Next good' : 'अगला शुभ');
     } catch (e) { /* strip is optional */ }
   }
+
+  // ---- "आपके लिए आज" on Home: the active family profile's day at a glance (from the dashboard, cached per day) ----
+  async function renderMine() {
+    const box = $('hm_mine'); if (!box) return;
+    const list = LS.get('kundali_profiles', []), act = LS.get('kundali_profile_active', null), p = list.find(x => x.id === act) || list[0];
+    const en = EN();
+    if (!p) { box.innerHTML = `<div class="mine-empty"><span class="em">✨</span><div><b>${en ? 'Your own day, every day' : 'आपका अपना दिन, रोज़'}</b><span>${en ? 'Add your birth details once — your personal day score, running dasha and alerts appear here.' : 'एक बार जन्म विवरण जोड़िए — यहाँ रोज़ आपका निजी दिन-स्कोर, चल रही दशा और सूचनाएँ दिखेंगी।'}</span></div><button type="button" data-go="t-dash">${en ? 'Add profile' : 'प्रोफ़ाइल जोड़िए'}</button></div>`; return; }
+    const today = new Date().toDateString(), key = p.id + today + (en ? 'en' : 'hi');
+    let c = LS.get('kundali_mine_cache', null);
+    if (!c || c.key !== key) {
+      box.innerHTML = `<div class="muted">${en ? 'Loading your day…' : 'आपका दिन लोड हो रहा है…'}</div>`;
+      try { const r = await apiFetch('/v1/dashboard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name: p.name, date: p.date, time: p.time, tz: p.tz, lat: p.lat, lon: p.lon})});
+        const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+        const T = d.today || {}, R = T.rashifal || {}, P = T.personal || {};
+        const sc = P.score ?? R.score ?? null, G = sc == null ? null : sc >= 70 ? ['उत्तम', 'excellent'] : sc >= 55 ? ['शुभ', 'good'] : sc >= 40 ? ['मिश्रित', 'mixed'] : ['संयम रखें', 'go easy'];
+        c = {key, name: p.name || '', score: sc, grade: G ? G[en ? 1 : 0] : '', line: (() => { const a = (T.alerts || [])[0], u = (d.upcoming || [])[0], cut = t => t.length > 120 ? t.slice(0, 118) + '…' : t;
+          if (a) return cut(en ? (a.en || a.text_en || a.title_en || '') : (a.hi || a.text_hi || a.title_hi || ''));
+          if (u) return cut(`${en ? 'Next' : 'आगे'} ${u.date.slice(8, 10)}-${u.date.slice(5, 7)}: ${en ? u.en : u.hi}`);
+          return ''; })(),
+             moon: en ? d.identity.moon_sign : d.identity.moon_sign_hi, nak: en ? d.identity.nakshatra : d.identity.nakshatra_hi,
+             dasha: (d.dasha || []).slice(0, 2).map(x => en ? x.lord : x.lord_hi).join(' › '), sade: d.sade_sati && d.sade_sati.active, bday: d.birthday && d.birthday.days};
+        LS.set('kundali_mine_cache', c);
+      } catch (e) { box.innerHTML = ''; return; }
+    }
+    const ring = typeof ringSvg === 'function' && c.score != null ? ringSvg(c.score, 70) : '';
+    box.innerHTML = `<div class="mine-row">${ring}<div class="mine-txt"><span class="k">${en ? 'Today for' : 'आज'} <b>${esc(c.name || (en ? 'you' : 'आपके लिए'))}</b>${c.grade ? ` · <span class="pill">${esc(c.grade)}</span>` : ''}</span>
+      <span class="l">${esc(c.line)}</span>
+      <span class="chips"><span>🌙 ${esc(c.moon)} · ${esc(c.nak)}</span>${c.dasha ? `<span>⏳ ${esc(c.dasha)}</span>` : ''}${c.sade ? `<span class="warn">${en ? 'Sade Sati' : 'साढ़ेसाती'}</span>` : ''}${c.bday != null && c.bday <= 30 ? `<span>🎂 ${c.bday} ${en ? 'days' : 'दिन'}</span>` : ''}</span></div>
+      <button type="button" class="ghost" data-go="t-dash">${en ? 'Dashboard →' : 'डैशबोर्ड →'}</button></div>`;
+  }
+  window.renderMine = renderMine;
 
   // page heads for every tool page (icon from the matching home feature card)
   const PAGEHEAD = {
@@ -1445,7 +1478,7 @@ $('yago').onclick = async () => {
       const r = await apiFetch('/v1/dashboard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const en = EN(), I = d.identity, T = d.today;
-      const meta = LS.get('kundali_profile_meta', {}); meta[p.id] = en ? I.moon_sign : I.moon_sign_hi; LS.set('kundali_profile_meta', meta); const mi = LS.get('kundali_profile_moon', {}); mi[p.id] = I.moon_sign_index; LS.set('kundali_profile_moon', mi); renderPeople();
+      const meta = LS.get('kundali_profile_meta', {}); meta[p.id] = en ? I.moon_sign : I.moon_sign_hi; LS.set('kundali_profile_meta', meta); const mi = LS.get('kundali_profile_moon', {}); mi[p.id] = I.moon_sign_index; LS.set('kundali_profile_moon', mi); LS.set('kundali_mine_cache', null); renderPeople();
       const dasha = d.dasha.map(x => `<div style="display:flex;justify-content:space-between;font-size:.9rem"><span><b>${esc(en ? x.lord : x.lord_hi)}</b> <span class="muted">${esc(en ? x.level_en : x.level_hi)}</span></span><span class="muted">${esc(x.end.split('-').reverse().join('-'))} <span>तक</span></span></div><div class="bar"><i style="width:${x.percent}%"></i></div>`).join('');
       const evs = d.upcoming.map(e => `<li><b>${esc(e.date.split('-').reverse().join('-'))}</b>${esc(en ? e.en : e.hi)}</li>`).join('');
       const ss = d.sade_sati;
@@ -2026,6 +2059,32 @@ async function openReport(path, body) {
       host.scrollIntoView({behavior: 'smooth', block: 'start'});
     } catch (err) { host.innerHTML = `<div style="color:#c62828">त्रुटि: ${esc(err.message)}</div>`; }
   }
+})();
+
+// ---- Today tab: choghadiya (day/night) and hora tables with the running slot highlighted + countdown ----
+(function timeTables() {
+  let last = null, mode = 'day';
+  const en = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  const left = n => { const h = Math.floor(n / 60), m = n % 60; return en() ? (h ? `${h}h ${m}m` : `${m} min`) : (h ? `${h} घं ${m} मि` : `${m} मि`); };
+  const nat = x => x.nature === 'inauspicious' ? 'bad' : x.nature;
+  const cls = x => `${nat(x)}${x.now ? ' now' : ''}${x.past ? ' past' : ''}`;
+  function render() {
+    if (!last || !last.tables) return;
+    const T = last.tables, E = en();
+    const rows = (mode === 'day' ? T.choghadiya_day : T.choghadiya_night).map(x => `<div class="crow ${cls(x)}"><span class="t">${esc(x.start)}–${esc(x.end)}</span><b>${esc(E ? x.name : x.name_hi)}</b><span class="n">${nat(x) === 'good' ? (E ? 'auspicious' : 'शुभ') : nat(x) === 'bad' ? (E ? 'avoid' : 'अशुभ') : (E ? 'neutral' : 'सामान्य')}</span>${x.now && last.choghadiya ? `<span class="cd">⏳ ${left(last.choghadiya.mins_left)}</span>` : ''}</div>`).join('');
+    $('tdchogt').innerHTML = rows; $('tdchogt').classList.remove('muted');
+    const hrs = T.hora.filter(x => !x.past || x.now).slice(0, 12);
+    $('tdhorat').innerHTML = hrs.map(x => `<div class="crow ${cls(x)}"><span class="t">${esc(x.start)}–${esc(x.end)}</span><b>${esc(E ? x.lord : x.lord_hi)}</b><span class="n">${x.night ? (E ? 'night' : 'रात्रि') : ''}</span>${x.now && last.hora ? `<span class="cd">⏳ ${left(last.hora.mins_left)}</span>` : ''}</div>`).join('');
+    $('tdhorat').classList.remove('muted');
+  }
+  window.loadTimeTables = async (lat, lon, tz) => {
+    try { last = await (await apiFetch(`/v1/now?tables=1&lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz)}`)).json(); last._q = [lat, lon, tz];
+      mode = last.tables && last.tables.choghadiya_night.some(x => x.now) ? 'night' : 'day';
+      document.querySelectorAll('#tdchog [data-cn]').forEach(b => b.classList.toggle('on', b.dataset.cn === mode)); render(); } catch (e) {}
+  };
+  document.querySelectorAll('#tdchog [data-cn]').forEach(b => b.onclick = () => { mode = b.dataset.cn; document.querySelectorAll('#tdchog [data-cn]').forEach(x => x.classList.toggle('on', x === b)); render(); });
+  document.querySelectorAll('#tdjump [data-j]').forEach(a => a.onclick = e => { e.preventDefault(); const t = $(a.dataset.j); if (t) window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 110, behavior: 'smooth'}); });
+  setInterval(() => { if (last && document.querySelector('.tab.on')?.id === 't-today' && !document.hidden) window.loadTimeTables(...last._q); }, 60000);
 })();
 
 // ---- "add to calendar" links for a time window (Google Calendar + .ics for iPhone/Outlook) ----

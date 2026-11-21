@@ -29,10 +29,10 @@
 </header>
 <nav class="groups" id="groups">
   <button type="button" data-group="today"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg> होम</button>
-  <button type="button" data-group="kundali"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3v18M3 12h18"/></svg> मेरी कुंडली</button>
-  <button type="button" data-group="panchang"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> पंचांग-मुहूर्त</button>
-  <button type="button" data-group="vidya"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9L9.5 8z"/></svg> अन्य विद्याएँ</button>
-  <button type="button" data-group="learn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> सीखिए-पूछिए</button>
+  <button type="button" data-group="panchang"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg> पंचांग</button>
+  <button type="button" data-group="kundali"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 3l18 18M21 3L3 21M12 3v18M3 12h18"/></svg> कुंडली</button>
+  <button type="button" data-group="vidya"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9L9.5 8z"/></svg> विद्याएँ</button>
+  <button type="button" data-group="learn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> सहायता</button>
 </nav>
 <nav class="tabs" id="tabs">
   <button type="button" data-tab="t-home"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg> होम</button>
@@ -78,6 +78,7 @@
       <div class="muted" id="hm_err" style="font-size:.82rem;margin-top:6px">समय न पता हो तो 12:00 डालें — लग्न अनिश्चित रहेगा, चंद्र राशि प्रायः सही।</div>
     </div>
 
+    <div class="card mine" id="hm_mine"></div>
     <div class="glance" id="hm_glance"><div class="tile"><div class="k">आज</div><div class="v">…</div></div></div>
     <div class="card dayarc" id="hm_daycard" hidden><div class="dtext"><b>आज का दिन-चक्र</b><div class="big" id="hm_dayinfo"></div><div id="hm_now" class="nowstrip"></div><div id="hm_daylist" class="dlist"></div>
       <div class="lg"><span><i style="background:#e0533d"></i>राहु काल</span><span><i style="background:#2e9d5b"></i>अभिजित मुहूर्त</span><span><i style="background:#f3a23a"></i>सूर्य अभी</span></div></div><svg id="hm_arc" viewBox="0 0 600 205" role="img" aria-label="सूर्योदय से सूर्यास्त"></svg></div>
@@ -162,12 +163,16 @@
   </section>
   <section class="tab" id="t-today">
     <div class="card"><b>आज</b><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-2px 0 6px"><input id="tdcity" list="placelist" placeholder="शहर बदलिए (जैसे: इंदौर)" autocomplete="off" style="max-width:220px"><button type="button" class="ghost" id="tdgo" style="width:auto;padding:4px 12px">दिखाइए</button><button type="button" class="ghost" id="tdshare" style="width:auto;padding:4px 12px">कार्ड साझा करें</button><select id="tdlang" style="width:auto" title="पंचांग की भाषा"><option value="">हिंदी / English</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="ml">മലയാളം</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option></select></div><div id="tdhead" class="muted">लोड हो रहा है…</div><div id="tdpanchang" style="margin-top:6px"></div></div>
+    <nav class="jump" id="tdjump"><a data-j="tdgridwrap">शुभ-अशुभ समय</a><a data-j="tdchog">चौघड़िया</a><a data-j="tdhora">होरा</a><a data-j="tdupcard">व्रत-पर्व</a><a data-j="tdsigncard">राशिफल</a><a href="/tyohar">त्योहार कैलेंडर</a></nav>
+    <div id="tdgridwrap"></div>
     <div id="todaygrid">
       <div class="card"><b>आज और कल के व्रत-पर्व</b><div id="tdevents" class="muted">—</div></div>
       <div class="card"><b>आज के शुभ-अशुभ समय</b><div id="tdkaal" class="muted">—</div></div>
     </div>
-    <div class="card"><b>आगामी 30 दिन के व्रत-पर्व</b><div id="tdupcoming" class="muted">—</div></div>
-    <div class="card"><b>आज का राशिफल (सभी 12 राशियाँ)</b><div class="signs" id="tdsigns"></div><div class="muted" style="font-size:.8rem;margin-top:6px">चंद्र राशि से गोचर-आधारित प्रवृत्ति-संकेत; अपनी राशि अपनी कुंडली से जानिए।</div></div>
+    <div class="card" id="tdchog"><div class="cth"><b>चौघड़िया</b><span class="seg"><button type="button" class="on" data-cn="day">दिन</button><button type="button" data-cn="night">रात</button></span></div><div id="tdchogt" class="ctable muted">—</div></div>
+    <div class="card" id="tdhora"><div class="cth"><b>होरा</b><span class="muted" style="font-size:.82rem">ग्रह का घंटा — शुभ होरा में काम शुरू करें</span></div><div id="tdhorat" class="ctable muted">—</div></div>
+    <div class="card" id="tdupcard"><b>आगामी 30 दिन के व्रत-पर्व</b><div id="tdupcoming" class="muted">—</div></div>
+    <div class="card" id="tdsigncard"><b>आज का राशिफल (सभी 12 राशियाँ)</b><div class="signs" id="tdsigns"></div><div class="muted" style="font-size:.8rem;margin-top:6px">चंद्र राशि से गोचर-आधारित प्रवृत्ति-संकेत; अपनी राशि अपनी कुंडली से जानिए।</div></div>
     <div class="card"><b>जल्दी जाइए</b><div class="quick">
       <button type="button" onclick="showTab('t-kundali')">कुंडली बनाइए</button><button type="button" class="ghost" onclick="showTab('t-kundali');document.getElementById('wacard')?.scrollIntoView({behavior:'smooth'})">WhatsApp पर रोज़ का अपडेट</button>
       <button type="button" class="ghost" onclick="showTab('t-muhurta')">मुहूर्त खोजिए</button><button type="button" class="ghost" onclick="showTab('t-match')">कुंडली मिलान</button><button type="button" class="ghost" onclick="showTab('t-cal')">कैलेंडर बनाइए</button><button type="button" class="ghost" onclick="showTab('t-ask')">सवाल पूछिए</button>
