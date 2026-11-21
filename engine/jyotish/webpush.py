@@ -206,6 +206,13 @@ def compose(sub: dict, d: date) -> dict:
         ev2 = [x for x in tm["events"] if x["kind"] in kinds]
         if ev2:
             lines.append(("कल: " if hi else "Tomorrow: ") + ", ".join(x["name_hi"] if hi else x["name_en"] for x in ev2))
+    if sub.get("moon_sign") is not None:
+        try:
+            from . import rashifal as rashifal_mod
+            r = rashifal_mod.rashifal(d.isoformat(), sub["tz"], "daily")["signs"][int(sub["moon_sign"]) % 12]
+            lines.append((f'🔮 {r["sign_name_hi"]}: {r["grade_hi"]} {r["score"]}/100' if hi else f'🔮 {r["sign_name"]}: {r["grade_en"]} {r["score"]}/100'))
+        except Exception:
+            pass
     vara = day["vara_hi"] if hi else day["vara"]
     title = (f"🌅 आज का पंचांग — {vara}" if hi else f"🌅 Today's panchang — {vara}") + (f" ({sub['place']})" if sub.get("place") else "")
     return {"title": title, "body": "\n".join(x for x in lines if x), "url": "/#t-today", "tag": "panchang-" + d.isoformat()}

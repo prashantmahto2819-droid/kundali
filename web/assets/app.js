@@ -1107,6 +1107,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21b', em: '⏱️', t: 'अभी कौन-सा चौघड़िया और होरा', d: 'होम के दिन-चक्र में अभी का चौघड़िया, होरा और अगला शुभ समय।', go: 't-home'},
     {id: '2026-11-21a', em: '🔔', t: 'फ़ोन पर रोज़ पंचांग की सूचना', d: 'WhatsApp के बिना हर सुबह ब्राउज़र/ऐप की सूचना।', go: 't-home'},
     {id: '2026-11-20c', em: '🗣️', t: 'तमिल और मलयालम में पंचांग', d: 'WhatsApp और "आज" टैब में अब तमिल व मलयालम भी।', go: 't-today'},
     {id: '2026-11-20b', em: '☁️', t: 'परिवार की प्रोफ़ाइल हर फ़ोन पर', d: 'लॉगिन करने पर "मेरे लोग" खाते से sync होते हैं।', go: 't-dash'},
@@ -1142,7 +1143,7 @@ $('yago').onclick = async () => {
         const r = await reg(); let s = await r.pushManager.getSubscription();
         if (!s) { const {publicKey} = await (await apiFetch('/v1/push/key')).json(); s = await r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(publicKey)}); }
         const own = LS.get('kundali_today_place', null) || {lat: 28.61, lon: 77.2, tz: 'Asia/Kolkata', name: 'दिल्ली'};
-        const res = await post('/v1/push/subscribe', {subscription: s.toJSON(), lat: own.lat, lon: own.lon, tz: own.tz, place: own.name || '', lang: EN() ? 'en' : 'hi', daily_time: $('push_time').value || '06:30'});
+        const res = await post('/v1/push/subscribe', {subscription: s.toJSON(), lat: own.lat, lon: own.lon, tz: own.tz, place: own.name || '', lang: EN() ? 'en' : 'hi', daily_time: $('push_time').value || '06:30', moon_sign: LS.get('kundali_profile_moon', {})[LS.get('kundali_profile_active', null)] ?? null});
         const j = await res.json(); if (!res.ok) throw new Error(j.detail || res.status);
         LS.set('kundali_push_time', j.daily_time);
         msg(`✅ <span>रोज़</span> ${esc(j.daily_time)} <span>बजे सूचना आएगी</span> (${esc(own.name || '')}).`); state();
@@ -1285,10 +1286,27 @@ $('yago').onclick = async () => {
     }
     g += `<text x="${C[0]}" y="${C[1] - 14}" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">${en ? 'Day length' : 'दिनमान'} ${dur(len)}</text>`;
     $('hm_arc').innerHTML = g; $('hm_dayinfo').textContent = info;
+    loadNow(tz);
     const row = (k, v) => v ? `<span>${k}</span><b>${esc(v)}</b>` : '';
     $('hm_daylist').innerHTML = row('<span>सूर्योदय · सूर्यास्त</span>', `${p.sunrise} – ${p.sunset}`) + row('<span>राहु काल</span>', p.rahu_kaal && `${p.rahu_kaal.start}–${p.rahu_kaal.end}`) +
       row('<span>अभिजित मुहूर्त</span>', p.abhijit && `${p.abhijit.start}–${p.abhijit.end}`) + row('<span>चंद्रोदय</span>', p.moonrise) + row('<span>दिनमान</span>', dur(len));
   };
+
+  async function loadNow(tz) {
+    try {
+      const own = LS.get('kundali_today_place', null);
+      const lat = own ? own.lat : +($('lat').value || 28.61), lon = own ? own.lon : +($('lon').value || 77.2);
+      const r = await (await apiFetch(`/v1/now?lat=${lat}&lon=${lon}&tz=${encodeURIComponent(tz || (own && own.tz) || 'Asia/Kolkata')}`)).json();
+      if (!r.available) { $('hm_now').innerHTML = ''; return; }
+      const en = EN(), m = n => { const h = Math.floor(n / 60), mm = n % 60; return en ? (h ? `${h}h ${mm}m` : `${mm} min`) : (h ? `${h} घं ${mm} मि` : `${mm} मि`); };
+      const at = (x, k) => x ? `<span class="nc ${x.nature}"><i>${k}</i> <b>${esc(en ? (x.name || x.lord) : (x.name_hi || x.lord_hi))}</b> <i>· ${m(x.mins_left)} ${en ? 'left' : 'बाकी'}</i></span>` : '';
+      const nx = (x, k) => x ? `<span class="nc"><i>${k}</i> <b>${esc(en ? (x.name || x.lord) : (x.name_hi || x.lord_hi))}</b> <i>${esc(x.start)} (${en ? 'in ' + m(x.mins_to) : m(x.mins_to) + ' में'})</i></span>` : '';
+      $('hm_now').innerHTML = (r.rahu_kaal_now ? `<span class="nc alert">⚠️ ${en ? 'Rahu kaal now' : 'अभी राहु काल'} · ${esc(r.rahu_kaal.end)} ${en ? 'till' : 'तक'}</span>` : '') +
+        (r.abhijit_now ? `<span class="nc good">✨ ${en ? 'Abhijit muhurta now' : 'अभी अभिजित मुहूर्त'}</span>` : '') +
+        at(r.choghadiya, en ? 'Choghadiya' : 'चौघड़िया') + at(r.hora, en ? 'Hora' : 'होरा') +
+        nx(r.next_good_choghadiya, en ? 'Next good' : 'अगला शुभ');
+    } catch (e) { /* strip is optional */ }
+  }
 
   // page heads for every tool page (icon from the matching home feature card)
   const PAGEHEAD = {
@@ -1424,7 +1442,7 @@ $('yago').onclick = async () => {
       const r = await apiFetch('/v1/dashboard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
       const en = EN(), I = d.identity, T = d.today;
-      const meta = LS.get('kundali_profile_meta', {}); meta[p.id] = en ? I.moon_sign : I.moon_sign_hi; LS.set('kundali_profile_meta', meta); renderPeople();
+      const meta = LS.get('kundali_profile_meta', {}); meta[p.id] = en ? I.moon_sign : I.moon_sign_hi; LS.set('kundali_profile_meta', meta); const mi = LS.get('kundali_profile_moon', {}); mi[p.id] = I.moon_sign_index; LS.set('kundali_profile_moon', mi); renderPeople();
       const dasha = d.dasha.map(x => `<div style="display:flex;justify-content:space-between;font-size:.9rem"><span><b>${esc(en ? x.lord : x.lord_hi)}</b> <span class="muted">${esc(en ? x.level_en : x.level_hi)}</span></span><span class="muted">${esc(x.end.split('-').reverse().join('-'))} <span>तक</span></span></div><div class="bar"><i style="width:${x.percent}%"></i></div>`).join('');
       const evs = d.upcoming.map(e => `<li><b>${esc(e.date.split('-').reverse().join('-'))}</b>${esc(en ? e.en : e.hi)}</li>`).join('');
       const ss = d.sade_sati;

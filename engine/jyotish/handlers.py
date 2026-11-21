@@ -1113,3 +1113,50 @@ def sky_from_query(q: dict) -> dict:
     data = {"at": now.isoformat(timespec="seconds"), "planets": rows, "ayanamsa": "lahiri"}
     _SKY_CACHE.update(key=key, data=data)
     return data
+
+
+
+def now_from_query(q: dict) -> dict:
+    """GET /v1/now?lat=&lon=&tz= — what is running right now: choghadiya, hora, Rahu kaal / Abhijit, and the next good
+    choghadiya and hora (for the live strip on Home)."""
+    from datetime import datetime as _dt
+    from . import muhurta
+    lat, lon = float(q.get("lat", 28.61)), float(q.get("lon", 77.2)); tz = str(q.get("tz") or "Asia/Kolkata")
+    if not _tz_ok(tz):
+        raise BadRequest("unknown time zone")
+    now = _dt.now(ZoneInfo(tz)) if not q.get("at") else _dt.fromisoformat(str(q["at"])).astimezone(ZoneInfo(tz))
+    t = muhurta.day_table(now.replace(second=0, microsecond=0), lat, lon, tz)
+    if not t.get("available"):
+        return {"available": False}
+    mins = lambda s: int(s[:2]) * 60 + int(s[3:5])
+
+    def unwrap(slots):
+        out, base, prev = [], 0, None
+        for x in slots:
+            a, b = mins(x["start"]), mins(x["end"])
+            if prev is not None and a + base < prev - 1:
+                base += 1440
+            a += base; b += base
+            if b < a:
+                b += 1440
+            out.append({**x, "_a": a, "_b": b}); prev = b
+        return out
+    chog = unwrap(t["choghadiya_day"] + t["choghadiya_night"])
+    hora = unwrap(t["hora"])
+    nm = now.hour * 60 + now.minute
+    if nm < chog[0]["_a"]:
+        nm += 1440
+
+    def cur_next(rows, good):
+        cur = next((x for x in rows if x["_a"] <= nm < x["_b"]), None)
+        nxt = next((x for x in rows if x["_a"] > nm and good(x)), None)
+        clean = lambda x: {k: v for k, v in x.items() if not k.startswith("_")} | {"mins_left": x["_b"] - nm} if x else None
+        cl2 = lambda x: {k: v for k, v in x.items() if not k.startswith("_")} | {"mins_to": x["_a"] - nm} if x else None
+        return clean(cur), cl2(nxt)
+    c_cur, c_next = cur_next(chog, lambda x: x["nature"] == "good")
+    h_cur, h_next = cur_next(hora, lambda x: x["nature"] == "good")
+    inside = lambda w: bool(w) and mins(w["start"]) <= now.hour * 60 + now.minute < mins(w["end"])
+    from .muhurta import CHOG_NATURE  # noqa: F401  (kept for callers that import it from here)
+    return {"available": True, "at": now.strftime("%H:%M"), "vara": t["vedic_vara"], "choghadiya": c_cur, "next_good_choghadiya": c_next,
+            "hora": h_cur, "next_good_hora": h_next, "rahu_kaal_now": inside(t["rahu_kaal"]), "abhijit_now": inside(t["abhijit"]),
+            "rahu_kaal": t["rahu_kaal"], "abhijit": t["abhijit"]}

@@ -135,6 +135,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(200, handlers.panchang_month_from_query(q))
             except handlers.BadRequest as exc:
                 return self._json(400, {"detail": str(exc)})
+        if path == "/v1/now":
+            try:
+                from urllib.parse import parse_qs
+                return self._json(200, handlers.now_from_query({k: v[0] for k, v in parse_qs(self.path.partition('?')[2]).items()}))
+            except (handlers.BadRequest, ValueError) as exc:
+                return self._json(400, {"detail": str(exc)})
         if path == "/v1/push/key":
             return self._json(200, handlers.push_key())
         if path == "/v1/sky":

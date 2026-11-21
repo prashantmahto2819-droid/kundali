@@ -221,3 +221,12 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .pushcard h4 { margin:0 0 4px; } .pushcard p { margin:0 0 8px; }
 .pc-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; } .pc-row label { display:flex; gap:6px; align-items:center; } .pc-row input { width:auto; } .pc-row button { width:auto; }
 @keyframes ring { 0%,86%,100% { transform:rotate(0); } 88% { transform:rotate(14deg); } 91% { transform:rotate(-12deg); } 94% { transform:rotate(8deg); } 97% { transform:rotate(-4deg); } }
+
+/* ---- right-now strip ---- */
+.nowstrip { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px; }
+.nowstrip .nc { display:inline-flex; gap:6px; align-items:center; padding:4px 10px; border-radius:99px; font-size:.84rem; border:1px solid var(--line); background:var(--card); }
+.nowstrip .nc i { font-style:normal; color:var(--muted); }
+.nowstrip .good { border-color:#2e9d5b; background:color-mix(in srgb,#2e9d5b 12%,var(--card)); }
+.nowstrip .bad { border-color:#e0533d; background:color-mix(in srgb,#e0533d 12%,var(--card)); }
+.nowstrip .neutral { border-color:#c9a24a; }
+.nowstrip .alert { border-color:#e0533d; background:#e0533d; color:#fff; animation:livedot 1.8s infinite; }

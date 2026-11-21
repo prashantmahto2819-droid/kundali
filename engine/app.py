@@ -361,6 +361,14 @@ def notify_status(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/now")
+def now_running(lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata", at: str | None = None):
+    try:
+        return handlers.now_from_query({"lat": lat, "lon": lon, "tz": tz, "at": at})
+    except (handlers.BadRequest, ValueError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
 @app.get("/v1/push/key")
 def push_key():
     return handlers.push_key()
