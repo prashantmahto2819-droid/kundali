@@ -1107,6 +1107,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21c', em: '📅', t: 'मुहूर्त सीधे फ़ोन के कैलेंडर में', d: 'मुहूर्त और शुभ लग्न के समय Google/iPhone कैलेंडर में जोड़िए, 30 मिनट पहले याद दिलाएगा।', go: 't-muhurta'},
     {id: '2026-11-21b', em: '⏱️', t: 'अभी कौन-सा चौघड़िया और होरा', d: 'होम के दिन-चक्र में अभी का चौघड़िया, होरा और अगला शुभ समय।', go: 't-home'},
     {id: '2026-11-21a', em: '🔔', t: 'फ़ोन पर रोज़ पंचांग की सूचना', d: 'WhatsApp के बिना हर सुबह ब्राउज़र/ऐप की सूचना।', go: 't-home'},
     {id: '2026-11-20c', em: '🗣️', t: 'तमिल और मलयालम में पंचांग', d: 'WhatsApp और "आज" टैब में अब तमिल व मलयालम भी।', go: 't-today'},
@@ -1994,7 +1995,7 @@ async function openReport(path, body) {
       if (window.lastBody) body.chart = window.lastBody;
       const r = await apiFetch('/v1/muhurta', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
       const d = await r.json(); if (!r.ok) throw new Error(d.detail || 'त्रुटि');
-      const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span><br><button type="button" class="ghost mulagna" data-date="${x.date}" style="width:auto;padding:2px 8px;font-size:.8rem">लग्न-शुद्धि</button></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span></td></tr>`;
+      const row = x => `<tr><td><b>${esc(x.date)}</b><br><span class="muted">${esc(x.vara_hi)}</span><br><button type="button" class="ghost mulagna" data-date="${x.date}" style="width:auto;padding:2px 8px;font-size:.8rem">लग्न-शुद्धि</button></td><td><b class="${x.score >= 60 ? 'yes' : ''}">${x.score}</b></td><td>${esc(x.tithi_hi)}<br>${esc(x.nakshatra_hi)} · ${esc(x.yoga_hi)}</td><td class="muted">${x.reasons_hi.map(esc).join('; ')}</td><td>${x.good_windows.map(w => `${esc(w.name)} ${esc(w.start)}–${esc(w.end)}`).join('<br>')}${x.abhijit ? `<br>अभिजित ${esc(x.abhijit.start)}–${esc(x.abhijit.end)}` : ''}<br><span class="muted">राहु काल ${esc(x.rahu_kaal.start)}–${esc(x.rahu_kaal.end)}</span>${(() => { const w = x.good_windows[0] || x.abhijit; return w ? '<br>' + window.calLinks({title: `${d.activity_hi} मुहूर्त${w.name ? ' — ' + w.name : ''}`, date: x.date, start: w.start, end: w.end, tz: body.tz, details: `${x.tithi_hi}, ${x.nakshatra_hi} · स्कोर ${x.score}`}) : ''; })()}</td></tr>`;
       window._lastMuhurta = body;
       $('muout').innerHTML = `<p><b>${esc(d.activity_hi)}</b>: ${esc(d.from)} से ${d.days} दिन${body.chart ? ' (ताराबल-चंद्रबल सहित)' : ''}</p>
         <div class="actions"><button type="button" class="ghost" onclick="openReport('/v1/muhurta/report', window._lastMuhurta).catch(e => { document.getElementById('muerr').textContent = 'त्रुटि: ' + e.message; })">मुहूर्त PDF (प्रिंट)</button></div>
@@ -2018,11 +2019,34 @@ async function openReport(path, body) {
       host.innerHTML = `<h4 style="margin:12px 0 4px">${esc(date)} — लग्न-सारणी और लग्न-शुद्धि</h4>
         ${Object.keys(d.chandrabala || {}).length || Object.keys(d.tarabala || {}).length ? `<p>${Object.entries(d.chandrabala || {}).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: चंद्रबल ${c.count}वाँ (${esc(c.day_moon_sign_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')} ${Object.entries(d.tarabala || {}).map(([w, c]) => `<span class="chip ${c.ok ? 'yes' : 'muted'}">${w === 'groom' ? 'वर' : 'वधू'}: ताराबल <span>${esc(c.tara_hi)}</span> (${c.count}वाँ, ${esc(c.day_nakshatra_hi)}) ${c.ok ? '✓' : '✗'}</span>`).join(' ')}</p>` : ''}
         <p class="muted" style="font-size:.85rem">अभिजित ${d.abhijit ? `${esc(d.abhijit.start)}–${esc(d.abhijit.end)}` : '—'} · राहु काल ${d.rahu_kaal ? `${esc(d.rahu_kaal.start)}–${esc(d.rahu_kaal.end)}` : '—'} · शुभ चौघड़िया: ${d.good_choghadiya.map(c => `${esc(c.name)} ${esc(c.start)}–${esc(c.end)}`).join(', ')}</p>
-        <table><tr><th>समय</th><th>लग्न</th><th>स्कोर</th><th>निर्णय</th><th>दोष</th><th>बल</th></tr>${d.lagnas.map(l => `<tr${l.night ? ' class="muted"' : ''}><td>${esc(l.start)}–${esc(l.end)}${l.night ? ' <span class="muted">(रात्रि)</span>' : ''}</td><td><b>${esc(l.sign_name_hi)}</b></td><td><b>${l.score}</b></td><td><span class="chip ${V[l.verdict]}">${esc(l.verdict_hi)}</span></td><td class="muted" style="font-size:.85rem">${l.doshas.map(x => esc(x.hi)).join('; ') || '—'}</td><td class="muted" style="font-size:.85rem">${l.strengths.map(x => esc(x.hi)).join('; ') || '—'}</td></tr>`).join('')}</table>
+        <table><tr><th>समय</th><th>लग्न</th><th>स्कोर</th><th>निर्णय</th><th>दोष</th><th>बल</th></tr>${d.lagnas.map(l => `<tr${l.night ? ' class="muted"' : ''}><td>${esc(l.start)}–${esc(l.end)}${l.night ? ' <span class="muted">(रात्रि)</span>' : ''}${l.verdict === 'shubh' ? '<br>' + window.calLinks({title: `मुहूर्त — ${l.sign_name_hi} लग्न`, date, start: l.start, end: l.end, tz: base.tz, details: `${l.sign_name_hi} लग्न, स्कोर ${l.score}`}) : ''}</td><td><b>${esc(l.sign_name_hi)}</b></td><td><b>${l.score}</b></td><td><span class="chip ${V[l.verdict]}">${esc(l.verdict_hi)}</span></td><td class="muted" style="font-size:.85rem">${l.doshas.map(x => esc(x.hi)).join('; ') || '—'}</td><td class="muted" style="font-size:.85rem">${l.strengths.map(x => esc(x.hi)).join('; ') || '—'}</td></tr>`).join('')}</table>
         <div class="muted" style="font-size:.8rem">${esc(d.note_hi)}</div>`;
       host.scrollIntoView({behavior: 'smooth', block: 'start'});
     } catch (err) { host.innerHTML = `<div style="color:#c62828">त्रुटि: ${esc(err.message)}</div>`; }
   }
+})();
+
+// ---- "add to calendar" links for a time window (Google Calendar + .ics for iPhone/Outlook) ----
+(function calendarLinks() {
+  function tzOff(tz, y, m, d, hh, mm) {
+    try { const v = new Intl.DateTimeFormat('en-US', {timeZone: tz, timeZoneName: 'longOffset'}).formatToParts(new Date(Date.UTC(y, m - 1, d, hh, mm))).find(p => p.type === 'timeZoneName').value;
+      const g = /GMT([+-])(\d{1,2}):?(\d{2})?/.exec(v); return g ? (g[1] === '-' ? -1 : 1) * (+g[2] * 60 + +(g[3] || 0)) : 0; } catch (e) { return 330; }
+  }
+  function stamp(date, hm, tz, plusDay) {
+    const [y, m, d] = date.split('-').map(Number), [h, mi] = hm.split(':').map(Number);
+    const t = Date.UTC(y, m - 1, d, h, mi) - tzOff(tz, y, m, d, h, mi) * 60000 + (plusDay ? 86400000 : 0);
+    return new Date(t).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  }
+  const icsEsc = t => String(t).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  // ev: {title, date: 'YYYY-MM-DD', start: 'HH:MM', end: 'HH:MM', tz, details}
+  window.calLinks = ev => {
+    const s = stamp(ev.date, ev.start, ev.tz), e = stamp(ev.date, ev.end, ev.tz, ev.end <= ev.start);
+    const g = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(ev.title) + '&dates=' + s + '/' + e + '&details=' + encodeURIComponent((ev.details || '') + '\n' + location.origin);
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//kundali//muhurta//HI', 'BEGIN:VEVENT', `UID:${s}-${Math.random().toString(36).slice(2)}@kundali`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`,
+      `DTSTART:${s}`, `DTEND:${e}`, `SUMMARY:${icsEsc(ev.title)}`, `DESCRIPTION:${icsEsc(ev.details || '')}`, 'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', `DESCRIPTION:${icsEsc(ev.title)}`, 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    return `<span class="callinks">📅 <a href="${g}" target="_blank" rel="noopener">Google</a> · <a href="${href}" download="muhurta-${ev.date}.ics">iPhone/Outlook</a></span>`;
+  };
 })();
 
 // ---- Prashna (KP horary)

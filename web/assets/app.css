@@ -230,3 +230,5 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .nowstrip .bad { border-color:#e0533d; background:color-mix(in srgb,#e0533d 12%,var(--card)); }
 .nowstrip .neutral { border-color:#c9a24a; }
 .nowstrip .alert { border-color:#e0533d; background:#e0533d; color:#fff; animation:livedot 1.8s infinite; }
+
+.callinks { font-size:.8rem; white-space:nowrap; } .callinks a { color:var(--accent); font-weight:600; text-decoration:none; }

@@ -147,3 +147,4 @@ Tarot (78 cards, 3 spreads), numerology (moolank, bhagyank, name numbers, Lo Shu
 - **Festival calendar feed**: `/tyohar/<year>.ics` (all vrats/festivals as all-day events, refreshes weekly) with "Google Calendar में जोड़ें", iPhone/Outlook (webcal) and download buttons on the year page.
 - **Right-now strip** on Home's day card (`GET /v1/now`): running choghadiya and hora with minutes left, next good choghadiya, and a red "Rahu kaal now" / green "Abhijit now" flag; refreshed every minute.
 - Push notifications include the Moon-sign rashifal score of the active dashboard profile.
+- **Muhurta → calendar**: every muhurta day and every auspicious lagna slot has "📅 Google · iPhone/Outlook" links (timed event in UTC from the place's time zone, 30-minute reminder in the .ics).
