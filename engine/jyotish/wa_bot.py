@@ -45,7 +45,17 @@ CMD = {"panchang": ("पंचांग", "panchang", "panchaang", "panchag"), "
        "language": ("भाषा", "language", "bhasha", "lang"), "settings": ("सेटिंग", "settings", "setting", "मेरी", "my"),
        "varshaphal": ("वर्षफल", "varshaphal", "varshphal", "varsha"), "numerology": ("अंक", "ank", "numerology", "mulank", "मूलांक"),
        "festival": ("त्योहार", "tyohar", "festival", "कब", "kab", "when"), "match": ("मिलान", "milan", "match", "gun", "गुण"),
-       "tarot": ("टैरो", "tarot", "card", "कार्ड"), "prashna": ("प्रश्न", "prashna", "prashn", "question", "सवाल")}
+       "tarot": ("टैरो", "tarot", "card", "कार्ड"), "prashna": ("प्रश्न", "prashna", "prashn", "question", "सवाल"),
+       "upay": ("उपाय", "upay", "upaay", "remedy", "remedies", "totka", "टोटका"), "ratna": ("रत्न", "ratna", "ratn", "gem", "gemstone", "stone", "नग"),
+       "shop": ("शॉप", "shop", "dukan", "दुकान", "kharid", "खरीद", "order")}
+UPAY_WORDS = {"नौकरी": "career", "naukri": "career", "job": "career", "career": "career", "करियर": "career", "व्यापार": "business", "business": "business", "vyapar": "business",
+              "धन": "business", "पैसा": "business", "money": "business", "विवाह": "marriage_delay", "शादी": "marriage_delay", "shadi": "marriage_delay", "marriage": "marriage_delay",
+              "दांपत्य": "married_life", "पति": "married_life", "पत्नी": "married_life", "स्वास्थ्य": "health", "health": "health", "बीमारी": "health", "पढ़ाई": "education",
+              "परीक्षा": "education", "exam": "education", "padhai": "education", "education": "education", "संतान": "children", "बच्चा": "children", "santan": "children",
+              "कोर्ट": "legal", "court": "legal", "केस": "legal", "case": "legal", "क़र्ज़": "debt", "कर्ज": "debt", "कर्ज़": "debt", "debt": "debt", "karz": "debt", "loan": "debt",
+              "तनाव": "peace", "stress": "peace", "tension": "peace", "विदेश": "foreign", "videsh": "foreign", "foreign": "foreign", "मकान": "property", "ज़मीन": "property",
+              "property": "property", "शत्रु": "enemies", "दुश्मन": "enemies", "साढ़ेसाती": "sade_sati", "शनि": "sade_sati", "sadesati": "sade_sati", "shani": "sade_sati",
+              "मांगलिक": "mangal_dosha", "manglik": "mangal_dosha", "mangal": "mangal_dosha", "कालसर्प": "kaal_sarp", "kalsarp": "kaal_sarp", "पितृ": "pitru", "pitru": "pitru"}
 PRASHNA_TOPICS = {"विवाह": "marriage", "शादी": "marriage", "marriage": "marriage", "shadi": "marriage", "नौकरी": "job", "job": "job", "naukri": "job", "व्यापार": "business", "business": "business", "vyapar": "business",
                   "धन": "money", "पैसा": "money", "money": "money", "paisa": "money", "वसूली": "money", "संपत्ति": "property", "मकान": "property", "property": "property", "ghar": "property", "घर": "property",
                   "शिक्षा": "education", "परीक्षा": "education", "exam": "education", "education": "education", "padhai": "education", "संतान": "children", "बच्चा": "children", "children": "children", "santan": "children",
@@ -216,6 +226,8 @@ def menu_list(hi: bool) -> dict:
             ("cmd:vrat", "व्रत-पर्व" if hi else "Vrats & festivals", "इस सप्ताह" if hi else "this week"),
             ("cmd:muhurta:marriage", "विवाह मुहूर्त" if hi else "Marriage muhurta", "अगले 30 दिन" if hi else "next 30 days"),
             ("cmd:muhurta:griha_pravesh", "गृह प्रवेश मुहूर्त" if hi else "Griha pravesh muhurta", "अगले 30 दिन" if hi else "next 30 days"),
+            ("cmd:upay", "उपाय" if hi else "Remedies", "नौकरी, विवाह, क़र्ज़…" if hi else "job, marriage, debt…"),
+            ("cmd:ratna", "राशि रत्न" if hi else "Lucky gemstone", "आपकी राशि/लग्न से" if hi else "by your sign/lagna"),
             ("cmd:start", "रोज़ सुबह पंचांग पाइए" if hi else "Daily morning panchang", "सब्सक्राइब" if hi else "subscribe"),
             ("cmd:settings", "मेरी सेटिंग" if hi else "My settings", "शहर, समय, जन्म-विवरण, भाषा" if hi else "city, time, birth details, language"),
             ("cmd:stop", "रोज़ का संदेश बंद" if hi else "Stop daily message", "" )]
@@ -625,6 +637,12 @@ def answer(phone: str, text: str, name: str = "") -> str:
             return reply_tarot(phone, text, words, hi)
         if cmd == "prashna":
             return reply_prashna(sub, text, words, hi)
+        if cmd == "upay":
+            return reply_upay(sub, text, words, hi)
+        if cmd == "ratna":
+            return reply_ratna(sub, text, words, hi)
+        if cmd == "shop":
+            return reply_shop(hi)
     except Exception as exc:                        # never leave a sender without an answer
         return ("क्षमा करें, यह अभी नहीं बन सका (" + type(exc).__name__ + ")। *मदद* लिखकर विकल्प देखिए।" if hi else
                 "Sorry, that could not be prepared (" + type(exc).__name__ + "). Send *help* for the options.")
@@ -635,6 +653,76 @@ def answer(phone: str, text: str, name: str = "") -> str:
             return ans
     _LAST_EXTRA.update(menu_list(hi))
     return reply_help(hi, name)
+
+
+def reply_upay(sub: dict | None, text: str, words: list[str], hi: bool) -> str:
+    """उपाय नौकरी / upay marriage — remedy plan from the subscriber's saved birth details (or the Moon sign / general)."""
+    from . import upay
+    key = next((UPAY_WORDS[w] for w in words if w in UPAY_WORDS), None)
+    if not key:
+        names = " · ".join(f"*{v['hi'] if hi else v['en']}*" for v in list(upay.PROBLEMS.values())[:12])
+        return ("किस समस्या का उपाय चाहिए? जैसे: *उपाय नौकरी*, *उपाय विवाह*, *उपाय क़र्ज़*, *उपाय साढ़ेसाती*\n\n" + names if hi else
+                "Which problem? e.g. *upay job*, *upay marriage*, *upay debt*, *upay shani*\n\n" + names)
+    birth = _birth_from(sub, text, words)
+    chart = None
+    if birth:
+        from .handlers import chart_from_payload
+        chart = chart_from_payload(birth)
+    ms = None if chart else next((SIGN_WORDS[w] for w in words if w in SIGN_WORDS), sub.get("moon_sign") if sub else None)
+    r = upay.plan(key, chart, ms)
+    out = [f"🪔 *{r['problem_hi'] if hi else r['problem_en']} — {'उपाय' if hi else 'remedies'}*" + (f" ({'आपकी कुंडली से' if hi else 'from your chart'})" if r["basis"] == "chart" else "")]
+    for p in r["planets"][:3]:
+        out.append(f"\n*{p['planet_hi'] if hi else p['planet']}* — {p['why_hi'] if hi else p['why_en']}\n"
+                   f"मंत्र: {p['mantra']} ({p['count']:,})\n" if hi else
+                   f"\n*{p['planet']}* — {p['why_en']}\nMantra: {p['mantra']} ({p['count']:,})\n")
+        out[-1] += (f"{p['day_hi']} · दान: {p['daan_hi']}\n{p['deity_hi']}" if hi else f"{p['day_en']} · charity: {p['daan_en']}\n{p['deity_en']}")
+        if p["gem"]:
+            out[-1] += (f"\nरत्न: {p['gem']['hi']} (या {p['gem']['upa_hi']})" if hi else f"\nGem: {p['gem']['en']} (or {p['gem']['upa_en']})")
+    out.append("\n" + "\n".join("• " + x for x in (r["practices_hi"] if hi else r["practices_en"])[:3]))
+    if r["basis"] != "chart":
+        out.append("\n_सटीक उपाय के लिए *सेटिंग* में जन्म-विवरण जोड़िए, या लिखिए: उपाय नौकरी 15-05-1990 10:30 जबलपुर_" if hi else
+                   "\n_For a precise plan add birth details in *settings*, or send: upay job 15-05-1990 10:30 Jabalpur_")
+    out.append(f"\n{'पूरा विवरण' if hi else 'Full plan'}: {SITE}/#t-upay\n_{'परंपरागत उपाय (ड्राफ़्ट); स्वास्थ्य/क़ानूनी/आर्थिक समस्या में विशेषज्ञ से भी मिलें।' if hi else 'Traditional remedies (draft); also see the right professional.'}_")
+    return "\n".join(out)
+
+
+def reply_ratna(sub: dict | None, text: str, words: list[str], hi: bool) -> str:
+    """रत्न [राशि] — lucky gemstones by lagna (saved birth details) or the Moon sign given."""
+    from . import upay
+    birth = _birth_from(sub, text, words)
+    sign = next((SIGN_WORDS[w] for w in words if w in SIGN_WORDS), None)
+    if birth and sign is None:
+        from .handlers import ratna_from_payload
+        r = ratna_from_payload(birth)
+    elif sign is not None or (sub and sub.get("moon_sign") is not None):
+        r = upay.ratna(None, sign if sign is not None else int(sub["moon_sign"]))
+    else:
+        return ("अपनी राशि लिखिए, जैसे: *रत्न मेष* — या जन्म-विवरण: *रत्न 15-05-1990 10:30 जबलपुर*" if hi else
+                "Send your sign, e.g. *ratna mesh* — or birth details: *ratna 15-05-1990 10:30 Jabalpur*")
+    out = ["💎 *" + ("राशि रत्न" if hi else "Lucky gemstones") + "*"]
+    if r.get("by_lagna"):
+        L = r["by_lagna"]
+        out.append(("लग्न " + L["sign_hi"] + ":" if hi else "Lagna " + L["sign_en"] + ":"))
+        out += [f"• {s['gem_hi'] if hi else s['gem_en']} — {s['role_hi'] if hi else s['role_en']} ({s['metal_hi']}, {s['finger_hi']})" for s in L["stones"]]
+        if L["avoid"]:
+            out.append(("⚠️ न पहनें: " if hi else "⚠️ Avoid: ") + ", ".join(a["gem_hi"] if hi else a["gem_en"] for a in L["avoid"]))
+    if r.get("by_moon"):
+        m = r["by_moon"]; st = m["stone"]
+        out.append((f"चंद्र राशि {m['sign_hi']}: *{st['gem_hi']}* (उपरत्न {st['upa_hi']})" if hi else f"Moon sign {m['sign_en']}: *{st['gem_en']}* (substitute {st['upa_en']})"))
+    out.append("\n" + ("धारण विधि: " if hi else "How to wear: ") + (r["how_hi"] if hi else r["how_en"])[0])
+    out.append(f"\n{'प्रमाणित रत्न' if hi else 'Certified stones'}: {SITE}/#t-shop\n_{'पहनने से पहले योग्य ज्योतिषी को पूरी कुंडली दिखाएँ।' if hi else 'Show your full chart to an astrologer before wearing one.'}_")
+    return "\n".join(out)
+
+
+def reply_shop(hi: bool) -> str:
+    from . import shop as _shop
+    try:
+        items = _shop.products({})["products"][:6]
+    except Exception:
+        items = []
+    lines = [f"• {p['name_hi'] if hi else (p.get('name_en') or p['name_hi'])} — ₹{p['price']:,.0f}/{p['unit_hi'] if hi else p['unit_en']}" for p in items]
+    return ("🛍️ *रत्न शॉप*\n" + ("\n".join(lines) + "\n" if lines else "") + f"\nपूरी सूची और ऑर्डर: {SITE}/#t-shop\nUPI या कैश ऑन डिलीवरी।" if hi else
+            "🛍️ *Gem shop*\n" + ("\n".join(lines) + "\n" if lines else "") + f"\nFull list and orders: {SITE}/#t-shop\nUPI or cash on delivery.")
 
 
 def reply_ai(phone: str, text: str, sub: dict | None, hi: bool) -> str | None:

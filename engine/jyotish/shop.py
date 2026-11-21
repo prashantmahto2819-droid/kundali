@@ -245,7 +245,22 @@ def admin(payload: dict) -> dict:
         db.execute("UPDATE shop_orders SET status=?, pay_ref=COALESCE(?, pay_ref), track=COALESCE(?, track), history=?, updated=? WHERE id=?",
                    (st, payload.get("pay_ref") or None, payload.get("track") or None, json.dumps(hist, ensure_ascii=False), _now(), oid))
         db.commit()
-        return {"id": oid, "status": st}
+        told = False
+        if payload.get("notify", True) and st != "new":
+            o = shop()._rows("SELECT phone, total, track FROM shop_orders WHERE id=?", (oid,))[0]
+            msg = {"paid": f"✅ आपका ऑर्डर *{oid}* — ₹{o['total']:,.0f} का भुगतान मिल गया। जल्द पैक करके भेजेंगे। 🙏",
+                   "packed": f"📦 आपका ऑर्डर *{oid}* पैक हो गया है, जल्द रवाना होगा।",
+                   "shipped": f"🚚 आपका ऑर्डर *{oid}* भेज दिया गया है।" + (f"\nट्रैकिंग: {o['track']}" if o.get("track") else ""),
+                   "delivered": f"🎉 आपका ऑर्डर *{oid}* पहुँच गया। धारण विधि ऐप के 'उपाय व रत्न' में देखें। धन्यवाद! 🙏",
+                   "cancelled": f"आपका ऑर्डर *{oid}* रद्द कर दिया गया है। कोई प्रश्न हो तो इसी नंबर पर लिखें।"}[st]
+            try:
+                sender = payload.get("_sender")
+                if sender is None:
+                    from .notify import send_whatsapp as sender
+                told = bool(sender(o["phone"], msg).get("ok"))
+            except Exception:
+                told = False
+        return {"id": oid, "status": st, "customer_notified": told}
     raise ValueError("unknown action")
 
 

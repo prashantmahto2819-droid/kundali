@@ -1509,12 +1509,31 @@ $('yago').onclick = async () => {
           <div class="card"><b>जन्मदिन</b><div style="font-size:1.6rem;font-weight:700;color:var(--accent)">${d.birthday.days === 0 ? (en ? 'Today! 🎂' : 'आज! 🎂') : d.birthday.days + ' <span style="font-size:1rem">' + (en ? 'days' : 'दिन') + '</span>'}</div><div class="muted">${esc(d.birthday.date.split('-').reverse().join('-'))} · ${d.birthday.age} <span>वर्ष</span></div><div class="actions"><button type="button" class="ghost" id="dash_varsha">वर्षफल देखिए</button></div></div>
         </div>
         <div class="card"><b>आगामी छह महीने में बदलाव</b>${evs ? `<ul class="tl">${evs}</ul>` : '<span class="muted">कोई बड़ा बदलाव नहीं।</span>'}</div>
-        <div class="actions"><button type="button" id="dash_open">पूरी कुंडली खोलिए</button><button type="button" class="ghost" id="dash_card">कुंडली कार्ड साझा करें</button><button type="button" class="ghost" id="dash_wa">इनके लिए WhatsApp अपडेट</button><button type="button" class="ghost" id="dash_del">प्रोफ़ाइल हटाएँ</button></div>`;
+        <div class="actions"><button type="button" id="dash_open">पूरी कुंडली खोलिए</button><button type="button" class="ghost" id="dash_card">कुंडली कार्ड साझा करें</button><button type="button" class="ghost" id="dash_wa">इनके लिए WhatsApp अपडेट</button><button type="button" class="ghost" id="dash_del">प्रोफ़ाइल हटाएँ</button></div>
+        ${profiles().length > 1 ? `<div class="card fmatch"><b>💍 <span>परिवार में गुण मिलान</span></b><div class="pc-row" style="margin-top:6px"><span>${esc(p.name || '')} <span>के साथ</span></span><select id="fm_other" style="width:auto">${profiles().filter(x => x.id !== p.id).map(x => `<option value="${esc(x.id)}">${esc(x.name || x.date)}${x.rel ? ' (' + esc(x.rel) + ')' : ''}</option>`).join('')}</select>
+          <label class="ck"><input type="radio" name="fm_role" value="boy" checked> <span>ये वर हैं</span></label><label class="ck"><input type="radio" name="fm_role" value="girl"> <span>ये वधू हैं</span></label><button type="button" id="fm_go">मिलान देखिए</button></div><div id="fm_out"></div></div>` : ''}`;
       const loadInto = () => { $('name').value = p.name; $('date').value = p.date; $('time').value = p.time; $('lat').value = p.lat; $('lon').value = p.lon; $('tz').value = p.tz; $('citysearch').value = p.place || ''; };
       $('dash_open').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); };
       $('dash_varsha').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => window.showSub && window.showSub('s-varsha'), 1500); };
       $('dash_wa').onclick = () => { loadInto(); window.showTab('t-kundali'); $('f').requestSubmit(); setTimeout(() => $('wacard')?.scrollIntoView({behavior: 'smooth'}), 1200); };
       $('dash_card').onclick = async () => { try { const rr = await apiFetch('/v1/chart/card.png', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...body, lang: en ? 'en' : 'hi', chart_style: window.chartStyle})}); const blob = await rr.blob(); const file = new File([blob], 'kundali.png', {type: 'image/png'}); if (navigator.canShare && navigator.canShare({files: [file]})) await navigator.share({files: [file]}); else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'kundali.png'; a.click(); } } catch (e) {} };
+      if ($('fm_go')) $('fm_go').onclick = async () => {
+        const q = profiles().find(x => x.id === $('fm_other').value); if (!q) return;
+        const P = x => ({name: x.name || null, date: x.date, time: x.time, tz: x.tz, lat: +x.lat, lon: +x.lon});
+        const me = document.querySelector('[name=fm_role]:checked').value === 'boy';
+        const pair = me ? {boy: P(p), girl: P(q)} : {boy: P(q), girl: P(p)};
+        $('fm_out').innerHTML = '<div class="muted">…</div>';
+        try {
+          const r = await apiFetch('/v1/match', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(pair)}); const m = await r.json(); if (!r.ok) throw new Error(m.detail);
+          const mg = m.manglik || {}, has = x => x && (x.from_lagna || x.from_moon);
+          $('fm_out').innerHTML = `<div class="fmrow">${ringSvg(Math.round(m.total / m.max * 100), 76)}<div><b style="font-size:1.3rem">${m.total} / ${m.max}</b> ${m.total_with_parihara != null && m.total_with_parihara !== m.total ? `<span class="muted">(<span>परिहार के बाद</span> ${m.total_with_parihara})</span>` : ''}<br><span>${esc(en ? (m.band_en || '') : (m.band_hi || ''))}</span>
+            <div class="muted small"><span>मंगल दोष</span>: <span>वर</span> ${has(mg.boy) ? '⚠️' : '✓'} · <span>वधू</span> ${has(mg.girl) ? '⚠️' : '✓'}</div></div></div>
+            <div class="kbars">${m.kootas.map(k => `<div><span>${esc(en ? k.name : (k.name_hi || k.name))}</span><i><b style="width:${k.score / k.max * 100}%;background:${k.score >= k.max / 2 ? '#2e9d5b' : '#e0533d'}"></b></i><span>${k.score}/${k.max}</span></div>`).join('')}</div>
+            <button type="button" class="ghost" id="fm_full">पूरा मिलान खोलिए</button>`;
+          $('fm_full').onclick = () => { const fill = (k, x) => { $(k + '_name').value = x.name || ''; $(k + '_date').value = x.date; $(k + '_time').value = x.time; $(k + '_lat').value = x.lat; $(k + '_lon').value = x.lon; $(k + '_tz').value = x.tz; };
+            fill('b', pair.boy); fill('g', pair.girl); window.showTab('t-match'); $('mf').requestSubmit(); };
+        } catch (e) { $('fm_out').innerHTML = '⚠️ ' + esc(e.message); }
+      };
       $('dash_del').onclick = () => { if (!confirm('यह प्रोफ़ाइल हटाएँ?')) return; window._unsyncProfile(p); LS.set('kundali_profiles', profiles().filter(x => x.id !== p.id)); LS.set('kundali_profile_active', profiles()[0]?.id || null); dashKey = ''; renderPeople(); loadDash(); if (!profiles().length) $('dash_view').innerHTML = '<div class="card muted"><span>कोई प्रोफ़ाइल नहीं।</span></div>'; };
     } catch (e) { $('dash_view').innerHTML = `<div class="card err">${esc(e.message)}</div>`; }
   }

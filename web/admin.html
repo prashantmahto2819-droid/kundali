@@ -166,7 +166,7 @@ function showOrders() {
 }
 $('o_filter').onchange = showOrders;
 $('orders').onclick = async e => { const b = e.target.closest('[data-osave]'); if (!b) return; const id = b.dataset.osave, st = document.querySelector(`[data-os="${id}"]`).value, ref = document.querySelector(`[data-ref="${id}"]`).value.trim();
-  try { await post('/v1/shop/admin', {action: 'order_status', id, status: st, pay_ref: st === 'paid' ? ref : undefined, track: st === 'shipped' ? ref : undefined}); loadShop(); } catch (err) { alert(err.message); } };
+  try { const d = await post('/v1/shop/admin', {action: 'order_status', id, status: st, pay_ref: st === 'paid' ? ref : undefined, track: st === 'shipped' ? ref : undefined}); if (st !== 'new') alert(d.customer_notified ? 'ग्राहक को WhatsApp भेजा गया ✓' : 'स्थिति सहेजी (WhatsApp नहीं गया — Relay सेट नहीं?)'); loadShop(); } catch (err) { alert(err.message); } };
 const pf = {id: 'p_id', name_hi: 'p_name_hi', name_en: 'p_name_en', category: 'p_cat', planet: 'p_planet', price: 'p_price', mrp: 'p_mrp', unit: 'p_unit', min_qty: 'p_min', max_qty: 'p_max', step: 'p_step', stock: 'p_stock', origin: 'p_origin', certificate: 'p_cert', sort: 'p_sort', desc_hi: 'p_desc_hi', desc_en: 'p_desc_en'};
 function fillForm(p) { for (const [k, id] of Object.entries(pf)) $(id).value = p ? (p[k] ?? '') : ({min_qty: 1, max_qty: 10, step: 1, sort: 0}[k] ?? ''); if (!p) $('p_cat').selectedIndex = 0; $('p_active').value = p ? String(p.active) : '1';
   $('p_imgs').innerHTML = p ? p.images.map(u => `<span style="position:relative"><img src="${API}${esc(u)}" style="width:70px;height:70px;object-fit:cover;border-radius:10px"><button type="button" class="sm" data-rmimg="${esc(u)}" style="position:absolute;top:0;right:0">✕</button></span>`).join('') : ''; }

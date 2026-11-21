@@ -70,7 +70,9 @@ def test_shop_catalogue_order_and_admin(store):
     assert r["owner_alerted"] and sent[0][0] == "919800000000" and r["order_id"] in sent[0][1] and "wa.me/919800000000" in r["whatsapp_link"]
     st = handlers.shop_status_from_payload({"order_id": r["order_id"], "phone": "9876543210"})
     assert st["status"] == "new" and st["items"][0]["qty"] == 5.25
-    handlers.shop_admin_from_payload({"action": "order_status", "id": r["order_id"], "status": "paid", "pay_ref": "UPI123"}, H)
+    told = []
+    res = shop.admin({"action": "order_status", "id": r["order_id"], "status": "paid", "pay_ref": "UPI123", "_sender": lambda ph, m: told.append((ph, m)) or {"ok": True}})
+    assert res["customer_notified"] and told[0][0] == "919876543210" and "भुगतान मिल गया" in told[0][1]
     lst = handlers.shop_admin_from_payload({"action": "list"}, H)
     o = lst["orders"][0]
     assert o["status"] == "paid" and o["pay_ref"] == "UPI123" and len(o["history"]) == 2
@@ -80,3 +82,18 @@ def test_shop_catalogue_order_and_admin(store):
     assert small["shipping"] == 60 and small["total"] == 311
     with pytest.raises(handlers.BadRequest):
         handlers.shop_status_from_payload({"order_id": r["order_id"], "phone": "9000000000"})
+
+
+def test_bot_upay_ratna_shop(monkeypatch):
+    from jyotish import notify, wa_bot
+    monkeypatch.setattr(notify, "subs", lambda: type("S", (), {"get": staticmethod(lambda p: None)})())
+    a = wa_bot.answer("919811111111", "उपाय नौकरी 15-05-1990 10:30 जबलपुर")
+    assert "नौकरी / करियर में रुकावट — उपाय" in a and "आपकी कुंडली से" in a and "मंत्र: ॐ" in a
+    g = wa_bot.answer("919811111111", "उपाय विवाह धनु")
+    assert "विवाह में देरी" in g and "सटीक उपाय" in g
+    assert "किस समस्या" in wa_bot.answer("919811111111", "उपाय")
+    r = wa_bot.answer("919811111111", "रत्न 15-05-1990 10:30 जबलपुर")
+    assert "मोती" in r and "न पहनें" in r and "नीलम" in r
+    assert "पुखराज" in wa_bot.answer("919811111111", "रत्न धनु")
+    assert "Lucky gemstones" in wa_bot.answer("919811111111", "ratna mesh") and "Red coral" in wa_bot.answer("919811111111", "ratna mesh")
+    assert "रत्न शॉप" in wa_bot.answer("919811111111", "शॉप")

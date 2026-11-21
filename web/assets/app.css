@@ -284,3 +284,8 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .kact:empty { display:none; } .kfs, .kbtns { display:flex; flex-wrap:wrap; gap:6px; } .kbtns button { width:auto; padding:7px 12px; }
 .kf { padding:3px 10px; border-radius:99px; font-size:.82rem; font-weight:600; } .kf.bad { background:color-mix(in srgb,#e0533d 14%,transparent); color:#b8331f; } .kf.good { background:color-mix(in srgb,#2e9d5b 14%,transparent); color:#1f7a45; }
 #sh_checkout textarea, #sh_checkout input { width:100%; }
+
+.fmatch { margin-top:12px; } .fmatch .ck { display:inline-flex; gap:4px; align-items:center; }
+.fmrow { display:flex; gap:14px; align-items:center; margin:10px 0; }
+.kbars { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:6px 16px; margin:8px 0; font-size:.86rem; }
+.kbars > div { display:grid; grid-template-columns:96px 1fr 44px; gap:8px; align-items:center; } .kbars i { height:8px; border-radius:6px; background:color-mix(in srgb,var(--accent) 12%,transparent); overflow:hidden; } .kbars i b { display:block; height:100%; border-radius:6px; }
