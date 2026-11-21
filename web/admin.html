@@ -29,7 +29,7 @@
 <main>
 <nav class="tabs" id="tabs">
   <button type="button" data-t="t-home">सार</button><button type="button" class="ghost" data-t="t-subs">WhatsApp सब्सक्राइबर</button><button type="button" class="ghost" data-t="t-log">संदेश लॉग</button>
-  <button type="button" class="ghost" data-t="t-consult">परामर्श व ज्योतिषी</button><button type="button" class="ghost" data-t="t-wallet">वॉलेट</button><button type="button" class="ghost" data-t="t-ai">AI</button><button type="button" class="ghost" data-t="t-over">त्योहार सुधार</button>
+  <button type="button" class="ghost" data-t="t-consult">परामर्श व ज्योतिषी</button><button type="button" class="ghost" data-t="t-wallet">वॉलेट</button><button type="button" class="ghost" data-t="t-shop">🛍️ दुकान</button><button type="button" class="ghost" data-t="t-ai">AI</button><button type="button" class="ghost" data-t="t-over">त्योहार सुधार</button>
 </nav>
 <div id="err" class="err"></div>
 
@@ -65,6 +65,24 @@
 <section class="tab" id="t-wallet"><div class="card"><b>टॉप-अप दर्ज करें</b> <span class="muted" id="paidflag"></span><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><input id="w_phone" placeholder="91XXXXXXXXXX"><input id="w_amt" type="number" placeholder="राशि ₹" style="max-width:120px"><input id="w_ref" placeholder="UPI संदर्भ"><input id="w_note" placeholder="टिप्पणी" style="flex:1 1 160px"><button type="button" id="w_add">जोड़ें</button></div><div id="w_out" class="muted"></div></div>
   <div class="card"><b>हाल के टॉप-अप</b><div class="wrap"><table id="topups"></table></div></div></section>
 
+<section class="tab" id="t-shop">
+<div class="card"><b>दुकान की सेटिंग</b> <span class="muted" id="sh_set"></span></div>
+<div class="card"><b>उत्पाद जोड़ें / बदलें</b> <span class="muted">(ID ख़ाली = नया)</span>
+<div class="grid" style="margin-top:6px">
+<label>ID<input id="p_id" placeholder="नया"></label><label>नाम (हिंदी)*<input id="p_name_hi"></label><label>Name (English)<input id="p_name_en"></label>
+<label>श्रेणी*<select id="p_cat"></select></label><label>ग्रह<select id="p_planet"><option value="">—</option></select></label>
+<label>दाम ₹ (प्रति इकाई)*<input id="p_price" type="number" min="1"></label><label>MRP ₹<input id="p_mrp" type="number"></label><label>इकाई<select id="p_unit"></select></label>
+<label>न्यूनतम मात्रा<input id="p_min" type="number" step="0.25" value="1"></label><label>अधिकतम मात्रा<input id="p_max" type="number" step="0.25" value="10"></label><label>स्टेप<input id="p_step" type="number" step="0.25" value="1"></label>
+<label>स्टॉक (ख़ाली = असीमित)<input id="p_stock" type="number"></label><label>मूल स्थान<input id="p_origin" placeholder="जैसे: श्रीलंका"></label><label>प्रमाणपत्र<input id="p_cert" placeholder="जैसे: IGI / GJEPC लैब"></label>
+<label>क्रम<input id="p_sort" type="number" value="0"></label><label>सक्रिय<select id="p_active"><option value="1">हाँ</option><option value="0">नहीं</option></select></label>
+</div>
+<label style="margin-top:8px">विवरण (हिंदी)<textarea id="p_desc_hi" rows="3"></textarea></label><label>Description (English)<textarea id="p_desc_en" rows="2"></textarea></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center"><button type="button" id="p_save">सहेजें</button><button type="button" class="ghost" id="p_new">नया फ़ॉर्म</button>
+<label style="display:inline-flex;gap:6px;align-items:center">फ़ोटो जोड़ें (सहेजने के बाद) <input type="file" id="p_img" accept="image/jpeg,image/png,image/webp" style="width:auto"></label><span id="p_out" class="muted"></span></div>
+<div id="p_imgs" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div></div>
+<div class="card"><b>उत्पाद</b><div class="wrap"><table id="prods"></table></div></div>
+<div class="card"><b>ऑर्डर</b> <select id="o_filter" style="width:auto"><option value="">सभी</option></select><div class="wrap"><table id="orders"></table></div></div>
+</section>
 <section class="tab" id="t-ai"><div class="card"><b>AI प्रदाता</b><div id="aiprov" class="muted"></div></div><div class="card"><b>आज/हाल का उपयोग</b><div class="wrap"><table id="aiuse"></table></div></div>
   <div class="card"><b>ग्रंथ-पाठ से नियम निकालिए (ड्राफ़्ट)</b><label>स्रोत<input id="x_src" placeholder="जैसे: BPHS अध्याय 24"></label><label>पाठ<textarea id="x_text" rows="6"></textarea></label><div style="margin-top:8px"><button type="button" id="x_go">निकालिए और data/rules/drafts में सेव कीजिए</button></div><pre id="x_out" style="white-space:pre-wrap;font-size:.85rem"></pre></div></section>
 
@@ -121,6 +139,46 @@ $('an_testgo').onclick = async () => { try { const d = await post('/v1/consult/a
 $('an_go').onclick = async () => { if (!confirm('सभी सक्रिय सब्सक्राइबरों को भेजें?')) return; try { const d = await post('/v1/consult/admin', {action: 'announce', text: $('an_text').value, lang: $('an_lang').value || null}); $('an_out').textContent = `${d.targets} लक्ष्य: ${d.sent} भेजे, ${d.failed} असफल`; load(); } catch (e) { $('an_out').innerHTML = `<span class="bad">${esc(e.message)}</span>`; } };
 $('t_send').onclick = async () => { try { const d = await post('/v1/consult/admin', {action: 'send_test', phone: $('t_phone').value, text: $('t_text').value}); $('t_out').innerHTML = d.ok ? '<span class="ok">भेजा गया</span>' : `<span class="bad">${esc(d.detail)}</span>`; } catch (e) { $('t_out').innerHTML = `<span class="bad">${esc(e.message)}</span>`; } };
 $('x_go').onclick = async () => { $('x_out').textContent = '…'; try { const d = await post('/v1/ai/extract_rules', {text: $('x_text').value, source: $('x_src').value, save: true}); $('x_out').textContent = `${d.count} नियम → ${d.saved_as || '(सेव नहीं)'}\n` + JSON.stringify(d.rules, null, 1); } catch (e) { $('x_out').textContent = e.message; } };
+
+// ---- दुकान ----
+let SHOP = null; const ST_HI = {new: 'नया', paid: 'भुगतान मिला', packed: 'पैक', shipped: 'भेजा', delivered: 'पहुँचा', cancelled: 'रद्द'};
+const PL = {Sun: 'सूर्य', Moon: 'चंद्र', Mars: 'मंगल', Mercury: 'बुध', Jupiter: 'गुरु', Venus: 'शुक्र', Saturn: 'शनि', Rahu: 'राहु', Ketu: 'केतु'};
+async function loadShop() {
+  try { SHOP = await post('/v1/shop/admin', {action: 'list'}); } catch (e) { $('err').textContent = e.message; return; }
+  const S = SHOP.settings;
+  $('sh_set').innerHTML = `UPI: ${S.upi_id ? esc(S.upi_id) : '<span class="bad">KUNDALI_UPI_ID सेट नहीं</span>'} · WhatsApp: ${S.whatsapp ? esc(S.whatsapp) : '<span class="bad">KUNDALI_SHOP_WHATSAPP सेट नहीं</span>'} · COD: ${S.cod ? 'हाँ' : 'नहीं'} · डिलीवरी ₹${S.shipping}${S.free_above ? ` (₹${S.free_above} से ऊपर मुफ़्त)` : ''}`;
+  if (!$('p_cat').options.length) {
+    $('p_cat').innerHTML = Object.entries(SHOP.categories).map(([k, v]) => `<option value="${k}">${esc(v[0])}</option>`).join('');
+    $('p_unit').innerHTML = Object.entries(SHOP.units).map(([k, v]) => `<option value="${k}">${esc(v[0])}</option>`).join('');
+    $('p_planet').innerHTML += SHOP.planets.map(p => `<option value="${p}">${PL[p]}</option>`).join('');
+    $('o_filter').innerHTML += SHOP.statuses.map(s => `<option value="${s}">${ST_HI[s]}</option>`).join('');
+  }
+  $('prods').innerHTML = `<tr><th>फ़ोटो</th><th>नाम</th><th>श्रेणी</th><th>ग्रह</th><th>₹</th><th>स्टॉक</th><th>सक्रिय</th><th></th></tr>` + SHOP.products.map(p => `<tr><td>${p.images[0] ? `<img src="${API}${esc(p.images[0])}" style="width:44px;height:44px;object-fit:cover;border-radius:8px">` : '—'}</td><td>${esc(p.name_hi)}<br><span class="muted">${esc(p.id)}</span></td><td>${esc(p.category_hi)}</td><td>${p.planet ? PL[p.planet] : ''}</td><td>${p.price}/${esc(p.unit_hi)}</td><td>${p.stock ?? '∞'}</td><td>${yn(p.active)}</td><td><button type="button" class="sm ghost" data-pe="${esc(p.id)}">बदलें</button></td></tr>`).join('');
+  showOrders();
+}
+function showOrders() {
+  const f = $('o_filter').value, list = SHOP.orders.filter(o => !f || o.status === f);
+  $('orders').innerHTML = `<tr><th>ऑर्डर</th><th>ग्राहक</th><th>सामान</th><th>₹</th><th>भुगतान</th><th>स्थिति</th><th>बदलें</th></tr>` + list.map(o => `<tr><td><b>${esc(o.id)}</b><br><span class="muted">${esc(o.created.slice(0, 16).replace('T', ' '))}</span></td>
+    <td>${esc(o.name)}<br><a href="https://wa.me/${esc(o.phone)}" target="_blank">+${esc(o.phone)}</a><br><span class="muted">${esc(o.address)}, ${esc(o.city || '')} ${esc(o.pincode || '')}</span>${o.note ? `<br><i>${esc(o.note)}</i>` : ''}</td>
+    <td>${o.items.map(i => `${esc(i.name_hi)} × ${i.qty} ${esc(i.unit_hi)}`).join('<br>')}</td><td>${o.total}${o.shipping ? `<br><span class="muted">(डिलीवरी ${o.shipping})</span>` : ''}</td>
+    <td>${esc(o.payment.toUpperCase())}${o.pay_ref ? `<br><span class="chip">${esc(o.pay_ref)}</span>` : ''}</td><td><span class="chip">${ST_HI[o.status] || esc(o.status)}</span>${o.track ? `<br>${esc(o.track)}` : ''}</td>
+    <td><select data-os="${esc(o.id)}">${SHOP.statuses.map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${ST_HI[s]}</option>`).join('')}</select><input data-ref="${esc(o.id)}" placeholder="UPI संदर्भ / ट्रैकिंग" style="margin-top:4px;width:150px"><button type="button" class="sm" data-osave="${esc(o.id)}" style="margin-top:4px">सहेजें</button></td></tr>`).join('');
+}
+$('o_filter').onchange = showOrders;
+$('orders').onclick = async e => { const b = e.target.closest('[data-osave]'); if (!b) return; const id = b.dataset.osave, st = document.querySelector(`[data-os="${id}"]`).value, ref = document.querySelector(`[data-ref="${id}"]`).value.trim();
+  try { await post('/v1/shop/admin', {action: 'order_status', id, status: st, pay_ref: st === 'paid' ? ref : undefined, track: st === 'shipped' ? ref : undefined}); loadShop(); } catch (err) { alert(err.message); } };
+const pf = {id: 'p_id', name_hi: 'p_name_hi', name_en: 'p_name_en', category: 'p_cat', planet: 'p_planet', price: 'p_price', mrp: 'p_mrp', unit: 'p_unit', min_qty: 'p_min', max_qty: 'p_max', step: 'p_step', stock: 'p_stock', origin: 'p_origin', certificate: 'p_cert', sort: 'p_sort', desc_hi: 'p_desc_hi', desc_en: 'p_desc_en'};
+function fillForm(p) { for (const [k, id] of Object.entries(pf)) $(id).value = p ? (p[k] ?? '') : ({min_qty: 1, max_qty: 10, step: 1, sort: 0}[k] ?? ''); if (!p) $('p_cat').selectedIndex = 0; $('p_active').value = p ? String(p.active) : '1';
+  $('p_imgs').innerHTML = p ? p.images.map(u => `<span style="position:relative"><img src="${API}${esc(u)}" style="width:70px;height:70px;object-fit:cover;border-radius:10px"><button type="button" class="sm" data-rmimg="${esc(u)}" style="position:absolute;top:0;right:0">✕</button></span>`).join('') : ''; }
+$('prods').onclick = e => { const b = e.target.closest('[data-pe]'); if (!b) return; fillForm(SHOP.products.find(p => p.id === b.dataset.pe)); window.scrollTo({top: 0, behavior: 'smooth'}); };
+$('p_new').onclick = () => fillForm(null);
+$('p_save').onclick = async () => { const p = {}; for (const [k, id] of Object.entries(pf)) p[k] = $(id).value; p.active = $('p_active').value === '1';
+  try { const d = await post('/v1/shop/admin', {action: 'save_product', product: p}); $('p_id').value = d.saved; $('p_out').innerHTML = '<span class="ok">सहेजा ✓</span>'; loadShop(); } catch (err) { $('p_out').innerHTML = `<span class="bad">${esc(err.message)}</span>`; } };
+$('p_img').onchange = async () => { const f = $('p_img').files[0]; if (!f) return; if (!$('p_id').value) { $('p_out').textContent = 'पहले उत्पाद सहेजें'; return; }
+  const data = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f); });
+  try { const d = await post('/v1/shop/admin', {action: 'upload_image', id: $('p_id').value, data}); $('p_out').innerHTML = '<span class="ok">फ़ोटो जुड़ी ✓</span>'; await loadShop(); fillForm(SHOP.products.find(p => p.id === $('p_id').value)); } catch (err) { $('p_out').innerHTML = `<span class="bad">${esc(err.message)}</span>`; } $('p_img').value = ''; };
+$('p_imgs').onclick = async e => { const b = e.target.closest('[data-rmimg]'); if (!b) return; try { await post('/v1/shop/admin', {action: 'remove_image', id: $('p_id').value, url: b.dataset.rmimg}); await loadShop(); fillForm(SHOP.products.find(p => p.id === $('p_id').value)); } catch (err) { alert(err.message); } };
+document.querySelector('#tabs [data-t="t-shop"]').addEventListener('click', loadShop);
 $('load').onclick = load; if ($('key').value) load();
 </script>
 </body>

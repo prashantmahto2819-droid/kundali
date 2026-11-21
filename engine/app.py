@@ -361,6 +361,51 @@ def notify_status(req: NotifyRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+@app.get("/v1/upay/problems")
+def upay_problems():
+    return handlers.upay_problems()
+
+
+@app.post("/v1/upay")
+def upay_plan(req: NotifyRequest):
+    return _consult_route(handlers.upay_from_payload, req)
+
+
+@app.post("/v1/ratna")
+def ratna(req: NotifyRequest):
+    return _consult_route(handlers.ratna_from_payload, req)
+
+
+@app.get("/v1/shop/products")
+def shop_products(category: str | None = None, planet: str | None = None):
+    return handlers.shop_products_from_query({"category": category, "planet": planet})
+
+
+@app.post("/v1/shop/order")
+def shop_order(req: NotifyRequest):
+    return _consult_route(handlers.shop_order_from_payload, req)
+
+
+@app.post("/v1/shop/status")
+def shop_status(req: NotifyRequest):
+    return _consult_route(handlers.shop_status_from_payload, req)
+
+
+@app.post("/v1/shop/admin")
+def shop_admin(req: NotifyRequest, request: Request):
+    return _consult_route(handlers.shop_admin_from_payload, req, request)
+
+
+@app.get("/v1/shop/img/{name}")
+def shop_img(name: str):
+    from fastapi.responses import FileResponse
+    from jyotish import shop as _shop
+    fp = _shop.image_path(name)
+    if not fp:
+        raise HTTPException(status_code=404)
+    return FileResponse(fp, headers={"Cache-Control": "public, max-age=86400"})
+
+
 @app.get("/v1/now")
 def now_running(lat: float = 28.61, lon: float = 77.2, tz: str = "Asia/Kolkata", at: str | None = None, tables: int = 0):
     try:
@@ -715,6 +760,7 @@ from fastapi.responses import Response as _Resp
 @app.get("/tyohar/{rest:path}")
 @app.get("/.well-known/assetlinks.json")
 @app.get("/privacy")
+@app.get("/ratna")
 @app.get("/terms")
 def seo_pages(request: Request):
     from jyotish import seo

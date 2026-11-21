@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved && btns.some(b => b.dataset[attr] === saved && b.style.display !== 'none')) show(saved);
     return show;
   };
-  const GROUPS = {today: ['t-home', 't-dash'], panchang: ['t-today', 't-muhurta', 't-cal'], kundali: ['t-kundali', 't-match', 't-prashna', 't-mine'], vidya: ['t-tarot', 't-vastu', 't-palm'], learn: ['t-ask', 't-consult', 't-learn']};
+  const GROUPS = {today: ['t-home', 't-dash'], panchang: ['t-today', 't-muhurta', 't-cal'], kundali: ['t-kundali', 't-match', 't-upay', 't-prashna', 't-mine'], vidya: ['t-tarot', 't-vastu', 't-palm'], learn: ['t-shop', 't-ask', 't-consult', 't-learn']};
   const groupOf = id => Object.keys(GROUPS).find(g => GROUPS[g].includes(id)) || 'kundali';
   const showGroup = g => {
     [...$('groups').querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.group === g));
@@ -602,6 +602,12 @@ function render(c) {
   }
   // doshas and remedies
   const D = c.doshas || {};
+  (() => {   // quick strip under the tiles: doshas at a glance + remedies / gemstones / shop
+    const en = (window.getLang ? window.getLang() : 'hi') === 'en', ss = c.gochara && c.gochara.sade_sati;
+    const flag = (on, hi, enl) => on ? `<span class="kf bad">${en ? enl : hi}</span>` : '';
+    const fl = flag(D.mangal && D.mangal.present, 'मंगल दोष', 'Mangal dosha') + flag(D.kaal_sarp && D.kaal_sarp.present, 'कालसर्प', 'Kaal Sarp') + flag(D.pitru && D.pitru.present, 'पितृ दोष', 'Pitru dosha') + flag(ss && ss.active, 'साढ़ेसाती', 'Sade Sati');
+    $('kact').innerHTML = `<div class="kfs">${fl || `<span class="kf good">${en ? 'No major dosha' : 'कोई बड़ा दोष नहीं'}</span>`}</div><div class="kbtns"><button type="button" data-go="t-upay">🪔 ${en ? 'Remedies' : 'उपाय'}</button><button type="button" class="ghost" data-go="t-upay" data-scroll="ratnacard">💎 ${en ? 'Which gemstone' : 'कौन-सा रत्न'}</button><button type="button" class="ghost" data-go="t-shop">🛍️ ${en ? 'Gem shop' : 'रत्न शॉप'}</button></div>`;
+  })();
   const ENM = (window.getLang ? window.getLang() : 'hi') === 'en';
   const T = (o, k) => esc(ENM && o[k + '_en'] != null ? o[k + '_en'] : o[k + '_hi']);
   const dRow = (title, d) => `<details ${d.present ? 'open' : ''}><summary>${title} <span class="chip ${d.present ? '' : 'yes'}">${d.present ? (d.partial ? '<span>आंशिक</span>' : d.level ? '<span>' + ({low: 'परिहार सहित', medium: 'मध्यम', high: 'प्रबल'}[d.level] || 'है') + '</span>' : '<span>है</span>') : '<span>नहीं</span>'}</span></summary><div><span>${T(d, 'text')}</span></div><div class="muted" style="font-size:.8rem"><span>${T(d, 'note')}</span></div></details>`;
@@ -1108,6 +1114,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21g', em: '💎', t: 'उपाय, राशि रत्न और रत्न शॉप', d: 'समस्या चुनिए — आपकी कुंडली से मंत्र, दान, व्रत; कौन-सा रत्न पहनें; प्रमाणित रत्न ऑर्डर कीजिए।', go: 't-upay'},
     {id: '2026-11-21f', em: '🧭', t: 'नया, व्यवस्थित मेन्यू', d: 'होम · पंचांग · कुंडली · विद्याएँ · सहायता; पंचांग में पूरा चौघड़िया और होरा, होम पर आपका अपना दिन।', go: 't-today'},
     {id: '2026-11-21e', em: '💍', t: 'मिलान रिपोर्ट भी 9 भाषाओं में', d: 'अष्टकूट तालिका, दोनों की राशि-नक्षत्र और मंगल दोष — क्षेत्रीय भाषा में पहला पन्ना।', go: 't-match'},
     {id: '2026-11-21d', em: '📜', t: 'कुंडली रिपोर्ट 9 भाषाओं में', d: 'मराठी, ગુજરાતી, বাংলা, తెలుగు, ಕನ್ನಡ, தமிழ், മലയാളം में जन्म पत्रिका का पहला पन्ना।', go: 't-kundali'},
@@ -1359,6 +1366,8 @@ $('yago').onclick = async () => {
     't-prashna': ['प्रश्न कुंडली', 'KP अंक (1–249) से सवाल का उत्तर'],
     't-learn': ['ज्योतिष सीखिए', '54 शब्द, 10 पाठ, प्रश्नोत्तरी'],
     't-ask': ['AI से पूछिए', 'अपनी कुंडली के आधार पर बातचीत'],
+    't-upay': ['उपाय व रत्न', 'समस्या चुनिए — आपकी कुंडली के कमज़ोर ग्रहों के अनुसार मंत्र, दान, व्रत; और राशि रत्न'],
+    't-shop': ['रत्न शॉप', 'प्रमाणित रत्न, उपरत्न, रुद्राक्ष, यंत्र — UPI या कैश ऑन डिलीवरी'],
     't-consult': ['ज्योतिषी परामर्श', 'अनुभवी ज्योतिषी से सवाल, WhatsApp पर उत्तर'],
   };
   const ICON_FALLBACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>';
@@ -2085,6 +2094,160 @@ async function openReport(path, body) {
   document.querySelectorAll('#tdchog [data-cn]').forEach(b => b.onclick = () => { mode = b.dataset.cn; document.querySelectorAll('#tdchog [data-cn]').forEach(x => x.classList.toggle('on', x === b)); render(); });
   document.querySelectorAll('#tdjump [data-j]').forEach(a => a.onclick = e => { e.preventDefault(); const t = $(a.dataset.j); if (t) window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 110, behavior: 'smooth'}); });
   setInterval(() => { if (last && document.querySelector('.tab.on')?.id === 't-today' && !document.hidden) window.loadTimeTables(...last._q); }, 60000);
+})();
+
+// ---- उपाय व रत्न: remedies for a chosen problem (from the current chart / active profile / Moon sign) and rashi ratna ----
+(function upayRatna() {
+  if (!$('up_probs')) return;
+  const E = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  const SIGNS_HI = ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 'सिंह', 'कन्या', 'तुला', 'वृश्चिक', 'धनु', 'मकर', 'कुंभ', 'मीन'];
+  const post = (u, b) => apiFetch(u, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(b)});
+  SIGNS_HI.forEach((n, i) => { $('up_moon').insertAdjacentHTML('beforeend', `<option value="${i}">${n}</option>`); $('rt_signs').insertAdjacentHTML('beforeend', `<button type="button" class="chip" data-ms="${i}">${n}</button>`); });
+  function birth() {          // the chart on screen first, then the active family profile
+    const b = window.lastBody;
+    if (b && b.date && b.lat != null) return {src: 'chart', name: b.name || '', date: b.date, time: b.time, tz: b.tz, lat: b.lat, lon: b.lon};
+    const list = LS.get('kundali_profiles', []), act = LS.get('kundali_profile_active', null), p = list.find(x => x.id === act) || list[0];
+    return p ? {src: 'profile', name: p.name || '', date: p.date, time: p.time, tz: p.tz, lat: +p.lat, lon: +p.lon} : null;
+  }
+  function basis() {
+    const b = birth();
+    $('up_moonrow').hidden = !!b;
+    $('up_basis').innerHTML = b ? `✅ <span>उपाय इस कुंडली से:</span> <b>${esc(b.name || b.date)}</b> (${esc(b.date)} ${esc(b.time)})` : '<span>कुंडली या प्रोफ़ाइल न होने पर सामान्य उपाय दिखेंगे — सटीक उपाय के लिए पहले कुंडली बनाइए।</span>';
+    return b;
+  }
+  let probs = [];
+  apiFetch('/v1/upay/problems').then(r => r.json()).then(d => { probs = d.problems; $('up_probs').innerHTML = probs.map(p => `<button type="button" class="chip" data-p="${p.key}">${esc(p.hi)}</button>`).join(''); });
+  const shopBtn = pl => `<button type="button" class="ghost sm" data-shop-planet="${pl}">🛍️ <span>शॉप में देखें</span></button>`;
+  async function showPlan(key) {
+    document.querySelectorAll('#up_probs .chip').forEach(c => c.classList.toggle('on', c.dataset.p === key));
+    const b = basis(); $('up_out').innerHTML = '<div class="card muted">…</div>';
+    try {
+      const r = await post('/v1/upay', b ? {problem: key, ...b} : {problem: key, moon_sign: $('up_moon').value});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+      const en = E();
+      const cards = d.planets.map(p => `<div class="card upc"><div class="uph"><b>${esc(en ? p.planet : p.planet_hi)}</b><span class="muted">${esc(en ? p.why_en : p.why_hi)}</span></div>
+        <div class="kvg"><span>${en ? 'Mantra' : 'मंत्र'}</span><b class="mantra">${esc(p.mantra)} <button type="button" class="ghost sm" data-copy="${esc(p.mantra)}">📋</button></b>
+        <span>${en ? 'Japa' : 'जप'}</span><b>${p.count.toLocaleString('en-IN')} ${en ? '(over 40 days, or 108 daily)' : '(40 दिनों में, या रोज़ 108)'}</b>
+        <span>${en ? 'Day' : 'दिन'}</span><b>${esc(en ? p.day_en : p.day_hi)}</b>
+        <span>${en ? 'Charity' : 'दान'}</span><b>${esc(en ? p.daan_en : p.daan_hi)}</b>
+        <span>${en ? 'Worship' : 'पूजा'}</span><b>${esc(en ? p.deity_en : p.deity_hi)}</b>
+        <span>${en ? 'Colour' : 'रंग'}</span><b>${esc(en ? p.colour_en : p.colour_hi)}</b>
+        <span>${en ? 'Do' : 'आचरण'}</span><b>${esc(en ? p.act_en : p.act_hi)}</b>
+        <span>${en ? 'Rudraksha' : 'रुद्राक्ष'}</span><b>${esc(p.rudraksha_hi)}</b>
+        <span>${en ? 'Gemstone' : 'रत्न'}</span><b>${p.gem ? `${esc(en ? p.gem.en : p.gem.hi)} <span class="muted">(${en ? 'or' : 'या'} ${esc(en ? p.gem.upa_en : p.gem.upa_hi)}; ${esc(p.gem.metal_hi)}, ${esc(p.gem.finger_hi)})</span>` : `<span class="muted">${en ? 'Not advised for this planet in your chart — use mantra / rudraksha.' : 'आपकी कुंडली में इस ग्रह का रत्न उचित नहीं — मंत्र/रुद्राक्ष करें।'}</span>`}</b></div>
+        <div style="margin-top:8px">${shopBtn(p.planet)}</div></div>`).join('');
+      $('up_out').innerHTML = `<div class="card"><b>${esc(en ? d.problem_en : d.problem_hi)}: ${en ? 'remedy plan' : 'उपाय योजना'}</b> <span class="pill">${d.basis === 'chart' ? (en ? 'from your chart' : 'आपकी कुंडली से') : (en ? 'general' : 'सामान्य')}</span>
+        <ul class="plist">${(en ? d.practices_en : d.practices_hi).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>${cards}<p class="muted" style="font-size:.8rem">${esc(en ? d.note_en : d.note_hi)}</p>`;
+    } catch (e) { $('up_out').innerHTML = `<div class="card">⚠️ ${esc(e.message)}</div>`; }
+  }
+  $('up_probs').addEventListener('click', e => { const c = e.target.closest('[data-p]'); if (c) showPlan(c.dataset.p); });
+  $('up_moon').onchange = () => { const on = document.querySelector('#up_probs .chip.on'); if (on) showPlan(on.dataset.p); };
+  document.addEventListener('click', e => {
+    const c = e.target.closest('[data-copy]'); if (c) { navigator.clipboard?.writeText(c.dataset.copy); c.textContent = '✓'; setTimeout(() => { c.textContent = '📋'; }, 1200); }
+    const s = e.target.closest('[data-shop-planet]'); if (s) { window.shopFilter && window.shopFilter({planet: s.dataset.shopPlanet}); window.showTab('t-shop'); }
+  });
+  async function showRatna(body) {
+    $('rt_out').innerHTML = '<div class="muted">…</div>';
+    try {
+      const r = await post('/v1/ratna', body); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+      const en = E(); let h = '';
+      const st = s => `<div class="gem"><b>${esc(en ? s.gem_en : s.gem_hi)}</b><span>${esc(en ? s.role_en : s.role_hi)} · ${esc(en ? s.planet : s.planet_hi)}</span><span class="muted">${en ? 'Substitute' : 'उपरत्न'}: ${esc(en ? s.upa_en : s.upa_hi)} · ${esc(s.metal_hi)} · ${esc(s.finger_hi)} · ${esc(en ? s.day_en : s.day_hi)}</span>${shopBtn(s.planet)}</div>`;
+      if (d.by_lagna) h += `<h4>${en ? 'By your lagna' : 'आपके लग्न से'} (${esc(en ? d.by_lagna.sign_en : d.by_lagna.sign_hi)})</h4><div class="gems">${d.by_lagna.stones.map(st).join('')}</div>` +
+        (d.by_lagna.avoid.length ? `<p class="warnline">⚠️ ${en ? 'Avoid' : 'न पहनें'}: ${d.by_lagna.avoid.map(a => esc(en ? `${a.gem_en} (${a.planet})` : `${a.gem_hi} (${a.planet_hi})`)).join(', ')}</p>` : '');
+      if (d.by_moon) h += `<h4>${en ? 'By Moon sign' : 'चंद्र राशि से'} (${esc(en ? d.by_moon.sign_en : d.by_moon.sign_hi)})</h4><div class="gems">${st(d.by_moon.stone)}</div>`;
+      h += `<h4>${en ? 'How to wear' : 'कैसे पहनें'}</h4><ul class="plist">${(en ? d.how_en : d.how_hi).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+      h += `<details><summary>${en ? 'All 12 signs' : 'सभी 12 राशियों के रत्न'}</summary><table>${d.table.map(t => `<tr><td>${esc(en ? t.sign_en : t.sign_hi)}</td><td>${esc(t.lord_hi)}</td><td><b>${esc(en ? t.gem_en : t.gem_hi)}</b></td><td class="muted">${esc(t.lagna_stones.join(', '))}</td></tr>`).join('')}</table></details>`;
+      h += `<p class="muted" style="font-size:.8rem">${esc(en ? d.note_en : d.note_hi)}</p>`;
+      $('rt_out').innerHTML = h;
+    } catch (e) { $('rt_out').innerHTML = `⚠️ ${esc(e.message)}`; }
+  }
+  $('rt_signs').addEventListener('click', e => { const c = e.target.closest('[data-ms]'); if (!c) return; document.querySelectorAll('#rt_signs .chip').forEach(x => x.classList.toggle('on', x === c)); showRatna({moon_sign: +c.dataset.ms}); });
+  $('rt_mine').onclick = () => { const b = birth(); if (!b) { $('rt_out').innerHTML = `<p>${E() ? 'Make your chart or add a profile first.' : 'पहले कुंडली बनाइए या डैशबोर्ड में प्रोफ़ाइल जोड़िए।'}</p>`; return; } showRatna(b); };
+  const _st = window.showTab; window.showTab = id => { _st(id); if (id === 't-upay') basis(); };
+})();
+
+// ---- रत्न शॉप: catalogue, cart (localStorage), checkout with UPI / COD, order tracking ----
+(function gemShop() {
+  if (!$('sh_grid')) return;
+  const E = () => (window.getLang ? window.getLang() : 'hi') === 'en';
+  const LSg = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+  const LSs = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const PL_HI = {Sun: 'सूर्य', Moon: 'चंद्र', Mars: 'मंगल', Mercury: 'बुध', Jupiter: 'गुरु', Venus: 'शुक्र', Saturn: 'शनि', Rahu: 'राहु', Ketu: 'केतु'};
+  const rs = n => '₹' + Math.round(n).toLocaleString('en-IN');
+  let data = null, filt = {}, cart = LSg('kundali_cart', []);
+  const count = () => { const n = cart.length; $('cartcount').hidden = !n; $('cartcount').textContent = n; };
+  async function load() {
+    try { data = await (await apiFetch('/v1/shop/products')).json(); } catch (e) { $('sh_grid').innerHTML = '<div class="muted">⚠️</div>'; return; }
+    $('sh_cats').innerHTML = `<button type="button" class="chip ${!filt.category ? 'on' : ''}" data-cat="">${E() ? 'All' : 'सभी'}</button>` + data.categories.filter(c => data.products.some(p => p.category === c.key)).map(c => `<button type="button" class="chip ${filt.category === c.key ? 'on' : ''}" data-cat="${c.key}">${esc(E() ? c.en : c.hi)}</button>`).join('');
+    const S = data.settings;
+    $('sh_note').textContent = [S.upi ? 'UPI' : '', S.cod ? (E() ? 'Cash on delivery' : 'कैश ऑन डिलीवरी') : '', S.free_above ? (E() ? `free shipping above ${rs(S.free_above)}` : `${rs(S.free_above)} से ऊपर डिलीवरी मुफ़्त`) : ''].filter(Boolean).join(' · ');
+    render(); renderCart();
+  }
+  function render() {
+    if (!data) return;
+    const en = E();
+    $('sh_planet').innerHTML = filt.planet ? `${en ? 'Showing items for' : 'इस ग्रह के लिए'}: <b>${en ? filt.planet : PL_HI[filt.planet]}</b> · <a href="#" id="sh_clear">${en ? 'show all' : 'सब दिखाइए'}</a>` : '';
+    const list = data.products.filter(p => (!filt.category || p.category === filt.category) && (!filt.planet || p.planet === filt.planet));
+    if (!data.products.length) { $('sh_grid').innerHTML = `<div class="card">${en ? 'The shop is opening soon.' : 'शॉप जल्द खुल रही है।'} ${data.settings.whatsapp ? `<a href="https://wa.me/${data.settings.whatsapp}" target="_blank" rel="noopener">${en ? 'Ask on WhatsApp' : 'WhatsApp पर पूछें'}</a>` : ''}</div>`; return; }
+    if (!list.length) { $('sh_grid').innerHTML = `<div class="card muted">${en ? 'Nothing in this filter yet.' : 'इस श्रेणी में अभी कुछ नहीं।'}</div>`; return; }
+    $('sh_grid').innerHTML = list.map(p => `<div class="card prod">
+      <div class="pimg">${p.images[0] ? `<img src="${API}${esc(p.images[0])}" alt="${esc(p.name_hi)}" loading="lazy">` : '<span>💎</span>'}${p.planet ? `<i>${esc(en ? p.planet : PL_HI[p.planet])}</i>` : ''}</div>
+      <b>${esc(en && p.name_en ? p.name_en : p.name_hi)}</b>
+      <div class="price">${rs(p.price)} <span class="muted">/ ${esc(en ? p.unit_en : p.unit_hi)}</span>${p.mrp && p.mrp > p.price ? ` <s class="muted">${rs(p.mrp)}</s>` : ''}</div>
+      <div class="muted small">${[p.origin, p.certificate ? (en ? 'Certified: ' : 'प्रमाणपत्र: ') + p.certificate : ''].filter(Boolean).map(esc).join(' · ')}</div>
+      ${p.desc_hi ? `<details><summary>${en ? 'Details' : 'विवरण'}</summary><p class="small">${esc(en && p.desc_en ? p.desc_en : p.desc_hi)}</p></details>` : ''}
+      ${p.in_stock ? `<div class="addrow"><input type="number" min="${p.min_qty}" max="${p.max_qty}" step="${p.step}" value="${p.min_qty}" data-q="${p.id}" aria-label="qty"><span class="muted small">${esc(en ? p.unit_en : p.unit_hi)}</span><button type="button" data-add="${p.id}">${en ? 'Add to cart' : 'कार्ट में डालें'}</button></div>` : `<div class="muted">${en ? 'Out of stock' : 'स्टॉक में नहीं'}</div>`}
+    </div>`).join('');
+  }
+  function totals() {
+    const sub = cart.reduce((a, c) => a + c.price * c.qty, 0), S = data ? data.settings : {shipping: 0, free_above: 0};
+    const ship = cart.length ? ((S.free_above && sub >= S.free_above) ? 0 : S.shipping) : 0; return {sub, ship, total: sub + ship};
+  }
+  function renderCart() {
+    count();
+    const en = E();
+    if (!cart.length) { $('sh_cart').innerHTML = en ? 'Your cart is empty.' : 'कार्ट ख़ाली है।'; $('sh_checkout').hidden = true; return; }
+    const t = totals();
+    $('sh_cart').innerHTML = `<table>${cart.map((c, i) => `<tr><td>${esc(en && c.name_en ? c.name_en : c.name_hi)}</td><td>${c.qty} ${esc(en ? c.unit_en : c.unit_hi)}</td><td>${rs(c.price * c.qty)}</td><td><button type="button" class="ghost sm" data-rm="${i}">✕</button></td></tr>`).join('')}
+      <tr><td colspan="2">${en ? 'Shipping' : 'डिलीवरी'}</td><td>${t.ship ? rs(t.ship) : (en ? 'free' : 'मुफ़्त')}</td><td></td></tr><tr><td colspan="2"><b>${en ? 'Total' : 'कुल'}</b></td><td><b>${rs(t.total)}</b></td><td></td></tr></table>`;
+    $('sh_cart').classList.remove('muted'); $('sh_checkout').hidden = false;
+    const S = data ? data.settings : {};
+    $('sh_pay').innerHTML = (S.upi ? `<label class="ck"><input type="radio" name="sh_payment" value="upi" checked> UPI (PhonePe / GPay / Paytm)</label>` : '') + (S.cod ? `<label class="ck"><input type="radio" name="sh_payment" value="cod" ${S.upi ? '' : 'checked'}> ${en ? 'Cash on delivery' : 'कैश ऑन डिलीवरी'}</label>` : '') + (!S.upi && !S.cod ? `<span class="muted">${en ? 'We will confirm payment on WhatsApp.' : 'भुगतान की पुष्टि WhatsApp पर होगी।'}</span>` : '');
+  }
+  window.shopFilter = f => { filt = {...f}; render(); };
+  $('sh_cats').addEventListener('click', e => { const c = e.target.closest('[data-cat]'); if (!c) return; filt.category = c.dataset.cat || undefined; document.querySelectorAll('#sh_cats .chip').forEach(x => x.classList.toggle('on', x === c)); render(); });
+  $('sh_planet').addEventListener('click', e => { if (e.target.id === 'sh_clear') { e.preventDefault(); filt.planet = undefined; render(); } });
+  $('sh_grid').addEventListener('click', e => {
+    const b = e.target.closest('[data-add]'); if (!b) return;
+    const p = data.products.find(x => x.id === b.dataset.add), q = +document.querySelector(`[data-q="${p.id}"]`).value || p.min_qty;
+    if (q < p.min_qty || q > p.max_qty) { alert(`${p.min_qty}–${p.max_qty} ${p.unit_hi}`); return; }
+    cart.push({id: p.id, name_hi: p.name_hi, name_en: p.name_en, qty: q, price: p.price, unit_hi: p.unit_hi, unit_en: p.unit_en}); LSs('kundali_cart', cart); renderCart();
+    b.textContent = '✓'; setTimeout(() => { b.textContent = E() ? 'Add to cart' : 'कार्ट में डालें'; }, 1200);
+  });
+  $('sh_cart').addEventListener('click', e => { const r = e.target.closest('[data-rm]'); if (!r) return; cart.splice(+r.dataset.rm, 1); LSs('kundali_cart', cart); renderCart(); });
+  const me = LSg('kundali_shop_me', {}); ['name', 'phone', 'addr', 'city', 'pin'].forEach(k => { if (me[k]) $('sh_' + k).value = me[k]; });
+  $('sh_checkout').onsubmit = async e => {
+    e.preventDefault(); const en = E();
+    const body = {items: cart.map(c => ({id: c.id, qty: c.qty})), name: $('sh_name').value, phone: $('sh_phone').value, address: $('sh_addr').value, city: $('sh_city').value, pincode: $('sh_pin').value,
+      note: $('sh_note2').value, payment: (document.querySelector('[name=sh_payment]:checked') || {}).value || 'upi'};
+    LSs('kundali_shop_me', {name: body.name, phone: body.phone, addr: body.address, city: body.city, pin: body.pincode});
+    try {
+      const r = await apiFetch('/v1/shop/order', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+      cart = []; LSs('kundali_cart', cart); renderCart(); $('sh_oid').value = d.order_id; $('sh_ophone').value = body.phone;
+      const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      $('sh_done').innerHTML = `<div class="okbox">✅ <b>${en ? 'Order placed' : 'ऑर्डर दर्ज हुआ'}: ${esc(d.order_id)}</b> · ${en ? 'Total' : 'कुल'} <b>${rs(d.total)}</b>
+        ${d.payment === 'upi' ? `<p>${en ? 'Pay by UPI now:' : 'अभी UPI से भुगतान कीजिए:'} ${mobile ? `<a class="btnlink" href="${esc(d.upi_link)}">${en ? 'Pay' : 'भुगतान करें'} ${rs(d.total)}</a>` : ''} <span class="muted">UPI ID: <b>${esc(d.upi_id)}</b> · ${en ? 'note' : 'नोट में'}: ${esc(d.order_id)}</span></p><p class="muted small">${en ? 'After paying, send the UPI reference on WhatsApp — we confirm and ship.' : 'भुगतान के बाद UPI संदर्भ संख्या WhatsApp पर भेजें — पुष्टि के बाद डिलीवरी होगी।'}</p>` : `<p>${d.payment === 'cod' ? (en ? 'Pay cash on delivery.' : 'डिलीवरी पर नकद भुगतान।') : (en ? 'We will contact you on WhatsApp.' : 'हम WhatsApp पर संपर्क करेंगे।')}</p>`}
+        ${d.whatsapp_link ? `<a class="btnlink" style="background:#25d366" href="${esc(d.whatsapp_link)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>`;
+    } catch (err) { $('sh_done').innerHTML = `⚠️ ${esc(err.message)}`; }
+  };
+  $('sh_track').onclick = async () => {
+    try { const r = await apiFetch('/v1/shop/status', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: $('sh_oid').value, phone: $('sh_ophone').value})}); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+      const ST = {new: 'नया', paid: 'भुगतान मिला', packed: 'पैक हुआ', shipped: 'भेजा गया', delivered: 'पहुँच गया', cancelled: 'रद्द'};
+      $('sh_trackout').innerHTML = `<b>${esc(d.id)}</b>: ${E() ? esc(d.status) : esc(ST[d.status] || d.status)}${d.track ? ` · ${E() ? 'tracking' : 'ट्रैकिंग'}: ${esc(d.track)}` : ''} · ${rs(d.total)}`;
+    } catch (e) { $('sh_trackout').innerHTML = '⚠️ ' + esc(e.message); }
+  };
+  count();
+  const _st = window.showTab; window.showTab = id => { _st(id); if (id === 't-shop') { if (!data) load(); else { render(); renderCart(); } } };
 })();
 
 // ---- "add to calendar" links for a time window (Google Calendar + .ics for iPhone/Outlook) ----

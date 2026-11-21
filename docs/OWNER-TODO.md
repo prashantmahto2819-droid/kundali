@@ -26,6 +26,9 @@ cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com      # mu
 | `RELAY_WEBHOOK_SECRET` | make a webhook in Relay pointing to `https://kundali.vividbrandify.com/v1/notify/webhook`, copy its secret |
 | `KUNDALI_BRAND_NAME`, `KUNDALI_BRAND_TAGLINE` | text on the daily panchang image |
 | `KUNDALI_CONTACT_EMAIL` | email shown on /privacy and /terms |
+| `KUNDALI_UPI_ID`, `KUNDALI_UPI_NAME` | your UPI ID (e.g. name@okaxis) and the payee name — shop payments |
+| `KUNDALI_SHOP_WHATSAPP` | your WhatsApp number (91XXXXXXXXXX) for new-order alerts |
+| `KUNDALI_SHOP_COD=1`, `KUNDALI_SHOP_SHIPPING`, `KUNDALI_SHOP_FREE_ABOVE` | cash on delivery on/off, flat delivery charge, free delivery above this total |
 | `TWA_PACKAGE`, `TWA_SHA256` | after the Play Store step (docs/PLAY-STORE.md) |
 
 ## 4. Google Search
@@ -37,3 +40,6 @@ Follow docs/PLAY-STORE.md (PWABuilder → .aab → Play Console; privacy URL: ht
 ## 6. Supabase
 Already automatic: new files in `supabase/migrations/` apply on push (GitHub Action "Supabase migrations").
 Once: Supabase dashboard → Authentication → URL Configuration → Site URL `https://kundali.vividbrandify.com`.
+
+## 7. Gem shop products
+Open https://kundali.vividbrandify.com/admin.html → admin key → **🛍️ दुकान** → add each product (name, category, planet, price per ratti/carat/piece, stock, certificate) → **सहेजें** → add photos. Orders appear in the same tab; after checking the UPI reference set the status to “भुगतान मिला”, then “भेजा” with the courier tracking number.

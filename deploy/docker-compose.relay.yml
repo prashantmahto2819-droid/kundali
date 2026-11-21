@@ -44,6 +44,12 @@ services:
       EMBED_PROVIDER: ${EMBED_PROVIDER:-}
       EMBED_MODEL: ${EMBED_MODEL:-}
       AI_WA_SUMMARY: ${AI_WA_SUMMARY:-0}
+      KUNDALI_UPI_ID: ${KUNDALI_UPI_ID:-}            # gem shop + consult wallet: where UPI payments go
+      KUNDALI_UPI_NAME: ${KUNDALI_UPI_NAME:-}
+      KUNDALI_SHOP_WHATSAPP: ${KUNDALI_SHOP_WHATSAPP:-}  # owner's number: new-order alerts + "ask on WhatsApp"
+      KUNDALI_SHOP_COD: ${KUNDALI_SHOP_COD:-0}
+      KUNDALI_SHOP_SHIPPING: ${KUNDALI_SHOP_SHIPPING:-0}
+      KUNDALI_SHOP_FREE_ABOVE: ${KUNDALI_SHOP_FREE_ABOVE:-0}
       KUNDALI_PUSH: ${KUNDALI_PUSH:-1}                # browser push notifications (0 = off); VAPID key is generated into /srv/data/vapid.json
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       KUNDALI_CONTACT_EMAIL: ${KUNDALI_CONTACT_EMAIL:-}  # shown on /privacy and /terms

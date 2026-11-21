@@ -135,6 +135,19 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(200, handlers.panchang_month_from_query(q))
             except handlers.BadRequest as exc:
                 return self._json(400, {"detail": str(exc)})
+        if path == "/v1/upay/problems":
+            return self._json(200, handlers.upay_problems())
+        if path == "/v1/shop/products":
+            from urllib.parse import parse_qs
+            return self._json(200, handlers.shop_products_from_query({k: v[0] for k, v in parse_qs(self.path.partition('?')[2]).items()}))
+        if path.startswith("/v1/shop/img/"):
+            from jyotish import shop as _shop
+            fp = _shop.image_path(path.rsplit("/", 1)[1])
+            if not fp:
+                return self._json(404, {"detail": "not found"})
+            data = open(fp, "rb").read(); ext = fp.rsplit(".", 1)[1]
+            self.send_response(200); self.send_header("Content-Type", "image/jpeg" if ext == "jpg" else f"image/{ext}"); self.send_header("Content-Length", str(len(data)))
+            self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); self.wfile.write(data); return
         if path == "/v1/now":
             try:
                 from urllib.parse import parse_qs
@@ -198,6 +211,8 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/notify/status": handlers.notify_status_from_payload,
                   "/v1/notify/preview": handlers.notify_preview_from_payload,
                   "/v1/push/subscribe": handlers.push_subscribe_from_payload,
+                  "/v1/upay": handlers.upay_from_payload, "/v1/ratna": handlers.ratna_from_payload,
+                  "/v1/shop/order": handlers.shop_order_from_payload, "/v1/shop/status": handlers.shop_status_from_payload,
                   "/v1/push/unsubscribe": handlers.push_unsubscribe_from_payload,
                   "/v1/push/test": handlers.push_test_from_payload,
                   "/v1/ai/chat": handlers.ai_chat_from_payload,
@@ -212,7 +227,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/consult/mine": handlers.consult_mine_from_payload,
                   "/v1/wallet": handlers.wallet_from_payload}
         header_routes = {"/v1/consult/get": handlers.consult_get_from_payload, "/v1/consult/message": handlers.consult_message_from_payload,
-                         "/v1/consult/close": handlers.consult_close_from_payload, "/v1/consult/admin": handlers.consult_admin_from_payload,
+                         "/v1/consult/close": handlers.consult_close_from_payload, "/v1/consult/admin": handlers.consult_admin_from_payload, "/v1/shop/admin": handlers.shop_admin_from_payload,
                          "/v1/consult/draft": handlers.consult_draft_from_payload, "/v1/ai/extract_rules": handlers.ai_extract_rules_from_payload}
         if self.path in header_routes:
             try:

@@ -51,3 +51,8 @@ def test_festival_calendar_feed():
     assert ics.count("BEGIN:VEVENT") > 60 and "DTSTART;VALUE=DATE:2026" in ics and "SUMMARY:दीपावली" in ics
     assert all(len(line.encode()) <= 75 for line in ics.split("\r\n"))
     assert "calendar.google.com" in seo.route("/tyohar/2026")[2]
+
+
+def test_ratna_page():
+    b = _ok("/ratna", ["राशि रत्न", "पुखराज", "माणिक्य", "रत्न कैसे पहनें"])
+    assert b.count("<tr>") == 13

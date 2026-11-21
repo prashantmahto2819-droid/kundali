@@ -1176,3 +1176,72 @@ def now_from_query(q: dict) -> dict:
 
 def _strip(x: dict, nm: int) -> dict:
     return {**{k: v for k, v in x.items() if not k.startswith("_")}, "now": x["_a"] <= nm < x["_b"], "past": x["_b"] <= nm}
+
+
+
+# ---------------------------------------------------------------- उपाय, राशि रत्न, रत्न-शॉप
+def _maybe_chart(payload: dict):
+    if payload.get("date") and payload.get("time") and payload.get("lat") not in (None, "") and payload.get("lon") not in (None, ""):
+        return chart_from_payload({k: payload[k] for k in ("date", "time", "tz", "lat", "lon", "name") if k in payload})
+    return None
+
+
+def upay_problems() -> dict:
+    from . import upay
+    return {"problems": [{"key": k, "hi": v["hi"], "en": v["en"]} for k, v in upay.PROBLEMS.items()]}
+
+
+def upay_from_payload(payload: dict) -> dict:
+    """POST /v1/upay {problem, [birth: date,time,tz,lat,lon] | [moon_sign]} → remedy plan for that problem."""
+    from . import upay
+    try:
+        ms = payload.get("moon_sign")
+        return upay.plan(str(payload.get("problem") or ""), _maybe_chart(payload), int(ms) if ms not in (None, "") else None)
+    except (ValueError, KeyError, TypeError) as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def ratna_from_payload(payload: dict) -> dict:
+    """POST /v1/ratna {birth} or {lagna_sign, moon_sign} → lucky gemstones by lagna and by Moon sign, how to wear, what to avoid."""
+    from . import upay
+    try:
+        c = _maybe_chart(payload)
+        if c:
+            moon = next(p for p in c["planets"] if p["name"] == "Moon")
+            out = upay.ratna(c["lagna"]["sign"], moon["sign"])
+        else:
+            ls, ms = payload.get("lagna_sign"), payload.get("moon_sign")
+            if ls in (None, "") and ms in (None, ""):
+                raise ValueError("give birth details, or lagna_sign / moon_sign (0-11)")
+            out = upay.ratna(int(ls) if ls not in (None, "") else None, int(ms) if ms not in (None, "") else None)
+        out["table"] = upay.table()
+        return out
+    except (ValueError, TypeError) as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def _shop_call(fn, *a):
+    from . import shop
+    try:
+        return getattr(shop, fn)(*a)
+    except (ValueError, TypeError, KeyError) as exc:
+        raise BadRequest(str(exc)) from exc
+
+
+def shop_products_from_query(q: dict) -> dict:
+    return _shop_call("products", q)
+
+
+def shop_order_from_payload(payload: dict) -> dict:
+    return _shop_call("place_order", payload)
+
+
+def shop_status_from_payload(payload: dict) -> dict:
+    return _shop_call("order_status", payload)
+
+
+def shop_admin_from_payload(payload: dict, headers: dict | None = None) -> dict:
+    from . import consult
+    if not consult.is_admin(headers or {}):
+        raise BadRequest("admin key required (X-Admin-Key)")
+    return _shop_call("admin", payload)

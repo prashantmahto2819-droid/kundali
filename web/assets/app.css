@@ -256,3 +256,31 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .crow.past { opacity:.5; } .crow.now { background:color-mix(in srgb,var(--accent) 12%,var(--card)); border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent); }
 .crow .cd { font-size:.8rem; font-weight:700; color:var(--accent); }
 @media (max-width:800px) { .jump { top:0; } }
+
+/* ---- remedies, ratna, shop ---- */
+.chip { width:auto; padding:5px 12px; border-radius:99px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-size:.86rem; box-shadow:none; }
+.chip.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+.chipsrow { display:flex; flex-wrap:wrap; gap:6px; }
+.upc .uph { display:flex; flex-direction:column; gap:2px; margin-bottom:8px; } .upc .uph b { font-size:1.1rem; color:var(--accent); }
+.kvg { display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:.92rem; } .kvg > span { color:var(--muted); } .kvg b { font-weight:500; }
+.kvg .mantra { font-weight:700; } button.sm { width:auto; padding:3px 9px; font-size:.8rem; }
+.plist { margin:6px 0 0; padding-left:20px; } .plist li { margin:3px 0; }
+.gems { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; } .gem { border:1px solid var(--line); border-radius:12px; padding:10px; display:flex; flex-direction:column; gap:3px; }
+.gem b { font-size:1.05rem; color:var(--accent); } .gem span { font-size:.85rem; } .gem button { margin-top:4px; align-self:flex-start; }
+.warnline { color:#b8331f; font-size:.9rem; } #ratnacard h4 { margin:14px 0 6px; }
+.shopgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin:12px 0; } .shopgrid > .card { margin:0; }
+.prod { display:flex; flex-direction:column; gap:6px; } .prod .pimg { position:relative; aspect-ratio:1; border-radius:12px; overflow:hidden; background:color-mix(in srgb,var(--accent) 8%,var(--card)); display:grid; place-items:center; font-size:2.4rem; }
+.prod .pimg img { width:100%; height:100%; object-fit:cover; } .prod .pimg i { position:absolute; left:8px; top:8px; font-style:normal; font-size:.72rem; background:rgba(0,0,0,.55); color:#fff; padding:2px 8px; border-radius:99px; }
+.prod .price { font-size:1.1rem; font-weight:700; } .small { font-size:.8rem; }
+.addrow { display:flex; gap:6px; align-items:center; } .addrow input { width:74px; } .addrow button { width:auto; flex:1; }
+#sh_checkout { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; } #sh_checkout .wide { grid-column:1/-1; } #sh_checkout .ck { display:inline-flex; gap:6px; margin-right:14px; }
+.okbox { margin-top:10px; padding:12px; border-radius:12px; border:1px solid #2e9d5b; background:color-mix(in srgb,#2e9d5b 10%,var(--card)); }
+.btnlink { display:inline-block; background:var(--accent); color:#fff !important; padding:8px 14px; border-radius:10px; text-decoration:none; font-weight:700; margin:6px 6px 0 0; }
+#cartcount { position:absolute; top:2px; right:2px; min-width:16px; height:16px; padding:0 4px; border-radius:99px; background:var(--accent); color:#fff; font-size:.65rem; font-style:normal; display:grid; place-items:center; }
+#cartcount[hidden] { display:none; }
+@media (max-width:600px) { #sh_checkout { grid-template-columns:1fr; } .shopgrid { grid-template-columns:1fr 1fr; } .addrow { flex-wrap:wrap; } .addrow button { width:100%; } }
+
+.kact { display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin:10px 0; padding:10px 12px; border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent); border-radius:14px; }
+.kact:empty { display:none; } .kfs, .kbtns { display:flex; flex-wrap:wrap; gap:6px; } .kbtns button { width:auto; padding:7px 12px; }
+.kf { padding:3px 10px; border-radius:99px; font-size:.82rem; font-weight:600; } .kf.bad { background:color-mix(in srgb,#e0533d 14%,transparent); color:#b8331f; } .kf.good { background:color-mix(in srgb,#2e9d5b 14%,transparent); color:#1f7a45; }
+#sh_checkout textarea, #sh_checkout input { width:100%; }

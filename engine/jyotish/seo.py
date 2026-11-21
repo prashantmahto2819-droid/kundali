@@ -86,7 +86,7 @@ def page(path: str, title: str, desc: str, body: str, crumbs: list[tuple[str, st
 <meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{e(url)}">
 <meta property="og:image" content="{e(site())}/icons/icon-512.png"><meta name="theme-color" content="#22154a"><link rel="icon" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest"><style>{CSS}</style>{lds}</head><body>
-<header><div class="in"><a href="/">🪔 कुंडली · पंचांग</a><nav><a href="/panchang">आज का पंचांग</a><a href="/rashifal">राशिफल</a><a href="/tyohar/{today().year}">व्रत-त्योहार {today().year}</a><a href="/">कुंडली बनाइए</a></nav></div></header>
+<header><div class="in"><a href="/">🪔 कुंडली · पंचांग</a><nav><a href="/panchang">आज का पंचांग</a><a href="/rashifal">राशिफल</a><a href="/tyohar/{today().year}">व्रत-त्योहार {today().year}</a><a href="/ratna">राशि रत्न</a><a href="/">कुंडली बनाइए</a></nav></div></header>
 <main><div class="crumb">{crumb_html}</div>{body}
 <div class="card"><b>अपनी जन्म कुंडली, दशा और दैनिक फल निःशुल्क देखिए</b><br><a class="cta" href="/">कुंडली बनाइए →</a><a class="cta" style="background:#2e9d5b" href="/#wa">WhatsApp पर रोज़ पंचांग</a></div></main>
 <footer><div class="in">गणना: NASA JPL DE440s, लाहिरी अयनांश। फलादेश परंपरागत मार्गदर्शन है, भविष्यवाणी या पेशेवर सलाह नहीं। · <a href="/panchang">पंचांग</a> · <a href="/rashifal">राशिफल</a> · <a href="/tyohar/{today().year}">त्योहार</a> · <a href="/privacy">गोपनीयता</a> · <a href="/terms">शर्तें</a> · <a href="/sitemap.xml">sitemap</a></div></footer>
@@ -303,7 +303,7 @@ def timezone_utc():
 
 def sitemap() -> str:
     y, d = today().year, today().isoformat()
-    urls = ["/", "/panchang", "/rashifal", "/tyohar", "/privacy", "/terms"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
+    urls = ["/", "/panchang", "/rashifal", "/tyohar", "/ratna", "/privacy", "/terms"] + [f"/panchang/{c.lower()}" for c in CITIES[1:]] + [f"/rashifal/{s[0]}" for s in SIGNS]
     for yr in (y, y + 1):
         urls.append(f"/tyohar/{yr}")
         urls += sorted({f"/tyohar/{yr}/{_fkey(ev)}" for ev in _events(yr) if ev["kind"] in MAJOR_KINDS})
@@ -331,6 +331,8 @@ def route(path: str) -> tuple[int, str, str] | None:
         b = rashifal_sign(m.group(1)) if m.group(1) else rashifal_index(); return (200, H, b) if b else (404, H, not_found())
     if p == "/.well-known/assetlinks.json":
         return 200, "application/json", assetlinks()
+    if p == "/ratna":
+        return 200, H, _cached(("ratna",), ratna_page)
     if p == "/privacy":
         return 200, H, privacy_page()
     if p == "/terms":
@@ -351,6 +353,18 @@ def route(path: str) -> tuple[int, str, str] | None:
 def _contact() -> str:
     em = os.environ.get("KUNDALI_CONTACT_EMAIL", "").strip()
     return (f'<a href="mailto:{e(em)}">{e(em)}</a>' if em else "WhatsApp पर <b>मदद</b> लिखकर") + " (Contact: " + (e(em) if em else "WhatsApp, send <b>help</b>") + ")"
+
+
+def ratna_page() -> str:
+    from . import upay
+    rows = "".join(f"<tr><td><b>{e(t['sign_hi'])}</b> <span class='en'>{e(t['sign_en'])}</span></td><td>{e(t['lord_hi'])}</td><td><b>{e(t['gem_hi'])}</b> <span class='en'>{e(t['gem_en'])}</span></td>"
+                   f"<td>{e(t['upa_hi'])}</td><td>{e(', '.join(t['lagna_stones']))}</td></tr>" for t in upay.table())
+    how = "".join(f"<li>{e(x)}</li>" for x in upay.HOW_HI)
+    body = ("<div class='hero'><h1>राशि रत्न — किस राशि को कौन-सा रत्न पहनना चाहिए?</h1><p>मेष से मीन तक 12 राशियों के रत्न, उपरत्न और लग्न के अनुसार शुभ रत्न</p></div>"
+            f"<div class='card'><table><tr><th>राशि</th><th>स्वामी</th><th>राशि रत्न</th><th>उपरत्न</th><th>उस लग्न के शुभ रत्न</th></tr>{rows}</table></div>"
+            f"<div class='card'><h2>रत्न कैसे पहनें</h2><ul>{how}</ul><p class='muted'>{e(upay.NOTE_HI)}</p></div>"
+            "<div class='card'><b>अपनी कुंडली से सही रत्न और समस्या के उपाय देखिए</b><br><a class='cta' href='/#t-upay'>उपाय व रत्न →</a><a class='cta' style='background:#444' href='/#t-shop'>रत्न शॉप</a></div>")
+    return page("/ratna", "राशि रत्न — मेष से मीन तक कौन-सा रत्न पहनें | Rashi ratna", "12 राशियों के रत्न व उपरत्न, लग्न के अनुसार शुभ रत्न, न पहनने योग्य रत्न और धारण विधि।", body, [("राशि रत्न", "/ratna")])
 
 
 def privacy_page() -> str:
