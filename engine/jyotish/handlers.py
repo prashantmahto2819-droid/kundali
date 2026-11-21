@@ -130,8 +130,13 @@ def match_from_payload(payload: dict) -> dict:
 def match_report_from_payload(payload: dict) -> str:
     """POST /v1/match/report: printable Hindi HTML of the matching result (same payload as /v1/match, + lang)."""
     from . import i18n, report
-    html = report.render_match(match_from_payload(payload), style="south" if str(payload.get("chart_style", "north")).lower() == "south" else "north")
-    if str(payload.get("lang", "hi")).lower() == "en":
+    m = match_from_payload(payload)
+    html = report.render_match(m, style="south" if str(payload.get("chart_style", "north")).lower() == "south" else "north")
+    lang = str(payload.get("lang", "hi")).lower()
+    from . import regional_report
+    if lang in regional_report.LANGS:
+        html = html.replace("<body>", "<body>" + regional_report.match_page(m, lang), 1)
+    if lang == "en":
         html = i18n.translate_html(html.replace('<html lang="hi">', '<html lang="en">', 1))
     return html
 

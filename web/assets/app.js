@@ -765,7 +765,7 @@ function renderMatch(m) {
       return `<div class="card" style="margin:0;flex:1 1 300px"><b>${label}: ${esc(m[role + '_name'] || label)}</b><div class="muted" style="font-size:.85rem">लग्न ${esc(ch.lagna.sign_name_hi)} ${esc(ch.lagna.dms)} · चंद्र ${esc(moon.sign_name_hi)}, ${esc(moon.nakshatra_hi)} पाद ${moon.pada}</div><svg id="m_${role}" viewBox="-4 -4 408 408" width="100%"></svg></div>`; };
     const chartsHtml = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin:10px 0">${chartBox('boy', 'वर')}${chartBox('girl', 'वधू')}</div>`;
     $('mout').innerHTML = `<p style="font-size:1.1rem;margin:12px 0 4px"><b>कुल: ${m.total} / 36</b> — ${esc(m.band_hi)}</p>${chartsHtml}
-      <div class="actions"><button type="button" id="mrep">मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="maisum">AI सार</button></div><div id="maisumout"></div>
+      <div class="actions">${document.getElementById('replang').outerHTML.replace('id="replang"', 'id="mreplang"')}<button type="button" id="mrep">मिलान रिपोर्ट खोलिए (PDF के लिए प्रिंट कीजिए)</button><button type="button" class="ghost" id="maisum">AI सार</button></div><div id="maisumout"></div>
       <div class="muted" style="font-size:.85rem">वर: ${esc(m.groom.moon_sign)} राशि, ${esc(m.groom.nakshatra_hi)} पाद ${m.groom.pada} · वधू: ${esc(m.bride.moon_sign)} राशि, ${esc(m.bride.nakshatra_hi)} पाद ${m.bride.pada}</div>
       <table style="margin-top:8px"><tr><th>कूट</th><th>अंक</th><th>कारण</th><th>भरोसा</th></tr>${rows}</table>
       ${dosh}
@@ -778,7 +778,7 @@ function renderMatch(m) {
       drawChart($('m_' + role), ch.houses.map(h => ({sign: h.sign, planets: h.planets.map(n => ({name: n, short: pm[n].short_hi, retro: pm[n].retrograde, deg: Math.floor(pm[n].degree_in_sign), title: `${pm[n].name_hi} ${pm[n].dms}`}))})), 'match'); }
     $('maisum').onclick = () => window.aiSummary('match', {boy: personBody('b'), girl: personBody('g')}, 'maisumout');
     $('mrep').onclick = async () => {
-      try { const r = await apiFetch('/v1/match/report', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({boy: personBody('b'), girl: personBody('g'), lang: window.getLang ? window.getLang() : 'hi', chart_style: window.chartStyle})});
+      try { const r = await apiFetch('/v1/match/report', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({boy: personBody('b'), girl: personBody('g'), lang: ($('mreplang') && $('mreplang').value) || (window.getLang ? window.getLang() : 'hi'), chart_style: window.chartStyle})});
         const html = await r.text(); if (!r.ok) throw new Error('रिपोर्ट नहीं बनी'); const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close(); }
       catch (e) { $('merr').textContent = 'त्रुटि: ' + e.message; }
     };
@@ -1107,6 +1107,7 @@ $('yago').onclick = async () => {
 
   // ---- "नया क्या है" (what's new): red dot until the newest item has been seen ----
   const NEWS = [
+    {id: '2026-11-21e', em: '💍', t: 'मिलान रिपोर्ट भी 9 भाषाओं में', d: 'अष्टकूट तालिका, दोनों की राशि-नक्षत्र और मंगल दोष — क्षेत्रीय भाषा में पहला पन्ना।', go: 't-match'},
     {id: '2026-11-21d', em: '📜', t: 'कुंडली रिपोर्ट 9 भाषाओं में', d: 'मराठी, ગુજરાતી, বাংলা, తెలుగు, ಕನ್ನಡ, தமிழ், മലയാളം में जन्म पत्रिका का पहला पन्ना।', go: 't-kundali'},
     {id: '2026-11-21c', em: '📅', t: 'मुहूर्त सीधे फ़ोन के कैलेंडर में', d: 'मुहूर्त और शुभ लग्न के समय Google/iPhone कैलेंडर में जोड़िए, 30 मिनट पहले याद दिलाएगा।', go: 't-muhurta'},
     {id: '2026-11-21b', em: '⏱️', t: 'अभी कौन-सा चौघड़िया और होरा', d: 'होम के दिन-चक्र में अभी का चौघड़िया, होरा और अगला शुभ समय।', go: 't-home'},

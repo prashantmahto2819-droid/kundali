@@ -16,3 +16,12 @@ def test_every_regional_language_gets_a_patrika_page():
 def test_tamil_page_details():
     h = handlers.report_from_payload({**B, "lang": "ta"})
     assert "ஜாதகம்" in h and "தனுசு" in h and "உத்திராடம் – 1" in h and "புதன்</b> <small>(வக்ரம்)" in h and "மகாதசை" in h
+
+
+def test_regional_match_page():
+    from jyotish import regional_report
+    P = lambda n, d, t: {"name": n, "date": d, "time": t, "tz": "Asia/Kolkata", "lat": 23.18, "lon": 79.99}
+    for lang in regional_report.LANGS:
+        h = handlers.match_report_from_payload({"boy": P("A", "1990-05-15", "10:30"), "girl": P("B", "1993-08-20", "06:15"), "lang": lang})
+        assert regional_report.MT[lang][0] in h and "28.5 / 36" in h and all(k in h for k in regional_report.KOOTA_L[lang])
+        assert regional.SIGNS_L[lang][8] in h and regional.SIGNS_L[lang][5] in h          # Dhanu groom, Kanya bride
