@@ -140,6 +140,9 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/v1/shop/products":
             from urllib.parse import parse_qs
             return self._json(200, handlers.shop_products_from_query({k: v[0] for k, v in parse_qs(self.path.partition('?')[2]).items()}))
+        if path == "/v1/shop/reviews":
+            from urllib.parse import parse_qs
+            return self._json(200, handlers.shop_reviews_from_query({k: v[0] for k, v in parse_qs(self.path.partition('?')[2]).items()}))
         if path.startswith("/v1/shop/img/"):
             from jyotish import shop as _shop
             fp = _shop.image_path(path.rsplit("/", 1)[1])
@@ -212,7 +215,7 @@ class Handler(BaseHTTPRequestHandler):
                   "/v1/notify/preview": handlers.notify_preview_from_payload,
                   "/v1/push/subscribe": handlers.push_subscribe_from_payload,
                   "/v1/upay": handlers.upay_from_payload, "/v1/ratna": handlers.ratna_from_payload,
-                  "/v1/shop/order": handlers.shop_order_from_payload, "/v1/shop/status": handlers.shop_status_from_payload,
+                  "/v1/shop/order": handlers.shop_order_from_payload, "/v1/shop/review": handlers.shop_review_from_payload, "/v1/shop/invoice": handlers.shop_invoice_from_payload, "/v1/shop/status": handlers.shop_status_from_payload,
                   "/v1/push/unsubscribe": handlers.push_unsubscribe_from_payload,
                   "/v1/push/test": handlers.push_test_from_payload,
                   "/v1/ai/chat": handlers.ai_chat_from_payload,

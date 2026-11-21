@@ -29,6 +29,7 @@ cd /srv/kundali && ./deploy/smoke.sh https://kundali.vividbrandify.com      # mu
 | `KUNDALI_UPI_ID`, `KUNDALI_UPI_NAME` | your UPI ID (e.g. name@okaxis) and the payee name — shop payments |
 | `KUNDALI_SHOP_WHATSAPP` | your WhatsApp number (91XXXXXXXXXX) for new-order alerts |
 | `KUNDALI_SHOP_COD=1`, `KUNDALI_SHOP_SHIPPING`, `KUNDALI_SHOP_FREE_ABOVE` | cash on delivery on/off, flat delivery charge, free delivery above this total |
+| `KUNDALI_SHOP_GSTIN`, `KUNDALI_SHOP_LEGAL_NAME`, `KUNDALI_SHOP_ADDRESS`, `KUNDALI_SHOP_STATE` | only if you have GST registration — then invoices become tax invoices; ask your CA for each product's HSN and GST rate and fill them in admin → दुकान |
 | `TWA_PACKAGE`, `TWA_SHA256` | after the Play Store step (docs/PLAY-STORE.md) |
 
 ## 4. Google Search

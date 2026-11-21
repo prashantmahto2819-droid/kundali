@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS shop_products(id TEXT PRIMARY KEY, name_hi TEXT NOT N
 CREATE TABLE IF NOT EXISTS shop_orders(id TEXT PRIMARY KEY, items TEXT NOT NULL, subtotal REAL NOT NULL, shipping REAL NOT NULL, total REAL NOT NULL,
   name TEXT NOT NULL, phone TEXT NOT NULL, address TEXT NOT NULL, city TEXT, pincode TEXT, note TEXT, payment TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'new', pay_ref TEXT, track TEXT, history TEXT NOT NULL DEFAULT '[]', created TEXT NOT NULL, updated TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS shop_reviews(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT NOT NULL, order_id TEXT NOT NULL, name TEXT NOT NULL,
+  rating INTEGER NOT NULL, text TEXT, visible INTEGER NOT NULL DEFAULT 1, created TEXT NOT NULL, UNIQUE(order_id, product_id));
 """
 
 
@@ -44,7 +46,12 @@ class Shop:
     def __init__(self, store):
         self.db = store._db
         self.dir = os.path.join(os.path.dirname(os.environ.get("KUNDALI_DB", "") or "./x"), "shop_images")
-        self.db.executescript(SCHEMA); self.db.commit()
+        self.db.executescript(SCHEMA)
+        cols = [r[1] for r in self.db.execute("PRAGMA table_info(shop_products)")]
+        for c, t in (("hsn", "TEXT"), ("gst_rate", "REAL")):          # migration: tax fields for invoices
+            if c not in cols:
+                self.db.execute(f"ALTER TABLE shop_products ADD COLUMN {c} {t}")
+        self.db.commit()
 
     def _rows(self, sql, args=()):
         cur = self.db.execute(sql, args); names = [d[0] for d in cur.description]
@@ -85,6 +92,9 @@ def products(q: dict | None = None) -> dict:
     if q.get("planet"):
         sql += " AND planet=?"; args.append(str(q["planet"]))
     rows = [_public(p) for p in shop()._rows(sql + " ORDER BY sort, name_hi", args)]
+    agg = {r["product_id"]: r for r in shop()._rows("SELECT product_id, COUNT(*) n, AVG(rating) avg FROM shop_reviews WHERE visible=1 GROUP BY product_id")}
+    for p in rows:
+        a = agg.get(p["id"]); p["rating"] = round(a["avg"], 1) if a else None; p["reviews"] = a["n"] if a else 0
     s = settings()
     return {"products": rows, "categories": [{"key": k, "hi": v[0], "en": v[1]} for k, v in CATEGORIES.items()],
             "settings": {"upi": bool(s["upi_id"]), "cod": s["cod"], "shipping": s["shipping"], "free_above": s["free_above"], "whatsapp": s["whatsapp"]}}
@@ -139,6 +149,7 @@ def place_order(payload: dict, notifier=None) -> dict:
             raise ValueError(f"{p['name_hi']}: out of stock")
         amt = round(p["price"] * qty, 2)
         items.append({"id": p["id"], "name_hi": p["name_hi"], "name_en": p.get("name_en") or "", "qty": qty, "unit_hi": p["unit_hi"], "price": p["price"], "amount": amt,
+                      "hsn": p.get("hsn") or "", "gst_rate": p.get("gst_rate"),
                       "option": str(it.get("option") or "")[:80]})
         subtotal += amt
     shipping = 0.0 if (s["free_above"] and subtotal >= s["free_above"]) else s["shipping"]
@@ -205,7 +216,8 @@ def admin(payload: dict) -> dict:
         fields = {"name_hi": str(p["name_hi"]).strip()[:120], "name_en": str(p.get("name_en") or "")[:120], "category": p["category"], "planet": planet, "price": price,
                   "mrp": float(p["mrp"]) if p.get("mrp") not in (None, "") else None, "unit": unit, "min_qty": float(p.get("min_qty") or 1), "max_qty": float(p.get("max_qty") or 10),
                   "step": float(p.get("step") or 1), "stock": stock, "origin": str(p.get("origin") or "")[:80], "certificate": str(p.get("certificate") or "")[:120],
-                  "desc_hi": str(p.get("desc_hi") or "")[:2000], "desc_en": str(p.get("desc_en") or "")[:2000], "active": 1 if p.get("active", True) else 0, "sort": int(p.get("sort") or 0)}
+                  "desc_hi": str(p.get("desc_hi") or "")[:2000], "desc_en": str(p.get("desc_en") or "")[:2000], "active": 1 if p.get("active", True) else 0, "sort": int(p.get("sort") or 0),
+                  "hsn": re.sub(r"\D", "", str(p.get("hsn") or ""))[:8] or None, "gst_rate": float(p["gst_rate"]) if p.get("gst_rate") not in (None, "") else None}
         now = _now()
         if shop()._rows("SELECT id FROM shop_products WHERE id=?", (pid,)):
             db.execute("UPDATE shop_products SET " + ",".join(f"{k}=?" for k in fields) + ", updated=? WHERE id=?", [*fields.values(), now, pid])
@@ -261,6 +273,16 @@ def admin(payload: dict) -> dict:
             except Exception:
                 told = False
         return {"id": oid, "status": st, "customer_notified": told}
+    if a == "reviews":
+        return {"reviews": shop()._rows("SELECT r.*, p.name_hi FROM shop_reviews r LEFT JOIN shop_products p ON p.id=r.product_id ORDER BY r.created DESC LIMIT 300")}
+    if a == "review_visible":
+        db.execute("UPDATE shop_reviews SET visible=? WHERE id=?", (1 if payload.get("visible") else 0, int(payload.get("id") or 0))); db.commit()
+        return {"id": payload.get("id"), "visible": bool(payload.get("visible"))}
+    if a == "invoice":
+        r = shop()._rows("SELECT * FROM shop_orders WHERE id=?", (str(payload.get("id") or ""),))
+        if not r:
+            raise ValueError("order not found")
+        return {"html": invoice_html(r[0])}
     raise ValueError("unknown action")
 
 
@@ -269,3 +291,94 @@ def image_path(name: str) -> str | None:
         return None
     p = os.path.join(shop().dir, name)
     return p if os.path.exists(p) else None
+
+
+
+# ---------------------------------------------------------------- verified reviews (delivered orders only)
+def add_review(payload: dict) -> dict:
+    oid = str(payload.get("order_id") or "").strip().upper(); phone = _phone(payload.get("phone")); pid = str(payload.get("product_id") or "")
+    r = shop()._rows("SELECT name, items, status FROM shop_orders WHERE id=? AND phone=?", (oid, phone))
+    if not r:
+        raise ValueError("order not found for this phone number")
+    if r[0]["status"] != "delivered":
+        raise ValueError("you can review after the order is delivered")
+    if pid not in [i["id"] for i in json.loads(r[0]["items"])]:
+        raise ValueError("this product is not in the order")
+    rating = int(payload.get("rating") or 0)
+    if not 1 <= rating <= 5:
+        raise ValueError("rating must be 1-5")
+    name = (str(payload.get("name") or "").strip() or r[0]["name"]).split()[0][:30]          # first name only
+    try:
+        shop().db.execute("INSERT INTO shop_reviews(product_id, order_id, name, rating, text, created) VALUES(?,?,?,?,?,?)",
+                          (pid, oid, name, rating, str(payload.get("text") or "").strip()[:600], _now()))
+        shop().db.commit()
+    except Exception as exc:
+        if "UNIQUE" in str(exc):
+            raise ValueError("already reviewed") from exc
+        raise
+    return {"saved": True}
+
+
+def reviews(pid: str, limit: int = 20) -> list[dict]:
+    return shop()._rows("SELECT name, rating, text, created FROM shop_reviews WHERE product_id=? AND visible=1 ORDER BY created DESC LIMIT ?", (pid, limit))
+
+
+# ---------------------------------------------------------------- invoice (tax invoice when a GSTIN is set, else a receipt)
+# first two digits of a PIN code → state (for CGST+SGST vs IGST)
+PIN_STATE = {**{k: "Delhi" for k in ("11",)}, **{k: "Haryana" for k in ("12", "13")}, **{k: "Punjab" for k in ("14", "15")}, "16": "Chandigarh",
+             "17": "Himachal Pradesh", **{k: "Jammu & Kashmir" for k in ("18", "19")}, **{k: "Uttar Pradesh" for k in ("20", "21", "22", "23", "24", "25", "26", "27", "28")},
+             **{k: "Rajasthan" for k in ("30", "31", "32", "33", "34")}, **{k: "Gujarat" for k in ("36", "37", "38", "39")}, **{k: "Maharashtra" for k in ("40", "41", "42", "43", "44")},
+             **{k: "Madhya Pradesh" for k in ("45", "46", "47", "48")}, "49": "Chhattisgarh", **{k: "Telangana" for k in ("50",)}, **{k: "Andhra Pradesh" for k in ("51", "52", "53")},
+             **{k: "Karnataka" for k in ("56", "57", "58", "59")}, **{k: "Tamil Nadu" for k in ("60", "61", "62", "63", "64")}, **{k: "Kerala" for k in ("67", "68", "69")},
+             **{k: "West Bengal" for k in ("70", "71", "72", "73", "74")}, **{k: "Odisha" for k in ("75", "76", "77")}, "78": "Assam", "79": "North East",
+             **{k: "Bihar" for k in ("80", "81", "82", "83", "84", "85")}}
+
+
+def invoice_html(o: dict) -> str:
+    import html as _h
+    e = lambda x: _h.escape(str(x if x is not None else ""))
+    items = json.loads(o["items"]) if isinstance(o["items"], str) else o["items"]
+    gstin = os.environ.get("KUNDALI_SHOP_GSTIN", "").strip().upper()
+    seller = os.environ.get("KUNDALI_SHOP_LEGAL_NAME", "") or settings()["upi_name"]
+    saddr = os.environ.get("KUNDALI_SHOP_ADDRESS", "")
+    sstate = os.environ.get("KUNDALI_SHOP_STATE", "")
+    bstate = PIN_STATE.get(str(o.get("pincode") or "")[:2], "")
+    inter = bool(sstate and bstate and sstate.lower() != bstate.lower())
+    rows, tax_total, taxable_total = "", 0.0, 0.0
+    for i, it in enumerate(items, 1):
+        r = float(it.get("gst_rate") or 0) if gstin else 0.0
+        taxable = round(it["amount"] / (1 + r / 100), 2); tax = round(it["amount"] - taxable, 2)
+        taxable_total += taxable; tax_total += tax
+        rows += (f"<tr><td>{i}</td><td>{e(it['name_hi'])}{(' / ' + e(it.get('name_en'))) if it.get('name_en') else ''}{('<br><small>' + e(it['option']) + '</small>') if it.get('option') else ''}</td>"
+                 f"<td>{e(it.get('hsn') or '')}</td><td>{it['qty']:g} {e(it['unit_hi'])}</td><td>{it['price']:,.2f}</td>"
+                 + (f"<td>{taxable:,.2f}</td><td>{r:g}%</td><td>{tax:,.2f}</td>" if gstin else "") + f"<td>{it['amount']:,.2f}</td></tr>")
+    ship = float(o.get("shipping") or 0)
+    tax_lines = ""
+    if gstin:
+        tax_lines = (f"<tr><td colspan=7>IGST</td><td colspan=2>{tax_total:,.2f}</td></tr>" if inter else
+                     f"<tr><td colspan=7>CGST</td><td colspan=2>{tax_total / 2:,.2f}</td></tr><tr><td colspan=7>SGST</td><td colspan=2>{tax_total / 2:,.2f}</td></tr>")
+    span = 7 if gstin else 4
+    title = "TAX INVOICE / कर बीजक" if gstin else "रसीद / RECEIPT"
+    head_cols = "<th>#</th><th>विवरण</th><th>HSN</th><th>मात्रा</th><th>दर ₹</th>" + ("<th>कर-योग्य ₹</th><th>GST</th><th>कर ₹</th>" if gstin else "") + "<th>राशि ₹</th>"
+    return f"""<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>{e(o['id'])} — {title}</title>
+<style>body{{font:14px/1.5 'Noto Sans Devanagari','Noto Sans',sans-serif;color:#222;max-width:820px;margin:20px auto;padding:0 16px}}h1{{font-size:18px;margin:0}}
+table{{width:100%;border-collapse:collapse;margin-top:12px}}th,td{{border:1px solid #ccc;padding:6px;text-align:left;vertical-align:top}}th{{background:#f6efe6}}
+.top{{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}}.muted{{color:#666;font-size:12px}}.tot td{{font-weight:700}}@media print{{button{{display:none}}}}</style></head><body>
+<div class="top"><div><h1>{e(seller)}</h1><div>{e(saddr)}</div>{f'<div>GSTIN: <b>{e(gstin)}</b></div>' if gstin else ''}{f'<div>राज्य: {e(sstate)}</div>' if sstate else ''}</div>
+<div style="text-align:right"><h1>{title}</h1><div>क्रमांक: <b>{e(o['id'])}</b></div><div>दिनांक: {e(o['created'][:10])}</div><div>भुगतान: {e(o['payment'].upper())}{(' · ' + e(o['pay_ref'])) if o.get('pay_ref') else ''}</div></div></div>
+<p><b>ग्राहक:</b> {e(o['name'])} · +{e(o['phone'])}<br>{e(o['address'])}, {e(o.get('city') or '')} {e(o.get('pincode') or '')}{(' · ' + e(bstate)) if bstate else ''}</p>
+<table><tr>{head_cols}</tr>{rows}
+{f'<tr><td colspan={span}>डिलीवरी</td><td colspan=2>{ship:,.2f}</td></tr>' if ship else ''}{tax_lines}
+<tr class="tot"><td colspan={span}>कुल (सभी कर सहित)</td><td colspan=2>₹{o['total']:,.2f}</td></tr></table>
+<p class="muted">{'दरें GST सहित हैं; कर-योग्य राशि और कर ऊपर अलग दिखाए गए हैं।' if gstin else 'यह भुगतान की रसीद है (GST पंजीकरण के बिना)।'} रत्न परंपरागत आस्था के अनुसार बेचे जाते हैं; किसी परिणाम की गारंटी नहीं।</p>
+<button onclick="print()">प्रिंट / PDF</button></body></html>"""
+
+
+def customer_invoice(payload: dict) -> dict:
+    oid = str(payload.get("order_id") or "").strip().upper(); phone = _phone(payload.get("phone"))
+    r = shop()._rows("SELECT * FROM shop_orders WHERE id=? AND phone=?", (oid, phone))
+    if not r:
+        raise ValueError("order not found for this phone number")
+    if r[0]["status"] in ("new", "cancelled"):
+        raise ValueError("the invoice is available after payment is confirmed")
+    return {"html": invoice_html(r[0])}

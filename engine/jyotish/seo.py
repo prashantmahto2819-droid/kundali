@@ -393,10 +393,19 @@ def shop_product_page(pid: str) -> str | None:
            "image": [site() + u for u in p["images"]], "description": p.get("desc_en") or p.get("desc_hi") or p["name_hi"], "category": p["category_en"],
            "offers": {"@type": "Offer", "priceCurrency": "INR", "price": f"{p['price']:.2f}", "url": f"{site()}/shop/{p['id']}",
                       "availability": "https://schema.org/InStock" if p["in_stock"] else "https://schema.org/OutOfStock"}}]
+    from . import shop as _shop
+    revs = _shop.reviews(p["id"])
+    if revs:
+        ld[0]["aggregateRating"] = {"@type": "AggregateRating", "ratingValue": f"{sum(r['rating'] for r in revs) / len(revs):.1f}", "reviewCount": len(revs)}
+        ld[0]["review"] = [{"@type": "Review", "author": {"@type": "Person", "name": r["name"]}, "reviewRating": {"@type": "Rating", "ratingValue": r["rating"]},
+                            "reviewBody": r["text"] or "", "datePublished": r["created"][:10]} for r in revs[:10]]
+    rev_html = ("<div class='card'><h2>ग्राहकों की समीक्षा " + f"★ {sum(r['rating'] for r in revs) / len(revs):.1f} ({len(revs)})</h2>"
+                + "".join(f"<p><b>{'★' * r['rating']}{'☆' * (5 - r['rating'])}</b> {e(r['name'])} <span class='muted'>{e(r['created'][:10])}</span><br>{e(r['text'] or '')}</p>" for r in revs)
+                + "<p class='muted'>केवल उन ग्राहकों की समीक्षा जिनका ऑर्डर पहुँच चुका है।</p></div>") if revs else ""
     body = (f"<div class='hero'><h1>{e(p['name_hi'])}</h1><p class='en'>{e(p.get('name_en') or '')}</p></div><div class='card'>{imgs}<div class='kv'>{kv}</div>"
             f"{('<p>' + e(p['desc_hi']) + '</p>') if p.get('desc_hi') else ''}<a class='cta' href='/#t-shop'>ऑर्डर कीजिए →</a></div>"
             + (f"<div class='card'><b>{e(pl)} ग्रह के लिए — किसे पहनना चाहिए?</b><p>लग्न के अनुसार शुभ ग्रह का रत्न ही पहनें; 6, 8, 12 भाव के स्वामी का रत्न नहीं (रुद्राक्ष और यंत्र सभी के लिए सुरक्षित माने जाते हैं)। "
-               f"<a href='/ratna'>राशि रत्न तालिका</a> · <a href='/#t-upay'>अपनी कुंडली से जाँचिए</a></p></div>" if pl else ""))
+               f"<a href='/ratna'>राशि रत्न तालिका</a> · <a href='/#t-upay'>अपनी कुंडली से जाँचिए</a></p></div>" if pl else "") + rev_html)
     return page(f"/shop/{p['id']}", f"{p['name_hi']} — ₹{p['price']:,.0f}/{p['unit_hi']} | रत्न शॉप", f"{p['name_hi']} ({p.get('name_en') or ''}) — {p['category_hi']}, {pl or ''} ग्रह, {p.get('certificate') or ''}। UPI या कैश ऑन डिलीवरी।",
                 body, [("रत्न शॉप", "/shop"), (p["name_hi"], f"/shop/{p['id']}")], ld)
 

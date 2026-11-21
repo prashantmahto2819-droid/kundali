@@ -110,3 +110,38 @@ def test_shop_seo_pages(store):
     assert code == 200 and '"@type": "Product"' in b and '"price": "950.00"' in b and "मंगल" in b and "GJEPC" in b
     assert seo.route("/shop/nope")[0] == 404
     assert f"/shop/{pid}" in seo.sitemap()
+
+
+def test_reviews_and_invoice(store, monkeypatch):
+    from jyotish import seo
+    H = {"X-Admin-Key": "secret"}
+    pid = handlers.shop_admin_from_payload({"action": "save_product", "product": {"name_hi": "पुखराज", "name_en": "Yellow sapphire", "category": "gemstone", "planet": "Jupiter",
+                                            "price": 2000, "unit": "ratti", "min_qty": 3, "max_qty": 9, "hsn": "7103", "gst_rate": 3}}, H)["saved"]
+    o = shop.place_order({"items": [{"id": pid, "qty": 4}], "name": "राम शर्मा", "phone": "9876543210", "address": "12 गांधी मार्ग, नेपियर टाउन", "pincode": "482001"},
+                         notifier=lambda *a: {"ok": True})
+    rv = {"order_id": o["order_id"], "phone": "9876543210", "product_id": pid, "rating": 5, "text": "बढ़िया रत्न, प्रमाणपत्र साथ आया"}
+    with pytest.raises(handlers.BadRequest):
+        handlers.shop_review_from_payload(rv)                                   # not delivered yet
+    with pytest.raises(handlers.BadRequest):
+        handlers.shop_invoice_from_payload({"order_id": o["order_id"], "phone": "9876543210"})     # not paid yet
+    shop.admin({"action": "order_status", "id": o["order_id"], "status": "paid", "_sender": lambda *a: {"ok": True}})
+    # receipt without GSTIN
+    h = handlers.shop_invoice_from_payload({"order_id": o["order_id"], "phone": "9876543210"})["html"]
+    assert "रसीद" in h and "8,000.00" in h and "CGST" not in h
+    # tax invoice with GSTIN, intra-state (MP seller, Jabalpur 48xxxx buyer) → CGST+SGST on a tax-inclusive price
+    monkeypatch.setenv("KUNDALI_SHOP_GSTIN", "23ABCDE1234F1Z5"); monkeypatch.setenv("KUNDALI_SHOP_STATE", "Madhya Pradesh")
+    h = handlers.shop_admin_from_payload({"action": "invoice", "id": o["order_id"]}, H)["html"]
+    assert "TAX INVOICE" in h and "7103" in h and "7,766.99" in h and "CGST" in h and "116.50" in h and "IGST" not in h
+    monkeypatch.setenv("KUNDALI_SHOP_STATE", "Delhi")
+    assert "IGST" in shop.invoice_html(shop.shop()._rows("SELECT * FROM shop_orders WHERE id=?", (o["order_id"],))[0])
+    shop.admin({"action": "order_status", "id": o["order_id"], "status": "delivered", "_sender": lambda *a: {"ok": True}})
+    assert handlers.shop_review_from_payload(rv)["saved"]
+    with pytest.raises(handlers.BadRequest):
+        handlers.shop_review_from_payload(rv)                                   # only once
+    p = handlers.shop_products_from_query({})["products"][0]
+    assert p["rating"] == 5 and p["reviews"] == 1
+    page = seo.route(f"/shop/{pid}")[2]
+    assert '"aggregateRating"' in page and "बढ़िया रत्न" in page and "राम" in page and "शर्मा" not in page
+    rid = handlers.shop_admin_from_payload({"action": "reviews"}, H)["reviews"][0]["id"]
+    handlers.shop_admin_from_payload({"action": "review_visible", "id": rid, "visible": False}, H)
+    assert handlers.shop_products_from_query({})["products"][0]["reviews"] == 0

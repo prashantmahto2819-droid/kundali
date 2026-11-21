@@ -1240,6 +1240,18 @@ def shop_status_from_payload(payload: dict) -> dict:
     return _shop_call("order_status", payload)
 
 
+def shop_review_from_payload(payload: dict) -> dict:
+    return _shop_call("add_review", payload)
+
+
+def shop_invoice_from_payload(payload: dict) -> dict:
+    return _shop_call("customer_invoice", payload)
+
+
+def shop_reviews_from_query(q: dict) -> dict:
+    return {"reviews": _shop_call("reviews", str(q.get("id") or ""))}
+
+
 def shop_admin_from_payload(payload: dict, headers: dict | None = None) -> dict:
     from . import consult
     if not consult.is_admin(headers or {}):

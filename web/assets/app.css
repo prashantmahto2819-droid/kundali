@@ -293,3 +293,6 @@ input[type=color]{height:38px;padding:3px;width:64px;cursor:pointer}
 .myo { padding:10px 0; border-bottom:1px dashed var(--line); } .myo:last-child { border:0; }
 .steps { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; align-items:center; } .steps span { font-size:.76rem; padding:2px 8px; border-radius:99px; background:color-mix(in srgb,var(--line) 40%,transparent); color:var(--muted); }
 .steps span.done { background:#2e9d5b; color:#fff; } .steps em { font-size:.8rem; font-style:normal; margin-left:6px; } .steps details { width:100%; font-size:.82rem; }
+
+.prod .stars { color:#c98a00; font-size:.85rem; font-weight:700; } .rvbox { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:6px; font-size:.84rem; } .rvbox input { flex:1 1 140px; } .rvbox select { width:auto; } .bad { color:#b8331f; }
+.myo [data-inv] { margin-top:6px; }

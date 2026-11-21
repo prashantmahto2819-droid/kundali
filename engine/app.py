@@ -386,6 +386,21 @@ def shop_order(req: NotifyRequest):
     return _consult_route(handlers.shop_order_from_payload, req)
 
 
+@app.post("/v1/shop/review")
+def shop_review(req: NotifyRequest):
+    return _consult_route(handlers.shop_review_from_payload, req)
+
+
+@app.post("/v1/shop/invoice")
+def shop_invoice(req: NotifyRequest):
+    return _consult_route(handlers.shop_invoice_from_payload, req)
+
+
+@app.get("/v1/shop/reviews")
+def shop_reviews(id: str = ""):
+    return handlers.shop_reviews_from_query({"id": id})
+
+
 @app.post("/v1/shop/status")
 def shop_status(req: NotifyRequest):
     return _consult_route(handlers.shop_status_from_payload, req)

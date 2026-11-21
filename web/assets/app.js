@@ -1322,6 +1322,15 @@ $('yago').onclick = async () => {
   }
 
   // ---- "आपके लिए आज" on Home: the active family profile's day at a glance (from the dashboard, cached per day) ----
+  $('sh_mine').addEventListener('click', async e => {
+    const inv = e.target.closest('[data-inv]');
+    if (inv) { try { const r = await apiFetch('/v1/shop/invoice', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: inv.dataset.inv, phone: inv.dataset.ph})}); const d = await r.json(); if (!r.ok) throw new Error(d.detail);
+      const w = window.open(URL.createObjectURL(new Blob([d.html], {type: 'text/html'})), '_blank'); if (!w) alert('pop-up blocked'); } catch (err) { alert(err.message); } return; }
+    const go = e.target.closest('[data-rvgo]'); if (!go) return;
+    const box = go.closest('[data-rv]'), [order_id, phone, product_id] = box.dataset.rv.split('|');
+    try { const r = await apiFetch('/v1/shop/review', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id, phone, product_id, rating: +box.querySelector('select').value, text: box.querySelector('input').value})});
+      const d = await r.json(); if (!r.ok) throw new Error(d.detail); box.innerHTML = `✅ ${(window.getLang && window.getLang() === 'en') ? 'Thank you for the review!' : 'समीक्षा के लिए धन्यवाद!'}`; } catch (err) { box.insertAdjacentHTML('beforeend', ` <span class="bad">${esc(err.message)}</span>`); }
+  });
   async function renderMine() {
     const box = $('hm_mine'); if (!box) return;
     const list = LS.get('kundali_profiles', []), act = LS.get('kundali_profile_active', null), p = list.find(x => x.id === act) || list[0];
@@ -2212,7 +2221,7 @@ async function openReport(path, body) {
     if (!list.length) { $('sh_grid').innerHTML = `<div class="card muted">${en ? 'Nothing in this filter yet.' : 'इस श्रेणी में अभी कुछ नहीं।'}</div>`; return; }
     $('sh_grid').innerHTML = list.map(p => `<div class="card prod">
       <div class="pimg">${p.images[0] ? `<img src="${API}${esc(p.images[0])}" alt="${esc(p.name_hi)}" loading="lazy">` : '<span>💎</span>'}${p.planet ? `<i>${esc(en ? p.planet : PL_HI[p.planet])}</i>` : ''}</div>
-      <b>${esc(en && p.name_en ? p.name_en : p.name_hi)}</b>
+      <b>${esc(en && p.name_en ? p.name_en : p.name_hi)}</b>${p.reviews ? `<span class="stars">★ ${p.rating} <span class="muted">(${p.reviews})</span></span>` : ''}
       <div class="price">${rs(p.price)} <span class="muted">/ ${esc(en ? p.unit_en : p.unit_hi)}</span>${p.mrp && p.mrp > p.price ? ` <s class="muted">${rs(p.mrp)}</s>` : ''}</div>
       <div class="muted small">${[p.origin, p.certificate ? (en ? 'Certified: ' : 'प्रमाणपत्र: ') + p.certificate : ''].filter(Boolean).map(esc).join(' · ')}</div>
       <a class="small" href="/shop/${esc(p.id)}" target="_blank" rel="noopener">🔗 ${en ? 'Product page' : 'उत्पाद पेज'}</a>
@@ -2279,7 +2288,9 @@ async function openReport(path, body) {
         const box = document.querySelector(`[data-st="${o.id}"]`); if (!box) continue;
         box.innerHTML = d.status === 'cancelled' ? `<span class="kf bad">${en ? 'cancelled' : 'रद्द'}</span>` :
           STEPS.map((s2, i) => `<span class="${i <= STEPS.indexOf(d.status) ? 'done' : ''}">${en ? s2 : ST[s2]}</span>`).join('') + (d.track ? `<em>${en ? 'tracking' : 'ट्रैकिंग'}: ${esc(d.track)}</em>` : '') +
-          `<details><summary>${en ? 'Items' : 'सामान'}</summary>${d.items.map(i => `${esc(i.name_hi)} × ${i.qty} ${esc(i.unit_hi)}`).join('<br>')}</details>`;
+          `<details><summary>${en ? 'Items' : 'सामान'}</summary>${d.items.map(i => `${esc(i.name_hi)} × ${i.qty} ${esc(i.unit_hi)}`).join('<br>')}</details>` +
+          (!['new', 'cancelled'].includes(d.status) ? `<button type="button" class="ghost sm" data-inv="${esc(o.id)}" data-ph="${esc(o.phone)}">🧾 ${en ? 'Invoice' : 'रसीद'}</button>` : '') +
+          (d.status === 'delivered' ? d.items.map(i => `<div class="rvbox" data-rv="${esc(o.id)}|${esc(o.phone)}|${esc(i.id)}"><span>${en ? 'Review' : 'समीक्षा'}: ${esc(i.name_hi)}</span> <select aria-label="rating"><option value="5">★★★★★</option><option value="4">★★★★</option><option value="3">★★★</option><option value="2">★★</option><option value="1">★</option></select><input placeholder="${en ? 'A few words (optional)' : 'दो शब्द (वैकल्पिक)'}"><button type="button" class="sm" data-rvgo>${en ? 'Submit' : 'भेजिए'}</button></div>`).join('') : '');
       } catch (e) { const box = document.querySelector(`[data-st="${o.id}"]`); if (box) box.textContent = '—'; }
     }
   }

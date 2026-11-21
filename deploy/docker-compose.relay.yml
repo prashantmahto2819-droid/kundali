@@ -50,6 +50,10 @@ services:
       KUNDALI_SHOP_COD: ${KUNDALI_SHOP_COD:-0}
       KUNDALI_SHOP_SHIPPING: ${KUNDALI_SHOP_SHIPPING:-0}
       KUNDALI_SHOP_FREE_ABOVE: ${KUNDALI_SHOP_FREE_ABOVE:-0}
+      KUNDALI_SHOP_GSTIN: ${KUNDALI_SHOP_GSTIN:-}      # set → tax invoices (CGST+SGST / IGST); empty → plain receipts
+      KUNDALI_SHOP_LEGAL_NAME: ${KUNDALI_SHOP_LEGAL_NAME:-}
+      KUNDALI_SHOP_ADDRESS: ${KUNDALI_SHOP_ADDRESS:-}
+      KUNDALI_SHOP_STATE: ${KUNDALI_SHOP_STATE:-}      # e.g. Madhya Pradesh — decides CGST+SGST vs IGST
       KUNDALI_PUSH: ${KUNDALI_PUSH:-1}                # browser push notifications (0 = off); VAPID key is generated into /srv/data/vapid.json
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       KUNDALI_CONTACT_EMAIL: ${KUNDALI_CONTACT_EMAIL:-}  # shown on /privacy and /terms
